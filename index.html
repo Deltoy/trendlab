@@ -679,8 +679,17 @@ function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function
 function won(n) { return typeof n === 'number' ? n.toLocaleString('ko-KR') + '원' : ''; }
 function $(id) { return document.getElementById(id); }
 function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove('on'); }, 2600); }
-function call(fn, args, ok, fail) {
-  var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function (e) { (fail || function () { toast('서버와 연결하지 못했어요. 잠시 뒤 다시 시도해주세요'); })(e); });
+function call(fn, args, ok, fail, tries) {
+  tries = tries || 0;
+  var again = function () { setTimeout(function () { call(fn, args, ok, fail, tries + 1); }, 1500 * (tries + 1)); };
+  var r = google.script.run.withSuccessHandler(function (res) {
+    /* 서버가 바쁠 때(잠금 대기·일시 오류) 조용히 두 번까지 다시 시도 */
+    if (res && res.ok === false && /잠시|오류|timeout|Lock/i.test(res.msg || '') && tries < 2) { again(); return; }
+    ok && ok(res);
+  }).withFailureHandler(function (e) {
+    if (tries < 2) { again(); return; }
+    (fail || function () { toast('서버와 연결하지 못했어요. 잠시 뒤 다시 시도해주세요'); })(e);
+  });
   r[fn].apply(r, (args || []).concat([S.k || '']));   /* 서버가 암호를 다시 확인한다 */
 }
 function imgErr(img) { var d = document.createElement('div'); d.className = 'noimg'; d.setAttribute('aria-hidden', 'true'); img.replaceWith(d); }
