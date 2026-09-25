@@ -542,6 +542,27 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
   .sheet.docked .sheet-body{overflow-y:auto}
   .brow.sel,.row.sel{background:#f3f4f6;box-shadow:inset 3px 0 0 #111}
 }
+
+/* 헤더: 레디영 MD 송주희 주임 전용 (그라데이션 테두리 알약) */
+.owner-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 9px;font-size:11.5px;font-weight:600;color:#111;border:1px solid transparent;border-radius:999px;
+  background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#f6d5d8,#d6ddd3 55%,#e5e7eb) border-box;box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap;letter-spacing:-.01em}
+.owner-pill .op-ic{width:13px;height:13px;color:#c08a91}
+.owner-pill .op-org{color:#6b7280;font-weight:500}
+.owner-pill .op-dot{width:3px;height:3px;border-radius:50%;background:#c9c9cf}
+.owner-pill .op-name{font-weight:700;background:linear-gradient(90deg,#111,#5b5b63);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:520px){.owner-pill .op-org,.owner-pill .op-dot{display:none}}
+
+/* 오늘 확인: 도넛 + 숫자 타일 (빈 여백 채우기) */
+.step1-bottom{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px;align-items:center}
+.step1-bottom .mini-viz{margin-top:0}
+@media(min-width:900px){.step1-bottom{grid-template-columns:280px minmax(0,1fr)}}
+.s1-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:700px){.s1-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.s1k{background:#fafaf8;border:1px solid #ececec;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.s1k b{font-size:19px;font-weight:700;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}
+.s1k-l{font-size:12px;font-weight:600;color:#8a8a8a}
+.s1k-s{font-size:12px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s1k.warn b{color:#b42318}
 </style>
 </head>
 <body>
@@ -550,7 +571,7 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
     <span class="logo" aria-label="TRENDLAB 레디영">
       <span class="logo-mark" aria-hidden="true">T</span>
       <span class="logo-text">TRENDLAB</span>
-      <span class="logo-pill">레디영</span>
+      <span class="logo-pill owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span>
     </span>
     <nav class="tabs" id="tabs" role="tablist">
       <button type="button" role="tab" aria-selected="true" data-tab="home" class="on" onclick="go(this.dataset.tab)">대시보드</button>
@@ -826,7 +847,7 @@ function step1Html(home) {
   return '<section id="step1" class="card step step-hero" data-card="today">' + stepHead(1, '오늘 확인', '오늘 수집 결과와 리포트를 확인해요')
     + (statusText ? '<p class="step1-status">' + esc(statusText) + '</p>' : '')
     + '<div id="c-report" class="step1-report" data-card="report">' + reportBody + '</div>' + stats
-    + '<div id="step1-viz" class="mini-viz"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></div>'
+    + '<div class="step1-bottom"><div id="step1-viz" class="mini-viz"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></div><div id="step1-kpis" class="s1-kpis" aria-label="오늘 숫자 요약"></div></div>'
     + '</section>';
 }
 function step2Html(home) {
@@ -1265,9 +1286,9 @@ function topKeywords(v) {
 function heroHtml(v) {
   var tiles = topKeywords(v).slice(0, 3).map(function (k) {
     return '<div class="hero-tile"><div class="hero-tile-top"><span class="hero-kw">#' + esc(k.word) + '</span>' + growthPill(k) + '</div>'
-      + '<p class="hero-sub">상위 100 중 ' + k.now + '개</p>' + heroSparkSvg(k.series) + '</div>';
+      + '<p class="hero-sub">' + heroSitesText(k) + '</p>' + heroSparkSvg(k.series) + '</div>';
   }).join('');
-  var range = (v.keywordBase ? esc(v.keywordBase) + ' → ' : '') + esc(v.date) + ' · 7일 비교';
+  var range = (v.keywordBase ? esc(v.keywordBase) + ' → ' : '') + esc(v.date) + ' · 7일 비교' + (v.keywordSites && v.keywordSites.length > 1 ? ' · ' + v.keywordSites.length + '개 사이트 합산' : '');
   return '<div class="hero-head"><h2>이번 주 급상승 키워드</h2><span class="live-pill"><i class="live-dot" aria-hidden="true"></i>LIVE</span><span class="hero-range">' + range + '</span></div><div class="hero-tiles">' + tiles + '</div>';
 }
 /* ── 키워드·성분 TOP 5 ── */
@@ -1293,6 +1314,29 @@ function paletteHtml(v) {
   }).join('');
   return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2><span class="chip date-chip">' + esc(p.date) + '</span></div><div class="palette-swatches">' + swatches + '</div><div class="palette-list">' + list + '</div>';
 }
+/* 오늘 확인: 리포트를 안 열어도 핵심 숫자를 한눈에 */
+function step1Kpis() {
+  var el = $('step1-kpis'); if (!el) return;
+  var v = S.viz, h = S.home, y = S.yt, c = (h && h.cards) || {}, tiles = [];
+  var t = function (label, val, sub, tone) { tiles.push('<div class="s1k' + (tone ? ' ' + tone : '') + '"><span class="s1k-l">' + esc(label) + '</span><b>' + val + '</b><span class="s1k-s">' + (sub || '') + '</span></div>'); };
+  if (v && !v.empty) {
+    var sale = (v.flags || []).filter(function (f) { return f.label === '세일'; })[0];
+    if (sale) t('세일 중', sale.pct + '%', '100위 중 ' + sale.count + '개');
+    var own = (v.priceBins || []).reduce(function (a, b) { return a + (b.owned || 0); }, 0);
+    if (v.total) t('약국 보유', Math.round(own / v.total * 100) + '%', '100위 중 ' + own + '개', own / v.total < 0.3 ? 'warn' : '');
+    var b0 = (v.brands || [])[0]; if (b0) t('1위 브랜드', esc(b0.brand), '100위 안 ' + b0.count + '개');
+  }
+  if (c.price && c.price.avg != null) t('평균 판매가', won(c.price.avg), '할인 중 ' + Math.round(c.price.saleRate * 100) + '%');
+  if (c.survival && c.survival.d7 && c.survival.d7.rate != null) t('신제품 7일 생존', Math.round(c.survival.d7.rate * 100) + '%', c.survival.d7.alive + '/' + c.survival.d7.n + '개 남음');
+  if (y && y.total && y.brands && y.brands[0]) t('쇼츠 1위 브랜드', esc(y.brands[0].brand), viewsKo(y.brands[0].views) + '회 · ' + y.brands[0].videos + '편');
+  el.innerHTML = tiles.join('');
+}
+var SITE_SHORT = { oliveyoung: '올영', oyglobal: '글로벌', hwahae: '화해', daiso: '다이소', musinsa: '무신사', qoo10jp: '큐텐', amazonus: '아마존' };
+function heroSitesText(k) {
+  var st = k.sites || {}, ks = Object.keys(st).sort(function (a, b) { return st[b] - st[a]; });
+  if (ks.length <= 1) return '상위 상품 중 ' + k.now + '개';
+  return '전체 ' + k.now + '개 · ' + ks.slice(0, 3).map(function (m) { return esc(SITE_SHORT[m] || m) + ' ' + st[m]; }).join(' · ');
+}
 function renderViz() {
   var v = S.viz, el = $('c-viz'), mini = $('step1-viz');
   var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw');
@@ -1300,7 +1344,7 @@ function renderViz() {
   if (hw) hw.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 급상승 키워드가 나와요</p>' : heroHtml(v);
   if (t5) t5.innerHTML = (!v || v.empty) ? '<h2>키워드·성분 TOP 5</h2><p class="empty">데이터가 쌓이면 보여요</p>' : top5Html(v);
   if (pw) pw.innerHTML = (!v || v.empty) ? '<h2>컬러 트렌드 팔레트</h2><p class="empty">데이터가 쌓이면 보여요</p>' : paletteHtml(v);
-  renderFilters();
+  renderFilters(); step1Kpis();
   if (!el || !v) return;
   if (v.empty) { el.innerHTML = '<h2>한눈에 보기</h2><p class="empty">수집 기록이 쌓이면 그래프가 나와요</p>'; return; }
   var owned = v.brands.some(function (b) { return b.owned === true; });
@@ -1513,10 +1557,11 @@ function loadYt() {
   call('getYoutube', [], function (y) { S.yt = y && y.ok ? y : { total: 0 }; renderYt(); });
 }
 function renderYt() {
-  var el = $('c-yt'), y = S.yt; if (!el) return;
+  var el = $('c-yt'), y = S.yt; step1Kpis(); if (!el) return;
   if (!y.total) { el.innerHTML = '<h2>유튜브 쇼츠</h2><p class="empty">최근 7일 인기 뷰티 쇼츠가 모이면 여기에 떠요</p>'; return; }
   el.innerHTML = '<h2>유튜브 쇼츠에서 뜨는 브랜드</h2><p class="sub">최근 7일 인기 뷰티 쇼츠 ' + y.total + '개 · 제목·태그에 나온 브랜드의 조회수 합</p>'
     + (y.brands.length ? vzBars(y.brands.slice(0, 6).map(function (b) { return { label: b.brand, value: b.views, text: viewsKo(b.views) + '회 · ' + b.videos + '편', brand: b.brand }; })) : '<p class="empty">아직 브랜드가 언급된 영상이 없어요</p>')
+    + (y.items && y.items.length ? '<p class="sub yt-sub">뜨는 아이템 (영상 제목·태그 기준 조회수 합)</p>' + vzBars(y.items.slice(0, 6).map(function (x) { return { label: x.label, value: x.views, text: viewsKo(x.views) + '회 · ' + x.videos + '편' }; })) : '')
     + '<p class="sub yt-sub">조회수 TOP 영상</p><div class="yt-list">' + y.videos.slice(0, 5).map(function (v) { return '<a class="yt-row" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><span class="yt-v">' + viewsKo(v.views) + '</span><span class="tx"><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel) + ' · ' + v.seconds + '초</span></span><span class="side">↗</span></a>'; }).join('') + '</div>';
 }
 function otherMallsHtml(list) {
