@@ -563,6 +563,19 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .s1k-l{font-size:12px;font-weight:600;color:#8a8a8a}
 .s1k-s{font-size:12px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .s1k.warn b{color:#b42318}
+
+/* 구글 검색량 */
+#gt-kw{margin-top:20px}
+.gt-list{display:grid;grid-template-columns:minmax(0,1fr);gap:0 28px}
+@media(min-width:1100px){.gt-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gt-row{display:grid;grid-template-columns:minmax(0,1fr) 110px 64px 72px;align-items:center;gap:12px;min-height:52px;border-top:1px solid #ececec}
+.gt-t{display:flex;align-items:baseline;gap:8px;min-width:0}
+.gt-t b{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gt-t em{font-style:normal;font-size:11.5px;color:#8a8a8a;flex:none}
+.gt-row .hero-spark{width:110px;height:34px}
+.gt-v{font-size:12.5px;color:#6b7280;font-variant-numeric:tabular-nums;text-align:right}
+.gt-row .pill{justify-self:end}
+@media(max-width:420px){.gt-row{grid-template-columns:minmax(0,1fr) 80px 64px}.gt-v{display:none}.gt-row .hero-spark{width:80px}}
 </style>
 </head>
 <body>
@@ -878,6 +891,7 @@ function renderHome() {
   var home = S.home;
   $('home').innerHTML = '<section id="hero-kw" class="card hero-card" data-card="hero"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></section>'
     + '<div class="top-row"><article id="top5-kw" class="card" data-card="top5"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article><article id="palette-kw" class="card" data-card="palette"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article></div>'
+    + '<article id="gt-kw" class="card" data-card="gtrends"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
     + step1Html(home) + step2Html(home) + step3Html(home) + step4Html() + step5Html(home);
   if (S.viz) renderViz(); else loadViz();
   loadYt();
@@ -1265,6 +1279,17 @@ function loadViz() {
   call('getViz', [], function (v) { if (v && v.ok) { S.viz = v; renderViz(); } }, function () {});
 }
 /* ── HERO: 이번 주 급상승 키워드 ── */
+var GT_KIND = { keyword: '키워드', brand: '브랜드', item: '아이템' };
+/* 구글 검색량: 최근 7일 vs 그 전 7일 */
+function gtHtml(v) {
+  var g = v && v.gtrends;
+  var head = '<div class="card-head"><h2>구글 검색량 트렌드</h2>' + (g ? '<span class="chip date-chip">' + esc(g.date) + '</span>' : '') + '</div><p class="sub">대한민국 · 최근 7일 검색량이 그 전 7일보다 얼마나 늘었나 (구글 트렌드 지수 0~100)</p>';
+  if (!g || !g.items.length) return head + '<p class="empty">매일 아침 수집 뒤 맥이 구글 트렌드를 모으면 여기에 떠요</p>';
+  return head + '<div class="gt-list">' + g.items.slice(0, 12).map(function (x) {
+    return '<div class="gt-row"><span class="gt-t"><b>' + esc(x.term) + '</b><em>' + esc(GT_KIND[x.kind] || '') + '</em></span>' + heroSparkSvg(x.series.map(function (p) { return p.v; }))
+      + '<span class="gt-v">지수 ' + x.now + '</span>' + (x.growth == null ? '<span class="pill">–</span>' : growthPill(x)) + '</div>';
+  }).join('') + '</div>';
+}
 function heroSparkSvg(series) {
   series = series || []; if (!series.length) return '';
   var W = 140, H = 44, n = series.length, max = Math.max.apply(null, series.concat([1])), min = Math.min.apply(null, series.concat([0]));
@@ -1339,7 +1364,8 @@ function heroSitesText(k) {
 }
 function renderViz() {
   var v = S.viz, el = $('c-viz'), mini = $('step1-viz');
-  var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw');
+  var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw'), gw = $('gt-kw');
+  if (gw) gw.innerHTML = gtHtml(v);
   if (mini) mini.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 그래프가 나와요</p>' : vzDonut(v.catMix, v.total, '카테고리');
   if (hw) hw.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 급상승 키워드가 나와요</p>' : heroHtml(v);
   if (t5) t5.innerHTML = (!v || v.empty) ? '<h2>키워드·성분 TOP 5</h2><p class="empty">데이터가 쌓이면 보여요</p>' : top5Html(v);
