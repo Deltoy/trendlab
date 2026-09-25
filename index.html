@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="theme-color" content="#fafaf8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TRENDLAB"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TRENDLAB · 레디영</title><script>/* GitHub Pages 전용: google.script.run 을 Apps Script 서버 호출(fetch)로 바꾼다. 암호(k)는 주소 또는 이 기기에 저장된 값 */
+(function () {
+  if (window.google && window.google.script) return;   /* Apps Script 안에서 열렸거나 테스트 목이 있으면 그대로 */
+  var API = "https://script.google.com/macros/s/AKfycbzV6NiDcEOG_4cGorp0d-aGrl5e_ibqvzII33rQZVSqbcf8NG6SPtvC0V4tyL01ovcJdg/exec";
+  var q = new URLSearchParams(location.search), k = q.get('k') || '';
+  try { if (k) localStorage.setItem('tl_k', k); else k = localStorage.getItem('tl_k') || ''; } catch (e) {}
+  function send(fn, args, ok, fail) {
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ rpc: fn, args: args }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.__err) { fail && fail(new Error(j.__err)); return; }
+        if (j && j.ok === false && /암호/.test(j.msg || '')) { showGate(); }
+        ok && ok(j);
+      })
+      .catch(function (e) { fail && fail(e); });
+  }
+  function runner(ok, fail) {
+    return new Proxy({}, { get: function (_, name) {
+      if (name === 'withSuccessHandler') return function (f) { return runner(f, fail); };
+      if (name === 'withFailureHandler') return function (f) { return runner(ok, f); };
+      return function () { send(String(name), [].slice.call(arguments), ok, fail); };
+    } });
+  }
+  window.google = { script: { run: runner(null, null), url: { getLocation: function (cb) { var p = {}; q.forEach(function (v, key) { p[key] = v; }); p.k = k; cb({ parameter: p }); } } } };
+  var gated = false;
+  function showGate() {
+    if (gated) return; gated = true;
+    var d = document.createElement('div');
+    d.setAttribute('style', 'position:fixed;inset:0;z-index:999;background:#fafaf8;display:flex;align-items:center;justify-content:center;padding:20px');
+    d.innerHTML = '<form style="width:min(340px,100%);background:#fff;border:1px solid #ececec;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.04)"><div style="width:44px;height:44px;border-radius:12px;background:#111;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:20px">T</div><h1 style="font-size:20px;margin:16px 0 4px">TRENDLAB</h1><p style="color:#6b7280;font-size:13px;margin:0 0 16px">암호를 넣으면 이 기기에 기억해요</p><input type="password" inputmode="numeric" autocomplete="current-password" style="width:100%;height:48px;border:1px solid #e5e7eb;border-radius:12px;padding:0 14px;font-size:17px;box-sizing:border-box" aria-label="암호"><button style="margin-top:12px;width:100%;height:48px;border:0;border-radius:999px;background:#111;color:#fff;font-size:16px;font-weight:600">들어가기</button><p class="m" style="color:#b42318;font-size:13px;min-height:18px;margin:10px 0 0"></p></form>';
+    document.body.appendChild(d);
+    var f = d.querySelector('form'), inp = d.querySelector('input');
+    setTimeout(function () { inp.focus(); }, 50);
+    f.addEventListener('submit', function (ev) {
+      ev.preventDefault(); var code = inp.value.trim(); if (!code) return;
+      send('unlockApp', [code], function (r) {
+        if (r && r.ok) { try { localStorage.setItem('tl_k', code); } catch (e) {} q.set('k', code); location.replace(location.pathname + '?' + q.toString()); }
+        else d.querySelector('.m').textContent = '암호가 달라요';
+      }, function () { d.querySelector('.m').textContent = '서버에 연결하지 못했어요'; });
+    });
+  }
+})();
+</script>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>레디영 트렌드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>:root{color-scheme:light;
+  --bg:#fafaf8;--card:#fff;--line:#ececec;--line2:#e2e2df;
+  --ink:#111111;--ink2:#6b6b6b;--muted:#8a8a8a;
+  --good:#16a34a;--good-soft:#dcfce7;--bad:#b42318;--bad-soft:#fee4e2;
+  --warn:#9a5b1f;--warn-soft:#f6ece0;
+  --pink:#f6d5d8;--sage:#d6ddd3;--neutral:#f5f5f5;
+  --act:#111111;--good-ink:#16a34a;
+  --radius:20px;--radius-sm:14px;--radius-thumb:12px;--pill:999px;
+  --shadow:0 4px 24px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;word-break:keep-all}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.97)}
+
+/* ── 상단 바 ── */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(250,250,248,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:10px 24px}
+.logo{display:flex;align-items:center;gap:8px;flex:none}
+.logo-mark{width:28px;height:28px;border-radius:9px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.logo-text{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.logo-pill{font-size:11px;font-weight:600;color:var(--ink2);background:var(--neutral);border-radius:var(--pill);padding:2px 9px}
+.tabs{display:flex;gap:4px;flex:1;justify-content:center}
+.tabs button{min-height:44px;border:0;background:transparent;border-bottom:2px solid transparent;font-size:14.5px;color:var(--ink2);font-weight:500;padding:0 12px}
+.tabs button.on{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+.topsearch-wrap{flex:none;width:260px}
+.topsearch{width:100%;height:44px;border:1px solid var(--line2);border-radius:var(--pill);padding:0 16px;font-size:14px;background:#fff}
+.topsearch:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.status{max-width:1400px;margin:12px auto 0;padding:0 24px;font-size:13px;color:var(--ink2)}
+.status.bad{margin:12px 16px 0;padding:10px 14px;border-radius:var(--radius-sm);background:var(--bad-soft);color:var(--bad);font-weight:600}
+@media(min-width:900px){.status.bad{margin:12px auto 0;max-width:1352px}}
+.status.first{color:var(--ink2)}
+
+/* ── 레이아웃: 좌측 필터 + 본문 ── */
+.layout{max-width:1400px;margin:0 auto;padding:16px 24px 80px}
+@media(min-width:900px){.layout{display:grid;grid-template-columns:1fr;gap:20px}}
+@media(min-width:1100px){.layout{grid-template-columns:220px 1fr}}
+.filter-col{display:none}
+.filter-mobile{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px 10px;margin:0 -16px}
+.filter-mobile::-webkit-scrollbar{display:none}
+.filter-mobile .chip{flex:none}
+@media(min-width:900px){
+  .filter-mobile{display:none}
+  .filter-col{display:block}
+}
+@media(min-width:1100px){
+  .filter-col{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow-y:auto}
+}
+.filter-sec{margin-bottom:20px}
+.filter-sec h3{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.filter-cats{display:flex;flex-direction:column;gap:2px}
+.filter-cat{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;padding:0 10px;border:0;border-radius:12px;background:transparent;font-size:13.5px;color:var(--ink);text-align:left}
+.filter-cat b{font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.filter-cat:hover{background:var(--neutral)}
+.filter-pills{display:flex;flex-wrap:wrap;gap:6px}
+.filter-period{margin-top:2px}
+.filter-report{margin-top:4px;padding:16px;border-radius:var(--radius-sm);background:var(--pink)}
+.filter-report p{margin:0 0 10px;font-size:13px;color:var(--ink)}
+.filter-report .btn{width:100%}
+main{min-width:0}
+.view{display:none}.view.on{display:block}
+#home{display:none}#home.on{display:flex;flex-direction:column;gap:20px}
+
+/* ── 카드 ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0;box-shadow:var(--shadow);transition:transform .15s ease}
+.card:hover{transform:translateY(-2px)}
+.card.flat{background:var(--card);padding:16px 20px}
+.card.flat h2{font-size:14px}
+.step{min-width:0}
+.step-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.step-num{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.step-head-tx{min-width:0}
+.step-head h2{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em}
+.step-sub-line{margin:2px 0 0;font-size:12px;color:var(--muted);font-weight:500}
+.step-hero{padding:20px}
+.step-flat{background:var(--card)}
+.step1-status{margin:0 0 12px;font-size:12.5px;color:var(--ink2)}
+.step1-report .rp-head{font-size:22px!important;margin:0 0 8px!important}
+.mini-viz{margin-top:16px;max-width:280px}
+.mini-viz .vz-donut{gap:10px}
+.mini-viz .vz-donut svg{width:64px;height:64px}
+.mini-viz .vz-legend{font-size:11.5px}
+.mini-bars{margin:8px 0 12px}
+.mini-bars .vz-row{min-height:22px;font-size:11.5px}
+.mini-bars .vz-track{height:8px}
+.step2-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media(min-width:900px){.step2-grid{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}}
+.step2-left,.step2-right{min-width:0}
+.step2-right{display:flex;flex-direction:column;gap:16px}
+.step5-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px}
+@media(min-width:900px){.step5-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.move-body{margin-top:8px}
+.card h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.card .sub{margin:2px 0 8px;font-size:12.5px;color:var(--muted)}
+.card .wait{margin:8px 0 0;padding:16px;border-radius:var(--radius-sm);background:var(--neutral);color:var(--ink2);font-size:13.5px;text-align:center}
+.card .empty{margin:8px 0 0;color:var(--muted);font-size:13.5px}
+.more{margin-top:4px;min-height:44px;width:100%;border:0;background:transparent;color:var(--ink);font-weight:600;font-size:14px}
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left}
+.card .row:first-of-type{border-top:0}
+.row .rk{flex:none;width:36px;font-size:17px;font-weight:600;text-align:center;font-variant-numeric:tabular-nums}
+.row .rk small{font-size:11px;font-weight:400;color:var(--ink2)}
+.row img,.row .noimg,.thumb{flex:none;width:48px;height:48px;border-radius:var(--radius-thumb);object-fit:contain;background:#fff;border:1px solid var(--line)}
+.row .noimg,.thumb,span.thumb{background:linear-gradient(135deg,#f1f1f3,#e6e6ea)}
+.row .tx{flex:1;min-width:0}
+.row .br{display:block;font-size:12px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .nm{font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.row .pr{display:block;margin-top:2px;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.row .pr b{color:var(--ink);font-weight:600}
+.row .pr .dc{color:var(--warn);margin-left:4px}
+.row .side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:92px}
+.val{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.val.up{color:var(--good)}.val.down{color:var(--bad)}
+.row .val.up,.row .val.down,.flow .val.up,.flow .val.down{padding:1px 7px;border-radius:var(--pill)}
+.row .val.up,.flow .val.up{background:var(--good-soft)}
+.row .val.down,.flow .val.down{background:var(--bad-soft)}
+.own{font-size:12px;font-weight:600;line-height:18px;padding:1px 8px;border-radius:var(--pill);white-space:nowrap}
+.own.y{background:transparent;color:var(--good-ink);font-weight:400}.own.n{background:var(--warn-soft);color:var(--warn)}
+.flags{display:flex;gap:4px;margin-top:4px}
+.flags span{font-size:12px;padding:1px 7px;border-radius:var(--pill);background:var(--neutral);color:var(--ink2)}
+.mv{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mv.up{color:var(--good)}.mv.down{color:var(--bad)}.mv.new{color:#fff;background:var(--ink);padding:1px 8px;border-radius:var(--pill);font-size:12px}
+.flow{display:grid;gap:6px;margin-top:8px}
+.flow div{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-top:1px solid var(--line)}
+.flow div:first-child{border-top:0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.kpis div{background:var(--neutral);border-radius:var(--radius-sm);padding:12px}
+.kpis b{display:block;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpis span{font-size:12px;color:var(--ink2)}
+.rank-head{position:sticky;top:var(--top-h,66px);z-index:10;background:var(--bg);padding:4px 0 8px}
+.chips{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+.chips::-webkit-scrollbar{display:none}
+@media(min-width:900px){.chips{flex-wrap:wrap;overflow:visible}}
+.chip{flex:none;min-height:44px;padding:0 16px;border-radius:var(--pill);border:1px solid var(--line2);background:#fff;font-size:14px}
+.chip.on{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:600}
+.seg{display:flex;gap:4px;background:var(--neutral);border-radius:14px;padding:3px}
+.seg button{flex:1;min-height:44px;border:0;border-radius:11px;background:transparent;font-size:14px;color:#515154}
+.seg button.on{background:#111;color:#fff;font-weight:600}
+.list{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:4px 16px;box-shadow:var(--shadow)}
+.list .row:first-child{border-top:0}
+.msg{padding:32px 12px;text-align:center;color:var(--ink2);font-size:14px}
+.dim{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{visibility:hidden;position:fixed;left:0;right:0;bottom:0;z-index:41;background:#fff;border-radius:20px 20px 0 0;max-height:92vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s .25s;max-width:640px;margin:0 auto}
+.sheet.on{transform:none;visibility:visible;transition-delay:0s}
+@media(min-width:900px){.sheet{bottom:auto;top:50%;border-radius:20px;transform:translateY(-40%);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.sheet.on{transform:translateY(-50%);opacity:1;pointer-events:auto}}
+.sheet-head{flex:none;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}
+.sheet-head b{font-size:17px;font-weight:700}
+.close{min-height:44px;padding:0 16px;border:0;border-radius:var(--pill);background:var(--neutral);font-size:14px}
+.sheet-body{flex:1;min-height:0;overflow:auto;padding:16px;overscroll-behavior:contain}
+.pd-top{display:flex;gap:16px;align-items:flex-start}
+.pd-top img,.pd-top .noimg{flex:none;width:112px;height:112px;border-radius:16px;object-fit:contain;border:1px solid var(--line);background:#fff}
+.pd-top .noimg{background:linear-gradient(135deg,#f1f1f3,#e6e6ea)}
+.pd-top .br{font-size:13px;color:var(--ink2)}
+.pd-top h3{margin:2px 0 6px;font-size:17px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.pd-sec{margin-top:20px}
+.pd-sec h4{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--ink2)}
+.facts{display:flex;gap:16px;font-size:13px;color:var(--ink2)}
+.facts b{color:var(--ink);font-weight:600}
+.chart{max-width:440px}.chart svg{width:100%;height:auto;max-height:190px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--ink2);margin-top:4px}
+.legend i{display:inline-block;width:10px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px}
+.link-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.link-row:first-child{border-top:0}
+.link-row span{flex:1;min-width:0;overflow-wrap:anywhere}
+.btn{min-height:44px;padding:0 14px;border-radius:var(--pill);border:1px solid var(--line2);background:#fff;font-size:14px;white-space:nowrap}
+.btn.pri{border:0;background:var(--ink);color:#fff;font-weight:600}
+.btn.danger{color:var(--bad)}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink)}
+.field{display:block;margin-bottom:8px}
+.field textarea,.field input{width:100%;border:1px solid var(--line2);border-radius:var(--radius-sm);padding:10px 12px;font-size:16px;background:#fff;min-height:44px}
+.field textarea{min-height:72px;resize:vertical}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.grp{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:12px;box-shadow:var(--shadow)}
+.grp h2{margin:0 0 4px;font-size:17px;font-weight:700;overflow-wrap:anywhere}
+.grp .memo{font-size:13px;color:var(--ink);margin-top:2px}
+.grp .logi{display:block;font-size:12px;color:var(--good-ink);margin-top:2px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);max-width:calc(100% - 32px);background:rgba(17,17,17,.94);color:#fff;padding:10px 16px;border-radius:var(--pill);font-size:14px;opacity:0;pointer-events:none;transition:all .2s;z-index:60;word-break:keep-all;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row:focus-visible{outline-offset:-2px;border-radius:12px}
+button:focus:not(:focus-visible){outline:none}
+/* 요약 타일 — 누르면 해당 단계로 */
+#home .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0}
+.sum a{display:block;background:var(--neutral);border-radius:var(--radius-sm);padding:12px;text-decoration:none;color:var(--ink2);font-size:12.5px;min-height:44px}
+.sum b{display:block;font-size:24px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.sum a.hot b{color:var(--bad)}
+.card.small{padding:12px 16px}.card.small h2{font-size:15px}.card.small .sub{display:none}.card.small .empty{margin-top:2px}
+/* 폰: 탭은 아래, 검색은 헤더 */
+@media(max-width:899px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:0 8px env(safe-area-inset-bottom);justify-content:space-around}
+  .tabs button{border-bottom:0;min-height:52px}
+  .tabs button.on{color:var(--ink);border-bottom:0}
+  .topbar{padding-bottom:0;backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
+  .topbar-inner{flex-wrap:wrap;padding:10px 16px}
+  .topsearch-wrap{width:100%}
+  main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .layout{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+/* 랭킹은 한 화면에 더 많이 */
+#rankList .nm{-webkit-line-clamp:1}
+.rank-head{display:grid;gap:4px}
+/* 상세: 아래 고정 버튼 */
+.sheet-foot{flex:none;display:flex;gap:8px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.sheet-foot .btn{flex:1}
+.link-q{font-size:14px;margin:0 0 8px}
+.grp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.grp-chips .chip{min-height:44px}
+/* 담은 목록 */
+.grp .sum-line{font-size:13px;color:var(--ink2);margin:0 0 4px}
+.grp .memo{display:inline-block;background:var(--neutral);border-radius:var(--pill);padding:2px 10px;color:var(--ink2);font-size:12.5px;margin-top:4px}
+.fb{margin:12px 0 4px;padding:8px 12px;border-radius:var(--radius-sm);background:var(--warn-soft);color:var(--warn);font-size:13px}
+.pd-img{flex:none;display:block;border-radius:16px}
+.pd-name{color:inherit;text-decoration:none}.pd-name span{color:var(--ink2);font-weight:400}
+
+/* ── 2단계 묶음① ── */
+.bdg{display:inline-block;margin-right:6px;padding:0 7px;border-radius:var(--pill);font-size:11.5px;font-weight:600;line-height:19px;vertical-align:1px}
+.b-new{background:var(--neutral);color:var(--ink)}.b-peak{background:var(--warn-soft);color:var(--warn)}.b-up{background:var(--good-soft);color:var(--good)}.b-down{background:var(--bad-soft);color:var(--bad)}
+.head-acts{display:flex;gap:8px;align-items:center}
+.heart{min-height:44px;padding:0 14px;border:1px solid var(--line2);border-radius:var(--pill);background:#fff;font-size:14px;color:var(--ink)}
+.heart.on{border-color:var(--bad);color:var(--bad);font-weight:600;background:var(--bad-soft)}
+.lnk{border:0;background:transparent;padding:0;color:var(--ink2);font-size:13px;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+#bs{z-index:41}#bsDim{z-index:40}#pd{z-index:43}#pdDim{z-index:42}
+.brow{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left;min-height:56px}
+.list .brow:first-of-type{border-top:0}
+.brow .rk{flex:none;width:28px;font-size:17px;font-weight:600;text-align:center;font-variant-numeric:tabular-nums}
+.brow .tx{flex:1;min-width:0}
+.nm1{display:block;font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.meta{display:block;font-size:13px;color:var(--ink2);margin-top:2px}
+.tag-new{color:var(--ink);font-weight:600}.tag-own{color:var(--good-ink);font-weight:600}
+.hrt{color:var(--bad)}
+.note{margin:12px 0 4px;font-size:13px;color:var(--ink2)}
+.wrow{display:flex;align-items:center;gap:12px;width:100%;padding:10px 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left;min-height:52px}
+.card .wrow:first-of-type{border-top:0}
+.wtx{flex:1;min-width:0}.wtx .br{display:block;font-size:12px;color:var(--ink2)}.wtx .nm1{font-size:14.5px;font-weight:400;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.wch{flex:none;max-width:48%;text-align:right;font-size:13px;font-weight:600;color:var(--ink2)}
+.wch.up{color:var(--good)}.wch.down{color:var(--bad)}.wch.sale{color:var(--warn)}
+@media(max-width:899px){.tabs button{font-size:13.5px}}
+
+.bs-items .row .br{font-size:0}.bs-items .row .br .bdg{font-size:12px}
+.hint{margin:0;padding:12px 16px;border-radius:var(--radius-sm);background:#fff;border:1px solid var(--line);color:var(--ink2);font-size:13px}
+@media(min-width:900px){#brandList{max-width:760px}#pd.sheet.on{transform:translateY(-48%)}}
+.chart svg{width:100%}
+
+/* ── 트렌드 리포트 ── */
+.rp-kicker{margin:0 0 4px;font-size:12.5px;color:var(--ink2);font-weight:600}
+.rp-head{font-size:19px!important;line-height:1.35;margin:0 0 8px!important}
+.rp-title{font-size:20px;font-weight:700;line-height:1.35;margin:4px 0 8px}
+.rp-sum{margin:0 0 12px;padding-left:18px}.rp-sum li{margin:4px 0;font-size:14.5px}
+.rp-open{width:100%}
+.rp-item{padding:8px 0;border-top:1px solid var(--line)}.rp-item:first-of-type{border-top:0}
+.rp-item b{font-weight:600}.rp-item p{margin:2px 0 0;font-size:14px;color:var(--ink2)}
+.rp-why{display:block;margin-top:4px;font-size:13px;color:var(--ink);background:var(--neutral);border-radius:10px;padding:4px 8px}
+.rp-note{margin-top:16px;font-size:12.5px;color:var(--ink2)}
+.rp-date{min-height:44px;border:1px solid var(--line2);border-radius:var(--pill);padding:0 10px;background:#fff;font-size:14px}
+.rp-head,.rp-title,.rp-sum li,.rp-item,.rp-why{overflow-wrap:anywhere}
+/* ── 한눈에 보기 ── */
+.vz-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:4px}
+@media(min-width:900px){.vz-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.vz-block{border-top:1px solid var(--line);padding-top:12px;min-width:0}
+.vz-block h3{margin:0;font-size:15px;font-weight:700}
+.vz-block .sub{margin:2px 0 8px}
+.vz-donut{display:flex;gap:16px;align-items:center}
+.vz-donut svg{flex:none;width:128px;height:128px}
+.vz-legend{list-style:none;margin:0;padding:0;flex:1;min-width:0;font-size:13px}
+.vz-legend li{display:grid;grid-template-columns:10px 1fr auto auto;gap:6px;align-items:center;padding:2px 0}
+.vz-legend i{width:10px;height:10px;border-radius:3px}
+.vz-legend span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vz-legend b{font-weight:600;font-variant-numeric:tabular-nums}.vz-legend em{font-style:normal;color:var(--ink2);font-size:12px;font-variant-numeric:tabular-nums}
+.vz-bars{display:grid;gap:4px}
+.vz-row{display:grid;grid-template-columns:minmax(64px,34%) 1fr auto;gap:8px;align-items:center;width:100%;min-height:32px;border:0;background:transparent;padding:0;text-align:left;font-size:13px;color:var(--ink)}
+button.vz-row{min-height:44px}
+.vz-lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vz-track{height:8px;background:var(--neutral);border-radius:var(--pill);overflow:hidden}
+.vz-fill{display:block;height:100%;border-radius:var(--pill)}
+.vz-val{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.vz-key{display:flex;gap:12px;align-items:center;margin:6px 0 0;font-size:12px;color:var(--ink2)}
+.vz-key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.vz-cols{display:flex;gap:8px;align-items:flex-end;height:132px;padding-top:6px}
+.vz-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
+.vz-cbar{width:70%;max-width:44px;background:#111;border-radius:6px 6px 0 0}
+.vz-cv{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.vz-cl{font-size:11.5px;color:var(--ink2);white-space:nowrap}
+.vz-multi{display:grid;gap:4px}
+.vz-sm{display:grid;grid-template-columns:minmax(80px,38%) 1fr auto;gap:8px;align-items:center;font-size:13px}
+.vz-smlab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vz-smlab i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.vz-spark{width:100%;height:32px}
+.vz-sm b{font-weight:600;font-variant-numeric:tabular-nums;font-size:12.5px}
+.vz-mv{display:grid;grid-template-columns:minmax(0,40%) 1fr auto;gap:8px;align-items:center;width:100%;min-height:44px;border:0;border-top:1px solid var(--line);background:transparent;padding:4px 0;text-align:left;font-size:13px;color:var(--ink)}
+.vz-mvname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vz-mvname em{font-style:normal;color:var(--ink2)}
+.vz-mvtrack{position:relative;height:8px;background:linear-gradient(to right,transparent calc(50% - 1px),var(--line2) calc(50% - 1px),var(--line2) calc(50% + 1px),transparent calc(50% + 1px))}
+.vz-mvfill{position:absolute;top:0;height:100%;border-radius:var(--pill)}
+.vz-mvval{font-size:12.5px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}.vz-mvval.up{color:var(--good)}.vz-mvval.down{color:var(--bad)}.vz-mvval small{font-weight:400;color:var(--ink2)}
+
+/* ── 세트 ── */
+#set.on{display:grid;gap:16px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mrow{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left}
+.card .mrow:first-of-type{border-top:0}
+.mrow .side{color:var(--muted);font-size:18px}
+.mbadge{display:inline-block;margin-right:6px;padding:0 8px;border-radius:var(--pill);font-size:12px;font-weight:600;line-height:20px;white-space:nowrap}
+.mbadge.own{background:var(--neutral);color:var(--ink)}.mbadge.col{background:var(--good-soft);color:var(--good)}.mbadge.col.soon{background:var(--warn-soft);color:var(--warn)}.mbadge.col.end{background:var(--neutral);color:var(--ink2)}.mbadge.oy{background:var(--bad-soft);color:var(--bad)}
+.wide-btn{width:100%;margin-top:8px}
+.btn[disabled]{opacity:.45}
+.pending{margin-top:8px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--pink);color:var(--ink);font-size:14px}
+.setcard{margin-top:12px;padding:16px;border:1px solid var(--line2);border-radius:var(--radius-sm)}
+.setcard h3{margin:0;font-size:16px;font-weight:700;overflow-wrap:anywhere}
+.sitem{display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.sitem .tx{flex:1;min-width:0}.sitem .nm1{font-weight:400;font-size:14.5px}.sitem a{color:var(--ink);text-decoration:none}
+.role{font-size:12px;color:var(--ink2);font-weight:600;margin-right:4px}
+.why{font-size:14px;margin:8px 0 4px;overflow-wrap:anywhere}
+.setprice{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13.5px;color:var(--ink2)}.setprice b{color:var(--ink);font-weight:600}
+.field>span{display:block;font-size:13px;color:var(--ink2);margin-bottom:4px}
+.field select{width:100%;min-height:44px;border:1px solid var(--line2);border-radius:var(--radius-sm);padding:0 10px;font-size:16px;background:#fff}
+#mtBody .seg{margin-bottom:12px}
+
+/* ── 사이트 비교 ── */
+.cmp{display:grid;gap:2px}
+.cmp-row{display:grid;gap:3px;align-items:center;width:100%;min-height:44px;border:0;background:transparent;padding:2px 0;text-align:left;font-size:13px;color:var(--ink)}
+.cmp-head{min-height:32px;font-size:11.5px;color:var(--ink2);position:sticky;top:calc(var(--top-h,66px) + 104px);background:#fff;z-index:2}
+.cmp-head span{text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cmp-head span:first-child{text-align:left}
+.cmp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cmp-name i{font-style:normal;margin-right:4px}.cmp-name em{font-style:normal;font-size:11.5px}
+.cmp-tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--ink2);background:var(--neutral);border-radius:6px;padding:1px 5px;vertical-align:1px}
+.cmp-head em{font-style:normal;font-size:10.5px;color:var(--ink2)}
+.cmp-cell{display:flex;align-items:center;justify-content:center;height:30px;border-radius:8px;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.cmp-cell.empty{color:var(--muted);font-weight:400}
+#brandView{margin-bottom:8px}
+
+/* 대표색 점 */
+.cdot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:5px;vertical-align:1px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.cdot.clear{background:repeating-linear-gradient(45deg,#fff 0 2px,#d9d9de 2px 4px)!important}
+.cchip .cdot{margin:0 6px 0 0}
+.cnote{color:var(--ink)}
+
+/* ── 사이드 필터/앵커 ── */
+html{scroll-behavior:smooth}
+#step1,#step2,#step3,#step4,#step5{scroll-margin-top:16px}
+.side-anchors{display:none}
+.chip-anchors{display:none}
+@media(max-width:899px){
+  #step1,#step2,#step3,#step4,#step5{scroll-margin-top:calc(var(--top-h,66px) + 100px)}
+  .chip-anchors.show{display:flex;position:sticky;top:var(--top-h,66px);z-index:15;gap:8px;overflow-x:auto;white-space:nowrap;background:var(--bg);padding:8px 16px;margin:0;scrollbar-width:none}
+  .chip-anchors::-webkit-scrollbar{display:none}
+  .chip-anchors a{flex:none;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:var(--pill);border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;text-decoration:none}
+}
+@media(min-width:900px){
+  .side-anchors.show{display:block;margin-top:8px;border-top:1px solid var(--line);padding-top:14px}
+  .side-anchors-title{margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+  .side-anchors a{display:block;min-height:36px;line-height:36px;padding:0 4px;color:var(--ink2);text-decoration:none;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .side-anchors a:hover{color:var(--ink)}
+}
+
+/* 브랜드 검색 */
+.bc-form{display:flex;gap:8px;margin:4px 0 8px}
+.bc-form input{flex:1;min-width:0;height:44px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:0 14px;font-size:16px;background:var(--card)}
+.bc-form .btn{min-height:44px}
+.bc-recent{margin-top:8px}
+.bc-head{margin:8px 0 12px}
+.bc-head h2{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:2px 0 12px}
+.bc-stat{display:flex;gap:20px;margin-bottom:12px}
+.bc-stat span{display:flex;flex-direction:column;font-size:12.5px;color:var(--ink2)}
+.bc-stat b{font-size:22px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.bc-ratio{height:8px;border-radius:var(--pill);background:var(--line);overflow:hidden;margin-bottom:6px}
+.bc-ratio span{display:block;height:100%;background:var(--ink);border-radius:var(--pill)}
+.bc-ours{margin-top:10px;font-size:13.5px}
+.bc-ours summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink)}
+.bc-ours ul{margin:0;padding-left:18px;color:var(--ink2)}
+.bc-filter{margin-bottom:8px}
+.bc-row{text-decoration:none;color:inherit}
+.bc-row .meta{line-height:1.45}
+.bc-no{font-size:12px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:var(--pill);padding:3px 8px;white-space:nowrap}
+.tag-old{font-style:normal;font-size:11px;color:var(--ink2);border:1px solid var(--line);border-radius:8px;padding:1px 5px}
+/* 유튜브 쇼츠 */
+#c-yt{margin-top:0}
+.yt-sub{margin-top:14px}
+.yt-list{display:flex;flex-direction:column}
+.yt-row{display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.yt-v{flex:none;width:52px;font-weight:700;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.yt-row .tx{flex:1;min-width:0}
+.yt-row .nm1{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+[hidden]{display:none!important}
+.list.plain{background:none;padding:0;border-radius:0;border:0;box-shadow:none}
+.bc-filter{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.bc-filter::-webkit-scrollbar{display:none}
+.bc-filter .chip{flex:none}
+
+/* ── 성장 pill ── */
+.pill{display:inline-flex;align-items:center;min-height:22px;padding:2px 10px;border-radius:var(--pill);font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill-up{background:var(--good-soft);color:var(--good)}
+.pill-down{background:var(--bad-soft);color:var(--bad)}
+.pill-new{background:#111;color:#fff}
+
+/* ── HERO: 급상승 키워드 ── */
+.hero-card{padding:24px}
+.hero-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:16px}
+.hero-head h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0}
+.live-pill{display:inline-flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:var(--pill);padding:3px 10px 3px 8px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e}
+.hero-range{margin-left:auto;font-size:12.5px;color:var(--ink2)}
+.hero-tiles{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:700px){.hero-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hero-tile{background:var(--bg);border-radius:var(--radius);padding:18px}
+.hero-tile-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hero-kw{font-size:24px;font-weight:700;letter-spacing:-.02em;overflow-wrap:anywhere}
+.hero-sub{margin:6px 0 10px;font-size:12.5px;color:var(--ink2)}
+.hero-spark{width:100%;height:44px;display:block}
+
+/* ── TOP5 / 팔레트 ── */
+.top-row{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media(min-width:1100px){.top-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.top5-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.top5-row:first-of-type{border-top:0}
+.top5-rk{flex:none;width:22px;font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.top5-mono{flex:none;width:32px;height:32px;border-radius:50%;background:var(--neutral);color:var(--ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.top5-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.top5-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top5-track{height:6px;border-radius:var(--pill);background:var(--neutral);overflow:hidden}
+.top5-fill{display:block;height:100%;border-radius:var(--pill);background:#111}
+.palette-swatches{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 16px}
+.palette-swatch{display:flex;flex-direction:column;align-items:center;gap:4px;width:54px}
+.swatch-circle{width:44px;height:44px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.swatch-name{font-size:11.5px;color:var(--ink2);text-align:center}
+.swatch-pct{font-size:12px;font-weight:700}
+.palette-list{display:grid;gap:2px}
+.palette-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+.palette-row:first-of-type{border-top:0}
+.palette-dot{flex:none;width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.palette-name{flex:1;min-width:0}
+.palette-pct{color:var(--ink2);font-variant-numeric:tabular-nums}
+.date-chip{font-size:11.5px;font-weight:600;color:var(--ink2);background:var(--neutral);border-radius:var(--pill);padding:3px 10px}
+/* 모바일: 급상승 키워드 타일은 옆으로 넘기기 */
+@media(max-width:699px){
+  .hero-tiles{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -24px;padding:0 24px 4px;scrollbar-width:none}
+  .hero-tiles::-webkit-scrollbar{display:none}
+  .hero-tile{flex:0 0 78%;scroll-snap-align:start}
+  .hero-range{margin-left:0;width:100%}
+}
+.date-chip{min-height:0;height:auto;padding:4px 10px;font-size:12px;align-self:flex-start;pointer-events:none}
+@media(max-width:899px){nav.tabs,.tabs{background:#fff!important;box-shadow:0 -1px 0 var(--line)}}
+body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
+@media(min-width:1100px){body.not-home .layout{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 0925 QA: 스크롤바·필터·토글·스켈레톤 ── */
+*{scrollbar-width:thin;scrollbar-color:#e5e7eb transparent}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:999px}
+::-webkit-scrollbar-track{background:transparent}
+.hide-scrollbar,.chips,.filter-mobile,.chip-anchors{-ms-overflow-style:none;scrollbar-width:none}
+.chips::-webkit-scrollbar,.filter-mobile::-webkit-scrollbar,.chip-anchors::-webkit-scrollbar{display:none}
+/* 왼쪽 카테고리 */
+.filter-cat{border-radius:12px;padding:0 10px;transition:background .15s}
+.filter-cat:hover{background:#f3f4f6}
+.filter-cat b{background:#f3f4f6;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;color:#6b7280}
+.filter-cat.on{background:#111;color:#fff}
+.filter-cat.on b{background:rgba(255,255,255,.15);color:#fff}
+/* 위쪽 필터 칩 줄: 양끝 흐려짐 + 끌어서 넘기기 */
+.chips,.filter-mobile{overflow-x:auto;flex-wrap:nowrap!important;cursor:grab;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 24px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 24px),transparent 100%);padding-left:8px}
+.chips.grabbing,.filter-mobile.grabbing{cursor:grabbing;user-select:none}
+.chips .chip,.filter-mobile .chip{border:1px solid #e5e7eb;transition:background .2s,color .2s}
+.chips .chip.on{background:#111;color:#fff;border-color:#111}
+/* 일간/주간 같은 분절 토글 */
+.seg{background:#f3f4f6;border-radius:14px;padding:4px;gap:4px}
+.seg button{border-radius:10px;transition:background .2s,color .2s,box-shadow .2s}
+.seg button.on{background:#111;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+/* 손가락 화면에선 누르기 쉽게 44px 유지 */
+/* PC(마우스)에선 40px, 폰·폴드(900px 미만 또는 손가락)는 44px 유지 */
+@media (min-width:900px) and (pointer:fine){.filter-cat,.chips .chip,.filter-mobile .chip,.seg button{min-height:40px;height:40px}}
+/* 스켈레톤 */
+.skel{display:flex;flex-direction:column;gap:14px;padding:16px;background:#fff;border:1px solid #ececec;border-radius:20px}
+.skel-row{display:flex;gap:14px;align-items:center}
+.skel-img{flex:none;width:80px;height:80px;border-radius:14px}
+.skel-tx{flex:1;display:flex;flex-direction:column;gap:9px}
+.skel-bar{display:block;height:12px;border-radius:999px}
+.skel-bar.w60{width:60%}.skel-bar.w90{width:90%}.skel-bar.w40{width:40%}
+.skel-lines{display:flex;flex-direction:column;gap:10px;padding:6px 10px}
+.skel-lines .skel-bar{height:14px}
+.skel-img,.skel-bar{background:linear-gradient(90deg,#f3f4f6 25%,#e9eaee 37%,#f3f4f6 63%);background-size:400% 100%;animation:skel 1.3s ease infinite}
+@keyframes skel{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.skel-img,.skel-bar{animation:none}}
+
+/* ── PC 옆 칸 상세 (1100px+, 랭킹·브랜드) ── */
+.split-side{display:none}
+@media(min-width:1100px){
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,1.05fr);gap:20px;align-items:start}
+  .split-side.on{display:block;position:sticky;top:88px}
+  .sheet.docked,#pd.sheet.docked,#bs.sheet.docked{top:auto!important;opacity:1!important;pointer-events:auto!important;transform:none!important}
+  .split #brandList{max-width:none}
+  .sheet.docked{position:relative;inset:auto;left:auto;right:auto;bottom:auto;transform:none;visibility:visible;max-width:none;margin:0;max-height:calc(100vh - 108px);border-radius:20px;border:1px solid #ececec;box-shadow:0 4px 24px rgba(0,0,0,.04);z-index:auto!important;transition:none}
+  .sheet.docked .close{display:none}
+  .sheet.docked .sheet-body{overflow-y:auto}
+  .brow.sel,.row.sel{background:#f3f4f6;box-shadow:inset 3px 0 0 #111}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="logo" aria-label="TRENDLAB 레디영">
+      <span class="logo-mark" aria-hidden="true">T</span>
+      <span class="logo-text">TRENDLAB</span>
+      <span class="logo-pill">레디영</span>
+    </span>
+    <nav class="tabs" id="tabs" role="tablist">
+      <button type="button" role="tab" aria-selected="true" data-tab="home" class="on" onclick="go(this.dataset.tab)">대시보드</button>
+      <button type="button" role="tab" data-tab="rank" onclick="go(this.dataset.tab)">랭킹</button>
+      <button type="button" role="tab" data-tab="brand" onclick="go(this.dataset.tab)">브랜드</button>
+      <button type="button" role="tab" data-tab="set" onclick="go(this.dataset.tab)">세트</button>
+      <button type="button" role="tab" data-tab="board" onclick="go(this.dataset.tab)">담은 목록</button>
+    </nav>
+    <div class="topsearch-wrap">
+      <input id="topSearchInput" type="search" class="topsearch" maxlength="30" placeholder="브랜드 검색 (예: 코나피딜)" aria-label="브랜드 검색" onkeydown="if(event.key==='Enter'){topSearch(this.value);}">
+    </div>
+  </div>
+</header>
+<div id="status" class="status" role="status"></div>
+<nav class="chip-anchors show" id="chipAnchors" aria-label="이 페이지에서">
+  <a href="#step1">① 확인</a>
+  <a href="#step2">② 움직임</a>
+  <a href="#step3">③ 결정</a>
+  <a href="#step4">④ 세트</a>
+  <a href="#step5">⑤ 분석</a>
+</nav>
+<div class="layout">
+  <aside class="filter-col" id="filterCol"></aside>
+  <nav class="filter-mobile" id="filterMobile" aria-label="필터"></nav>
+  <main>
+    <section id="home" class="view on" aria-label="대시보드"></section>
+    <section id="rank" class="view" aria-label="랭킹">
+      <div class="rank-head">
+        <div class="chips" id="rankChips"></div>
+        <div class="seg" id="rankMode" role="group" aria-label="기간">
+          <button type="button" data-mode="day" class="on" onclick="setMode(this.dataset.mode)">일간</button>
+          <button type="button" data-mode="week" onclick="setMode(this.dataset.mode)">주간 (7일 평균)</button>
+        </div>
+      </div>
+      <div class="split"><div id="rankList" class="list"></div><aside class="split-side" id="rankSide" aria-label="상품 상세"></aside></div>
+    </section>
+    <section id="brand" class="view" aria-label="브랜드">
+      <div class="rank-head"><div class="seg" id="brandView" role="group" aria-label="보기"><button type="button" data-v="oy" class="on" aria-pressed="true" onclick="setBrandView(this.dataset.v)">올리브영 브랜드</button><button type="button" data-v="cmp" aria-pressed="false" onclick="setBrandView(this.dataset.v)">사이트 비교</button><button type="button" data-v="find" aria-pressed="false" onclick="setBrandView(this.dataset.v)">브랜드 검색</button></div><div class="chips" id="brandChips"></div></div>
+      <div class="split"><div id="brandList" class="list"></div><aside class="split-side" id="brandSide" aria-label="브랜드 상세"></aside></div>
+    </section>
+    <section id="set" class="view" aria-label="세트"></section>
+    <section id="board" class="view" aria-label="담은 목록"></section>
+  </main>
+</div>
+<div class="dim" id="pdDim" onclick="closePd()"></div>
+<div class="sheet" id="pd" role="dialog" aria-modal="true" aria-label="상품 상세" aria-hidden="true">
+  <div class="sheet-head"><b>상품 상세</b><span class="head-acts"><button type="button" class="heart" id="pdWatch" data-act="watch" onclick="watchAct(this)" hidden>♡ 관심</button><button type="button" class="close" onclick="closePd()">닫기</button></span></div>
+  <div class="sheet-body" id="pdBody"></div>
+  <div class="sheet-foot" id="pdFoot"></div>
+</div>
+<div class="dim" id="bsDim" onclick="closeBs()"></div>
+<div class="sheet" id="bs" role="dialog" aria-modal="true" aria-label="브랜드 상세" aria-hidden="true">
+  <div class="sheet-head"><b id="bsTitle">브랜드</b><span class="head-acts"><button type="button" class="heart" id="bsWatch" data-act="watch-b" onclick="watchAct(this)" hidden>♡ 관심</button><button type="button" class="close" onclick="closeBs()">닫기</button></span></div>
+  <div class="sheet-body" id="bsBody"></div>
+</div>
+<div class="dim" id="rpDim" onclick="closeRp()"></div>
+<div class="sheet" id="rp" role="dialog" aria-modal="true" aria-label="트렌드 리포트" aria-hidden="true">
+  <div class="sheet-head"><b>트렌드 리포트</b><span class="head-acts"><select id="rpDate" class="rp-date" aria-label="날짜" onchange="loadReport(this.value)" hidden></select><button type="button" class="close" onclick="closeRp()">닫기</button></span></div>
+  <div class="sheet-body" id="rpBody"></div>
+</div>
+<div class="dim" id="mtDim" onclick="closeMt()"></div>
+<div class="sheet" id="mt" role="dialog" aria-modal="true" aria-label="재료" aria-hidden="true">
+  <div class="sheet-head"><b id="mtTitle">재료</b><button type="button" class="close" onclick="closeMt()">닫기</button></div>
+  <div class="sheet-body" id="mtBody"></div>
+  <div class="sheet-foot" id="mtFoot"></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>var S = { tab: 'home', home: null, rank: { cat: 'all', mode: 'day', data: null }, board: null, pdKey: '', layers: [], brand: { cat: 'all', data: null, cur: '' }, rev: { home: 0, rank: 0, pd: 0, board: 0, brands: 0, bs: 0 } };
+var BADGE = { new: ['🌱', '신규'], peak: ['⭐', '정점'], up: ['🚀', '상승'], down: ['📉', '하락'] };
+function badgeHtml(b) { var x = BADGE[b]; return x ? '<span class="bdg b-' + b + '"><span aria-hidden="true">' + x[0] + '</span> ' + x[1] + '</span>' : ''; }
+var CATS = [['all', '전체'], ['10000010001', '스킨케어'], ['10000010009', '마스크팩'], ['10000010011', '선케어'], ['10000010008', '더모 코스메틱'], ['10000010004', '헤어케어'], ['10000010003', '바디케어'], ['10000020001', '건강식품'], ['10000020003', '구강용품'], ['10000020005', '헬스/건강용품'], ['10000020004', '위생용품']];
+var LINE_COLORS = ['#111111', '#8a8a8a', '#c9a7ab', '#9fb09a', '#c9c9c9', '#e9c9cc'];
+var PLATFORMS = ['올리브영', '화해', '다이소', '무신사', '글로벌', '큐텐', '아마존', 'YouTube'];
+function catCodeByLabel(label) { for (var i = 0; i < CATS.length; i++) { if (CATS[i][1] === label) return CATS[i][0]; } return null; }
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function won(n) { return typeof n === 'number' ? n.toLocaleString('ko-KR') + '원' : ''; }
+function $(id) { return document.getElementById(id); }
+function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove('on'); }, 2600); }
+function call(fn, args, ok, fail) {
+  var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function (e) { (fail || function () { toast('서버와 연결하지 못했어요. 잠시 뒤 다시 시도해주세요'); })(e); });
+  r[fn].apply(r, (args || []).concat([S.k || '']));   /* 서버가 암호를 다시 확인한다 */
+}
+function imgErr(img) { var d = document.createElement('div'); d.className = 'noimg'; d.setAttribute('aria-hidden', 'true'); img.replaceWith(d); }
+function imgHtml(src) { return src ? '<img src="' + esc(src) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="imgErr(this)">' : '<div class="noimg" aria-hidden="true"></div>'; }
+function ownHtml(o) { return o === true ? '<span class="own y">✓ 약국 있음</span>' : o === false ? '<span class="own n">약국 없음</span>' : ''; }
+function priceHtml(p) {
+  if (typeof p.salePrice !== 'number') return '';
+  return '<div class="pr"><b>' + won(p.salePrice) + '</b>' + (p.disc ? '<span class="dc">' + p.disc + '%</span>' : '') + '</div>';
+}
+function rowHtml(p, side, showRank, noOwn) {
+  return '<button type="button" class="row" data-key="' + esc(p.key) + '" onclick="openPd(this.dataset.key)">'
+    + (showRank ? '<span class="rk">' + esc(p.rank) + '<small>위</small></span>' : '')
+    + imgHtml(p.img)
+    + '<span class="tx"><span class="br">' + badgeHtml(p.badge) + esc(p.brand) + '</span><span class="nm">' + esc(p.name) + '</span>' + priceHtml(p) + '</span>'
+    + '<span class="side">' + (side || '') + (noOwn ? '' : ownHtml(p.owned)) + '</span></button>';
+}
+
+/* ── 탭 ── */
+/* 오늘 자료가 아직 없을 때 안내: 아침 수집 전이면 '예정', 아니면 '실패' */
+function fbText(date) { return S.home && S.home.waiting ? '오늘 수집(07:00) 전이라 ' + esc(date) + ' 자료로 보여드려요' : '오늘 수집에 실패해서 ' + esc(date) + ' 기준으로 보여드려요'; }
+/* 불러오는 동안: 사진 + 글줄 3개 모양의 뼈대(스켈레톤) */
+function skel(n) { var one = '<div class="skel-row" aria-hidden="true"><i class="skel-img"></i><span class="skel-tx"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></span></div>'; var h = ''; for (var i = 0; i < (n || 3); i++) h += one; return '<div class="skel" role="status" aria-label="불러오는 중">' + h + '</div>'; }
+/* 가로 칩 줄: 마우스로 끌어서 넘기기 */
+function dragScroll(el) {
+  if (!el || el.__drag) return; el.__drag = 1; var down = false, x0 = 0, s0 = 0, moved = false;
+  el.addEventListener('mousedown', function (e) { down = true; moved = false; x0 = e.pageX; s0 = el.scrollLeft; el.classList.add('grabbing'); });
+  window.addEventListener('mouseup', function () { down = false; el.classList.remove('grabbing'); });
+  el.addEventListener('mousemove', function (e) { if (!down) return; var d = e.pageX - x0; if (Math.abs(d) > 4) moved = true; el.scrollLeft = s0 - d; });
+  el.addEventListener('click', function (e) { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+}
+function go(tab) {
+  S.tab = tab;
+  [].forEach.call(document.querySelectorAll('#tabs button'), function (b) { var on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  [].forEach.call(document.querySelectorAll('.view'), function (v) { v.classList.toggle('on', v.id === tab); });
+  var homeOn = tab === 'home';
+  [].forEach.call(document.querySelectorAll('.chips,.filter-mobile,.chip-anchors'), dragScroll);
+  document.body.classList.toggle('not-home', !homeOn);   /* 왼쪽 필터는 대시보드에서만 (다른 탭은 자기 칩이 있어 중복) */
+  var sa = $('sideAnchors'); if (sa) sa.classList.toggle('show', homeOn);
+  var ca = $('chipAnchors'); if (ca) ca.classList.toggle('show', homeOn);
+  if (tab === 'home' && !S.home) loadHome();
+  if (tab === 'rank' && !S.rank.data) loadRank();
+  if (tab === 'board') loadBoard();
+  if (tab === 'brand' && !S.brand.data && S.brand.view !== 'cmp') loadBrands();
+  if (tab === 'brand' && S.brand.view === 'cmp') loadCompare();
+  if (tab === 'set') loadSetTab(); else clearTimeout(S.set && S.set.poll);
+  window.scrollTo(0, 0);
+}
+
+/* ── 상단 검색: 브랜드 검색으로 이동 ── */
+function topSearch(q) {
+  q = String(q || '').trim(); if (!q) return;
+  go('brand');
+  ++S.rev.brands;   /* go()가 시작했을 수 있는 브랜드 표 요청을 무효화 */
+  S.brand.view = 'find';
+  [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === 'find'; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  $('brandChips').hidden = true;
+  $('brandList').classList.add('plain');
+  S.bc = S.bc || { f: 'all', old: false };
+  bcSearch(q);
+}
+
+/* ── 좌측 필터 컬럼(카테고리 · 플랫폼 · 기간 · 주간 리포트) ── */
+function filterCatClick(label) {
+  var code = catCodeByLabel(label); if (!code) return;
+  go('rank'); setCat(code);
+}
+function openCompareFromFilter() { go('brand'); setBrandView('cmp'); }
+function filterCatsHtml() {
+  var cm = (S.viz && S.viz.catMix) || [];
+  if (!cm.length) return '<div class="skel-lines"><i class="skel-bar"></i><i class="skel-bar"></i><i class="skel-bar"></i><i class="skel-bar"></i></div>';
+  return cm.map(function (c) { return '<button type="button" class="filter-cat" data-label="' + esc(c.label) + '" onclick="filterCatClick(this.dataset.label)"><span>' + esc(c.label) + '</span><b>' + c.count + '</b></button>'; }).join('');
+}
+function filterPlatformsHtml() {
+  return PLATFORMS.map(function (p) { return '<button type="button" class="chip" onclick="openCompareFromFilter()">' + esc(p) + '</button>'; }).join('');
+}
+function filterReportHtml() {
+  return '<div class="filter-report"><p>매일 아침 맥이 오늘의 트렌드 리포트를 써요</p><button type="button" class="btn pri" onclick="openFilterReport()">리포트 보기</button></div>';
+}
+function openFilterReport() { var r = S.home && S.home.cards && S.home.cards.report; openReport(r ? r.date : ''); }
+function filterSideAnchorsHtml() {
+  return '<nav class="side-anchors" id="sideAnchors" aria-label="이 페이지에서"><p class="side-anchors-title">이 페이지에서</p>'
+    + '<a href="#step1">① 오늘 확인</a><a href="#step2">② 움직임 보기</a><a href="#step3">③ 들여올 것 결정</a><a href="#step4">④ 세트로 묶기</a><a href="#step5">⑤ 더 깊이 보기</a></nav>';
+}
+function filterColHtml() {
+  return '<div class="filter-sec"><h3>카테고리</h3><div class="filter-cats">' + filterCatsHtml() + '</div></div>'
+    + '<div class="filter-sec"><h3>플랫폼</h3><div class="filter-pills">' + filterPlatformsHtml() + '</div></div>'
+    + '<div class="filter-sec"><h3>기간</h3><div class="seg filter-period" role="group" aria-label="기간"><button type="button" class="on" aria-pressed="true">7일</button><button type="button" aria-pressed="false" onclick="toast(\'데이터가 30일 쌓이면 열려요\')">30일</button></div></div>'
+    + filterReportHtml() + filterSideAnchorsHtml();
+}
+function filterMobileHtml() {
+  var cm = (S.viz && S.viz.catMix) || [];
+  return cm.map(function (c) { return '<button type="button" class="chip" data-label="' + esc(c.label) + '" onclick="filterCatClick(this.dataset.label)">' + esc(c.label) + '</button>'; }).join('')
+    + PLATFORMS.map(function (p) { return '<button type="button" class="chip" onclick="openCompareFromFilter()">' + esc(p) + '</button>'; }).join('');
+}
+function renderFilters() {
+  var fc = $('filterCol'); if (fc) fc.innerHTML = filterColHtml();
+  var fm = $('filterMobile'); if (fm) fm.innerHTML = filterMobileHtml();
+  var sa = $('sideAnchors'); if (sa) sa.classList.toggle('show', S.tab === 'home');
+}
+
+/* ── 상태 띠 ── */
+function renderStatus(h) {
+  var el = $('status'), lr = h.lastRun;
+  el.classList.toggle('bad', !!h.stale);
+  var logi = h.logi === 'unavailable' ? ' · 물류앱 연결 확인 필요' : '';
+  el.classList.toggle('first', !lr);
+  if (!lr) { el.classList.remove('bad'); el.textContent = '아직 수집 기록이 없어요 · 첫 수집은 다음 날 아침 7시' + logi; return; }
+  if (h.stale) { el.textContent = '오늘 수집 실패 · 마지막 ' + lr.date + logi; return; }
+  if (h.waiting) { el.textContent = '어제 ' + lr.start + ' 수집 자료 · 오늘 수집은 07:00에 시작해요' + logi; return; }
+  var total = 0; Object.keys(lr.counts || {}).forEach(function (k) { total += +lr.counts[k] || 0; });
+  el.textContent = '오늘 ' + lr.start + ' 수집 · ' + total.toLocaleString('ko-KR') + '개 · 데이터 ' + h.dataDays + '일째' + (h.partial && h.partial.length ? ' · ' + h.partial.join(', ') + '는 수집 실패(이전 기록으로 표시)' : '') + logi;
+}
+
+/* ── 오늘 ── */
+function loadHome() {
+  var rev = ++S.rev.home;
+  if (!S.home) $('home').innerHTML = skel(3);
+  call('getHome', [], function (h) {
+    if (rev !== S.rev.home) return;
+    if (!h || !h.ok) { $('home').innerHTML = '<div class="msg">' + esc((h && h.msg) || '불러오지 못했어요') + '</div>'; return; }
+    S.home = h; renderStatus(h); renderHome();
+  }, function () { if (rev === S.rev.home) $('home').innerHTML = '<div class="msg">불러오지 못했어요. 잠시 뒤 새로고침해주세요</div>'; });
+}
+/* ── 홈: ①~⑤ 순서대로 하는 워크플로우 ── */
+var MOVE_SIDE = {
+  risers: function (p) { return '<span class="val up">▲' + esc(p.diff) + '</span>'; },
+  steady: function (p) { return '<span class="val">' + esc(p.days) + '일</span>'; },
+  falling: function (p) { return '<span class="val down">▼' + esc(p.drop) + '</span>'; }
+};
+var MOVE_EMPTY = { risers: '크게 오른 상품이 없어요', 'new': '오늘 새로 들어온 상품이 없어요', steady: '아직 스테디 상품이 없어요', falling: '떨어지는 스테디 상품이 없어요' };
+var MOVE_SUB = { risers: '일 전보다 크게 오른 상품', 'new': '직전 수집 때는 100위 밖이었어요', steady: '14일 중 10일 이상 30위 안', falling: '스테디였다가 떨어지는 중' };
+var MOVE_SEGS = [['risers', '급상승'], ['new', 'NEW'], ['steady', '꾸준'], ['falling', '하락']];
+function listBody(m, sideFn, emptyMsg, noOwn, moreAttr) {
+  if (m && m.ready === false) return '<p class="wait">' + m.needDays + '일 더 모이면 보여요</p>';
+  if (!m || !m.items.length) return '<p class="empty">' + emptyMsg + '</p>';
+  var items = m.items, shown = items.slice(0, 5);
+  return shown.map(function (p) { return rowHtml(p, sideFn ? sideFn(p) : '', true, noOwn); }).join('')
+    + (items.length > 5 ? '<button type="button" class="more" ' + moreAttr + '>' + (items.length - 5) + '개 더 보기</button>' : '');
+}
+function expandCard(id) {
+  if (!S.home) { loadHome(); return; }
+  var m = S.home.cards[id], el = document.querySelector('#home [data-card="' + id + '"]');
+  if (!el) return;
+  var side = MOVE_SIDE[id];
+  var mo = el.querySelector('.more'); if (!mo) return; mo.remove();
+  el.insertAdjacentHTML('beforeend', m.items.slice(5).map(function (p) { return rowHtml(p, side ? side(p) : '', true, id === 'missing'); }).join(''));
+}
+function expandMove() {
+  var seg = S.moveSeg || 'risers', m = S.home.cards[seg], el = document.querySelector('#move .move-body');
+  if (!el) return;
+  var mo = el.querySelector('.more'); if (!mo) return; mo.remove();
+  var side = MOVE_SIDE[seg];
+  el.insertAdjacentHTML('beforeend', m.items.slice(5).map(function (p) { return rowHtml(p, side ? side(p) : '', true, false); }).join(''));
+}
+function moveInnerHtml() {
+  var c = S.home.cards, seg = S.moveSeg || 'risers', m = c[seg];
+  var segHtml = '<div class="seg" role="group" aria-label="움직임 보기">' + MOVE_SEGS.map(function (s) {
+    return '<button type="button" data-seg="' + s[0] + '" class="' + (seg === s[0] ? 'on' : '') + '" aria-pressed="' + (seg === s[0]) + '" onclick="setMoveSeg(this.dataset.seg)">' + s[1] + '</button>';
+  }).join('') + '</div>';
+  var sub = seg === 'risers' ? (m && m.ready ? m.baseDays + MOVE_SUB.risers : '') : MOVE_SUB[seg];
+  return segHtml + (sub ? '<p class="sub">' + esc(sub) + '</p>' : '') + '<div class="move-body">' + listBody(m, MOVE_SIDE[seg], MOVE_EMPTY[seg], false, 'onclick="expandMove()"') + '</div>';
+}
+function setMoveSeg(seg) { S.moveSeg = seg; var el = $('moveInner'); if (el) el.innerHTML = moveInnerHtml(); }
+function moveCardHtml() { return '<article id="move" class="card" data-card="move"><div id="moveInner">' + moveInnerHtml() + '</div></article>'; }
+function missingPriceBars(items) {
+  var bands = [[0, 10000, '~1만'], [10000, 20000, '1~2만'], [20000, 30000, '2~3만'], [30000, Infinity, '3만+']];
+  var counts = bands.map(function () { return 0; });
+  items.forEach(function (p) {
+    if (typeof p.salePrice !== 'number') return;
+    for (var i = 0; i < bands.length; i++) { if (p.salePrice >= bands[i][0] && p.salePrice < bands[i][1]) { counts[i]++; break; } }
+  });
+  if (!counts.some(function (n) { return n > 0; })) return '';
+  return '<div class="mini-bars">' + vzBars(bands.map(function (b, i) { return { label: b[2], value: counts[i], text: counts[i] + '개' }; })) + '</div>';
+}
+function stepHead(n, label, sub) { return '<div class="step-head"><span class="step-num" aria-hidden="true">' + n + '</span><div class="step-head-tx"><h2>' + esc(label) + '</h2>' + (sub ? '<p class="step-sub-line">' + esc(sub) + '</p>' : '') + '</div></div>'; }
+function step1Html(home) {
+  var c = home.cards, r = c.report, statusEl = $('status'), statusText = statusEl ? statusEl.textContent : '';
+  var reportBody;
+  if (!r) reportBody = '<p class="empty">매일 아침 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>';
+  else {
+    var old = r.date !== home.today;
+    reportBody = (old ? '<p class="rp-kicker">' + esc(r.date) + ' 기준</p>' : '')
+      + '<h3 class="rp-head">' + esc(r.headline) + '</h3>'
+      + '<ul class="rp-sum">' + (r.summary || []).slice(0, 2).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+      + '<button type="button" class="btn pri rp-open" data-act="report-open" data-date="' + esc(r.date) + '" onclick="openReport(this.dataset.date)">전체 리포트</button>';
+  }
+  var cnt = function (m) { return m && m.ready !== false ? m.items.length : '–'; };
+  var stats = '<nav class="sum" aria-label="요약">'
+    + '<a class="hot" href="#step3"><b>' + cnt(c.missing) + '</b>들여올 후보</a>'
+    + '<a href="#step2"><b>' + cnt(c.risers) + '</b>급상승</a>'
+    + '<a href="#step2"><b>' + cnt(c.new) + '</b>NEW</a></nav>';
+  return '<section id="step1" class="card step step-hero" data-card="today">' + stepHead(1, '오늘 확인', '오늘 수집 결과와 리포트를 확인해요')
+    + (statusText ? '<p class="step1-status">' + esc(statusText) + '</p>' : '')
+    + '<div id="c-report" class="step1-report" data-card="report">' + reportBody + '</div>' + stats
+    + '<div id="step1-viz" class="mini-viz"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></div>'
+    + '</section>';
+}
+function step2Html(home) {
+  return '<section id="step2" class="step" data-card="move-step">' + stepHead(2, '움직임 보기', '무엇이 오르고 내리는지 한눈에 봐요')
+    + '<div class="step2-grid"><div class="step2-left">' + moveCardHtml() + '</div><div class="step2-right">' + watchCard(home.cards.watch) + '<article id="c-yt" class="card" data-card="yt"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article></div></div></section>';
+}
+function step3Html(home) {
+  var m = home.cards.missing, emptyMsg = home.logi === 'unavailable' ? '물류앱을 읽지 못해 판단할 수 없어요' : '상위 상품이 모두 약국에 있어요';
+  var viz = (m && m.ready !== false && m.items.length) ? missingPriceBars(m.items) : '';
+  var body = listBody(m, null, emptyMsg, true, 'onclick="expandCard(\'missing\')"');
+  return '<section id="step3" class="card step" data-card="missing">' + stepHead(3, '들여올 것 결정', '약국에 없는 상위 상품을 확인해요')
+    + '<p class="sub">전체 상위권 중 약국에 없는 것</p>' + viz + body + '</section>';
+}
+function step4Html() {
+  var n = (S.set && S.set.mats) ? S.set.mats.length : null;
+  var hint = n != null ? ('재료 ' + n + '개 준비됨 · 오늘 트렌드로 세트를 짜보세요') : '자사·협업 제품을 모아 세트를 만들어요';
+  return '<section id="step4" class="card step step-flat" data-card="set-cta">' + stepHead(4, '세트로 묶기', '자사·협업 제품으로 세트를 만들어요')
+    + '<p class="sub">' + esc(hint) + '</p>'
+    + '<button type="button" class="btn pri wide-btn" onclick="go(\'set\')">세트 탭으로 이동</button></section>';
+}
+function step5Html(home) {
+  var c = home.cards;
+  return '<section id="step5" class="step" data-card="analysis">' + stepHead(5, '더 깊이 보기', '그래프로 더 자세히 살펴봐요')
+    + '<article id="c-viz" class="card" data-card="viz"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article>'
+    + '<div class="step5-grid">' + survivalCard(c.survival) + flowCardHtml(c.flow) + priceCardHtml(c.price) + '</div></section>';
+}
+function renderHome() {
+  var home = S.home;
+  $('home').innerHTML = '<section id="hero-kw" class="card hero-card" data-card="hero"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></section>'
+    + '<div class="top-row"><article id="top5-kw" class="card" data-card="top5"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article><article id="palette-kw" class="card" data-card="palette"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article></div>'
+    + step1Html(home) + step2Html(home) + step3Html(home) + step4Html() + step5Html(home);
+  if (S.viz) renderViz(); else loadViz();
+  loadYt();
+}
+
+/* ── 랭킹 ── */
+function renderChips() {
+  $('rankChips').innerHTML = CATS.map(function (c) { return '<button type="button" class="chip' + (S.rank.cat === c[0] ? ' on' : '') + '" aria-pressed="' + (S.rank.cat === c[0]) + '" data-cat="' + c[0] + '" onclick="setCat(this.dataset.cat)">' + c[1] + '</button>'; }).join('');
+  [].forEach.call(document.querySelectorAll('#rankMode button'), function (b) { b.classList.toggle('on', b.dataset.mode === S.rank.mode); b.setAttribute('aria-pressed', b.dataset.mode === S.rank.mode); });
+}
+function setCat(c) { S.rank.cat = c; loadRank(); }
+function setMode(m) { S.rank.mode = m; loadRank(); }
+function loadRank() {
+  renderChips();
+  var rev = ++S.rev.rank;
+  $('rankList').innerHTML = skel(3);
+  call('getRanking', [S.rank.cat, S.rank.mode], function (r) {
+    if (rev !== S.rev.rank) return;
+    if (!r || !r.ok) { $('rankList').innerHTML = '<div class="msg">불러오지 못했어요</div>'; return; }
+    S.rank.data = r;
+    if (!r.items.length) { $('rankList').innerHTML = '<div class="msg">이 카테고리는 아직 수집된 기록이 없어요</div>'; return; }
+    $('rankList').innerHTML = (r.fallback ? '<p class="fb">' + fbText(r.date) + '</p>' : '') + r.items.map(function (p) {
+      var mv = p.move === 'NEW' ? (p.badge === 'new' ? '' : '<span class="mv new">첫 진입</span>') : typeof p.move === 'number' && p.move !== 0 ? '<span class="mv ' + (p.move > 0 ? 'up' : 'down') + '">' + (p.move > 0 ? '▲' : '▼') + Math.abs(p.move) + '</span>' : '';
+      if (r.mode === 'week') mv = '<span class="val">평균 ' + esc(p.avg) + '위</span>';
+      var fl = (p.flags || []).slice(0, 2).map(function (f) { return '<span>' + esc(f) + '</span>'; }).join('');
+      return rowHtml(p, mv, true).replace('</span><span class="side">', function () { return (fl ? '<span class="flags">' + fl + '</span>' : '') + '</span><span class="side">'; });
+    }).join('');
+    if (canDock('pd')) { var ks = r.items.map(function (x) { return x.key; }); openPd(ks.indexOf(S.pdKey) !== -1 ? S.pdKey : ks[0]); }   /* PC: 첫 상품을 옆 칸에 바로 */
+  }, function () { if (rev === S.rev.rank) $('rankList').innerHTML = '<div class="msg">불러오지 못했어요</div>'; });
+}
+
+/* ── 상세 ── */
+function openPd(key) {
+  if (canDock('pd') && !(S.layers.length && S.layers[S.layers.length - 1] === 'bs')) {   /* 랭킹 탭 PC: 옆 칸에 바로 */
+    S.pdKey = key; $('pdFoot').innerHTML = ''; $('pdBody').innerHTML = skel(3); $('pdWatch').hidden = true;
+    dockSheet('pd'); markSel('rankList', 'data-key', key); loadPd(); return;
+  }
+  undockSheet('pd');
+  S.pdKey = key; S.pdFrom = document.activeElement; $('pdFoot').innerHTML = '';
+  $('pdBody').innerHTML = skel(3);
+  $('pdDim').classList.add('on'); $('pd').classList.add('on'); $('pd').setAttribute('aria-hidden', 'false'); $('pdWatch').hidden = true;
+  layerOpen('pd');
+  $('pd').querySelector('.close').textContent = S.layers.length > 1 && S.layers[S.layers.length - 2] === 'bs' ? '‹ ' + (S.brand.cur || '뒤로') : '닫기';
+  loadPd();
+  setTimeout(function () { var c = document.querySelector('#pd .close'); if (c) c.focus(); }, 60);
+}
+function loadPd() {
+  var rev = ++S.rev.pd, key = S.pdKey;
+  call('getProduct', [key], function (r) {
+    if (rev !== S.rev.pd || key !== S.pdKey) return;
+    if (!r || !r.ok) { $('pdBody').innerHTML = '<div class="msg">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
+    renderPd(r);
+  });
+}
+/* 여러 겹 창(브랜드 상세 위 상품 상세)과 뒤로가기: 열 때 기록 하나, 닫을 땐 뒤로가기로 맨 위만 닫는다 */
+function layerOpen(id) {
+  if (S.layers.indexOf(id) === -1) { S.layers.push(id); history.pushState({ l: id }, ''); }
+  var z = 40 + S.layers.indexOf(id) * 2;   /* 나중에 연 창이 항상 위 */
+  $(id).style.zIndex = z + 1; $(id + 'Dim').style.zIndex = z;
+}
+function layerClose(id) { if (S.layers[S.layers.length - 1] === id) history.back(); else { S.layers = S.layers.filter(function (x) { return x !== id; }); layerHide(id); } }
+function layerHide(id) { if (id === 'pd') hidePd(); else if (id === 'bs') hideBs(); else if (id === 'rp') hideRp(); else if (id === 'mt') hideMt(); }
+window.addEventListener('popstate', function () { var id = S.layers.pop(); if (id) layerHide(id); });
+function closePd() { layerClose('pd'); }
+function hidePd() {
+  $('pdDim').classList.remove('on'); $('pd').classList.remove('on'); $('pd').setAttribute('aria-hidden', 'true');
+  S.pdKey = ''; $('pdFoot').innerHTML = '';
+  if (S.pdFrom && S.pdFrom.focus && document.body.contains(S.pdFrom)) S.pdFrom.focus();
+}
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.layers.length) layerClose(S.layers[S.layers.length - 1]); });
+function chartSvg(series, labels, score) {   /* score=true: 값이 클수록 위 (브랜드 점수) */
+  var cats = Object.keys(series); if (!cats.length) return '<p class="empty">순위 기록이 없어요</p>';
+  var dates = {}; cats.forEach(function (c) { series[c].forEach(function (x) { dates[x.date] = 1; }); });
+  var ds = Object.keys(dates).sort(), W = 320, H = 140, pl = 28, pr = 8, pt = 8, pb = 20;
+  var maxR = 1; cats.forEach(function (c) { series[c].forEach(function (x) { maxR = Math.max(maxR, x.rank); }); });
+  maxR = score ? Math.max(5, Math.ceil(maxR * 1.2 / 5) * 5) : Math.min(100, Math.max(10, Math.ceil(maxR / 10) * 10));
+  var U = score ? '점' : '위', TOP = score ? maxR : 1, BOT = score ? 0 : maxR;
+  var X = function (d) { return ds.length < 2 ? (pl + W - pr) / 2 : pl + (W - pl - pr) * ds.indexOf(d) / (ds.length - 1); };
+  var Y = score ? function (v) { return pt + (H - pt - pb) * (1 - v / maxR); } : function (r) { return pt + (H - pt - pb) * (r - 1) / (maxR - 1); };
+  var g = '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(TOP) + '" y2="' + Y(TOP) + '" stroke="rgba(0,0,0,.08)"/><line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(BOT) + '" y2="' + Y(BOT) + '" stroke="rgba(0,0,0,.08)"/>'
+    + '<text x="' + (pl - 6) + '" y="' + (Y(TOP) + 4) + '" text-anchor="end" font-size="10" fill="#6e6e73">' + TOP + (score ? '' : '위') + '</text><text x="' + (pl - 6) + '" y="' + (Y(BOT) + 4) + '" text-anchor="end" font-size="10" fill="#6e6e73">' + BOT + '</text>'
+    + '<text x="' + pl + '" y="' + (H - 4) + '" font-size="10" fill="#6e6e73">' + esc(ds[0].slice(5)) + '</text><text x="' + (W - pr) + '" y="' + (H - 4) + '" text-anchor="end" font-size="10" fill="#6e6e73">' + esc(ds[ds.length - 1].slice(5)) + '</text>';
+  var legend = '';
+  cats.forEach(function (c, i) {
+    var col = LINE_COLORS[i % LINE_COLORS.length], pts = series[c];
+    g += '<path d="' + pts.map(function (x, j) { return (j ? 'L' : 'M') + X(x.date).toFixed(1) + ' ' + Y(x.rank).toFixed(1); }).join(' ') + '" fill="none" stroke="' + col + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(function (x) { g += '<circle cx="' + X(x.date).toFixed(1) + '" cy="' + Y(x.rank).toFixed(1) + '" r="3" fill="' + col + '"><title>' + esc(x.date + ' · ' + x.rank + U) + '</title></circle>'; });
+    legend += '<span><i style="background:' + col + '"></i>' + esc((labels || {})[c] || c) + ' ' + pts[pts.length - 1].rank + U + '</span>';
+  });
+  return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="최근 순위 흐름">' + g + '</svg><div class="legend">' + legend + '</div></div>';
+}
+function renderPd(r) {
+  var pw = $('pdWatch'); pw.hidden = false; pw.dataset.key = r.card.key; setHeart(pw, r.watched);
+  var c = r.card, lp = r.prices.length ? r.prices[r.prices.length - 1] : null, L = r.links;
+  var groups = (S.board && S.board.groups || []).map(function (g) { return g.group; }).filter(Boolean);
+  var oyUrl = esc(/^https:\/\//.test(c.url) ? c.url : 'https://www.oliveyoung.co.kr/');
+  var h = '<div class="pd-top"><a class="pd-img" href="' + oyUrl + '" target="_blank" rel="noopener" aria-label="올리브영에서 보기">' + imgHtml(c.img) + '</a><div><div class="br">' + badgeHtml(c.badge) + '<button type="button" class="lnk" data-b="' + esc(c.brand) + '" onclick="openBrand(this.dataset.b, true)">' + esc(c.brand) + ' ›</button></div><h3><a class="pd-name" href="' + oyUrl + '" target="_blank" rel="noopener">' + esc(c.name) + ' <span aria-hidden="true">↗</span></a></h3>'
+    + (lp && typeof lp.salePrice === 'number' ? '<div class="pr"><b>' + won(lp.salePrice) + '</b>' + (lp.price && lp.price > lp.salePrice ? ' <s style="color:#86868b">' + won(lp.price) + '</s>' : '') + '</div>' : '')
+    + '<div class="facts"><span>처음 본 날 <b>' + esc(c.first) + '</b></span><span>최고 <b>' + esc(c.best) + '위</b></span></div></div></div>'
+    + '<div class="pd-sec"><h4>최근 30일 순위</h4>' + chartSvg(r.series, r.labels) + '</div>' + otherMallsHtml(r.otherMalls)
+    + '<div class="pd-sec"><h4>우리 약국 연결</h4>';
+  if (L.logi === 'unavailable') h += '<p class="empty">물류앱을 읽지 못했어요. 설정의 물류앱 시트 ID 를 확인해주세요</p>';
+  else {
+    h += L.confirmed.map(function (n) { return '<div class="link-row"><span>✓ ' + esc(n) + '</span><button type="button" class="btn" data-act="link-off" data-name="' + esc(n) + '" onclick="linkAct(this)">해제</button></div>'; }).join('');
+    if (L.suggest.length) h += '<p class="link-q">우리 약국의 이 상품과 같은 상품인가요?</p>';
+    h += L.suggest.map(function (s) { return '<div class="link-row"><span><b>' + esc(s.name) + '</b></span><button type="button" class="btn pri" data-act="link-yes" data-name="' + esc(s.name) + '" onclick="linkAct(this)">같은 상품</button><button type="button" class="btn" data-act="link-no" data-name="' + esc(s.name) + '" onclick="linkAct(this)">아니에요</button></div>'; }).join('');
+    if (!L.confirmed.length && !L.suggest.length) h += '<p class="empty">비슷한 약국 상품을 찾지 못했어요 → 들여올 후보예요</p>';
+  }
+  h += '</div><div class="pd-sec"><h4>' + (r.board ? '담은 상품' : '담기') + '</h4>'
+    + '<label class="field"><textarea id="pdMemo" maxlength="200" placeholder="메모 (예: 가을 보습 세트에 넣기)">' + esc(r.board ? r.board.memo : '') + '</textarea></label>'
+    + '<label class="field"><input id="pdGroup" maxlength="30" list="pdGroups" placeholder="세트 묶음 이름 (선택)" value="' + esc(r.board ? r.board.group : '') + '"></label>'
+    + (groups.length ? '<div class="grp-chips">' + groups.map(function (g) { return '<button type="button" class="chip" data-g="' + esc(g) + '" onclick="pickGroup(this)">' + esc(g) + '</button>'; }).join('') + '</div>' : '')
+    + (r.board ? '<div class="acts"><button type="button" class="btn danger" onclick="removeBoard()">담은 목록에서 빼기</button></div>' : '') + '</div>';
+  $('pdBody').innerHTML = h;
+  $('pdFoot').innerHTML = '<button type="button" class="btn pri" data-act="save-board" onclick="saveBoard()">' + (r.board ? '메모·묶음 저장' : '☆ 담기') + '</button><a class="btn" href="' + esc(/^https:\/\//.test(c.url) ? c.url : 'https://www.oliveyoung.co.kr/') + '" target="_blank" rel="noopener">올리브영 ↗</a>';
+}
+function pickGroup(b) { $('pdGroup').value = b.dataset.g; }
+function linkAct(btn) {
+  var yes = btn.dataset.act === 'link-yes', name = btn.dataset.name, key = S.pdKey;
+  btn.disabled = true;
+  call('linkProduct', [key, name, yes], function (r) {
+    if (!r || !r.ok) { btn.disabled = false; toast((r && r.msg) || '저장하지 못했어요'); return; }
+    toast(yes ? '약국 상품과 연결했어요' : btn.dataset.act === 'link-off' ? '연결을 해제했어요' : '추천에서 뺐어요');
+    S.home = null; S.rank.data = null;
+    if (key === S.pdKey) loadPd();
+  });
+}
+function saveBoard() {
+  if (S.saving) return; S.saving = true;
+  var key = S.pdKey, memo = $('pdMemo').value.trim(), group = $('pdGroup').value.trim();
+  call('saveBoardItem', [key, memo, group], function (r) {
+    S.saving = false;
+    if (!r || !r.ok) { toast((r && r.msg) || '저장하지 못했어요'); return; }
+    toast(group ? '"' + group + '" 에 담았어요' : '담았어요'); refreshBoardGroups(); if (key === S.pdKey) loadPd();
+  }, function () { S.saving = false; toast('저장하지 못했어요'); });
+}
+function removeBoard() {
+  var key = S.pdKey;
+  call('removeBoardItem', [key], function () { toast('담은 목록에서 뺐어요'); refreshBoardGroups(); if (key === S.pdKey) loadPd(); });
+}
+
+/* ── 담은 목록 ── */
+function loadBoard() {
+  var rev = ++S.rev.board;
+  if (S.board) renderBoard(); else $('board').innerHTML = skel(3);
+  call('getBoard', [], function (b) {
+    if (rev !== S.rev.board) return;
+    if (!b || !b.ok) { if (!S.board) $('board').innerHTML = '<div class="msg">불러오지 못했어요</div>'; return; }
+    S.board = b; renderBoard();
+  });
+}
+function refreshBoardGroups() { call('getBoard', [], function (b) { if (b && b.ok) { S.board = b; if (S.tab === 'board') renderBoard(); } }, function () {}); }
+function renderBoard() {
+  var b = S.board;
+  if (!b.groups.length) { $('board').innerHTML = '<div class="msg">랭킹에서 상품을 누르고 ☆ 담기로 모아보세요</div>'; return; }
+  $('board').innerHTML = b.groups.map(function (g) {
+    var noLogi = g.items.filter(function (p) { return !(p.logi && p.logi.length); }).length;
+    return '<section class="grp"><h2>' + esc(g.group || '묶음 없음') + '</h2><p class="sum-line">' + g.items.length + '개' + (noLogi ? ' · 약국에 없는 상품 ' + noLogi + '개' : ' · 모두 약국에 있음') + '</p>'
+      + g.items.map(function (p) {
+        var extra = (p.memo ? '<span class="memo">' + esc(p.memo) + '</span>' : '') + (p.logi && p.logi.length ? '<span class="logi">약국: ' + esc(p.logi.join(', ')) + '</span>' : '');
+        return rowHtml({ key: p.key, brand: p.brand, name: p.name, img: p.img, owned: p.logi && p.logi.length ? true : false }, '<span class="val">최고 ' + esc(p.rank) + '위</span>', false).replace('</span><span class="side">', function () { return extra + '</span><span class="side">'; });
+      }).join('') + '</section>';
+  }).join('');
+}
+
+function syncTop() { var t = document.querySelector('.top'); if (t) document.documentElement.style.setProperty('--top-h', (window.innerWidth >= 900 ? 0 : t.offsetHeight) + 'px'); }
+window.addEventListener('resize', syncTop); syncTop();
+function start() { renderFilters(); loadHome(); refreshBoardGroups(); }
+if (google.script.url && google.script.url.getLocation) google.script.url.getLocation(function (loc) { S.k = (loc && loc.parameter && loc.parameter.k) || ''; start(); });
+else start();
+
+/* ── 2단계 묶음①: 관심 · 생존율 · 브랜드 ── */
+function setHeart(btn, on) { btn.classList.toggle('on', !!on); btn.setAttribute('aria-pressed', !!on); btn.textContent = (on ? '♥' : '♡') + ' 관심'; }
+function watchAct(btn) {
+  var kind = btn.dataset.act === 'watch-b' ? 'b' : 'p', key = kind === 'b' ? btn.dataset.b : btn.dataset.key;
+  if (!key || btn.disabled) return; btn.disabled = true;
+  call('toggleWatch', [kind, key], function (r) {
+    btn.disabled = false;
+    if (!r || !r.ok) { toast((r && r.msg) || '저장하지 못했어요'); return; }
+    setHeart(btn, r.watched); toast(r.watched ? '관심에 넣었어요 · 오늘 화면에서 변화 확인' : '관심에서 뺐어요');
+    S.home = null; S.brand.data = null;
+    if (kind === 'b' && S.tab === 'brand') loadBrands();   /* 목록의 ♥ 바로 반영 */
+  }, function () { btn.disabled = false; toast('저장하지 못했어요'); });
+}
+function watchCard(w) {
+  if (!w) return '';
+  var TY = { up: 'up', down: 'down', out: 'down', 'in': 'up', 'sale-on': 'sale', 'sale-off': '', badge: '', same: '' };
+  var items = (w.items || []).map(function (x) {
+    return '<button type="button" class="wrow" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"><span class="wtx"><span class="br">' + esc(x.brand) + '</span><span class="nm1">' + esc(x.name) + '</span></span><span class="wch ' + (TY[x.type] || '') + '">' + esc(x.text) + '</span></button>';
+  }).join('');
+  var brands = (w.brands || []).map(function (b) {
+    var d = b.delta == null ? '비교 전' : (b.delta > 0 ? '▲' : b.delta < 0 ? '▼' : '') + Math.abs(b.delta) + '점';
+    return '<button type="button" class="wrow" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="wtx"><span class="br">브랜드</span><span class="nm1">' + esc(b.brand) + ' · ' + b.count + '개</span></span><span class="wch ' + (b.delta > 0 ? 'up' : b.delta < 0 ? 'down' : '') + '">' + d + '</span></button>';
+  }).join('');
+  if (!items && !brands) return '<p id="c-watch" class="hint" data-card="watch">♡ 관심 — 상품·브랜드에서 누르면 매일 변화가 여기 모여요 (☆ 담기는 세트 후보 저장)</p>';
+  return '<article id="c-watch" class="card" data-card="watch"><h2>관심 변화</h2><p class="sub">♡ 누른 상품·브랜드의 오늘 변화</p>' + items + brands + '</article>';
+}
+function survivalCard(sv) {
+  if (!sv) return '';
+  var cell = function (x, label) { return '<div><b>' + (x && x.rate != null ? Math.round(x.rate * 100) + '%' : '–') + '</b><span>' + label + (x && x.rate != null ? ' · ' + x.alive + '/' + x.n : ' · 아직 판단 전') + '</span></div>'; };
+  return '<article id="c-survival" class="card flat" data-card="survival"><h2>신제품 생존율</h2><p class="sub">새로 100위에 들어온 상품이 N일 뒤에도 남아 있는 비율</p><div class="kpis">'
+    + cell(sv.d7, '7일') + cell(sv.d14, '14일') + cell(sv.d30, '30일') + '</div></article>';
+}
+function flowCardHtml(flow) {
+  return '<article id="c-flow" class="card flat" data-card="flow"><h2>지난주 대비 카테고리</h2><p class="sub">최근 7일 vs 이전 7일, 상위 30위에 머문 상품·일</p><div class="flow">'
+    + (flow.length ? flow.slice().sort(function (a, b) { return b.delta - a.delta; }).map(function (f) { return '<div><span>' + esc(f.label) + '</span><span class="val ' + (f.delta > 0 ? 'up' : f.delta < 0 ? 'down' : '') + '">' + (f.delta > 0 ? '▲' : f.delta < 0 ? '▼' : '') + Math.abs(f.delta) + '</span></div>'; }).join('') : '<p class="empty">카테고리 데이터가 없어요</p>')
+    + '</div></article>';
+}
+function priceCardHtml(price) {
+  return '<article id="c-price" class="card flat" data-card="price"><h2>가격대 · 할인</h2><p class="sub">전체 상위 30위 판매가 기준</p>'
+    + (price.avg == null ? '<p class="empty">가격 정보가 없어요</p>' : '<div class="kpis"><div><b>' + won(price.avg) + '</b><span>평균</span></div><div><b>' + won(price.median) + '</b><span>중앙값</span></div><div><b>' + Math.round(price.saleRate * 100) + '%</b><span>할인 중</span></div></div>')
+    + '</article>';
+}
+function renderBrandChips() {
+  $('brandChips').innerHTML = CATS.map(function (c) { return '<button type="button" class="chip' + (S.brand.cat === c[0] ? ' on' : '') + '" aria-pressed="' + (S.brand.cat === c[0]) + '" data-cat="' + c[0] + '" onclick="setBrandCat(this.dataset.cat)">' + c[1] + '</button>'; }).join('');
+}
+function setBrandCat(c) { S.brand.cat = c; S.brand.data = null; loadBrands(); }
+/* 브랜드 탭: 올리브영 브랜드 표 ↔ 사이트 비교 */
+function loadBrands() {
+  renderBrandChips();
+  var rev = ++S.rev.brands;
+  $('brandList').innerHTML = skel(3);
+  call('getBrands', [S.brand.cat], function (r) {
+    if (rev !== S.rev.brands) return;
+    if (!r || !r.ok) { $('brandList').innerHTML = '<div class="msg">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
+    S.brand.data = r;
+    if (!r.brands.length) { $('brandList').innerHTML = '<div class="msg">이 카테고리는 아직 수집된 기록이 없어요</div>'; return; }
+    $('brandList').innerHTML = (r.fallback ? '<p class="fb">' + fbText(r.date) + '</p>' : '')
+      + '<p class="note">100위 안에 상품이 많고 순위가 높은 브랜드가 위로 · 화살표는 지난주보다 올라왔는지' + (r.compare ? '' : ' (일주일 넘게 쌓이면 보여요)') + '</p>'
+      + r.brands.map(function (b, i) {
+        var d = b.delta == null || !b.delta ? '' : '<span class="val ' + (b.delta > 0 ? 'up' : 'down') + '" title="지난주보다 ' + (b.delta > 0 ? '올라옴' : '내려감') + '">' + (b.delta > 0 ? '▲ 상승' : '▼ 하락') + '</span>';
+        return '<button type="button" class="brow' + (S.brand.cur === b.brand && isDocked('bs') ? ' sel' : '') + '" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="rk">' + (i + 1) + '</span><span class="tx"><span class="nm1">' + esc(b.brand) + (b.watched ? ' <span class="hrt">♥</span>' : '') + '</span>'
+          + '<span class="meta">100위 안 ' + b.count + '개' + (b.best ? ' · 최고 ' + b.best + '위' : '') + (b.isNew ? ' · <span class="tag-new">NEW</span>' : '') + (b.owned === true ? ' · <span class="tag-own">약국 취급</span>' : '') + '</span></span><span class="side">' + d + '</span></button>';
+      }).join('');
+    if (canDock('bs')) { var names = r.brands.map(function (x) { return x.brand; }); openBrand(names.indexOf(S.brand.cur) !== -1 ? S.brand.cur : names[0]); }   /* PC: 첫 브랜드를 옆 칸에 바로 */
+  }, function () { if (rev === S.rev.brands) $('brandList').innerHTML = '<div class="msg">불러오지 못했어요</div>'; });
+}
+/* ── PC(1100px+)에선 상세를 팝업 대신 목록 옆 칸에 바로 보여준다 ── */
+var DOCK = { pd: { tab: 'rank', side: 'rankSide' }, bs: { tab: 'brand', side: 'brandSide' } };
+function canDock(id) { var d = DOCK[id]; return innerWidth >= 1100 && S.tab === d.tab && (id !== 'bs' || (S.brand.view || 'oy') === 'oy'); }
+function isDocked(id) { return $(id).classList.contains('docked'); }
+function dockSheet(id) {
+  var el = $(id), side = $(DOCK[id].side);
+  if (el.parentNode !== side) side.appendChild(el);
+  el.classList.add('docked', 'on'); el.setAttribute('aria-hidden', 'false'); el.setAttribute('aria-modal', 'false');
+  side.classList.add('on');
+}
+function undockSheet(id) {
+  var el = $(id); if (!isDocked(id)) return;
+  el.classList.remove('docked', 'on'); el.setAttribute('aria-hidden', 'true'); el.setAttribute('aria-modal', 'true');
+  $(DOCK[id].side).classList.remove('on'); document.body.appendChild(el);
+}
+function markSel(listId, attr, val) { [].forEach.call(document.querySelectorAll('#' + listId + ' [' + attr + ']'), function (x) { x.classList.toggle('sel', x.getAttribute(attr) === val); }); }
+window.addEventListener('resize', function () { ['pd', 'bs'].forEach(function (id) { if (isDocked(id) && !canDock(id)) undockSheet(id); }); });
+function openBrand(b, fromPd) {
+  if (!b) return;
+  if (!fromPd && canDock('bs')) {   /* 옆 칸에 바로 */
+    S.brand.cur = b; dockSheet('bs'); markSel('brandList', 'data-b', b);
+    $('bsTitle').textContent = b; $('bsBody').innerHTML = skel(3); $('bsWatch').hidden = true;
+    loadBrandDetail(b); return;
+  }
+  undockSheet('bs');
+  if (fromPd && S.layers.indexOf('bs') !== -1 && S.layers[S.layers.length - 1] === 'pd') { closePd(); }   /* 뒤에 깔린 브랜드 창을 다시 쓰지 않고, 상품 창을 닫고 그 브랜드로 */
+  if (fromPd) S.brand.cat = 'all';
+  S.brand.cur = b; S.bsFrom = document.activeElement;
+  $('bsTitle').textContent = b; $('bsBody').innerHTML = skel(3); $('bsWatch').hidden = true;
+  $('bsDim').classList.add('on'); $('bs').classList.add('on'); $('bs').setAttribute('aria-hidden', 'false');
+  layerOpen('bs');
+  setTimeout(function () { var c = $('bs').querySelector('.close'); if (c) c.focus(); }, 60);
+  loadBrandDetail(b);
+}
+function loadBrandDetail(b) {
+  var rev = ++S.rev.bs;
+  call('getBrand', [b, S.brand.cat], function (r) {
+    if (rev !== S.rev.bs) return;
+    if (!r || !r.ok) { $('bsBody').innerHTML = '<div class="msg">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
+    var bw = $('bsWatch'); bw.hidden = false; bw.dataset.b = r.brand; setHeart(bw, r.watched);
+    var sv = r.survival || {};
+    var cell = function (x, l) { return '<div><b>' + (x && x.rate != null ? Math.round(x.rate * 100) + '%' : '–') + '</b><span>' + l + (x && x.rate != null ? ' · ' + x.alive + '/' + x.n : ' · 판단 전') + '</span></div>'; };
+    var last = r.series.length ? (r.series[r.series.length - 1].count || 0) : 0;
+    $('bsBody').innerHTML = '<p class="sub">' + esc(r.label) + ' 기준 · ' + r.items.length + '개 상품이 100위 안' + (r.owned === true ? ' · <span class="tag-own">약국 취급</span>' : r.owned === false ? ' · 약국 미취급' : '') + '</p>'
+      + '<div class="pd-sec"><h4>100위 안 상품 수 흐름 · 오늘 ' + last + '개</h4>' + chartSvg({ s: r.series.map(function (x) { return { date: x.date, rank: x.count || 0 }; }) }, { s: '상품 수' }, true).replace(/<div class="legend">[\s\S]*?<\/div>/, '') + '</div>'
+      + (r.catMix && r.catMix.length ? '<div class="pd-sec"><h4>이 브랜드 상품의 카테고리</h4>' + vzDonut(r.catMix, 0, '오늘 100위 안') + '</div>' : '')
+      + '<div class="pd-sec"><h4>신제품 생존율</h4><div class="kpis">' + cell(sv.d7, '7일') + cell(sv.d14, '14일') + cell(sv.d30, '30일') + '</div></div>'
+      + '<div class="pd-sec bs-items"><h4>100위 안 상품</h4>' + (r.items.length ? r.items.map(function (p) { return rowHtml(p, '', true); }).join('') : '<p class="empty">오늘은 100위 안에 상품이 없어요</p>') + '</div>';
+  });
+}
+function closeBs() { layerClose('bs'); }
+function hideBs() {
+  $('bsDim').classList.remove('on'); $('bs').classList.remove('on'); $('bs').setAttribute('aria-hidden', 'true');
+  if (S.bsFrom && S.bsFrom.focus && document.body.contains(S.bsFrom)) S.bsFrom.focus();
+}
+
+/* ── 오늘의 트렌드 리포트 ── */
+function openReport(date) {
+  S.rpFrom = document.activeElement;
+  $('rpBody').innerHTML = skel(3);
+  $('rpDim').classList.add('on'); $('rp').classList.add('on'); $('rp').setAttribute('aria-hidden', 'false');
+  layerOpen('rp'); loadReport(date || '');
+  setTimeout(function () { var c = $('rp').querySelector('.close'); if (c) c.focus(); }, 60);
+}
+function loadReport(date) {
+  var rev = S.rev.rp = (S.rev.rp || 0) + 1;
+  call('getReport', [date || ''], function (r) {
+    if (rev !== S.rev.rp) return;
+    if (!r || !r.ok) { $('rpBody').innerHTML = '<div class="msg">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
+    renderReport(r);
+  });
+}
+function renderReport(r) {
+  var d = $('rpDate');
+  d.innerHTML = (r.dates || []).map(function (x) { return '<option value="' + esc(x) + '"' + (x === r.date ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('');
+  d.hidden = !(r.dates || []).length;
+  var p = r.report;
+  if (!p) { d.hidden = true; $('rpBody').innerHTML = '<div class="msg">' + (r.dates && r.dates.length ? '이 날짜의 리포트가 없어요' : '아직 리포트가 없어요. 매일 아침 수집이 끝나면 올라와요') + '</div>'; return; }
+  var sec = function (t, body) { return '<section class="pd-sec"><h4>' + t + '</h4>' + body + '</section>'; };
+  d.value = r.date;
+  var h = '<p class="rp-kicker">' + esc(r.date) + ' · ' + (r.source === 'gemini' ? '비상용 AI 요약' : 'Claude 작성') + '</p><h3 class="rp-title">' + esc(p.headline) + '</h3>'
+    + ((p.summary || []).length ? '<ul class="rp-sum">' + p.summary.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '')
+    + sec('무엇이 바뀌었나', (p.changes || []).length ? (p.changes || []).map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p></div>'; }).join('') : '<p class="empty">큰 변화가 없었어요</p>')
+    + sec('요즘 대세', (p.trends || []).length ? (p.trends || []).map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p></div>'; }).join('') : '<p class="empty">아직 흐름을 판단하기 일러요</p>')
+    + sec('검색량', '<p class="' + (p.search ? '' : 'empty') + '">' + esc(p.search || '네이버·구글 검색량 연결 준비 중이에요') + '</p>')
+    + sec('볼만한 아이템', (p.picks || []).length ? (p.picks || []).map(function (x) {
+        return rowHtml({ key: x.key, brand: x.brand, name: x.name, img: x.img, owned: x.owned }, '', false).replace('</span><span class="side">', function () { return '<span class="rp-why">' + esc(x.reason) + '</span></span><span class="side">'; });
+      }).join('') : '<p class="empty">추천할 만한 상품이 아직 없어요</p>')
+    + (p.note ? '<p class="rp-note">※ ' + esc(p.note) + '</p>' : '');
+  $('rpBody').innerHTML = h; $('rpBody').scrollTop = 0;
+}
+function closeRp() { layerClose('rp'); }
+function hideRp() {
+  $('rpDim').classList.remove('on'); $('rp').classList.remove('on'); $('rp').setAttribute('aria-hidden', 'true');
+  if (S.rpFrom && S.rpFrom.focus && document.body.contains(S.rpFrom)) S.rpFrom.focus();
+}
+
+/* ── 한눈에 보기 (그래프) — dataviz 기준: 도넛은 6조각 이하, 값은 글자로도. 색은 블랙/그레이/핑크/세이지 팔레트를 순서대로 돌려쓴다 ── */
+var VZ_PALETTE = ['#111111', '#8a8a8a', '#c9a7ab', '#9fb09a', '#d9d9d9', '#e9c9cc'];
+function vzColor(i) { return VZ_PALETTE[i % VZ_PALETTE.length]; }
+function vzPct(n, t) { return t ? Math.round(n / t * 100) : 0; }
+function vzDonut(items, total, center) {
+  var R = 54, r = 34, cx = 64, cy = 64, a0 = -Math.PI / 2, paths = '';
+  var tot = total || items.reduce(function (s, x) { return s + x.count; }, 0);
+  if (!tot) return '<p class="empty">데이터가 없어요</p>';
+  items.forEach(function (x, i) {
+    var a1 = a0 + 2 * Math.PI * x.count / tot, large = a1 - a0 > Math.PI ? 1 : 0;
+    var p = function (rad, a) { return (cx + rad * Math.cos(a)).toFixed(2) + ' ' + (cy + rad * Math.sin(a)).toFixed(2); };
+    var d = x.count === tot ? 'M' + p(R, a0) + ' A' + R + ' ' + R + ' 0 1 1 ' + p(R, a0 + 6.28318) + ' L' + p(r, a0 + 6.28318) + ' A' + r + ' ' + r + ' 0 1 0 ' + p(r, a0) + 'Z'
+      : 'M' + p(R, a0) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + p(R, a1) + ' L' + p(r, a1) + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + p(r, a0) + 'Z';
+    paths += '<path d="' + d + '" fill="' + vzColor(i) + '" stroke="#fff" stroke-width="2"><title>' + esc(x.label + ' ' + x.count + '개 (' + vzPct(x.count, tot) + '%)') + '</title></path>';
+    a0 = a1;
+  });
+  var legend = items.map(function (x, i) { return '<li><i style="background:' + vzColor(i) + '"></i><span>' + esc(x.label) + '</span><b>' + vzPct(x.count, tot) + '%</b><em>' + x.count + '개</em></li>'; }).join('');
+  return '<div class="vz-donut"><svg viewBox="0 0 128 128" role="img" aria-label="' + esc(center || '') + ' 구성">' + paths
+    + '<text x="64" y="61" text-anchor="middle" font-size="15" font-weight="700" fill="#111">' + tot + '개</text><text x="64" y="77" text-anchor="middle" font-size="10" fill="#8a8a8a">' + esc(center || '') + '</text></svg><ul class="vz-legend">' + legend + '</ul></div>';
+}
+function vzBars(items, opt) {   /* 가로 막대: 이름 · 막대 · 값(글자) */
+  opt = opt || {}; var max = Math.max.apply(null, items.map(function (x) { return x.value; }).concat([1]));
+  return '<div class="vz-bars">' + items.map(function (x) {
+    var w = Math.max(2, Math.round(x.value / max * 100));
+    var tag = x.key ? 'button type="button" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"' : x.brand ? 'button type="button" data-b="' + esc(x.brand) + '" onclick="openBrand(this.dataset.b)"' : 'div';
+    return '<' + tag + ' class="vz-row"><span class="vz-lab">' + esc(x.label) + '</span><span class="vz-track"><span class="vz-fill" style="width:' + w + '%;background:' + (x.color || '#111111') + '"></span></span><span class="vz-val">' + esc(x.text != null ? x.text : x.value) + '</span></' + tag.split(' ')[0] + '>';
+  }).join('') + '</div>' + (opt.legend || '');
+}
+function vzColumns(bins) {   /* 세로 막대 (순서 있는 구간) */
+  var max = Math.max.apply(null, bins.map(function (b) { return b.count; }).concat([1]));
+  return '<div class="vz-cols">' + bins.map(function (b) {
+    return '<div class="vz-col" title="' + esc(b.label + ' ' + b.count + '개' + (b.owned ? ' · 약국 확인 ' + b.owned : '')) + '"><span class="vz-cv">' + b.count + '</span><span class="vz-cbar" style="height:' + Math.max(2, Math.round(b.count / max * 90)) + 'px"></span><span class="vz-cl">' + esc(b.label) + '</span></div>';
+  }).join('') + '</div>';
+}
+function vzSpark(points, color) {
+  var W = 120, H = 32, n = points.length, max = Math.max.apply(null, points.concat([1])), min = Math.min.apply(null, points.concat([max]));
+  var X = function (i) { return n < 2 ? W / 2 : 2 + (W - 4) * i / (n - 1); }, Y = function (v) { return max === min ? H / 2 : 3 + (H - 6) * (1 - (v - min) / (max - min)); };
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="vz-spark" aria-hidden="true"><path d="' + points.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(points[n - 1]).toFixed(1) + '" r="3" fill="' + color + '"/></svg>';
+}
+function vzMovers(m) {   /* 위아래로 갈라지는 막대: 오른쪽 오름(초록), 왼쪽 내림(빨강) */
+  var max = Math.max.apply(null, m.up.concat(m.down).map(function (x) { return Math.abs(x.diff); }).concat([1]));
+  var row = function (x) {
+    var w = Math.max(3, Math.round(Math.abs(x.diff) / max * 50)), up = x.diff > 0;
+    return '<button type="button" class="vz-mv" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"><span class="vz-mvname">' + esc(x.brand) + ' <em>' + esc(x.name.replace(/\[[^\]]*\]\s*/g, '')) + '</em></span><span class="vz-mvtrack"><span class="vz-mvfill" style="' + (up ? 'left:50%' : 'right:50%') + ';width:' + w + '%;background:' + (up ? '#16a34a' : '#b42318') + '"></span></span><span class="vz-mvval ' + (up ? 'up' : 'down') + '">' + (up ? '▲' : '▼') + Math.abs(x.diff) + ' <small>' + (x.prev > 100 ? '100위 밖' : x.prev + '위') + '→' + x.rank + '위</small></span></button>';
+  };
+  return m.up.map(row).join('') + m.down.map(row).join('');
+}
+function vzBlock(title, sub, body) { return '<div class="vz-block"><h3>' + title + '</h3>' + (sub ? '<p class="sub">' + sub + '</p>' : '') + body + '</div>'; }
+function loadViz() {
+  if (!$('c-viz')) return;
+  call('getViz', [], function (v) { if (v && v.ok) { S.viz = v; renderViz(); } }, function () {});
+}
+/* ── HERO: 이번 주 급상승 키워드 ── */
+function heroSparkSvg(series) {
+  series = series || []; if (!series.length) return '';
+  var W = 140, H = 44, n = series.length, max = Math.max.apply(null, series.concat([1])), min = Math.min.apply(null, series.concat([0]));
+  var X = function (i) { return n < 2 ? W / 2 : 2 + (W - 4) * i / (n - 1); }, Y = function (v) { return max === min ? H / 2 : 6 + (H - 14) * (1 - (v - min) / (max - min)); };
+  var d = series.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ');
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="hero-spark" aria-hidden="true"><line x1="2" y1="' + (H - 6) + '" x2="' + (W - 2) + '" y2="' + (H - 6) + '" stroke="#e5e5e5" stroke-dasharray="2 3"/><path d="' + d + '" fill="none" stroke="#111" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(series[n - 1]).toFixed(1) + '" r="3" fill="#111"/></svg>';
+}
+function growthPill(k) {
+  if (k.growth == null) return k.prev === 0 ? '<span class="pill pill-new">NEW</span>' : '';
+  return k.growth >= 0 ? '<span class="pill pill-up">+' + k.growth + '%</span>' : '<span class="pill pill-down">' + k.growth + '%</span>';
+}
+function topKeywords(v) {
+  return (v.keywords || []).slice().sort(function (a, b) {
+    var ag = a.growth == null ? -Infinity : a.growth, bg = b.growth == null ? -Infinity : b.growth;
+    if (bg !== ag) return bg - ag;
+    return b.now - a.now;
+  });
+}
+function heroHtml(v) {
+  var tiles = topKeywords(v).slice(0, 3).map(function (k) {
+    return '<div class="hero-tile"><div class="hero-tile-top"><span class="hero-kw">#' + esc(k.word) + '</span>' + growthPill(k) + '</div>'
+      + '<p class="hero-sub">상위 100 중 ' + k.now + '개</p>' + heroSparkSvg(k.series) + '</div>';
+  }).join('');
+  var range = (v.keywordBase ? esc(v.keywordBase) + ' → ' : '') + esc(v.date) + ' · 7일 비교';
+  return '<div class="hero-head"><h2>이번 주 급상승 키워드</h2><span class="live-pill"><i class="live-dot" aria-hidden="true"></i>LIVE</span><span class="hero-range">' + range + '</span></div><div class="hero-tiles">' + tiles + '</div>';
+}
+/* ── 키워드·성분 TOP 5 ── */
+function top5Html(v) {
+  var list = (v.keywords || []).slice().sort(function (a, b) { return b.now - a.now; }).slice(0, 5);
+  var max = Math.max.apply(null, list.map(function (k) { return k.now; }).concat([1]));
+  return '<h2>키워드·성분 TOP 5</h2>' + list.map(function (k, i) {
+    var w = Math.max(4, Math.round(k.now / max * 100));
+    return '<div class="top5-row"><span class="top5-rk">0' + (i + 1) + '</span><span class="top5-mono" aria-hidden="true">' + esc(k.word.slice(0, 2)) + '</span>'
+      + '<span class="top5-body"><span class="top5-name">' + esc(k.word) + '</span><span class="top5-track"><span class="top5-fill" style="width:' + w + '%"></span></span></span>' + growthPill(k) + '</div>';
+  }).join('');
+}
+/* ── 컬러 트렌드 팔레트 ── */
+function paletteHtml(v) {
+  var p = v.palette;
+  if (!p) return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2></div><p class="empty">맥이 랭킹 사진에서 색을 모으면 보여요</p>';
+  var swatches = p.colors.slice(0, 5).map(function (c) {
+    return '<div class="palette-swatch"><span class="swatch-circle" style="background:' + (COLOR_HEX[c.name] || '#e5e5e5') + '"></span><span class="swatch-name">' + esc(c.name) + '</span><span class="swatch-pct">' + c.pct + '%</span></div>';
+  }).join('');
+  var list = p.colors.map(function (c) {
+    var prev = c.prevPct != null ? ' (지난주 ' + c.prevPct + '%)' : '';
+    return '<div class="palette-row"><span class="palette-dot" style="background:' + (COLOR_HEX[c.name] || '#e5e5e5') + '"></span><span class="palette-name">' + esc(c.name) + '</span><span class="palette-pct">' + c.pct + '%' + prev + '</span></div>';
+  }).join('');
+  return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2><span class="chip date-chip">' + esc(p.date) + '</span></div><div class="palette-swatches">' + swatches + '</div><div class="palette-list">' + list + '</div>';
+}
+function renderViz() {
+  var v = S.viz, el = $('c-viz'), mini = $('step1-viz');
+  var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw');
+  if (mini) mini.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 그래프가 나와요</p>' : vzDonut(v.catMix, v.total, '카테고리');
+  if (hw) hw.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 급상승 키워드가 나와요</p>' : heroHtml(v);
+  if (t5) t5.innerHTML = (!v || v.empty) ? '<h2>키워드·성분 TOP 5</h2><p class="empty">데이터가 쌓이면 보여요</p>' : top5Html(v);
+  if (pw) pw.innerHTML = (!v || v.empty) ? '<h2>컬러 트렌드 팔레트</h2><p class="empty">데이터가 쌓이면 보여요</p>' : paletteHtml(v);
+  renderFilters();
+  if (!el || !v) return;
+  if (v.empty) { el.innerHTML = '<h2>한눈에 보기</h2><p class="empty">수집 기록이 쌓이면 그래프가 나와요</p>'; return; }
+  var owned = v.brands.some(function (b) { return b.owned === true; });
+  var h = '<h2>한눈에 보기</h2><p class="sub">' + esc(v.date) + ' · 올리브영 전체 100위 기준</p><div class="vz-grid">'
+    + vzBlock('카테고리 구성', '전체 100위가 어떤 카테고리로 채워졌나', vzDonut(v.catMix, v.total, '전체 100위'))
+    + vzBlock('행사 비율', '100위 중 행사 표시가 붙은 상품 (겹칠 수 있음)', vzBars(v.flags.map(function (f) { return { label: f.label, value: f.pct, text: f.pct + '%' }; })))
+    + vzBlock('가격대', '판매가 기준 상품 수', vzColumns(v.priceBins))
+    + vzBlock('브랜드 TOP10', '점수 = 1위 100점 … 100위 1점 합', vzBars(v.brands.map(function (b) { return { label: b.brand, value: b.score, text: b.score + '점', brand: b.brand, color: b.owned === true ? '#9fb09a' : '#111111' }; }), { legend: '<p class="vz-key"><i style="background:#111111"></i>브랜드' + (owned ? ' <i style="background:#9fb09a"></i>약국 취급 브랜드' : '') + '</p>' }))
+    + vzBlock('상품명 키워드', v.keywordBase ? v.keywordBase + ' 대비' : '100위 상품명에 몇 번 나왔나', vzBars(v.keywords.map(function (k) { var d = k.prev == null ? '' : (k.now - k.prev > 0 ? ' ▲' + (k.now - k.prev) : k.now - k.prev < 0 ? ' ▼' + (k.prev - k.now) : ''); return { label: k.word, value: k.now, text: k.now + '회' + d }; })))
+    + vzBlock('카테고리 흐름', '날짜별 전체 100위 안 상품 수', v.catTrend.days.length >= 2 ? '<div class="vz-multi">' + v.catTrend.series.map(function (s, i) { var c = vzColor(i); return '<div class="vz-sm"><span class="vz-smlab"><i style="background:' + c + '"></i>' + esc(s.label) + '</span>' + vzSpark(s.points, c) + '<b>' + s.points[s.points.length - 1] + '개</b></div>'; }).join('') + '</div>' : '<p class="empty">이틀 이상 쌓이면 흐름이 보여요</p>')
+    + vzBlock('순위 변동 TOP', v.movers.ready ? v.movers.baseDate + ' 대비 · 누르면 상품 상세' : '', v.movers.ready ? vzMovers(v.movers) : '<p class="empty">일주일 가까이 쌓이면 크게 오르내린 상품이 보여요</p>')
+    + '</div>';
+  el.innerHTML = h;
+}
+
+/* ── 세트: 재료함 + AI 세트 추천 ── */
+S.set = { mats: null, meta: null, sets: null, mode: 'own', showEnded: false, edit: null, poll: null };
+function loadSetTab() {
+  call('getMaterials', [], function (r) { if (!r || !r.ok) { $('set').innerHTML = '<div class="msg">불러오지 못했어요</div>'; return; } S.set.mats = r.items; S.set.meta = r; renderSetTab(); });
+  call('getSets', [], function (r) { if (r && r.ok) { S.set.sets = r; renderSetTab(); setPollIfPending(); } });
+}
+function setPollIfPending() {
+  clearTimeout(S.set.poll);
+  var p = S.set.sets && (S.set.sets.own.pending || S.set.sets.mix.pending);
+  if (p && S.tab === 'set') S.set.poll = setTimeout(function () { call('getSets', [], function (r) { if (r && r.ok) { S.set.sets = r; renderSetTab(); setPollIfPending(); } }); }, 30000);
+}
+function matStatusBadge(m) {
+  if (m.kind === '자사') return '<span class="mbadge own">🏠 자사</span>';
+  var d = m.dday == null ? '' : m.dday < 0 ? ' · 종료' : ' · D-' + m.dday;
+  return '<span class="mbadge col' + (m.status === '곧 종료' ? ' soon' : m.status === '종료' ? ' end' : '') + '">🤝 협업' + esc(d) + '</span>';
+}
+function renderSetTab() {
+  var el = $('set'); if (!S.set.mats) { el.innerHTML = skel(3); return; }
+  var live = S.set.mats.filter(function (m) { return m.status !== '종료'; }), ended = S.set.mats.filter(function (m) { return m.status === '종료'; });
+  var row = function (m) { return '<button type="button" class="mrow" data-id="' + esc(m.id) + '" onclick="openMat(this.dataset.id)"><span class="tx"><span class="br">' + matStatusBadge(m) + esc(m.brand) + '</span><span class="nm1">' + esc(m.name) + cdots(m.colors) + '</span><span class="meta">' + esc([m.category].concat(m.uses).filter(Boolean).join(' · ')) + (m.price ? ' · ' + won(m.price) : '') + '</span></span><span class="side">›</span></button>'; };
+  var h = '<article class="card"><div class="card-head"><h2>세트 재료함</h2><button type="button" class="btn pri" onclick="openMat(\'\')">＋ 재료 추가</button></div>'
+    + '<p class="sub">자사 제품과 협업 제품을 넣어 두면 AI가 세트를 짜 줘요. 협업은 기간이 끝나면 자동으로 빠져요.</p>'
+    + (live.length ? live.map(row).join('') : '<p class="empty">아직 재료가 없어요. 자사·협업 제품을 먼저 넣어 주세요</p>')
+    + (ended.length ? '<button type="button" class="more" onclick="S.set.showEnded=!S.set.showEnded;renderSetTab()">' + (S.set.showEnded ? '종료된 협업 접기' : '종료된 협업 ' + ended.length + '개 보기') + '</button>' + (S.set.showEnded ? ended.map(row).join('') : '') : '')
+    + '</article>';
+  var ss = S.set.sets, cur = ss ? ss[S.set.mode] : null;
+  h += '<article class="card"><h2>AI 세트 추천</h2><div class="seg" role="group" aria-label="추천 방식">'
+    + ['own', 'mix'].map(function (m) { return '<button type="button" data-m="' + m + '" class="' + (S.set.mode === m ? 'on' : '') + '" aria-pressed="' + (S.set.mode === m) + '" onclick="S.set.mode=this.dataset.m;renderSetTab()">' + (m === 'own' ? '재료함 세트' : '트렌드 믹스') + '</button>'; }).join('') + '</div>'
+    + '<p class="sub">' + (S.set.mode === 'own' ? '자사·협업 제품만으로 바로 팔 수 있는 세트' : '재료함 제품 + 지금 뜨는 올리브영 상품으로 객단가를 높이는 세트') + '</p>';
+  if (cur && cur.pending) {
+    var mins = cur.waitingSince ? Math.max(0, Math.round((Date.now() - new Date(cur.waitingSince.replace(/\./g, '-').replace(' ', 'T') + ':00+09:00').getTime()) / 60000)) : 0;
+    h += '<div class="pending">추천을 만드는 중이에요 (보통 5~10분). 맥에서 제가 쓰고 있어요.' + (mins >= 30 ? '<br><b>30분 넘게 걸리고 있어요 — 맥이 꺼져 있거나 잠자기 상태일 수 있어요</b>' : '') + '</div>';
+  } else h += '<button type="button" class="btn pri wide-btn" data-act="req-sets" onclick="reqSets()"' + (live.length ? '' : ' disabled') + '>✨ ' + (S.set.mode === 'own' ? '재료함 세트' : '트렌드 믹스') + ' 추천 받기</button>';
+  if (cur && cur.sets && cur.sets.length) {
+    h += '<p class="note">' + esc(cur.date) + ' 추천</p>' + cur.sets.map(function (s, i) {
+      var disc = s.price && s.sum ? Math.round((1 - s.price / s.sum) * 100) : null;
+      return '<div class="setcard"><h3>' + esc(s.name) + '</h3>' + (s.target ? '<p class="sub">' + esc(s.target) + '</p>' : '')
+        + s.items.map(function (x) { var src = x.source === 'oliveyoung' ? '<span class="mbadge oy">올리브영 · 들여와야 함</span>' : x.source === 'collab' ? '<span class="mbadge col">🤝 협업</span>' : '<span class="mbadge own">🏠 자사</span>';
+          return '<div class="sitem"><span class="tx"><span class="br">' + src + (x.role ? '<b class="role">' + esc(x.role) + '</b>' : '') + '</span><span class="nm1">' + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + ' ↗</a>' : esc(x.name)) + cdots(x.colors) + '</span>' + (x.cond ? '<span class="meta">조건: ' + esc(x.cond) + '</span>' : '') + '</span><span class="side val">' + (x.price ? won(x.price) : '') + '</span></div>'; }).join('')
+        + (s.colorNote ? '<p class="meta cnote">' + esc(s.colorNote) + '</p>' : '')
+        + '<p class="why">' + esc(s.reason) + '</p>' + (s.display ? '<p class="meta">🛍 ' + esc(s.display) + '</p>' : '')
+        + '<div class="setprice"><span>구성품 합계 ' + won(s.sum) + '</span>' + (s.price ? '<b>권장 세트가 ' + won(s.price) + (disc > 0 ? ' (' + disc + '% 할인)' : '') + '</b>' : '') + '</div>'
+        + '<button type="button" class="btn" data-i="' + i + '" onclick="copySet(+this.dataset.i)">📋 텍스트 복사</button></div>';
+    }).join('');
+  } else if (cur && !cur.pending) h += '<p class="empty">아직 추천이 없어요. 위 버튼을 눌러 보세요</p>';
+  h += '</article>';
+  el.innerHTML = h;
+}
+function reqSets() {
+  var mode = S.set.mode;
+  call('requestSets', [mode], function (r) {
+    if (!r || !r.ok) { toast((r && r.msg) || '요청하지 못했어요'); return; }
+    toast('추천을 요청했어요 · 5~10분 뒤 여기에 떠요');
+    S.set.sets[mode].pending = true; S.set.sets[mode].waitingSince = ''; renderSetTab(); setPollIfPending();
+  });
+}
+function copySet(i) {
+  var s = S.set.sets[S.set.mode].sets[i]; if (!s) return;
+  var t = '[' + s.name + ']\n' + (s.target ? s.target + '\n' : '') + s.items.map(function (x) { return '- ' + x.name + (x.price ? ' (' + won(x.price) + ')' : ''); }).join('\n') + '\n구성품 합계 ' + won(s.sum) + (s.price ? ' → 세트가 ' + won(s.price) : '') + '\n' + s.reason;
+  var done = function () { toast('복사했어요 · 카톡에 붙여넣기 하세요'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { fallbackCopy(t); done(); }); else { fallbackCopy(t); done(); }
+}
+function fallbackCopy(t) { var a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); } catch (e) {} a.remove(); }
+var COLOR_HEX = { 화이트: '#ffffff', 아이보리: '#f6efdc', 베이지: '#e6d3b3', 그레이: '#9a9aa0', 블랙: '#1d1d1f', 실버: '#c7c9cc', 골드: '#c9a449', 브라운: '#8a5a3c', 레드: '#e0352b', 핑크: '#f4a3c0', 코랄: '#f78a70', 오렌지: '#f39a2b', 옐로: '#f5d13b', 그린: '#3f9a5a', 민트: '#7fd6c2', 블루: '#2f6fdb', 네이비: '#1f2f63', 퍼플: '#8a5cc7', 투명: 'transparent' };
+function cdots(cs) { return (cs || []).filter(function (c) { return COLOR_HEX[c]; }).map(function (c) { return '<i class="cdot' + (c === '투명' ? ' clear' : '') + '" style="background:' + COLOR_HEX[c] + '" title="' + esc(c) + '" aria-label="' + esc(c) + '"></i>'; }).join(''); }
+function toggleColor(c) { var m = S.set.edit; syncMat(); m.colors = m.colors || []; var i = m.colors.indexOf(c); if (i !== -1) m.colors.splice(i, 1); else if (m.colors.length < 2) m.colors.push(c); else { toast('대표색은 2개까지예요'); return; } renderMat(); }
+function openMat(id) {
+  var m = id ? S.set.mats.filter(function (x) { return x.id === id; })[0] : { kind: '자사', uses: [], colors: [] };
+  if (!m) return; S.set.edit = JSON.parse(JSON.stringify(m)); S.mtFrom = document.activeElement;
+  renderMat(); $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+}
+function renderMat() {
+  var m = S.set.edit, meta = S.set.meta, col = m.kind === '협업';
+  $('mtTitle').textContent = m.id ? '재료 수정' : '재료 추가';
+  $('mtBody').innerHTML = '<div class="seg" role="group" aria-label="종류">' + ['자사', '협업'].map(function (k) { return '<button type="button" data-k="' + k + '" class="' + (m.kind === k ? 'on' : '') + '" onclick="S.set.edit.kind=this.dataset.k;renderMat()">' + (k === '자사' ? '🏠 자사 제품' : '🤝 협업 제품') + '</button>'; }).join('') + '</div>'
+    + '<label class="field"><span>제품 이름 *</span><input id="mtName" maxlength="60" value="' + esc(m.name || '') + '" placeholder="예: 레디영 시카 진정 크림"></label>'
+    + '<label class="field"><span>' + (col ? '회사' : '브랜드') + '</span><input id="mtBrand" maxlength="40" value="' + esc(m.brand || '') + '"></label>'
+    + '<label class="field"><span>카테고리</span><select id="mtCat">' + meta.categories.map(function (c) { return '<option' + (c === m.category ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select></label>'
+    + '<div class="field"><span>용도 (최대 3개)</span><div class="grp-chips">' + meta.uses.map(function (u) { var on = (m.uses || []).indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="toggleUse(this.dataset.u)">' + esc(u) + '</button>'; }).join('') + '</div></div>'
+    + '<div class="field"><span>대표색 (최대 2개 · 세트 색 조합에 써요)</span><div class="grp-chips">' + (meta.colors || []).filter(function (c) { return COLOR_HEX[c]; }).map(function (c) { var on = (m.colors || []).indexOf(c) !== -1; return '<button type="button" class="chip cchip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(c) + '" onclick="toggleColor(this.dataset.c)">' + cdots([c]) + esc(c) + '</button>'; }).join('') + '</div></div>'
+    + '<label class="field"><span>특징 한 줄</span><input id="mtFeat" maxlength="120" value="' + esc(m.feature || '') + '" placeholder="예: 약국 전용 진정 크림, 민감 피부용"></label>'
+    + '<label class="field"><span>판매가 (원)</span><input id="mtPrice" inputmode="numeric" value="' + esc(m.price || '') + '"></label>'
+    + (col ? '<label class="field"><span>협업 시작일</span><input id="mtStart" type="date" value="' + esc((m.start || '').replace(/\./g, '-')) + '"></label><label class="field"><span>협업 종료일 *</span><input id="mtEnd" type="date" value="' + esc((m.end || '').replace(/\./g, '-')) + '"></label><label class="field"><span>협업 조건</span><input id="mtCond" maxlength="120" value="' + esc(m.cond || '') + '" placeholder="예: 세트 대표 상품으로, 최소 2종 포함"></label>' : '')
+    + '<p class="np-err" id="mtErr"></p>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri" data-act="save-mat" onclick="saveMat()">저장</button>' + (m.id ? '<button type="button" class="btn danger" onclick="delMat()">삭제</button>' : '');
+}
+function toggleUse(u) { var m = S.set.edit; syncMat(); var i = m.uses.indexOf(u); if (i !== -1) m.uses.splice(i, 1); else if (m.uses.length < 3) m.uses.push(u); else { toast('용도는 3개까지예요'); return; } renderMat(); }
+function syncMat() {
+  var m = S.set.edit, v = function (id) { var e = $(id); return e ? e.value.trim() : ''; };
+  m.name = v('mtName'); m.brand = v('mtBrand'); m.category = v('mtCat'); m.feature = v('mtFeat'); m.price = v('mtPrice').replace(/[^\d]/g, '');
+  if (m.kind === '협업') { m.start = v('mtStart').replace(/-/g, '.'); m.end = v('mtEnd').replace(/-/g, '.'); m.cond = v('mtCond'); }
+}
+function saveMat() {
+  if (S.saving) return; syncMat(); var m = S.set.edit;
+  if (!m.name) { $('mtErr').textContent = '제품 이름을 입력해 주세요'; return; }
+  if (m.kind === '협업' && !m.end) { $('mtErr').textContent = '협업 종료일을 골라 주세요'; return; }
+  S.saving = true;
+  call('saveMaterial', [m], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('저장했어요'); closeMt(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; });
+}
+function delMat() {
+  var m = S.set.edit; if (!m.id || !confirm('[' + m.name + '] 재료를 지울까요?')) return;
+  call('removeMaterial', [m.id], function () { toast('지웠어요'); closeMt(); loadSetTab(); });
+}
+function closeMt() { layerClose('mt'); }
+function hideMt() { $('mtDim').classList.remove('on'); $('mt').classList.remove('on'); $('mt').setAttribute('aria-hidden', 'true'); if (S.mtFrom && S.mtFrom.focus && document.body.contains(S.mtFrom)) S.mtFrom.focus(); }
+
+/* ── 사이트 비교 (브랜드 교차표) ── */
+var CMP_TYPE = { everywhere: ['전역', '어디서나'], abroad: ['해외', '해외에서'], home: ['국내', '국내에서'], mixed: ['', ''] };
+function cmpShade(rank) {   /* 순위가 높을수록 진한 검정 (한 가지 색의 명도 단계) */
+  var steps = ['#111111', '#333333', '#555555', '#777777', '#9a9a9a', '#c9c9c9'];
+  var i = rank <= 3 ? 0 : rank <= 10 ? 1 : rank <= 20 ? 2 : rank <= 40 ? 3 : rank <= 70 ? 4 : 5;
+  return { bg: steps[i], fg: i <= 3 ? '#fff' : '#111111' };
+}
+function loadCompare() {
+  $('brandList').innerHTML = skel(3);
+  call('getCompare', [], function (c) {
+    if (!c || !c.ok) { $('brandList').innerHTML = '<div class="msg">불러오지 못했어요</div>'; return; }
+    S.cmp = c; renderCompare();
+  });
+}
+function renderCompare() {
+  var c = S.cmp, el = $('brandList');
+  if (!c.malls.length || c.malls.length < 2) { el.innerHTML = '<div class="msg">다른 사이트 수집이 쌓이면 비교표가 나와요 (올리브영 글로벌·화해·다이소·무신사·큐텐·아마존)</div>'; return; }
+  var head = '<div class="cmp-row cmp-head" style="grid-template-columns:minmax(96px,1.4fr) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span>브랜드</span>' + c.malls.map(function (m) { return '<span title="' + esc(m.label + ' · ' + m.date) + '">' + esc(m.label.replace('올리브영 ', '').replace('올리브영', '올영')) + (m.abroad ? ' <em>해외</em>' : '') + '</span>'; }).join('') + '</div>';
+  var rows = c.brands.map(function (b) {
+    var t = CMP_TYPE[b.type] || ['', ''];
+    return '<button type="button" class="cmp-row" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)" style="grid-template-columns:minmax(96px,1.4fr) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span class="cmp-name">' + (t[0] ? '<i class="cmp-tag" title="' + t[1] + ' 뜨는 브랜드">' + t[0] + '</i>' : '') + esc(b.brand) + (b.owned === true ? ' <em class="tag-own">약국</em>' : '') + '</span>'
+      + c.malls.map(function (m) { var r = b.ranks[m.mall]; if (!r) return '<span class="cmp-cell empty">·</span>'; var s = cmpShade(r); return '<span class="cmp-cell" style="background:' + s.bg + ';color:' + s.fg + '" title="' + esc(m.label + ' ' + r + '위 · ' + (b.counts[m.mall] || 1) + '개') + '">' + r + '</span>'; }).join('') + '</button>';
+  }).join('');
+  el.innerHTML = '<p class="note">칸 숫자 = 그 사이트에서 이 브랜드의 가장 높은 순위 (진할수록 상위) · 전역 3곳 이상 · 해외 해외에서만 · 국내 국내에서만</p><div class="cmp">' + head + rows + '</div>';
+}
+function setBrandView(v) { S.brand.view = v; if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; clearTimeout(S.bcTimer); $('brandList').classList.toggle('plain', v === 'find'); if (v === 'cmp') loadCompare(); else if (v === 'find') loadFind(); else loadBrands(); }
+/* ── 브랜드 검색 (화해 전체 상품 + 우리 약국 보유) ── */
+function safeUrl(u) { return /^https:\/\//.test(String(u || '')) ? u : ''; }
+function loadFind() {
+  S.bc = S.bc || { f: 'all', old: false };
+  if (S.bc.res || S.bc.pending) { renderFind(); return; }
+  $('brandList').innerHTML = skel(3);
+  call('getBrandSearches', [], function (r) { S.bc.recent = r && r.ok ? r.items : []; if (S.brand.view === 'find') renderFind(); });
+}
+function findForm() {
+  var q = S.bc.q || '';
+  return '<form class="bc-form" onsubmit="event.preventDefault();bcSearch($(\'bcQ\').value)"><input id="bcQ" type="search" enterkeyhint="search" maxlength="30" placeholder="브랜드 이름 (예: 코나피딜)" aria-label="브랜드 이름" value="' + esc(q) + '"><button type="submit" class="btn pri">검색</button></form>'
+    + '<p class="note">손님이 묻는 브랜드의 전체 상품을 화해에서 가져와, 우리 약국에 있는지 같이 보여줘요 · 한 번 찾은 브랜드는 7일 보관</p>';
+}
+function renderFind() {
+  var b = S.bc, h = findForm();
+  if (b.pending) h += '<div class="pending">맥이 화해에서 <b>' + esc(b.q) + '</b> 상품을 가져오는 중이에요 (보통 1~2분)' + (b.polls >= 40 ? '<br><b>10분이 지나도 결과가 없어요. 맥이 켜져 있는지 확인하고 다시 검색해 주세요</b>' : b.polls > 16 ? '<br><b>오래 걸리고 있어요 — 맥이 꺼져 있거나 잠자기 상태일 수 있어요</b>' : '') + '</div>';
+  else if (b.res) h += findResult(b.res);
+  else if (b.recent && b.recent.length) h += '<div class="bc-recent"><p class="sub">최근 찾은 브랜드</p><div class="grp-chips">' + b.recent.map(function (x) { return '<button type="button" class="chip" data-q="' + esc(x.q) + '" onclick="bcSearch(this.dataset.q)">' + esc(x.q) + (x.count ? ' · ' + x.count : '') + '</button>'; }).join('') + '</div></div>';
+  $('brandList').innerHTML = h;
+}
+function findResult(r) {
+  if (r.status === 'failed') return '<p class="empty">' + esc(r.msg || '가져오지 못했어요') + '</p><button type="button" class="btn pri wide-btn" data-q="' + esc(r.q) + '" onclick="bcSearch(this.dataset.q, true)">다시 가져오기</button>';
+  if (r.status === 'empty') return '<p class="empty">' + esc(r.msg || '찾은 상품이 없어요') + ' · 다른 표기(영문 등)로도 찾아보세요</p>';
+  var f = S.bc.f, live = r.items.filter(function (x) { return !x.obsolete; }), pool = S.bc.old ? r.items : live;
+  var own = live.filter(function (x) { return x.owned; }).length, pct = live.length ? Math.round(own / live.length * 100) : 0;
+  var list = pool.filter(function (x) { return f === 'all' || (f === 'none' ? !x.owned : x.owned); });
+  var chip = function (k, lab) { return '<button type="button" class="chip' + (f === k ? ' on' : '') + '" aria-pressed="' + (f === k) + '" data-f="' + k + '" onclick="S.bc.f=this.dataset.f;renderFind()">' + lab + '</button>'; };
+  return '<article class="card bc-head"><p class="step-eye">' + esc(r.date.slice(0, 10)) + ' · 화해 기준</p><h2>' + esc(r.brand) + '</h2>'
+    + '<div class="bc-stat"><span><b>' + live.length + '</b>판매 중</span><span><b>' + (r.logiOk ? own + '/' + live.length : '–') + '</b>우리 약국 보유</span><span><b>' + (r.items.length - live.length) + '</b>단종</span></div>'
+    + (r.logiOk ? '<div class="bc-ratio" role="img" aria-label="보유 ' + pct + '%"><span style="width:' + pct + '%"></span></div><p class="sub">보유 ' + pct + '% · 나머지는 손님 문의 시 주문 검토 대상</p>' : '<p class="sub">물류앱을 읽지 못해 보유 여부는 알 수 없어요</p>')
+    + (r.ours && r.ours.length ? '<details class="bc-ours"><summary>물류앱에 있는 ' + esc(r.brand.replace(/\s*\(.*\)/, '')) + ' 상품 ' + r.ours.length + '개</summary><ul>' + r.ours.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></details>' : '')
+    + '</article><div class="grp-chips bc-filter">' + chip('all', '전체') + chip('none', '우리 없음') + chip('own', '우리 있음')
+    + '<button type="button" class="chip' + (S.bc.old ? ' on' : '') + '" aria-pressed="' + S.bc.old + '" data-f="old" onclick="S.bc.old=!S.bc.old;renderFind()">단종 포함</button></div>'
+    + (list.length ? '<div class="list">' + list.map(bcRow).join('') + '</div>' : '<p class="empty">해당하는 상품이 없어요</p>');
+}
+function bcRow(x) {
+  var u = safeUrl(x.url), img = safeUrl(x.img);
+  var tag = x.owned === true ? '<span class="own-yes">✓ 약국 있음</span>' : x.owned === false ? '<span class="bc-no">우리 없음</span>' : '';
+  var inner = (img ? '<img class="thumb" src="' + esc(img) + '" alt="" loading="lazy">' : '<span class="thumb"></span>')
+    + '<span class="tx"><span class="nm1">' + esc(x.name) + (x.obsolete ? ' <em class="tag-old">단종</em>' : '') + '</span><span class="meta">' + esc([x.capacity, x.price ? won(x.price) : '', x.rating ? '★' + x.rating + ' (' + x.reviews + ')' : ''].filter(Boolean).join(' · ')) + (x.match ? '<br>물류앱: ' + esc(x.match) : '') + '</span></span><span class="side">' + tag + '</span>';
+  return u ? '<a class="row bc-row" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<div class="row bc-row">' + inner + '</div>';
+}
+function bcSearch(q, retry) {
+  q = String(q || '').trim(); if (q.length < 2) { toast('브랜드 이름을 2글자 이상 넣어 주세요'); return; }
+  S.bc.q = q; S.bc.res = null; S.bc.pending = false; S.bc.polls = 0; S.bc.f = 'all'; S.bc.old = false; clearTimeout(S.bcTimer);
+  $('brandList').innerHTML = findForm() + '<div class="msg">찾는 중…</div>';
+  bcPoll(retry);
+}
+function bcPoll(retry) {
+  var q = S.bc.q;
+  call('searchBrand', [q, !!retry], function (r) {
+    if (S.brand.view !== 'find' || q !== S.bc.q) return;   // 그사이 다른 화면·다른 검색으로 바뀌었으면 버린다
+    if (!r || !r.ok) { toast((r && r.msg) || '검색하지 못했어요'); S.bc.pending = false; renderFind(); return; }
+    if (r.status === 'pending') { S.bc.pending = true; S.bc.polls = (S.bc.polls || 0) + 1; renderFind(); clearTimeout(S.bcTimer); if (S.bc.polls < 40 && S.brand.view === 'find') S.bcTimer = setTimeout(bcPoll, 15000); return; }
+    if (r.status === 'failed') { S.bc.pending = false; S.bc.res = r; renderFind(); return; }
+    S.bc.pending = false; S.bc.res = r; renderFind();
+  });
+}
+/* ── 유튜브 쇼츠 (홈 ②) ── */
+function viewsKo(n) { return n >= 10000 ? Math.round(n / 10000) + '만' : n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + '천' : String(n); }
+function loadYt() {
+  if (S.yt) { renderYt(); return; }
+  call('getYoutube', [], function (y) { S.yt = y && y.ok ? y : { total: 0 }; renderYt(); });
+}
+function renderYt() {
+  var el = $('c-yt'), y = S.yt; if (!el) return;
+  if (!y.total) { el.innerHTML = '<h2>유튜브 쇼츠</h2><p class="empty">최근 7일 인기 뷰티 쇼츠가 모이면 여기에 떠요</p>'; return; }
+  el.innerHTML = '<h2>유튜브 쇼츠에서 뜨는 브랜드</h2><p class="sub">최근 7일 인기 뷰티 쇼츠 ' + y.total + '개 · 제목·태그에 나온 브랜드의 조회수 합</p>'
+    + (y.brands.length ? vzBars(y.brands.slice(0, 6).map(function (b) { return { label: b.brand, value: b.views, text: viewsKo(b.views) + '회 · ' + b.videos + '편', brand: b.brand }; })) : '<p class="empty">아직 브랜드가 언급된 영상이 없어요</p>')
+    + '<p class="sub yt-sub">조회수 TOP 영상</p><div class="yt-list">' + y.videos.slice(0, 5).map(function (v) { return '<a class="yt-row" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><span class="yt-v">' + viewsKo(v.views) + '</span><span class="tx"><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel) + ' · ' + v.seconds + '초</span></span><span class="side">↗</span></a>'; }).join('') + '</div>';
+}
+function otherMallsHtml(list) {
+  if (!list || !list.length) return '';
+  return '<div class="pd-sec"><h4>다른 사이트 순위</h4>' + list.map(function (x) { return '<div class="link-row"><span><b>' + esc(x.label) + '</b> ' + x.rank + '위 <small class="meta">' + esc(x.name) + '</small></span>' + (x.url && /^https:\/\//.test(x.url) ? '<a class="btn" href="' + esc(x.url) + '" target="_blank" rel="noopener">보기 ↗</a>' : '') + '</div>'; }).join('') + '</div>';
+}
+</script>
+</body>
+</html>
