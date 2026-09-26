@@ -685,6 +685,7 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.ph-c{border:1px solid #e3e3e6;border-radius:12px;padding:4px;background:#fff;cursor:pointer;aspect-ratio:1/1}.ph-c img{width:100%;height:100%;object-fit:contain}
 .ph-need{margin:0 0 14px;border:1px solid #f0d9b5;background:#fffaf1;border-radius:14px;padding:10px 12px}.ph-need summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ph-need summary small{font-weight:400;color:#8a8a8a}
 .ph-row{padding:8px 0;border-top:1px solid #f3e6cf}.ph-row b{display:block;font-size:13.5px;margin-bottom:6px}.ph-row .ph-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}.ph-more{font:inherit;font-size:12px;color:#0066cc}
+.nm-row{display:flex;gap:8px}.nm-row input{flex:1;min-width:0}.nm-sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.nm-sug .chip{font-weight:600}
 </style>
 </head>
 <body>
@@ -1629,18 +1630,18 @@ function renderSetTab() {
 /* ── 0926 약국 세트 (물류앱 '_세트상품_' 과 한 벌) · 직접 조합 · AI 검토 ── */
 S.ps = null;
 function psHtml(sub) {
-  var p = S.ps, head = { have: ['보유 세트', '물류앱에 있는 세트예요. [고치기]를 누르면 세트 DIY 에 초안으로 열리고, [물류앱에 반영]을 눌러야 바뀌어요'], uses: ['용도별 상품', '물류앱에서 붙인 용도예요. 상품을 눌러 고치면 물류앱에도 바로 반영돼요'] }[sub];
+  var p = S.ps, head = { have: ['보유 세트', '물류앱과 같은 세트예요. 여기서 고치면 물류앱에도 바로 반영되고, 물류앱에서 고친 것도 여기 그대로 보여요'], uses: ['용도별 상품', '물류앱에서 붙인 용도예요. 상품을 눌러 고치면 물류앱에도 바로 반영돼요'] }[sub];
   if (!p) return '<article class="card" id="psCard">' + skel(2) + '</article>';
   if (p.err) return '<article class="card" id="psCard"><p class="empty">' + esc(p.err) + '</p></article>';
-  if (sub === 'diy') return diyHtml(p) + diyListCard(p);
-  var h = '<article class="card" id="psCard"><div class="card-head"><h2>' + head[0] + '</h2></div><p class="sub">' + head[1] + '</p>';
+  if (sub === 'diy') { if (S.psEditing && S.psEditing.directId) S.psEditing = psNewDraft(); return diyHtml(p) + diyListCard(p); }
+  var h = (sub === 'have' && S.psEditing && S.psEditing.directId ? diyHtml(p) : '') + '<article class="card" id="psCard"><div class="card-head"><h2>' + head[0] + '</h2></div><p class="sub">' + head[1] + '</p>';
   if (sub === 'uses') return h + psUsesHtml(p) + '</article>';
   h += p.sets.length ? '<div class="ps-grid">' + p.sets.map(function (s) {
     return '<div class="ps-card">' + (/^https:\/\//.test(s.photo || '') ? '<div class="ps-ph">' + imgHtml(s.photo) + '</div>' : '')
       + '<h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '📦 ' + esc(s.box) + ' · ' : '') + '상품 ' + s.items.length + '종 · ' + s.items.reduce(function (a, it) { return a + it.qty; }, 0) + '개</p>'
       + '<ul class="ps-items">' + s.items.map(function (it) { return '<li>' + esc(it.name) + (it.qty > 1 ? ' <b>×' + it.qty + '</b>' : '') + '</li>'; }).join('') + '</ul>'
       + (s.tags.length ? '<div class="grp-chips">' + s.tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div>' : '')
-      + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEditHave(this.dataset.id)">고치기 (DIY 초안)</button></div></div>';
+      + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEditHave(this.dataset.id)">고치기</button></div></div>';
   }).join('') + '</div>' : '<p class="empty">아직 세트가 없어요</p>';
   return h + '</article>';
 }
@@ -1666,7 +1667,7 @@ function diyPublish(id) {
   call('publishDiySet', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '반영하지 못했어요'); return; } toast('물류앱 세트에 반영했어요 (' + r.id + ')'); loadSetTab(); });
 }
 function diyDelete(id) { var s = psFind(id); if (!s || !confirm('[' + s.name + '] 테스트 세트를 지울까요? (물류앱 세트는 그대로예요)')) return; call('deleteDiySet', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } if (S.psEditing && S.psEditing.id === id) S.psEditing = psNewDraft(); toast('지웠어요'); loadSetTab(); }); }
-function psEditHave(id) { var s = ((S.ps && S.ps.sets) || []).filter(function (x) { return x.id === id; })[0]; if (!s) return; var ex = (S.ps.diys || []).filter(function (d) { return d.linked === id && d.status !== '반영됨'; })[0]; if (ex) { toast('이미 고치던 초안을 열었어요'); return psEdit(ex.id); } psEdit('', { name: s.name, box: s.box, memo: s.memo, items: s.items, linked: id }); }
+function psEditHave(id) { var s = ((S.ps && S.ps.sets) || []).filter(function (x) { return x.id === id; })[0]; if (!s) return; S.psEditing = { id: '', directId: id, linked: '', name: s.name, box: s.box || '', memo: s.memo || '', items: s.items.map(function (x) { return { name: x.name, qty: x.qty || 1 }; }) }; S.setSub = 'have'; S.psNameSug = null; renderSetTab(); var b = $('diyBox'); if (b) b.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
 function psNeedsHtml(p) {
   var ns = p.photoNeeds || []; if (!ns.length) return '';
   return '<details class="ph-need" open><summary>📷 사진 확인 필요 ' + ns.length + '개 <small>물류앱에 사진이 없는 상품 · 맞는 사진을 누르면 누끼를 따서 물류앱에 넣어요</small></summary>' + ns.slice(0, 30).map(function (x, i) {
@@ -1751,8 +1752,16 @@ function diyListHtml() {
 function diyBoxHtml() {
   var e = S.psEditing, s = e.id ? psFind(e.id) : null;
   var lk = e.linked ? ((S.ps.sets || []).filter(function (x) { return x.id === e.linked; })[0] || {}).name || e.linked : '';
+  if (e.directId) return diyBoxDirect(e);
   return '<h2>' + (e.id ? '테스트 세트 고치기' : '만드는 세트') + '</h2>' + (lk ? '<p class="meta">보유 세트 [' + esc(lk) + '] 고치기 초안 · 반영하면 그 세트가 바뀌어요</p>' : '')
-    + '<label class="field"><span>세트 이름 *</span><input id="psName" maxlength="40" value="' + esc(e.name) + '" placeholder="예: 가을 진정 세트" oninput="S.psEditing.name=this.value"></label>'
+    + diyBoxBody(e)
+    + '<div class="ps-act"><button type="button" class="btn pri" onclick="psSave()">테스트 저장</button>'
+    + (e.id ? (s && s.pending ? '<span class="pending">AI 검토 중</span>' : '<button type="button" class="btn" data-id="' + esc(e.id) + '" onclick="psReview(this.dataset.id)">✨ AI 검토</button>') + '<button type="button" class="btn danger" onclick="psDelete()">삭제</button>' : '')
+    + '<button type="button" class="btn" onclick="S.psEditing=psNewDraft();diyBox();diyList()">새로 시작</button></div>';
+}
+function diyBoxBody(e) {
+  return ''
+    + '<div class="field"><span>세트 이름 *</span><div class="nm-row"><input id="psName" maxlength="40" value="' + esc(e.name) + '" placeholder="예: 가을 진정 세트" oninput="S.psEditing.name=this.value"><button type="button" class="btn" onclick="psNames()"' + (e.items.length ? '' : ' disabled') + '>✨ 이름 추천</button></div><div id="psNameBox">' + psNamesHtml() + '</div></div>'
     + psBoxField(e)
     + '<div class="diy-items">' + (e.items.length ? e.items.map(function (x, i) {
       var cut = S.ps.cutouts && S.ps.cutouts[x.name];
@@ -1761,10 +1770,7 @@ function diyBoxHtml() {
         + psSizeTag(x.name) + (/^\[올리브영\]/.test(x.name) ? '' : '<button type="button" class="bx-size" data-n="' + esc(x.name) + '" onclick="psPhotoEdit(this.dataset.n)">사진 바꾸기</button>')
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">✕</button></div>'; }).join('') : '<p class="empty">왼쪽에서 상품을 담으면 여기에 사진으로 쌓여요</p>') + '</div>'
     + boxPreviewHtml(e)
-    + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>'
-    + '<div class="ps-act"><button type="button" class="btn pri" onclick="psSave()">테스트 저장</button>'
-    + (e.id ? (s && s.pending ? '<span class="pending">AI 검토 중</span>' : '<button type="button" class="btn" data-id="' + esc(e.id) + '" onclick="psReview(this.dataset.id)">✨ AI 검토</button>') + '<button type="button" class="btn danger" onclick="psDelete()">삭제</button>' : '')
-    + '<button type="button" class="btn" onclick="S.psEditing=psNewDraft();diyBox();diyList()">새로 시작</button></div>';
+    + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>';
 }
 /* ── 0926 박스에 넣어 보기: 박스 규격 · 상품 크기(mm) · 실제 비율 미리보기 · 들어가는지 판정 · 이미지 저장 ── */
 function psBoxOf(name) { return ((S.ps && S.ps.boxes) || []).filter(function (b) { return b.name === name; })[0] || null; }
@@ -1875,6 +1881,24 @@ function boxExport() {
   if (!jobs.length) return finish();
   jobs.forEach(function (j) { if (!j.u.img) return draw(j, null); var im = new Image(); im.crossOrigin = 'anonymous'; im.referrerPolicy = 'no-referrer'; im.onload = function () { draw(j, im); }; im.onerror = function () { draw(j, null); }; im.src = j.u.img; });
 }
+/* 0926 세트 이름 추천 5개 (계절 · 트렌드 · 기존 세트 말투) → 누르면 이름 칸에 */
+function diyBoxDirect(e) {   // 보유 세트 바로 고치기: 저장 = 물류앱에 바로
+  var h = diyBoxBody(e);
+  return '<h2>보유 세트 고치기</h2><p class="meta">저장하면 물류앱 세트도 바로 바뀌어요</p>' + h
+    + '<div class="ps-act"><button type="button" class="btn pri" onclick="psSaveDirect()">저장 (물류앱에 바로 반영)</button><button type="button" class="btn" onclick="S.psEditing=psNewDraft();renderSetTab()">닫기</button><button type="button" class="btn danger" onclick="psDeleteDirect()">세트 삭제</button></div>';
+}
+function psSaveDirect() {
+  if (S.saving) return; var e = S.psEditing; e.name = String(e.name || '').trim();
+  if (!e.name || !e.items.length) { $('mtErr').textContent = '세트 이름과 상품을 넣어 주세요'; return; }
+  S.saving = true;
+  call('savePharmacySet', [{ id: e.directId, name: e.name, box: e.box, memo: e.memo, items: e.items }], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('저장했어요 · 물류앱에도 반영됐어요'); S.psEditing = psNewDraft(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; });
+}
+function psDeleteDirect() { var e = S.psEditing; if (!confirm('[' + e.name + '] 세트를 지울까요? 물류앱에서도 지워져요')) return; call('deletePharmacySet', [e.directId], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } toast('지웠어요'); S.psEditing = psNewDraft(); loadSetTab(); }); }
+function psNamesHtml() { var r = S.psNameSug; if (!r) return ''; if (r.loading) return '<p class="meta">이름을 짓는 중이에요…</p>';
+  return '<p class="meta">' + esc([r.season, (r.uses || []).join('·'), (r.keywords || []).join(' ')].filter(Boolean).join(' · ')) + (r.by === 'rule' ? ' · 기본 규칙으로 지었어요' : '') + '</p><div class="nm-sug">' + r.names.map(function (x, i) { return '<button type="button" class="chip" data-i="' + i + '" title="' + esc(x.why || '') + '" onclick="psNamePick(+this.dataset.i)">' + esc(x.name) + '</button>'; }).join('') + '<button type="button" class="chip" onclick="psNames()">↻ 다시</button></div>'; }
+function psNames() { var e = S.psEditing; if (!e.items.length) { toast('상품을 먼저 담아 주세요'); return; } S.psNameSug = { loading: true }; var b = $('psNameBox'); if (b) b.innerHTML = psNamesHtml();
+  call('suggestSetNames', [e.items], function (r) { S.psNameSug = r && r.ok ? r : null; var bb = $('psNameBox'); if (bb) bb.innerHTML = psNamesHtml(); if (!r || !r.ok) toast((r && r.msg) || '이름을 못 지었어요'); }, function () { S.psNameSug = null; var bb = $('psNameBox'); if (bb) bb.innerHTML = ''; toast('이름을 못 지었어요'); }); }
+function psNamePick(i) { var x = S.psNameSug && S.psNameSug.names[i]; if (!x) return; S.psEditing.name = x.name; var n = $('psName'); if (n) n.value = x.name; toast('이름을 넣었어요'); }
 function diyList() { var l = $('diyList'); if (l) l.innerHTML = diyListHtml(); [].forEach.call(document.querySelectorAll('.diy-chips .chip'), function (b) { var on = (S.diyUses || []).indexOf(b.dataset.u) !== -1 && !S.diyQ; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); }
 function diyBox() { var b = $('diyBox'); if (b) b.innerHTML = diyBoxHtml(); var n = S.psEditing.items.length, bar = $('diyBar'); if (bar) { bar.hidden = !n; $('diyBarN').textContent = n; } psNeedImgs(S.psEditing.items.map(function (x) { return x.name; })); }
 function diyAdd(name, img) { if (diyHas(name)) { toast('이미 담았어요'); return; } if (img) S.psImg[name] = img; S.psEditing.items.push({ name: name, qty: 1 }); diyBox(); diyList(); toast('담았어요 · ' + S.psEditing.items.length + '개'); }
