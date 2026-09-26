@@ -683,6 +683,8 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .cut-tag{position:absolute;left:4px;bottom:4px;font-style:normal;font-size:10px;font-weight:700;background:#248a3d;color:#fff;border-radius:999px;padding:1px 6px}
 .diy-it .diy-img{position:relative}
 .ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.ph-c{border:1px solid #e3e3e6;border-radius:12px;padding:4px;background:#fff;cursor:pointer;aspect-ratio:1/1}.ph-c img{width:100%;height:100%;object-fit:contain}
+.ph-need{margin:0 0 14px;border:1px solid #f0d9b5;background:#fffaf1;border-radius:14px;padding:10px 12px}.ph-need summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ph-need summary small{font-weight:400;color:#8a8a8a}
+.ph-row{padding:8px 0;border-top:1px solid #f3e6cf}.ph-row b{display:block;font-size:13.5px;margin-bottom:6px}.ph-row .ph-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}.ph-more{font:inherit;font-size:12px;color:#0066cc}
 </style>
 </head>
 <body>
@@ -1665,8 +1667,18 @@ function diyPublish(id) {
 }
 function diyDelete(id) { var s = psFind(id); if (!s || !confirm('[' + s.name + '] 테스트 세트를 지울까요? (물류앱 세트는 그대로예요)')) return; call('deleteDiySet', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } if (S.psEditing && S.psEditing.id === id) S.psEditing = psNewDraft(); toast('지웠어요'); loadSetTab(); }); }
 function psEditHave(id) { var s = ((S.ps && S.ps.sets) || []).filter(function (x) { return x.id === id; })[0]; if (!s) return; var ex = (S.ps.diys || []).filter(function (d) { return d.linked === id && d.status !== '반영됨'; })[0]; if (ex) { toast('이미 고치던 초안을 열었어요'); return psEdit(ex.id); } psEdit('', { name: s.name, box: s.box, memo: s.memo, items: s.items, linked: id }); }
+function psNeedsHtml(p) {
+  var ns = p.photoNeeds || []; if (!ns.length) return '';
+  return '<details class="ph-need" open><summary>📷 사진 확인 필요 ' + ns.length + '개 <small>물류앱에 사진이 없는 상품 · 맞는 사진을 누르면 누끼를 따서 물류앱에 넣어요</small></summary>' + ns.slice(0, 30).map(function (x, i) {
+    return '<div class="ph-row"><b>' + esc(x.name) + '</b><div class="ph-grid">' + (x.cands || []).map(function (c, j) { return '<button type="button" class="ph-c" data-i="' + i + '" data-j="' + j + '" onclick="psNeedPick(+this.dataset.i,+this.dataset.j)" title="' + esc(c.title || '') + '"><img src="' + esc(c.thumb) + '" alt="" referrerpolicy="no-referrer" loading="lazy"></button>'; }).join('') + '<button type="button" class="ph-c ph-more" data-n="' + esc(x.name) + '" onclick="psPhotoEdit(this.dataset.n)">다른 사진 찾기</button></div></div>';
+  }).join('') + '</details>';
+}
+function psNeedPick(i, j) {
+  var x = (S.ps.photoNeeds || [])[i], c = x && x.cands[j]; if (!c) return;
+  call('setProductPhoto', [x.name, c.url], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '고르지 못했어요'); return; } S.ps.photoNeeds.splice(i, 1); renderSetTab(); toast('골랐어요 · 5분쯤 뒤 누끼를 따서 물류앱에 들어가요'); });
+}
 function psUsesHtml(p) {
-  var h = '', us = Object.keys(p.uses).sort(function (a, b) { return p.uses[b].length - p.uses[a].length; });
+  var h = psNeedsHtml(p), us = Object.keys(p.uses).sort(function (a, b) { return p.uses[b].length - p.uses[a].length; });
   if (us.length) h += '<div class="grp-chips">' + us.map(function (u) { var on = S.psUse === u; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="S.psUse=S.psUse===this.dataset.u?null:this.dataset.u;renderSetTab()">' + esc(u) + ' ' + p.uses[u].length + '</button>'; }).join('') + '</div>'
     + (S.psUse && p.uses[S.psUse] ? '<div class="ps-uses">' + p.uses[S.psUse].map(function (n) { return '<button type="button" class="ps-found" data-n="' + esc(n) + '" onclick="psUses(this.dataset.n)">' + esc(n) + ' <b>용도 고치기</b></button>'; }).join('') + '</div>' : '')
     + '<label class="field"><span>다른 상품 용도 고치기</span><input id="psUq" placeholder="상품 이름 일부" oninput="psUseFind(this.value)"></label><div id="psUf"></div>';
