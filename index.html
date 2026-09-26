@@ -688,6 +688,28 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .nm-row{display:flex;gap:8px}.nm-row input{flex:1;min-width:0}.nm-sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.nm-sug .chip{font-weight:600}
 .diy-lab{margin:8px 0 4px;font-weight:600}.cat-b{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:#eef3fb;color:#1f4f99;margin-right:4px}
 .diy-cats .chip.on{background:#1f4f99;border-color:#1f4f99;color:#fff}
+/* 0926 세트 DIY: 왼쪽 메뉴(분류 · 용도) | 상품만 */
+.diy-left{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.diy-side .diy-lab{margin:6px 0 4px;font-size:12px;font-weight:700;color:#6e6e73}
+.diy-main h2{margin:0 0 4px}
+@media(max-width:899px){.diy-side .grp-chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.diy-side .grp-chips .chip{flex:none}}
+@media(min-width:900px){
+  .diy{grid-template-columns:minmax(0,1.7fr) minmax(320px,1fr)!important}
+  .diy-left{grid-template-columns:190px minmax(0,1fr);align-items:start}
+  .diy-side{position:sticky;top:72px;max-height:calc(100vh - 96px);overflow:auto;padding-right:10px;border-right:1px solid #ececec}
+  .diy-side .grp-chips{display:flex;flex-direction:column;gap:2px}
+  .diy-side .grp-chips .chip{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:36px;border:0;border-radius:10px;background:none;text-align:left;padding:0 10px;font-size:13px}
+  .diy-side .grp-chips .chip:hover{background:#f3f4f6}
+  .diy-side .grp-chips .chip.on{background:#111;color:#fff}.diy-side .diy-cats .chip.on{background:#1f4f99}
+  .diy-main .diy-list{max-height:calc(100vh - 170px)}
+}
+.diy-img img,.ps-ph img{cursor:zoom-in}
+.img-zoom{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.img-zoom[hidden]{display:none}
+.img-zoom figure{margin:0;max-width:min(92vw,720px);background:#fff;border-radius:18px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;background-image:repeating-conic-gradient(#f3f3f5 0 25%,#fff 0 50%);background-size:18px 18px}
+.img-zoom img{max-width:100%;max-height:72vh;object-fit:contain}
+.img-zoom figcaption{background:#fff;border-radius:10px;padding:4px 10px;font-weight:700;font-size:14px;text-align:center}
+.img-zoom-x{position:fixed;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:18px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1729,11 +1751,11 @@ function diyHtml(p) {
   if (!S.diyUses) S.diyUses = us.length ? [us[0]] : [];
   var cs = {}; p.products.forEach(function (x) { if (x.cat) cs[x.cat] = (cs[x.cat] || 0) + 1; }); S.diyCats = S.diyCats || [];
   var catChips = '<div class="grp-chips diy-cats" aria-label="분류">' + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { var on = S.diyCats.indexOf(c) !== -1; return '<button type="button" class="chip cat' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(c) + '" onclick="diyCatToggle(this.dataset.c)">' + esc(c) + ' <em>' + cs[c] + '</em></button>'; }).join('') + '</div>';
-  return '<div class="diy"><section class="card diy-left"><h2>용도별 상품</h2><p class="meta diy-lab">분류</p>' + catChips + '<p class="meta diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
-    + '<label class="diy-and"><input type="checkbox" id="diyAnd"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"> 고른 용도를 모두 가진 상품만</label>'
-    + '<input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList()">'
+  return '<div class="diy"><section class="card diy-left"><nav class="diy-side" aria-label="분류 · 용도"><p class="diy-lab">분류</p>' + catChips + '<p class="diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
+    + '<label class="diy-and"><input type="checkbox" id="diyAnd"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"> 고른 용도를 모두 가진 상품만</label></nav>'
+    + '<div class="diy-main"><h2>상품</h2><input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList()">'
     + '<div id="diyList" class="diy-list">' + diyListHtml() + '</div>'
-    + '<details class="diy-oy"><summary>올리브영 상품 넣기</summary><input id="psQ" class="diy-q" placeholder="올리브영 상품 이름" oninput="psSearch(this.value)"><div id="psFound" class="diy-list">' + psFoundHtml() + '</div></details></section>'
+    + '<details class="diy-oy"><summary>올리브영 상품 넣기</summary><input id="psQ" class="diy-q" placeholder="올리브영 상품 이름" oninput="psSearch(this.value)"><div id="psFound" class="diy-list">' + psFoundHtml() + '</div></details></div></section>'
     + '<aside class="card diy-right" id="diyBox">' + diyBoxHtml() + '</aside></div>'
     + '<button type="button" class="diy-bar" id="diyBar"' + (e.items.length ? '' : ' hidden') + ' onclick="$(\'diyBox\').scrollIntoView({block:\'start\',behavior:\'smooth\'})">담은 상품 <b id="diyBarN">' + e.items.length + '</b>개 · 세트 보기 ↓</button>';
 }
@@ -2094,6 +2116,15 @@ function otherMallsHtml(list) {
   if (!list || !list.length) return '';
   return '<div class="pd-sec"><h4>다른 사이트 순위</h4>' + list.map(function (x) { return '<div class="link-row"><span><b>' + esc(x.label) + '</b> ' + x.rank + '위 <small class="meta">' + esc(x.name) + '</small></span>' + (x.url && /^https:\/\//.test(x.url) ? '<a class="btn" href="' + esc(x.url) + '" target="_blank" rel="noopener">보기 ↗</a>' : '') + '</div>'; }).join('') + '</div>';
 }
+/* 0926 상품 사진 누르면 크게 (세트 DIY · 보유 세트 · 테스트 세트) */
+document.addEventListener('click', function (e) {
+  var img = e.target.closest && e.target.closest('.diy-img img, .ps-ph img, .ps-thumbs img'); if (!img || !img.src) return;
+  var box = img.closest('.diy-row, .diy-it, .ps-card'), nm = box ? ((box.querySelector('.nm1, h3') || {}).textContent || '') : '';
+  var z = $('imgZoom'); if (!z) { z = document.createElement('div'); z.id = 'imgZoom'; z.className = 'img-zoom'; z.setAttribute('role', 'dialog'); z.setAttribute('aria-label', '사진 크게 보기'); z.onclick = function () { z.hidden = true; }; document.body.appendChild(z); }
+  z.innerHTML = '<figure><img src="' + esc(img.src) + '" alt="' + esc(nm) + '" referrerpolicy="no-referrer"><figcaption>' + esc(nm) + '</figcaption></figure><button type="button" class="img-zoom-x" aria-label="닫기">✕</button>';
+  z.hidden = false;
+});
+document.addEventListener('keydown', function (e) { var z = $('imgZoom'); if (e.key === 'Escape' && z && !z.hidden) z.hidden = true; });
 </script>
 </body>
 </html>
