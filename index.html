@@ -657,6 +657,24 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .diy-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom));z-index:30;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:#111;color:#fff;font:inherit;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .diy-bar[hidden]{display:none}@media(min-width:900px){.diy-bar{display:none}}
 .diy-it .diy-img{max-width:110px;margin:0 auto}
+/* 0926 박스에 넣어 보기 */
+.bx-sel{display:flex;gap:8px}.bx-sel select{flex:1;min-height:44px;border:1px solid #e3e3e6;border-radius:12px;padding:0 10px;font:inherit;background:#fff;min-width:0}
+.bx-size{margin-top:2px;min-height:32px;border:1px dashed #c7c7cc;border-radius:999px;background:#fff;font:inherit;font-size:11.5px;color:#6e6e73;cursor:pointer}
+.bx-size.none{border-color:#0066cc;color:#0066cc}.bx-size.guess{border-color:#f39a2b;color:#b25000}
+.bx{border-top:1px solid #ececec;margin-top:6px;padding-top:4px}.bx-ok{color:#248a3d;font-weight:600;font-size:13.5px}.bx-no{color:#d70015;font-weight:600;font-size:13.5px}
+.linkbtn{border:0;background:none;color:#0066cc;font:inherit;font-weight:600;cursor:pointer;padding:0;min-height:32px}
+.bx-views{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;align-items:end;margin:8px 0}
+.bx-views figure{margin:0}.bx-views figcaption{font-size:11.5px;color:#8a8a8a;text-align:center;margin-top:4px}
+.bx-front{position:relative;width:100%;background:linear-gradient(180deg,#fff,#f6f9fc)}
+.bx-wall{position:absolute;left:0;right:0;bottom:0;border:2px solid #9cc3e6;border-top:0;border-radius:0 0 6px 6px;background:rgba(156,195,230,.12);z-index:20;pointer-events:none}
+.bx-lid{position:absolute;left:-2%;right:-2%;height:0;border-top:2px dashed #9cc3e6;z-index:21}
+.bx-u{position:absolute;display:flex;align-items:flex-end;justify-content:center}.bx-u img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+.bx-u em{font-style:normal;font-size:10px;background:#e8e8ed;border-radius:4px;width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.bx-u.back{opacity:.7;filter:saturate(.8)}
+.bx-top{position:relative;width:100%;border:2px solid #9cc3e6;border-radius:6px;background:rgba(156,195,230,.12)}
+.bx-t{position:absolute;box-sizing:border-box;border:1px solid #7aa9d6;background:rgba(255,255,255,.85);font-size:9.5px;overflow:hidden;padding:1px 2px;line-height:1.2}
+.bx-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.bx-views{max-width:460px}
 </style>
 </head>
 <body>
@@ -1685,15 +1703,114 @@ function diyBoxHtml() {
   var e = S.psEditing, s = e.id ? psFind(e.id) : null;
   return '<h2>' + (e.id ? '세트 고치기' : '만드는 세트') + '</h2>'
     + '<label class="field"><span>세트 이름 *</span><input id="psName" maxlength="40" value="' + esc(e.name) + '" placeholder="예: 가을 진정 세트" oninput="S.psEditing.name=this.value"></label>'
-    + '<label class="field"><span>박스</span><input id="psBox" maxlength="20" value="' + esc(e.box) + '" placeholder="예: 5번" oninput="S.psEditing.box=this.value"></label>'
+    + psBoxField(e)
     + '<div class="diy-items">' + (e.items.length ? e.items.map(function (x, i) {
       return '<div class="diy-it"><span class="diy-img">' + imgHtml(S.psImg[x.name] || '') + '</span><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + (/^\[올리브영\]/.test(x.name) ? ' <span class="mbadge oy">올리브영</span>' : '') + '</span>'
         + '<span class="diy-qty"><button type="button" class="btn" data-i="' + i + '" aria-label="하나 빼기" onclick="diyQty(+this.dataset.i,-1)">−</button><b>' + x.qty + '</b><button type="button" class="btn" data-i="' + i + '" aria-label="하나 더" onclick="diyQty(+this.dataset.i,1)">＋</button></span>'
+        + psSizeTag(x.name)
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">✕</button></div>'; }).join('') : '<p class="empty">왼쪽에서 상품을 담으면 여기에 사진으로 쌓여요</p>') + '</div>'
+    + boxPreviewHtml(e)
     + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>'
     + '<div class="ps-act"><button type="button" class="btn pri" onclick="psSave()">저장 (물류앱에도 반영)</button>'
     + (e.id ? (s && s.pending ? '<span class="pending">AI 검토 중</span>' : '<button type="button" class="btn" data-id="' + esc(e.id) + '" onclick="psReview(this.dataset.id)">✨ AI 검토</button>') + '<button type="button" class="btn danger" onclick="psDelete()">삭제</button>' : '')
     + '<button type="button" class="btn" onclick="S.psEditing=psNewDraft();diyBox();diyList()">새로 시작</button></div>';
+}
+/* ── 0926 박스에 넣어 보기: 박스 규격 · 상품 크기(mm) · 실제 비율 미리보기 · 들어가는지 판정 · 이미지 저장 ── */
+function psBoxOf(name) { return ((S.ps && S.ps.boxes) || []).filter(function (b) { return b.name === name; })[0] || null; }
+function psBoxField(e) {
+  var bs = (S.ps && S.ps.boxes) || [], known = psBoxOf(e.box);
+  return '<div class="field"><span>박스</span><div class="bx-sel"><select id="psBox" onchange="S.psEditing.box=this.value;diyBox()"><option value="">박스 고르기</option>' + bs.map(function (b) { return '<option value="' + esc(b.name) + '"' + (b.name === e.box ? ' selected' : '') + '>' + esc(b.name) + ' · ' + b.w + '×' + b.d + '×' + b.h + 'mm</option>'; }).join('')
+    + (e.box && !known ? '<option value="' + esc(e.box) + '" selected>' + esc(e.box) + ' (크기 미등록)</option>' : '') + '</select><button type="button" class="btn" onclick="boxManage()">박스 관리</button></div></div>';
+}
+function psSizeOf(name) { var z = S.ps && S.ps.sizes && S.ps.sizes[name]; return z && z.w && z.d && z.h ? z : null; }
+function psSizeTag(name) { var z = psSizeOf(name); return '<button type="button" class="bx-size' + (z ? (z.src === 'AI추정' ? ' guess' : '') : ' none') + '" data-n="' + esc(name) + '" onclick="psSizeEdit(this.dataset.n)">' + (z ? z.w + '×' + z.d + '×' + z.h + 'mm' + (z.src === 'AI추정' ? ' (추정)' : '') : '크기 넣기') + '</button>'; }
+/** 앞줄부터 가로로 채우고, 넘치면 뒷줄로. 높은 것부터(앞줄 = 키 큰 것 · 사진이 가리지 않게 뒤로 보냄은 그림에서 처리) */
+function psPack(units, box) {
+  var rows = [], cur = null, maxH = 0, over = '';
+  units.slice().sort(function (a, b) { return b.h - a.h; }).forEach(function (u) {
+    var w = u.w, d = u.d; if (w > box.w && d <= box.w && w <= box.d) { w = u.d; d = u.w; }   // 옆으로 돌려 넣기
+    if (w > box.w) over = over || (u.name + ' 가로가 ' + (w - box.w) + 'mm 넘쳐요');
+    if (!cur || cur.x + w > box.w) { cur = { x: 0, y: rows.reduce(function (a, r) { return a + r.d; }, 0), d: 0, items: [] }; rows.push(cur); }
+    cur.items.push({ u: u, x: cur.x, w: w, d: d }); cur.x += w; cur.d = Math.max(cur.d, d); maxH = Math.max(maxH, u.h);
+  });
+  var depth = rows.reduce(function (a, r) { return a + r.d; }, 0), vol = units.reduce(function (a, u) { return a + u.w * u.d * u.h; }, 0);
+  if (!over && depth > box.d) over = '깊이가 ' + (depth - box.d) + 'mm 넘쳐요 (' + rows.length + '줄)';
+  if (!over && maxH > box.h) over = '높이가 ' + (maxH - box.h) + 'mm 넘쳐요 (뚜껑이 안 닫혀요)';
+  return { fit: !over, why: over, rows: rows, fill: Math.round(vol / (box.w * box.d * box.h) * 100), depth: depth, maxH: maxH };
+}
+function psUnits(e) { var u = [], miss = []; e.items.forEach(function (x) { var z = psSizeOf(x.name); if (!z) { miss.push(x.name); return; } for (var i = 0; i < x.qty; i++) u.push({ name: x.name, w: z.w, d: z.d, h: z.h, img: S.psImg[x.name] || '' }); }); return { units: u, miss: miss }; }
+function boxPreviewHtml(e) {
+  if (!e.items.length) return '';
+  var box = psBoxOf(e.box), U = psUnits(e), h = '<div class="bx"><h3 class="tour-h">박스에 넣어 보기</h3>';
+  if (U.miss.length) h += '<p class="meta">크기를 모르는 상품: ' + U.miss.map(esc).join(', ') + ' — 카드의 [크기 넣기]로 넣거나 <button type="button" class="linkbtn" onclick="psSizeGuess()"' + (S.ps.sizePending ? ' disabled' : '') + '>' + (S.ps.sizePending ? 'AI 추정 중 (5~10분)' : 'AI로 크기 추정') + '</button></p>';
+  var bs = ((S.ps && S.ps.boxes) || []).filter(function (b) { return b.w && b.d && b.h; });
+  if (!bs.length) return h + '<p class="empty">[박스 관리]에서 투명박스 크기를 먼저 넣어 주세요</p></div>';
+  if (!U.units.length) return h + '</div>';
+  var best = bs.map(function (b) { return { b: b, r: psPack(U.units, b) }; }).filter(function (x) { return x.r.fit; }).sort(function (a, c) { return a.b.w * a.b.d * a.b.h - c.b.w * c.b.d * c.b.h; })[0];
+  if (!box) return h + (best ? '<p class="bx-ok">추천 박스: <b>' + esc(best.b.name) + '</b> (' + best.r.fill + '% 참) <button type="button" class="btn" data-b="' + esc(best.b.name) + '" onclick="S.psEditing.box=this.dataset.b;diyBox()">이 박스로</button></p>' : '<p class="bx-no">등록된 박스 중 들어가는 게 없어요</p>') + '</div>';
+  var r = psPack(U.units, box);
+  h += r.fit ? '<p class="bx-ok">✅ ' + esc(box.name) + '에 들어가요 · ' + r.fill + '% 참 · ' + r.rows.length + '줄</p>' : '<p class="bx-no">❌ ' + esc(r.why) + (best ? ' → <button type="button" class="linkbtn" data-b="' + esc(best.b.name) + '" onclick="S.psEditing.box=this.dataset.b;diyBox()">' + esc(best.b.name) + '에는 들어가요</button>' : '') + '</p>';
+  var pic = function (it, style, cls) { return '<span class="bx-u' + cls + '" style="' + style + '" title="' + esc(it.u.name + ' ' + it.u.w + '×' + it.u.d + '×' + it.u.h + 'mm') + '">' + (it.u.img ? '<img src="' + esc(it.u.img) + '" alt="" referrerpolicy="no-referrer">' : '<em>' + esc(it.u.name) + '</em>') + '</span>'; };
+  var pct = function (a, b) { return Math.max(0, Math.min(100, a / b * 100)).toFixed(2) + '%'; };
+  var front = '', top = '';
+  r.rows.slice().reverse().forEach(function (row, ri) { var back = r.rows.length - 1 - ri; row.items.forEach(function (it) {
+    front += pic(it, 'left:' + pct(it.x, box.w) + ';width:' + pct(it.w, box.w) + ';height:' + pct(Math.min(it.u.h, box.h * 1.3), box.h * 1.3) + ';bottom:' + (back * 3) + '%;z-index:' + (10 - back), back ? ' back' : '');
+    top += '<span class="bx-t" style="left:' + pct(it.x, box.w) + ';top:' + pct(row.y, box.d) + ';width:' + pct(it.w, box.w) + ';height:' + pct(it.d, box.d) + '">' + esc(it.u.name.replace(/^\[올리브영\] /, '').slice(0, 8)) + '</span>';
+  }); });
+  h += '<div class="bx-views"><figure><div class="bx-front" style="aspect-ratio:' + box.w + '/' + (box.h * 1.3).toFixed(0) + '"><i class="bx-lid" style="bottom:' + pct(box.h, box.h * 1.3) + '"></i><i class="bx-wall" style="height:' + pct(box.h, box.h * 1.3) + '"></i>' + front + '</div><figcaption>정면 · ' + box.w + '×' + box.h + 'mm</figcaption></figure>'
+    + '<figure><div class="bx-top" style="aspect-ratio:' + box.w + '/' + box.d + '">' + top + '</div><figcaption>위에서 · ' + box.w + '×' + box.d + 'mm</figcaption></figure></div>'
+    + '<button type="button" class="btn" onclick="boxExport()">🖼 이미지로 저장 (직원에게 보내기)</button>';
+  return h + '</div>';
+}
+function psSizeEdit(name) {
+  var z = psSizeOf(name) || {}; S.mtFrom = document.activeElement; S.psSizeName = name;
+  $('mtTitle').textContent = '상품 크기';
+  $('mtBody').innerHTML = '<p class="sub"><b>' + esc(name) + '</b> · 포장 바깥 크기(mm)' + (z.src === 'AI추정' ? ' · 지금 값은 AI 추정이에요. 자로 재서 고쳐 주세요' : '') + '</p>'
+    + ['w', 'd', 'h'].map(function (k) { return '<label class="field"><span>' + { w: '가로 (정면 너비)', d: '깊이 (앞뒤 두께)', h: '높이 (세운 높이)' }[k] + '</span><input id="sz_' + k + '" inputmode="numeric" value="' + (z[k] || '') + '"></label>'; }).join('') + '<p class="np-err" id="mtErr"></p>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri" onclick="psSizeSave()">저장</button>';
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+}
+function psSizeSave() {
+  var v = ['w', 'd', 'h'].map(function (k) { return parseInt($('sz_' + k).value, 10) || 0; }), name = S.psSizeName;
+  if (v.some(function (x) { return x <= 0 || x > 2000; })) { $('mtErr').textContent = '세 칸 모두 mm 숫자로 넣어 주세요'; return; }
+  call('saveProductSize', [name, v[0], v[1], v[2]], function (r) { if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } S.ps.sizes[name] = { w: v[0], d: v[1], h: v[2], src: '실측' }; closeMt(); diyBox(); toast('크기를 저장했어요'); });
+}
+function psSizeGuess() { call('requestSizeGuess', [], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '요청하지 못했어요'); return; } S.ps.sizePending = true; diyBox(); toast('AI 크기 추정을 요청했어요 · 저장된 세트의 상품만 · 5~10분'); psPoll(); }); }
+function boxManage() {
+  S.mtFrom = document.activeElement; $('mtTitle').textContent = '박스 관리';
+  var bs = (S.ps && S.ps.boxes) || [];
+  $('mtBody').innerHTML = '<p class="sub">투명박스 안쪽 크기(mm)를 넣어 두면 세트가 들어가는지 그려 봐요. 박스 이름은 물류앱 세트의 "박스" 칸에 그대로 들어가요</p>'
+    + (bs.length ? bs.map(function (b) { return '<div class="sitem"><span class="tx"><span class="nm1">' + esc(b.name) + '</span><span class="meta">' + b.w + '×' + b.d + '×' + b.h + 'mm' + (b.memo ? ' · ' + esc(b.memo) : '') + '</span></span><button type="button" class="btn" data-b="' + esc(b.name) + '" onclick="boxFill(this.dataset.b)">고치기</button></div>'; }).join('') : '<p class="empty">아직 박스가 없어요</p>')
+    + '<h4>박스 추가 · 고치기</h4><input type="hidden" id="bxOld"><label class="field"><span>이름 (예: 5번, 소형)</span><input id="bxName" maxlength="20"></label>'
+    + '<div class="bx-3">' + ['w', 'd', 'h'].map(function (k) { return '<label class="field"><span>' + { w: '가로', d: '깊이', h: '높이' }[k] + ' mm</span><input id="bx_' + k + '" inputmode="numeric"></label>'; }).join('') + '</div>'
+    + '<label class="field"><span>메모</span><input id="bxMemo" maxlength="60"></label><p class="np-err" id="mtErr"></p>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri" onclick="boxSave()">저장</button><button type="button" class="btn danger" onclick="boxDel()">이 박스 삭제</button>';
+  if (!$('mt').classList.contains('on')) { $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
+}
+function boxFill(name) { var b = psBoxOf(name); if (!b) return; $('bxOld').value = b.name; $('bxName').value = b.name; $('bx_w').value = b.w; $('bx_d').value = b.d; $('bx_h').value = b.h; $('bxMemo').value = b.memo || ''; }
+function boxSave() {
+  var b = { name: $('bxName').value.trim(), w: +$('bx_w').value, d: +$('bx_d').value, h: +$('bx_h').value, memo: $('bxMemo').value.trim() }, old = $('bxOld').value;
+  call('saveSetBox', [b, old], function (r) { if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } var bs = S.ps.boxes = (S.ps.boxes || []).filter(function (x) { return x.name !== (old || b.name); }); bs.push(b); toast('박스를 저장했어요'); boxManage(); diyBox(); });
+}
+function boxDel() { var n = $('bxOld').value || $('bxName').value.trim(); if (!n || !confirm('[' + n + '] 박스를 지울까요?')) return; call('deleteSetBox', [n], function (r) { if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '지우지 못했어요'; return; } S.ps.boxes = S.ps.boxes.filter(function (x) { return x.name !== n; }); boxManage(); diyBox(); }); }
+/** 미리보기 + 구성표를 PNG 로 (사진이 다른 사이트라 막히면 이름 칸으로 대신 그림) */
+function boxExport() {
+  var e = S.psEditing, box = psBoxOf(e.box), U = psUnits(e); if (!box || !U.units.length) return;
+  var r = psPack(U.units, box), sc = Math.min(3, 520 / box.w), W = Math.round(box.w * sc), H = Math.round(box.h * sc), pad = 30, list = e.items.map(function (x) { return x.name.replace(/^\[올리브영\] /, '') + (x.qty > 1 ? ' ×' + x.qty : ''); });
+  var cv = document.createElement('canvas'); cv.width = W + pad * 2; cv.height = H + pad * 2 + 90 + list.length * 24; var g = cv.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height); g.fillStyle = '#111'; g.font = 'bold 22px sans-serif'; g.fillText(e.name || '세트', pad, 34); g.font = '14px sans-serif'; g.fillStyle = '#6e6e73'; g.fillText(box.name + ' · ' + box.w + '×' + box.d + '×' + box.h + 'mm · ' + (r.fit ? '들어가요' : r.why), pad, 56);
+  var oy = 70; g.strokeStyle = '#9cc3e6'; g.lineWidth = 2; g.fillStyle = '#f3f8fd'; g.fillRect(pad, oy, W, H); g.strokeRect(pad, oy, W, H);
+  var jobs = [];
+  r.rows.slice().reverse().forEach(function (row) { row.items.forEach(function (it) { jobs.push({ x: pad + it.x * sc, y: oy + H - Math.min(it.u.h, box.h) * sc, w: it.w * sc, h: Math.min(it.u.h, box.h) * sc, u: it.u }); }); });
+  var done = 0, finish = function () {
+    g.fillStyle = '#111'; g.font = 'bold 15px sans-serif'; g.fillText('구성', pad, oy + H + 30); g.font = '14px sans-serif'; list.forEach(function (t, i) { g.fillText('· ' + t, pad, oy + H + 54 + i * 24); });
+    var url = ''; try { url = cv.toDataURL('image/png'); } catch (x) { url = ''; }
+    if (!url) { toast('사진 때문에 저장이 막혔어요 · 화면을 캡처해 주세요'); return; }
+    var a = document.createElement('a'); a.href = url; a.download = (e.name || '세트') + '.png'; document.body.appendChild(a); a.click(); a.remove(); toast('이미지를 저장했어요');
+  };
+  var draw = function (j, img) { if (img) { g.globalCompositeOperation = 'multiply'; var ar = img.width / img.height, w = j.w, h = w / ar; if (h > j.h) { h = j.h; w = h * ar; } g.drawImage(img, j.x + (j.w - w) / 2, j.y + (j.h - h), w, h); g.globalCompositeOperation = 'source-over'; } else { g.fillStyle = '#e8e8ed'; g.fillRect(j.x + 1, j.y, j.w - 2, j.h); g.fillStyle = '#333'; g.font = '11px sans-serif'; g.fillText(j.u.name.slice(0, 10), j.x + 4, j.y + 16); } if (++done === jobs.length) finish(); };
+  if (!jobs.length) return finish();
+  jobs.forEach(function (j) { if (!j.u.img) return draw(j, null); var im = new Image(); im.crossOrigin = 'anonymous'; im.referrerPolicy = 'no-referrer'; im.onload = function () { draw(j, im); }; im.onerror = function () { draw(j, null); }; im.src = j.u.img; });
 }
 function diyList() { var l = $('diyList'); if (l) l.innerHTML = diyListHtml(); [].forEach.call(document.querySelectorAll('.diy-chips .chip'), function (b) { var on = b.dataset.u === S.diyUse && !S.diyQ; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); }
 function diyBox() { var b = $('diyBox'); if (b) b.innerHTML = diyBoxHtml(); var n = S.psEditing.items.length, bar = $('diyBar'); if (bar) { bar.hidden = !n; $('diyBarN').textContent = n; } psNeedImgs(S.psEditing.items.map(function (x) { return x.name; })); }
@@ -1720,7 +1837,7 @@ function psSave() {
 }
 function psDelete() { var e = S.psEditing; if (!e.id || !confirm('[' + e.name + '] 세트를 지울까요? 물류앱에서도 지워져요')) return; call('deletePharmacySet', [e.id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } toast('지웠어요'); S.psEditing = psNewDraft(); loadSetTab(); }); }
 function psReview(id) { call('requestSetReview', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '요청하지 못했어요'); return; } toast('AI 검토를 요청했어요 · 5~10분 뒤 세트 DIY 에 떠요'); var s = psFind(id); if (s) s.pending = '방금'; S.setSub = 'diy'; renderSetTab(); psPoll(); }); }
-function psPoll() { clearTimeout(S.psPollT); if (S.tab === 'set' && S.ps && S.ps.sets && S.ps.sets.some(function (s) { return s.pending; })) S.psPollT = setTimeout(function () { call('getPharmacySets', [], function (r) { if (r && r.ok) { S.ps = r; renderSetTab(); psPoll(); } }); }, 30000); }
+function psPoll() { clearTimeout(S.psPollT); if (S.tab === 'set' && S.ps && S.ps.sets && (S.ps.sizePending || S.ps.sets.some(function (s) { return s.pending; }))) S.psPollT = setTimeout(function () { call('getPharmacySets', [], function (r) { if (r && r.ok) { S.ps = r; renderSetTab(); psPoll(); } }); }, 30000); }
 function psAddon(id, i) { var s = psFind(id), a = s && s.review.result.addons[i]; if (!a) return; var d = JSON.parse(JSON.stringify(s)); if (!d.items.some(function (x) { return x.name === a.name; })) d.items.push({ name: a.name, qty: 1 }); psEdit(id, d); }
 function psFromDerived(id, i) { var s = psFind(id), d = s && s.review.result.sets[i]; if (!d) return; psEdit('', { name: d.name, box: '', memo: d.reason || '', items: d.items.map(function (x) { return { name: x.name, qty: 1 }; }) }); }
 function reqSets() {
