@@ -602,6 +602,22 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .pal-donut{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0 2px}
 .pal-donut svg{width:min(240px,70vw);height:auto}
 .pal-donut .sub{text-align:center;margin:0}
+/* 0926 관광객 · 환율 */
+.fx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0 6px}
+@media(min-width:1100px){.fx-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.fx-tile{display:flex;flex-direction:column;gap:3px;padding:12px;border-radius:14px;background:#f5f5f7;min-width:0}
+.fx-n{font-size:12px;color:#6e6e73}.fx-tile b{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.fx-u{font-size:11.5px;color:#8a8a8a;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tour-h{font-size:14px;font-weight:700;margin:18px 0 6px}.tour-h small{font-weight:400;font-size:12px;color:#8a8a8a;margin-left:6px}
+.tour-list{display:grid;gap:0}
+.tour-row{display:grid;grid-template-columns:72px minmax(0,1fr) 96px 86px;align-items:center;gap:10px;min-height:40px;border-top:1px solid #ececec;font-size:13px}
+.tour-n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tour-row .pill{justify-self:end}
+@media(max-width:420px){.tour-row{grid-template-columns:48px minmax(0,1fr) 76px 92px;gap:6px}.fx-tile{padding:10px}.fx-tile b{font-size:15px}}
+.sp-sum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:#6e6e73}.sp-sum b{font-size:20px;color:#1d1d1f}
+.sp-bars{display:flex;align-items:flex-end;gap:2px;height:90px;margin:10px 0 4px}
+.sp-bars span{flex:1;display:flex;flex-direction:column-reverse;height:100%;min-width:0}
+.sp-bars i{display:block}.sp-bars i.c{background:#e8453c;border-radius:0 0 2px 2px}.sp-bars i.e{background:#9aa4b2;border-radius:2px 2px 0 0}
+.tour-v{font-size:12.5px;color:#6b7280;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -925,6 +941,7 @@ function step5Html(home) {
 function renderHome() {
   var home = S.home;
   $('home').innerHTML = '<section id="hero-kw" class="card hero-card" data-card="hero"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></section>'
+    + '<article id="tour-kw" class="card" data-card="tourism"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
     + '<div class="top-row"><article id="top5-kw" class="card" data-card="top5"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article><article id="palette-kw" class="card" data-card="palette"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article></div>'
     + '<article id="gt-kw" class="card" data-card="gtrends"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
     + '<article id="nd-kw" class="card" data-card="ndatalab"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
@@ -1339,6 +1356,31 @@ function gtHtml(v, src) {
       + '<span class="gt-v">지수 ' + x.now + '</span>' + (x.growth == null ? '<span class="pill">–</span>' : growthPill(x)) + '</div>';
   }).join('') + '</div>';
 }
+/* 0926 관광객 · 환율 */
+var FX_NAME = { CNY: ['중국 위안', '1위안'], JPY: ['일본 엔', '100엔'], USD: ['미국 달러', '1달러'], TWD: ['대만 달러', '1대만달러'], HKD: ['홍콩 달러', '1홍콩달러'], THB: ['태국 바트', '1바트'] };
+function tourHtml(v) {
+  var t = (v && v.tourism) || {}, h = '<div class="card-head"><h2>관광객 · 환율</h2>' + (t.fx ? '<span class="chip date-chip">' + esc(t.fx.date) + '</span>' : '') + '</div>';
+  var sign = function (n) { return n == null ? '' : n > 0 ? '<span class="pill pill-up">+' + n + '%</span>' : n < 0 ? '<span class="pill pill-down">' + n + '%</span>' : '<span class="pill">0%</span>'; };
+  if (t.fx) h += '<p class="sub">원화로 바꾼 값 · 1주 전보다 오르면(+) 그 나라 손님이 한국에서 더 싸게 사요</p><div class="fx-grid">' + t.fx.items.map(function (x) {
+    var n = FX_NAME[x.cur] || [x.cur, x.cur];
+    return '<div class="fx-tile"><span class="fx-n">' + esc(n[0]) + '</span><b>' + x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원</b><span class="fx-u">' + esc(n[1]) + ' ' + sign(x.change) + '</span></div>';
+  }).join('') + '</div>';
+  else h += '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>';
+  if (t.tour && t.tour.items.length) {
+    var ym = t.tour.ym.slice(0, 4) + '년 ' + (+t.tour.ym.slice(4)) + '월', max = t.tour.items[0].num || 1;
+    h += '<h3 class="tour-h">나라별 방한 외국인 <small>' + esc(ym) + ' · 전국 · ' + t.tour.total.toLocaleString('ko-KR') + '명</small></h3><div class="tour-list">' + t.tour.items.map(function (x) {
+      return '<div class="tour-row"><span class="tour-n">' + esc(x.nat) + '</span><span class="nb-bar"><i style="width:' + Math.max(2, Math.round(x.num / max * 100)) + '%;background:#0066cc"></i></span><span class="tour-v">' + (x.num >= 10000 ? Math.round(x.num / 1000) / 10 + '만' : x.num.toLocaleString('ko-KR')) + ' · ' + x.share + '%</span>' + (x.yoy != null ? sign(x.yoy).replace('%<', '% 작년<') : '<span class="pill">–</span>') + '</div>';
+    }).join('') + '</div>';
+  } else h += '<h3 class="tour-h">나라별 방한 외국인</h3><p class="empty">공공데이터포털 인증키를 넣으면 달마다 나라별로 떠요</p>';
+  if (t.spop && t.spop.series.length) {
+    var ser = t.spop.series, mx = Math.max.apply(null, ser.map(function (x) { return x.total; }).concat([1]));
+    h += '<h3 class="tour-h">성수동 외국인 (단기 체류) <small>' + esc(t.spop.last) + '까지 · 영업시간 평균 · 서울시 자료라 늦게 나와요</small></h3>'
+      + '<div class="sp-sum"><b>' + t.spop.week.toLocaleString('ko-KR') + '명</b><span>최근 7일 평균</span>' + sign(t.spop.growth) + '<span>중국 ' + t.spop.chinaShare + '% · 그 외 ' + (100 - t.spop.chinaShare) + '%</span></div>'
+      + '<div class="sp-bars" role="img" aria-label="성수동 외국인 최근 ' + ser.length + '일">' + ser.map(function (x) { var hh = Math.round(x.total / mx * 100), hc = x.total ? Math.round(x.china / x.total * hh) : 0; return '<span title="' + esc(x.d + ' · ' + x.total + '명 (중국 ' + x.china + ')') + '"><i class="c" style="height:' + hc + '%"></i><i class="e" style="height:' + (hh - hc) + '%"></i></span>'; }).join('') + '</div>'
+      + '<p class="vz-key"><i style="background:#e8453c"></i>중국 <i style="background:#9aa4b2"></i>그 외 나라 (서울시 자료는 나라를 이 두 가지로만 나눠요)</p>';
+  } else h += '<h3 class="tour-h">성수동 외국인</h3><p class="empty">서울 열린데이터광장 인증키를 넣으면 날짜별로 떠요</p>';
+  return h;
+}
 /* 0926 네이버 블로그 언급량: 최근 7일 글 수 vs 그 전 7일 */
 function nbHtml(v) {
   var g = v && v.nblog, head = '<div class="card-head"><h2>블로그 언급량</h2>' + (g ? '<span class="chip date-chip">' + esc(g.date) + '</span>' : '') + '</div><p class="sub">네이버 블로그 · 최근 7일에 쓰인 글 수 (입소문 지표) · 그 전 7일과 비교</p>';
@@ -1439,6 +1481,7 @@ function renderViz() {
   var v = S.viz, el = $('c-viz'), mini = $('step1-viz');
   var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw'), gw = $('gt-kw');
   if (gw) gw.innerHTML = gtHtml(v);
+  var tw = $('tour-kw'); if (tw) tw.innerHTML = tourHtml(v);
   var nw = $('nd-kw'), bw = $('nb-kw');
   if (nw) nw.innerHTML = gtHtml(v, 'naver');
   if (bw) bw.innerHTML = nbHtml(v);
