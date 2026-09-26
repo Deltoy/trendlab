@@ -591,6 +591,14 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 @media(max-width:360px){.kpis div{padding:10px 8px}.s1-kpis{gap:8px}.s1k{padding:10px 12px}}
 .hero-tile-top{flex-wrap:wrap;row-gap:6px}
 .hero-kw{word-break:keep-all;overflow-wrap:normal}
+
+/* 0926 물류앱 연결 정보 */
+.link-row .li-info{display:block;margin-top:3px;font-size:12px;color:#6e6e73;line-height:1.45}
+.link-row .li-info b{color:#1d1d1f;font-weight:600}
+.link-row .li-info .li-act{color:#0066cc}
+.nb-bar{display:block;height:8px;border-radius:999px;background:#f0f0f2;overflow:hidden}
+.nb-bar i{display:block;height:100%;border-radius:999px;background:#03c75a}
+@media(max-width:420px){.gt-row.nb-row{grid-template-columns:minmax(0,1fr) 48px 54px 60px}.nb-row .gt-v{display:block}}
 </style>
 </head>
 <body>
@@ -916,6 +924,8 @@ function renderHome() {
   $('home').innerHTML = '<section id="hero-kw" class="card hero-card" data-card="hero"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></section>'
     + '<div class="top-row"><article id="top5-kw" class="card" data-card="top5"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article><article id="palette-kw" class="card" data-card="palette"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i><i class="skel-bar w40"></i></div></article></div>'
     + '<article id="gt-kw" class="card" data-card="gtrends"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
+    + '<article id="nd-kw" class="card" data-card="ndatalab"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
+    + '<article id="nb-kw" class="card" data-card="nblog"><div class="skel-lines" aria-label="불러오는 중"><i class="skel-bar w60"></i><i class="skel-bar w90"></i></div></article>'
     + step1Html(home) + step2Html(home) + step3Html(home) + step4Html() + step5Html(home);
   if (S.viz) renderViz(); else loadViz();
   loadYt();
@@ -1007,6 +1017,17 @@ function chartSvg(series, labels, score) {   /* score=true: 값이 클수록 위
   });
   return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="최근 순위 흐름">' + g + '</svg><div class="legend">' + legend + '</div></div>';
 }
+/* 0926 물류앱 연결 정보 한 줄: 15일 판매 · 마지막 발주 · 마지막 입고 · 발주 진행 중 */
+function logiInfoHtml(i) {
+  if (!i) return '';
+  var p = [];
+  if (i.act) p.push('<b class="li-act">발주 진행 중</b>');
+  if (i.s15 !== '' && i.s15 != null) p.push('15일 판매 <b>' + esc(i.s15) + '개</b>');
+  if (i.inb) p.push('마지막 입고 ' + esc(i.inb));
+  else if (i.ord) p.push('마지막 발주 ' + esc(i.ord));
+  if (!p.length) p.push('발주 기록 없음');
+  return '<small class="li-info">' + p.join(' · ') + '</small>';
+}
 function renderPd(r) {
   var pw = $('pdWatch'); pw.hidden = false; pw.dataset.key = r.card.key; setHeart(pw, r.watched);
   var c = r.card, lp = r.prices.length ? r.prices[r.prices.length - 1] : null, L = r.links;
@@ -1019,7 +1040,8 @@ function renderPd(r) {
     + '<div class="pd-sec"><h4>우리 약국 연결</h4>';
   if (L.logi === 'unavailable') h += '<p class="empty">물류앱을 읽지 못했어요. 설정의 물류앱 시트 ID 를 확인해주세요</p>';
   else {
-    h += L.confirmed.map(function (n) { return '<div class="link-row"><span>✓ ' + esc(n) + '</span><button type="button" class="btn" data-act="link-off" data-name="' + esc(n) + '" onclick="linkAct(this)">해제</button></div>'; }).join('');
+    var LI = r.logiInfo || {};
+    h += L.confirmed.map(function (n) { return '<div class="link-row"><span>✓ ' + esc(n) + logiInfoHtml(LI[n]) + '</span><button type="button" class="btn" data-act="link-off" data-name="' + esc(n) + '" onclick="linkAct(this)">해제</button></div>'; }).join('');
     if (L.suggest.length) h += '<p class="link-q">우리 약국의 이 상품과 같은 상품인가요?</p>';
     h += L.suggest.map(function (s) { return '<div class="link-row"><span><b>' + esc(s.name) + '</b></span><button type="button" class="btn pri" data-act="link-yes" data-name="' + esc(s.name) + '" onclick="linkAct(this)">같은 상품</button><button type="button" class="btn" data-act="link-no" data-name="' + esc(s.name) + '" onclick="linkAct(this)">아니에요</button></div>'; }).join('');
     if (!L.confirmed.length && !L.suggest.length) h += '<p class="empty">비슷한 약국 상품을 찾지 못했어요 → 들여올 후보예요</p>';
@@ -1305,13 +1327,23 @@ function loadViz() {
 /* ── HERO: 이번 주 급상승 키워드 ── */
 var GT_KIND = { keyword: '키워드', brand: '브랜드', item: '아이템' };
 /* 구글 검색량: 최근 7일 vs 그 전 7일 */
-function gtHtml(v) {
-  var g = v && v.gtrends;
-  var head = '<div class="card-head"><h2>구글 검색량 트렌드</h2>' + (g ? '<span class="chip date-chip">' + esc(g.date) + '</span>' : '') + '</div><p class="sub">대한민국 · 최근 7일 검색량이 그 전 7일보다 얼마나 늘었나 (구글 트렌드 지수 0~100)</p>';
-  if (!g || !g.items.length) return head + '<p class="empty">매일 아침 수집 뒤 맥이 구글 트렌드를 모으면 여기에 떠요</p>';
+function gtHtml(v, src) {
+  var nv = src === 'naver', g = v && (nv ? v.ndatalab : v.gtrends), who = nv ? '네이버' : '구글';
+  var head = '<div class="card-head"><h2>' + who + ' 검색량 트렌드</h2>' + (g ? '<span class="chip date-chip">' + esc(g.date) + '</span>' : '') + '</div><p class="sub">대한민국 · 최근 7일 검색량이 그 전 7일보다 얼마나 늘었나 (' + (nv ? '네이버 데이터랩' : '구글 트렌드') + ' 지수 0~100)</p>';
+  if (!g || !g.items.length) return head + '<p class="empty">매일 아침 수집 뒤 맥이 ' + (nv ? '네이버 데이터랩' : '구글 트렌드') + '을 모으면 여기에 떠요</p>';
   return head + '<div class="gt-list">' + g.items.slice(0, 12).map(function (x) {
     return '<div class="gt-row"><span class="gt-t"><b>' + esc(x.term) + '</b><em>' + esc(GT_KIND[x.kind] || '') + '</em></span>' + heroSparkSvg(x.series.map(function (p) { return p.v; }))
       + '<span class="gt-v">지수 ' + x.now + '</span>' + (x.growth == null ? '<span class="pill">–</span>' : growthPill(x)) + '</div>';
+  }).join('') + '</div>';
+}
+/* 0926 네이버 블로그 언급량: 최근 7일 글 수 vs 그 전 7일 */
+function nbHtml(v) {
+  var g = v && v.nblog, head = '<div class="card-head"><h2>블로그 언급량</h2>' + (g ? '<span class="chip date-chip">' + esc(g.date) + '</span>' : '') + '</div><p class="sub">네이버 블로그 · 최근 7일에 쓰인 글 수 (입소문 지표) · 그 전 7일과 비교</p>';
+  if (!g || !g.items.length) return head + '<p class="empty">매일 아침 수집 뒤 맥이 네이버 블로그 글 수를 세면 여기에 떠요</p>';
+  var max = Math.max.apply(null, g.items.map(function (x) { return x.now; }).concat([1]));
+  return head + '<div class="gt-list">' + g.items.slice(0, 12).map(function (x) {
+    return '<div class="gt-row nb-row"><span class="gt-t"><b>' + esc(x.term) + '</b><em>' + esc(GT_KIND[x.kind] || '') + '</em></span><span class="nb-bar" aria-hidden="true"><i style="width:' + Math.max(3, Math.round(x.now / max * 100)) + '%"></i></span>'
+      + '<span class="gt-v">' + x.now.toLocaleString('ko-KR') + '건</span>' + (growthPill(x) || '<span class="pill">–</span>') + '</div>';
   }).join('') + '</div>';
 }
 function heroSparkSvg(series) {
@@ -1390,6 +1422,9 @@ function renderViz() {
   var v = S.viz, el = $('c-viz'), mini = $('step1-viz');
   var hw = $('hero-kw'), t5 = $('top5-kw'), pw = $('palette-kw'), gw = $('gt-kw');
   if (gw) gw.innerHTML = gtHtml(v);
+  var nw = $('nd-kw'), bw = $('nb-kw');
+  if (nw) nw.innerHTML = gtHtml(v, 'naver');
+  if (bw) bw.innerHTML = nbHtml(v);
   if (mini) mini.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 그래프가 나와요</p>' : vzDonut(v.catMix, v.total, '카테고리');
   if (hw) hw.innerHTML = (!v || v.empty) ? '<p class="empty">데이터가 쌓이면 급상승 키워드가 나와요</p>' : heroHtml(v);
   if (t5) t5.innerHTML = (!v || v.empty) ? '<h2>키워드·성분 TOP 5</h2><p class="empty">데이터가 쌓이면 보여요</p>' : top5Html(v);
