@@ -679,6 +679,10 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .diy-btns{display:flex;gap:6px;align-items:center}.diy-btns .btn{padding-left:12px;padding-right:12px}
 .ps-st{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ps-thumbs{display:flex;gap:6px;flex-wrap:wrap}.ps-thumbs .diy-img{width:52px;height:52px}
 @media(max-width:420px){.diy-row{grid-template-columns:48px minmax(0,1fr)}.diy-row .diy-btns{grid-column:1/-1;justify-content:flex-end}.diy-row .diy-img{width:48px;height:48px}}
+.diy-img.is-cut{background:repeating-conic-gradient(#f3f3f5 0 25%,#fff 0 50%) 0 0/14px 14px;position:relative}.diy-img.is-cut img{object-fit:contain}
+.cut-tag{position:absolute;left:4px;bottom:4px;font-style:normal;font-size:10px;font-weight:700;background:#248a3d;color:#fff;border-radius:999px;padding:1px 6px}
+.diy-it .diy-img{position:relative}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.ph-c{border:1px solid #e3e3e6;border-radius:12px;padding:4px;background:#fff;cursor:pointer;aspect-ratio:1/1}.ph-c img{width:100%;height:100%;object-fit:contain}
 </style>
 </head>
 <body>
@@ -1646,7 +1650,7 @@ function diyListCard(p) {
     var rv = s.review && s.review.result, st = s.status === '반영됨' ? '<span class="mbadge own">✅ 물류앱 반영됨</span>' : s.status === '반영 후 수정' ? '<span class="mbadge col">반영 후 고침 · 다시 반영 필요</span>' : '<span class="mbadge oy">테스트</span>';
     psNeedImgs(s.items.map(function (x) { return x.name; }));
     return '<div class="ps-card"><div class="ps-st">' + st + (s.linked ? '<span class="meta">물류앱 ' + esc(s.linked) + '</span>' : '') + '</div><h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '📦 ' + esc(s.box) + ' · ' : '') + s.items.length + '종 · ' + esc(s.at) + '</p>'
-      + '<div class="ps-thumbs">' + s.items.map(function (it) { return '<span class="diy-img" title="' + esc(it.name + (it.qty > 1 ? ' ×' + it.qty : '')) + '">' + imgHtml(S.psImg[it.name] || '') + '</span>'; }).join('') + '</div>'
+      + '<div class="ps-thumbs">' + s.items.map(function (it) { return '<span class="diy-img" title="' + esc(it.name + (it.qty > 1 ? ' ×' + it.qty : '')) + '">' + imgHtml(psImgFor(it.name)) + '</span>'; }).join('') + '</div>'
       + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEdit(this.dataset.id)">열기</button><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="diyCopy(this.dataset.id)">복사</button>'
       + (s.pending ? '<span class="pending">AI 검토 중</span>' : '<button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psReview(this.dataset.id)">✨ AI 검토' + (rv ? ' 다시' : '') + '</button>')
       + (s.status === '반영됨' ? '' : '<button type="button" class="btn pri" data-id="' + esc(s.id) + '" onclick="diyPublish(this.dataset.id)">물류앱에 반영</button>')
@@ -1739,9 +1743,10 @@ function diyBoxHtml() {
     + '<label class="field"><span>세트 이름 *</span><input id="psName" maxlength="40" value="' + esc(e.name) + '" placeholder="예: 가을 진정 세트" oninput="S.psEditing.name=this.value"></label>'
     + psBoxField(e)
     + '<div class="diy-items">' + (e.items.length ? e.items.map(function (x, i) {
-      return '<div class="diy-it"><span class="diy-img">' + imgHtml(S.psImg[x.name] || '') + '</span><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + (/^\[올리브영\]/.test(x.name) ? ' <span class="mbadge oy">올리브영</span>' : '') + '</span>'
+      var cut = S.ps.cutouts && S.ps.cutouts[x.name];
+      return '<div class="diy-it"><span class="diy-img' + (cut && cut.cut ? ' is-cut' : '') + '">' + imgHtml(psImgFor(x.name)) + (cut && cut.cut ? '<i class="cut-tag">누끼</i>' : '') + '</span><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + (/^\[올리브영\]/.test(x.name) ? ' <span class="mbadge oy">올리브영</span>' : '') + '</span>'
         + '<span class="diy-qty"><button type="button" class="btn" data-i="' + i + '" aria-label="하나 빼기" onclick="diyQty(+this.dataset.i,-1)">−</button><b>' + x.qty + '</b><button type="button" class="btn" data-i="' + i + '" aria-label="하나 더" onclick="diyQty(+this.dataset.i,1)">＋</button></span>'
-        + psSizeTag(x.name)
+        + psSizeTag(x.name) + (/^\[올리브영\]/.test(x.name) ? '' : '<button type="button" class="bx-size" data-n="' + esc(x.name) + '" onclick="psPhotoEdit(this.dataset.n)">사진 바꾸기</button>')
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">✕</button></div>'; }).join('') : '<p class="empty">왼쪽에서 상품을 담으면 여기에 사진으로 쌓여요</p>') + '</div>'
     + boxPreviewHtml(e)
     + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>'
@@ -1755,6 +1760,18 @@ function psBoxField(e) {
   var bs = (S.ps && S.ps.boxes) || [], known = psBoxOf(e.box);
   return '<div class="field"><span>박스</span><div class="bx-sel"><select id="psBox" onchange="S.psEditing.box=this.value;diyBox()"><option value="">박스 고르기</option>' + bs.map(function (b) { return '<option value="' + esc(b.name) + '"' + (b.name === e.box ? ' selected' : '') + '>' + esc(b.name) + ' · ' + b.w + '×' + b.d + '×' + b.h + 'mm</option>'; }).join('')
     + (e.box && !known ? '<option value="' + esc(e.box) + '" selected>' + esc(e.box) + ' (크기 미등록)</option>' : '') + '</select><button type="button" class="btn" onclick="boxManage()">박스 관리</button></div></div>';
+}
+function psImgFor(name) { var c = S.ps && S.ps.cutouts && S.ps.cutouts[name]; return (c && (c.cut || c.photo)) || S.psImg[name] || ''; }
+function psPhotoEdit(name) {
+  S.mtFrom = document.activeElement; S.psPhotoName = name; $('mtTitle').textContent = '사진 바꾸기';
+  $('mtBody').innerHTML = '<p class="sub"><b>' + esc(name) + '</b> · 인터넷 사진 중 흰 배경의 깨끗한 걸 고르면 누끼가 더 예뻐요 (물류앱 사진은 그대로예요)</p><div id="phGrid" class="ph-grid">' + skel(1) + '</div>';
+  $('mtFoot').innerHTML = '';
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+  call('searchProductPhotos', [name], function (r) { var g = $('phGrid'); if (!g) return; var its = (r && r.ok && r.items) || []; S.psPhotoCands = its; g.innerHTML = its.length ? its.map(function (x, i) { return '<button type="button" class="ph-c" data-i="' + i + '" onclick="psPhotoPick(+this.dataset.i)"><img src="' + esc(x.thumb) + '" alt="" referrerpolicy="no-referrer" loading="lazy"></button>'; }).join('') : '<p class="empty">사진을 찾지 못했어요</p>'; });
+}
+function psPhotoPick(i) {
+  var x = (S.psPhotoCands || [])[i], name = S.psPhotoName; if (!x) return;
+  call('setProductPhoto', [name, x.url], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '바꾸지 못했어요'); return; } S.ps.cutouts = S.ps.cutouts || {}; S.ps.cutouts[name] = { cut: '', photo: x.url }; closeMt(); diyBox(); toast('사진을 바꿨어요 · 누끼는 5분쯤 뒤 자동으로 만들어져요'); });
 }
 function psSizeOf(name) { var z = S.ps && S.ps.sizes && S.ps.sizes[name]; return z && z.w && z.d && z.h ? z : null; }
 function psSizeTag(name) { var z = psSizeOf(name); return '<button type="button" class="bx-size' + (z ? (z.src === 'AI추정' ? ' guess' : '') : ' none') + '" data-n="' + esc(name) + '" onclick="psSizeEdit(this.dataset.n)">' + (z ? z.w + '×' + z.d + '×' + z.h + 'mm' + (z.src === 'AI추정' ? ' (추정)' : '') : '크기 넣기') + '</button>'; }
@@ -1772,7 +1789,7 @@ function psPack(units, box) {
   if (!over && maxH > box.h) over = '높이가 ' + (maxH - box.h) + 'mm 넘쳐요 (뚜껑이 안 닫혀요)';
   return { fit: !over, why: over, rows: rows, fill: Math.round(vol / (box.w * box.d * box.h) * 100), depth: depth, maxH: maxH };
 }
-function psUnits(e) { var u = [], miss = []; e.items.forEach(function (x) { var z = psSizeOf(x.name); if (!z) { miss.push(x.name); return; } for (var i = 0; i < x.qty; i++) u.push({ name: x.name, w: z.w, d: z.d, h: z.h, img: S.psImg[x.name] || '' }); }); return { units: u, miss: miss }; }
+function psUnits(e) { var u = [], miss = []; e.items.forEach(function (x) { var z = psSizeOf(x.name); if (!z) { miss.push(x.name); return; } for (var i = 0; i < x.qty; i++) u.push({ name: x.name, w: z.w, d: z.d, h: z.h, img: psImgFor(x.name) }); }); return { units: u, miss: miss }; }
 function boxPreviewHtml(e) {
   if (!e.items.length) return '';
   var box = psBoxOf(e.box), U = psUnits(e), h = '<div class="bx"><h3 class="tour-h">박스에 넣어 보기</h3>';
