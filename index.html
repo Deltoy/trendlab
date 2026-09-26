@@ -599,6 +599,9 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .nb-bar{display:block;height:8px;border-radius:999px;background:#f0f0f2;overflow:hidden}
 .nb-bar i{display:block;height:100%;border-radius:999px;background:#03c75a}
 @media(max-width:420px){.gt-row.nb-row{grid-template-columns:minmax(0,1fr) 48px 54px 60px}.nb-row .gt-v{display:block}}
+.pal-donut{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0 2px}
+.pal-donut svg{width:min(240px,70vw);height:auto}
+.pal-donut .sub{text-align:center;margin:0}
 </style>
 </head>
 <body>
@@ -1383,17 +1386,31 @@ function top5Html(v) {
   }).join('');
 }
 /* ── 컬러 트렌드 팔레트 ── */
-function paletteHtml(v) {
+function paletteHtml(v) {   /* 0926 도넛 하나: 조각 = 실제 색 · 가운데 = 1위 색 (목록 없음) */
   var p = v.palette;
   if (!p) return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2></div><p class="empty">맥이 랭킹 사진에서 색을 모으면 보여요</p>';
-  var swatches = p.colors.slice(0, 5).map(function (c) {
-    return '<div class="palette-swatch"><span class="swatch-circle" style="background:' + (COLOR_HEX[c.name] || '#e5e5e5') + '"></span><span class="swatch-name">' + esc(c.name) + '</span><span class="swatch-pct">' + c.pct + '%</span></div>';
-  }).join('');
-  var list = p.colors.map(function (c) {
-    var prev = c.prevPct != null ? ' (지난주 ' + c.prevPct + '%)' : '';
-    return '<div class="palette-row"><span class="palette-dot" style="background:' + (COLOR_HEX[c.name] || '#e5e5e5') + '"></span><span class="palette-name">' + esc(c.name) + '</span><span class="palette-pct">' + c.pct + '%' + prev + '</span></div>';
-  }).join('');
-  return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2><span class="chip date-chip">' + esc(p.date) + '</span></div><div class="palette-swatches">' + swatches + '</div><div class="palette-list">' + list + '</div>';
+  var cs = p.colors.filter(function (c) { return c.pct > 0; }), tot = cs.reduce(function (a, c) { return a + c.pct; }, 0);
+  if (!tot) return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2></div><p class="empty">색 정보가 없어요</p>';
+  var R = 58, r = 36, cx = 64, cy = 64, a0 = -Math.PI / 2, paths = '';
+  var pt = function (rad, a) { return (cx + rad * Math.cos(a)).toFixed(2) + ' ' + (cy + rad * Math.sin(a)).toFixed(2); };
+  cs.forEach(function (c) {
+    var a1 = a0 + 2 * Math.PI * c.pct / tot, large = a1 - a0 > Math.PI ? 1 : 0;
+    if (a1 - a0 > 6.28) a1 = a0 + 6.2831;
+    paths += '<path d="M' + pt(R, a0) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + pt(R, a1) + ' L' + pt(r, a1) + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + pt(r, a0) + 'Z" fill="' + (COLOR_HEX[c.name] || '#e5e5e5') + '" stroke="#fff" stroke-width="1.2" data-n="' + esc(c.name) + '" data-p="' + c.pct + '%' + (c.prevPct != null ? ' · 지난주 ' + c.prevPct + '%' : '') + '" onclick="palPick(this)" style="cursor:pointer"><title>' + esc(c.name + ' ' + c.pct + '%' + (c.prevPct != null ? ' (지난주 ' + c.prevPct + '%)' : '')) + '</title></path>';
+    a0 = a1;
+  });
+  var top = cs[0];
+  return '<div class="card-head"><h2>컬러 트렌드 팔레트</h2><span class="chip date-chip">' + esc(p.date) + '</span></div>'
+    + '<div class="pal-donut"><svg viewBox="0 0 128 128" role="img" aria-label="랭킹 상품 사진 색 비율 · 1위 ' + esc(top.name) + ' ' + top.pct + '%">'
+    + '<circle cx="64" cy="64" r="58.5" fill="none" stroke="rgba(0,0,0,.08)"/><circle cx="64" cy="64" r="35.5" fill="none" stroke="rgba(0,0,0,.06)"/>' + paths
+    + '<text class="pal-n" x="64" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#111">' + esc(top.name) + '</text><text class="pal-p" x="64" y="77" text-anchor="middle" font-size="11" fill="#6e6e73">' + top.pct + '%' + (top.prevPct != null ? ' · 지난주 ' + top.prevPct + '%' : '') + '</text></svg>'
+    + '<p class="sub">랭킹 상품 사진의 색 비율 · 가운데는 가장 많은 색 · 조각을 누르면 그 색이 보여요</p></div>';
+}
+function palPick(el) {
+  var svg = el.ownerSVGElement; if (!svg) return;
+  svg.querySelector('.pal-n').textContent = el.getAttribute('data-n');
+  svg.querySelector('.pal-p').textContent = el.getAttribute('data-p');
+  [].forEach.call(svg.querySelectorAll('path'), function (x) { x.style.opacity = x === el ? '1' : '.45'; });
 }
 /* 오늘 확인: 리포트를 안 열어도 핵심 숫자를 한눈에 */
 function step1Kpis() {
