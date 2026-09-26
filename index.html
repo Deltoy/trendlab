@@ -686,6 +686,8 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .ph-need{margin:0 0 14px;border:1px solid #f0d9b5;background:#fffaf1;border-radius:14px;padding:10px 12px}.ph-need summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ph-need summary small{font-weight:400;color:#8a8a8a}
 .ph-row{padding:8px 0;border-top:1px solid #f3e6cf}.ph-row b{display:block;font-size:13.5px;margin-bottom:6px}.ph-row .ph-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}.ph-more{font:inherit;font-size:12px;color:#0066cc}
 .nm-row{display:flex;gap:8px}.nm-row input{flex:1;min-width:0}.nm-sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.nm-sug .chip{font-weight:600}
+.diy-lab{margin:8px 0 4px;font-weight:600}.cat-b{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:#eef3fb;color:#1f4f99;margin-right:4px}
+.diy-cats .chip.on{background:#1f4f99;border-color:#1f4f99;color:#fff}
 </style>
 </head>
 <body>
@@ -1725,7 +1727,9 @@ function diyUses(p) { return Object.keys(p.uses).sort(function (a, b) { return p
 function diyHtml(p) {
   var e = S.psEditing = S.psEditing || psNewDraft(), us = diyUses(p);
   if (!S.diyUses) S.diyUses = us.length ? [us[0]] : [];
-  return '<div class="diy"><section class="card diy-left"><h2>용도별 상품</h2><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
+  var cs = {}; p.products.forEach(function (x) { if (x.cat) cs[x.cat] = (cs[x.cat] || 0) + 1; }); S.diyCats = S.diyCats || [];
+  var catChips = '<div class="grp-chips diy-cats" aria-label="분류">' + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { var on = S.diyCats.indexOf(c) !== -1; return '<button type="button" class="chip cat' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(c) + '" onclick="diyCatToggle(this.dataset.c)">' + esc(c) + ' <em>' + cs[c] + '</em></button>'; }).join('') + '</div>';
+  return '<div class="diy"><section class="card diy-left"><h2>용도별 상품</h2><p class="meta diy-lab">분류</p>' + catChips + '<p class="meta diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
     + '<label class="diy-and"><input type="checkbox" id="diyAnd"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"> 고른 용도를 모두 가진 상품만</label>'
     + '<input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList()">'
     + '<div id="diyList" class="diy-list">' + diyListHtml() + '</div>'
@@ -1734,19 +1738,21 @@ function diyHtml(p) {
     + '<button type="button" class="diy-bar" id="diyBar"' + (e.items.length ? '' : ' hidden') + ' onclick="$(\'diyBox\').scrollIntoView({block:\'start\',behavior:\'smooth\'})">담은 상품 <b id="diyBarN">' + e.items.length + '</b>개 · 세트 보기 ↓</button>';
 }
 function diyRows() {
-  var p = S.ps, q = String(S.diyQ || '').replace(/\s+/g, '').toLowerCase(), sel = S.diyUses || [];
-  if (q) return p.products.filter(function (x) { return x.name.replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1; }).slice(0, 80);
-  if (!sel.length) return [];
-  return p.products.filter(function (x) { var hit = sel.filter(function (u) { return x.tags.indexOf(u) !== -1; }).length; return S.diyAnd ? hit === sel.length : hit > 0; })
+  var p = S.ps, q = String(S.diyQ || '').replace(/\s+/g, '').toLowerCase(), sel = S.diyUses || [], cats = S.diyCats || [];
+  var inCat = function (x) { return !cats.length || cats.indexOf(x.cat) !== -1; };
+  if (q) return p.products.filter(function (x) { return inCat(x) && x.name.replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1; }).slice(0, 80);
+  if (!sel.length) return cats.length ? p.products.filter(inCat).slice(0, 150) : [];
+  return p.products.filter(function (x) { var hit = sel.filter(function (u) { return x.tags.indexOf(u) !== -1; }).length; return inCat(x) && (S.diyAnd ? hit === sel.length : hit > 0); })
     .sort(function (a, b) { var ha = sel.filter(function (u) { return a.tags.indexOf(u) !== -1; }).length, hb = sel.filter(function (u) { return b.tags.indexOf(u) !== -1; }).length; return hb - ha; }).slice(0, 150);
 }
+function diyCatToggle(c) { var a = S.diyCats, i = a.indexOf(c); if (i !== -1) a.splice(i, 1); else a.push(c); [].forEach.call(document.querySelectorAll('.diy-cats .chip'), function (b) { var on = a.indexOf(b.dataset.c) !== -1; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); diyList(); }
 function diyUseToggle(u) { var a = S.diyUses, i = a.indexOf(u); if (i !== -1) a.splice(i, 1); else a.push(u); S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; diyList(); }
 function diyHas(name) { return (S.psEditing.items || []).some(function (y) { return y.name === name; }); }
 function diyListHtml() {
   var rows = diyRows(); psNeedImgs(rows.map(function (x) { return x.name; }));
-  if (!rows.length) return '<p class="empty">' + (S.diyQ ? '찾는 상품이 없어요' : (S.diyUses || []).length ? '고른 용도를 모두 가진 상품이 없어요' : '용도를 골라 주세요') + '</p>';
+  if (!rows.length) return '<p class="empty">' + (S.diyQ ? '찾는 상품이 없어요' : (S.diyUses || []).length || (S.diyCats || []).length ? '조건에 맞는 상품이 없어요' : '분류나 용도를 골라 주세요') + '</p>';
   return rows.map(function (x) { var has = diyHas(x.name);
-    return '<div class="diy-row"><span class="diy-img">' + imgHtml(S.psImg[x.name] || '') + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta">' + esc((x.tags || []).join(' · ')) + '</span></span>'
+    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta">' + (x.cat ? '<b class="cat-b">' + esc(x.cat) + '</b> ' : '') + esc((x.tags || []).join(' · ')) + '</span></span>'
       + '<span class="diy-btns"><button type="button" class="btn" data-n="' + esc(x.name) + '" aria-label="용도 고치기" onclick="psUses(this.dataset.n)">✏️ 용도</button><button type="button" class="btn' + (has ? '' : ' pri') + '" data-n="' + esc(x.name) + '" onclick="diyAdd(this.dataset.n)"' + (has ? ' disabled' : '') + '>' + (has ? '✓ 담김' : '＋ 담기') + '</button></span></div>'; }).join('');
 }
 function diyBoxHtml() {
@@ -1767,6 +1773,7 @@ function diyBoxBody(e) {
       var cut = S.ps.cutouts && S.ps.cutouts[x.name];
       return '<div class="diy-it"><span class="diy-img' + (cut && cut.cut ? ' is-cut' : '') + '">' + imgHtml(psImgFor(x.name)) + (cut && cut.cut ? '<i class="cut-tag">누끼</i>' : '') + '</span><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + (/^\[올리브영\]/.test(x.name) ? ' <span class="mbadge oy">올리브영</span>' : '') + '</span>'
         + '<span class="diy-qty"><button type="button" class="btn" data-i="' + i + '" aria-label="하나 빼기" onclick="diyQty(+this.dataset.i,-1)">−</button><b>' + x.qty + '</b><button type="button" class="btn" data-i="' + i + '" aria-label="하나 더" onclick="diyQty(+this.dataset.i,1)">＋</button></span>'
+        + (function () { var pr = (S.ps.products || []).filter(function (y) { return y.name === x.name; })[0]; return pr && pr.cat ? '<b class="cat-b">' + esc(pr.cat) + '</b>' : ''; })()
         + psSizeTag(x.name) + (/^\[올리브영\]/.test(x.name) ? '' : '<button type="button" class="bx-size" data-n="' + esc(x.name) + '" onclick="psPhotoEdit(this.dataset.n)">사진 바꾸기</button>')
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">✕</button></div>'; }).join('') : '<p class="empty">왼쪽에서 상품을 담으면 여기에 사진으로 쌓여요</p>') + '</div>'
     + boxPreviewHtml(e)
