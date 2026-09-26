@@ -621,6 +621,22 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .sp-areas{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
 @media(min-width:900px){.sp-areas{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}}
 .sp-area h4{font-size:13.5px;font-weight:700;margin:4px 0 4px}
+/* 0926 약국 세트 */
+.ps-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:10px}
+@media(min-width:700px){.ps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.ps-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ps-card{border:1px solid #ececec;border-radius:16px;padding:14px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.ps-card h3{font-size:15px;font-weight:700;margin:0}
+.ps-ph{height:140px;border-radius:12px;overflow:hidden;background:#f5f5f7}.ps-ph img{width:100%;height:100%;object-fit:cover}
+.ps-items{margin:0;padding-left:18px;font-size:13px;line-height:1.6}.ps-uses{margin-top:8px}
+.ps-found .meta{font-size:11.5px;color:#8a8a8a}
+.ps-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ps-rv{border-top:1px solid #ececec;padding-top:8px}.ps-rv h4{font-size:13px;margin:10px 0 4px}
+.ps-row{display:grid;grid-template-columns:minmax(0,1fr) 64px 44px;gap:8px;align-items:center;margin:4px 0}
+.ps-row .nm1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ps-row input{min-height:44px;text-align:center}
+.ps-found{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:6px 10px;border:0;border-bottom:1px solid #f0f0f0;background:none;text-align:left;font:inherit;cursor:pointer}
+.ps-found b{margin-left:auto;color:#0066cc}
+.ps-card span.chip{min-height:0!important;height:auto;padding:3px 10px;font-size:12px;display:inline-flex;align-items:center}
 </style>
 </head>
 <body>
@@ -1512,6 +1528,7 @@ function renderViz() {
 /* ── 세트: 재료함 + AI 세트 추천 ── */
 S.set = { mats: null, meta: null, sets: null, mode: 'own', showEnded: false, edit: null, poll: null };
 function loadSetTab() {
+  call('getPharmacySets', [], function (r) { S.ps = r && r.ok ? r : { err: (r && r.msg) || '물류앱 세트를 불러오지 못했어요' }; renderSetTab(); psPoll(); }, function () { S.ps = { err: '물류앱 세트를 불러오지 못했어요' }; renderSetTab(); });
   call('getMaterials', [], function (r) { if (!r || !r.ok) { $('set').innerHTML = '<div class="msg">불러오지 못했어요</div>'; return; } S.set.mats = r.items; S.set.meta = r; renderSetTab(); });
   call('getSets', [], function (r) { if (r && r.ok) { S.set.sets = r; renderSetTab(); setPollIfPending(); } });
 }
@@ -1527,6 +1544,7 @@ function matStatusBadge(m) {
 }
 function renderSetTab() {
   var el = $('set'); if (!S.set.mats) { el.innerHTML = skel(3); return; }
+  var ph = psHtml();
   var live = S.set.mats.filter(function (m) { return m.status !== '종료'; }), ended = S.set.mats.filter(function (m) { return m.status === '종료'; });
   var row = function (m) { return '<button type="button" class="mrow" data-id="' + esc(m.id) + '" onclick="openMat(this.dataset.id)"><span class="tx"><span class="br">' + matStatusBadge(m) + esc(m.brand) + '</span><span class="nm1">' + esc(m.name) + cdots(m.colors) + '</span><span class="meta">' + esc([m.category].concat(m.uses).filter(Boolean).join(' · ')) + (m.price ? ' · ' + won(m.price) : '') + '</span></span><span class="side">›</span></button>'; };
   var h = '<article class="card"><div class="card-head"><h2>세트 재료함</h2><button type="button" class="btn pri" onclick="openMat(\'\')">＋ 재료 추가</button></div>'
@@ -1555,8 +1573,84 @@ function renderSetTab() {
     }).join('');
   } else if (cur && !cur.pending) h += '<p class="empty">아직 추천이 없어요. 위 버튼을 눌러 보세요</p>';
   h += '</article>';
-  el.innerHTML = h;
+  el.innerHTML = ph + h;
 }
+/* ── 0926 약국 세트 (물류앱 '_세트상품_' 과 한 벌) · 직접 조합 · AI 검토 ── */
+S.ps = null;
+function psHtml() {
+  var p = S.ps, h = '<article class="card" id="psCard"><div class="card-head"><h2>약국 세트</h2><button type="button" class="btn pri" onclick="psEdit(\'\')">＋ 새 세트 조합</button></div><p class="sub">물류앱 세트와 같은 목록이에요. 여기서 만들고 고치면 물류앱에도 바로 반영돼요</p>';
+  if (!p) return h + skel(2) + '</article>';
+  if (p.err) return h + '<p class="empty">' + esc(p.err) + '</p></article>';
+  h += p.sets.length ? '<div class="ps-grid">' + p.sets.map(function (s) {
+    var rv = s.review && s.review.result;
+    return '<div class="ps-card">' + (/^https:\/\//.test(s.photo || '') ? '<div class="ps-ph">' + imgHtml(s.photo) + '</div>' : '')
+      + '<h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '📦 ' + esc(s.box) + ' · ' : '') + '상품 ' + s.items.length + '종 · ' + s.items.reduce(function (a, it) { return a + it.qty; }, 0) + '개</p>'
+      + '<ul class="ps-items">' + s.items.map(function (it) { return '<li>' + esc(it.name) + (it.qty > 1 ? ' <b>×' + it.qty + '</b>' : '') + '</li>'; }).join('') + '</ul>'
+      + (s.tags.length ? '<div class="grp-chips">' + s.tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div>' : '')
+      + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEdit(this.dataset.id)">고치기</button>'
+      + (s.pending ? '<span class="pending">AI 검토 중 (5~10분)</span>' : '<button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psReview(this.dataset.id)">✨ AI 검토' + (rv ? ' 다시' : '') + '</button>') + '</div>'
+      + (rv ? psReviewHtml(s, rv) : '') + '</div>';
+  }).join('') + '</div>' : '<p class="empty">아직 세트가 없어요</p>';
+  var us = Object.keys(p.uses).sort(function (a, b) { return p.uses[b].length - p.uses[a].length; });
+  if (us.length) h += '<h3 class="tour-h">용도별 상품 <small>물류앱에서 붙인 용도</small></h3><div class="grp-chips">' + us.map(function (u) { var on = S.psUse === u; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="S.psUse=S.psUse===this.dataset.u?null:this.dataset.u;renderSetTab()">' + esc(u) + ' ' + p.uses[u].length + '</button>'; }).join('') + '</div>'
+    + (S.psUse && p.uses[S.psUse] ? '<div class="ps-uses">' + p.uses[S.psUse].map(function (n) { return '<button type="button" class="ps-found" data-n="' + esc(n) + '" onclick="psUses(this.dataset.n)">' + esc(n) + ' <b>용도 고치기</b></button>'; }).join('') + '</div>' : '')
+    + '<label class="field"><span>다른 상품 용도 고치기</span><input id="psUq" placeholder="상품 이름 일부" oninput="psUseFind(this.value)"></label><div id="psUf"></div>';
+  return h + '</article>';
+}
+function psReviewHtml(s, rv) {
+  var it = function (x) { return x.src === 'oy' ? '<span class="mbadge oy">올리브영</span>' + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name.replace(/^\[올리브영\] /, '')) + ' ↗</a>' : esc(x.name)) : '<span class="mbadge own">약국</span>' + esc(x.name); };
+  return '<div class="ps-rv"><p class="note">AI 검토 · ' + esc(s.review.date) + '</p>' + (rv.review ? '<p class="why">' + esc(rv.review) + '</p>' : '')
+    + (rv.addons.length ? '<h4>같이 넣으면 좋은 상품</h4>' + rv.addons.map(function (a, i) { return '<div class="sitem"><span class="tx"><span class="nm1">' + it(a) + '</span>' + (a.why ? '<span class="meta">' + esc(a.why) + '</span>' : '') + '</span><button type="button" class="btn" data-id="' + esc(s.id) + '" data-i="' + i + '" onclick="psAddon(this.dataset.id,+this.dataset.i)">＋ 넣기</button></div>'; }).join('') : '')
+    + (rv.sets.length ? '<h4>파생 세트</h4>' + rv.sets.map(function (d, i) { return '<div class="setcard"><h3>' + esc(d.name) + '</h3>' + (d.target ? '<p class="sub">' + esc(d.target) + '</p>' : '') + d.items.map(function (x) { return '<div class="sitem"><span class="tx"><span class="nm1">' + it(x) + '</span></span></div>'; }).join('') + (d.reason ? '<p class="why">' + esc(d.reason) + '</p>' : '') + '<button type="button" class="btn" data-id="' + esc(s.id) + '" data-i="' + i + '" onclick="psFromDerived(this.dataset.id,+this.dataset.i)">이 구성으로 새 세트 만들기</button></div>'; }).join('') : '')
+    + '</div>';
+}
+function psUseFind(q) { var n = String(q || '').replace(/\s+/g, '').toLowerCase(), f = $('psUf'); if (!f) return; f.innerHTML = n ? S.ps.products.filter(function (p) { return p.name.replace(/\s+/g, '').toLowerCase().indexOf(n) !== -1; }).slice(0, 12).map(function (p) { return '<button type="button" class="ps-found" data-n="' + esc(p.name) + '" onclick="psUses(this.dataset.n)">' + esc(p.name) + (p.tags.length ? ' <span class="meta">' + esc(p.tags.join(' · ')) + '</span>' : '') + ' <b>용도 고치기</b></button>'; }).join('') : ''; }
+function psUses(name) {
+  var p = S.ps.products.filter(function (x) { return x.name === name; })[0] || { name: name, tags: [] };
+  S.psTagEdit = { name: name, tags: p.tags.slice() }; S.mtFrom = document.activeElement; psUsesRender();
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+}
+function psUsesRender() {
+  var e = S.psTagEdit; $('mtTitle').textContent = '용도 고치기';
+  $('mtBody').innerHTML = '<p class="sub"><b>' + esc(e.name) + '</b> · 최대 5개 · 저장하면 물류앱에도 반영돼요</p><div class="grp-chips">' + (S.ps.useList || []).map(function (u) { var on = e.tags.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="psUseToggle(this.dataset.u)">' + esc(u) + '</button>'; }).join('') + '</div><p class="np-err" id="mtErr"></p>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri" onclick="psUsesSave()">저장 (물류앱에도 반영)</button>';
+}
+function psUseToggle(u) { var t = S.psTagEdit.tags, i = t.indexOf(u); if (i !== -1) t.splice(i, 1); else if (t.length < 5) t.push(u); else { toast('용도는 5개까지예요'); return; } psUsesRender(); }
+function psUsesSave() { if (S.saving) return; S.saving = true; var e = S.psTagEdit; call('saveProductUses', [e.name, e.tags], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('용도를 저장했어요 · 물류앱에도 반영됐어요'); closeMt(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; }); }
+function psFind(id) { return ((S.ps && S.ps.sets) || []).filter(function (s) { return s.id === id; })[0]; }
+function psEdit(id, draft) {
+  var s = draft || (id ? psFind(id) : null) || { name: '', box: '', memo: '', items: [] };
+  S.psEditing = JSON.parse(JSON.stringify({ id: s.id || '', name: s.name, box: s.box || '', memo: s.memo || '', items: s.items.map(function (x) { return { name: x.name, qty: x.qty || 1 }; }) }));
+  S.psFound = []; S.mtFrom = document.activeElement; psRender();
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+}
+function psSync() { var e = S.psEditing; if (!$('psName')) return; e.name = $('psName').value.trim(); e.box = $('psBox').value.trim(); e.memo = $('psMemo').value.trim(); [].forEach.call(document.querySelectorAll('#mtBody .ps-q'), function (q) { var n = parseInt(q.value, 10); e.items[+q.dataset.i].qty = n >= 1 && n <= 999 ? n : 1; }); }
+function psRender() {
+  var e = S.psEditing;
+  $('mtTitle').textContent = e.id ? '세트 고치기' : '새 세트 조합';
+  $('mtBody').innerHTML = '<label class="field"><span>세트 이름 *</span><input id="psName" maxlength="40" value="' + esc(e.name) + '" placeholder="예: 가을 진정 세트"></label>'
+    + '<label class="field"><span>박스</span><input id="psBox" maxlength="20" value="' + esc(e.box) + '" placeholder="예: 5번"></label>'
+    + '<div class="field"><span>들어가는 상품 (' + e.items.length + ')</span>' + (e.items.length ? e.items.map(function (x, i) { return '<div class="ps-row"><span class="nm1">' + esc(x.name) + '</span><input class="ps-q" data-i="' + i + '" inputmode="numeric" aria-label="수량" value="' + x.qty + '"><button type="button" class="btn" data-i="' + i + '" aria-label="빼기" onclick="psSync();S.psEditing.items.splice(+this.dataset.i,1);psRender()">✕</button></div>'; }).join('') : '<p class="empty">아래에서 상품을 찾아 넣어 주세요</p>') + '</div>'
+    + '<label class="field"><span>상품 찾기 (약국 상품 · 올리브영)</span><input id="psQ" placeholder="이름 일부를 입력" oninput="psSearch(this.value)"></label><div id="psFound">' + psFoundHtml() + '</div>'
+    + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '"></label><p class="np-err" id="mtErr"></p>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri" onclick="psSave()">저장 (물류앱에도 반영)</button>' + (e.id ? '<button type="button" class="btn danger" onclick="psDelete()">삭제</button>' : '');
+}
+function psFoundHtml() { return (S.psFound || []).map(function (x, i) { return '<button type="button" class="ps-found" data-i="' + i + '" onclick="psAdd(+this.dataset.i)">' + (x.src === 'oy' ? '<span class="mbadge oy">올리브영</span>' : '<span class="mbadge own">약국</span>') + esc(x.name.replace(/^\[올리브영\] /, '')) + ' <b>＋</b></button>'; }).join(''); }
+var _psQT = null;
+function psSearch(q) { clearTimeout(_psQT); _psQT = setTimeout(function () { call('searchSetItems', [q], function (r) { S.psFound = r && r.ok ? r.items : []; var f = $('psFound'); if (f) f.innerHTML = psFoundHtml(); }); }, 300); }
+function psAdd(i) { var x = S.psFound[i]; if (!x) return; psSync(); var e = S.psEditing; if (e.items.some(function (y) { return y.name === x.name; })) { toast('이미 들어 있어요'); return; } e.items.push({ name: x.name, qty: 1 }); var q = $('psQ').value; psRender(); $('psQ').value = q; }
+function psSave() {
+  if (S.saving) return; psSync(); var e = S.psEditing;
+  if (!e.name) { $('mtErr').textContent = '세트 이름을 입력해 주세요'; return; }
+  if (!e.items.length) { $('mtErr').textContent = '상품을 하나 이상 넣어 주세요'; return; }
+  S.saving = true;
+  call('savePharmacySet', [e], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('저장했어요 · 물류앱에도 반영됐어요'); closeMt(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; });
+}
+function psDelete() { var e = S.psEditing; if (!e.id || !confirm('[' + e.name + '] 세트를 지울까요? 물류앱에서도 지워져요')) return; call('deletePharmacySet', [e.id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } toast('지웠어요'); closeMt(); loadSetTab(); }); }
+function psReview(id) { call('requestSetReview', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '요청하지 못했어요'); return; } toast('AI 검토를 요청했어요 · 5~10분 뒤 여기에 떠요'); var s = psFind(id); if (s) s.pending = '방금'; renderSetTab(); psPoll(); }); }
+function psPoll() { clearTimeout(S.psPollT); if (S.tab === 'set' && S.ps && S.ps.sets && S.ps.sets.some(function (s) { return s.pending; })) S.psPollT = setTimeout(function () { call('getPharmacySets', [], function (r) { if (r && r.ok) { S.ps = r; renderSetTab(); psPoll(); } }); }, 30000); }
+function psAddon(id, i) { var s = psFind(id), a = s && s.review.result.addons[i]; if (!a) return; var d = JSON.parse(JSON.stringify(s)); if (!d.items.some(function (x) { return x.name === a.name; })) d.items.push({ name: a.name, qty: 1 }); psEdit(id, d); }
+function psFromDerived(id, i) { var s = psFind(id), d = s && s.review.result.sets[i]; if (!d) return; psEdit('', { name: d.name, box: '', memo: d.reason || '', items: d.items.map(function (x) { return { name: x.name, qty: 1 }; }) }); }
 function reqSets() {
   var mode = S.set.mode;
   call('requestSets', [mode], function (r) {
