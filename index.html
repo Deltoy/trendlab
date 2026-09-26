@@ -710,6 +710,16 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .img-zoom img{max-width:100%;max-height:72vh;object-fit:contain}
 .img-zoom figcaption{background:#fff;border-radius:10px;padding:4px 10px;font-weight:700;font-size:14px;text-align:center}
 .img-zoom-x{position:fixed;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:18px;cursor:pointer}
+.set-photo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.set-ph{width:120px;height:90px;border-radius:12px}.set-ph img{object-fit:cover}.set-ph.none{display:grid;place-items:center;background:#f5f5f7;color:#8a8a8a;font-size:12px}.set-photo label.btn{cursor:pointer}
+/* 0927 세트 DIY 는 화면 높이에 맞춘 작업 공간: 왼쪽 메뉴 · 상품 목록 · 오른쪽 만드는 세트가 각자 스크롤 → 상품을 내려 봐도 만드는 세트가 계속 보인다 */
+@media(min-width:900px){
+  .diy{height:calc(100vh - 190px);min-height:480px;align-items:stretch!important}
+  .diy-left{height:100%;min-height:0;overflow:hidden;grid-template-rows:minmax(0,1fr)}
+  .diy-side{position:static;height:100%;max-height:none}
+  .diy-main{display:flex;flex-direction:column;min-height:0;height:100%}
+  .diy-main .diy-list{flex:1;max-height:none;min-height:0;overflow:auto}
+  .diy-right{position:static;height:100%;max-height:none;overflow:auto}
+}
 </style>
 </head>
 <body>
@@ -1913,14 +1923,28 @@ function boxExport() {
 /* 0926 세트 이름 추천 5개 (계절 · 트렌드 · 기존 세트 말투) → 누르면 이름 칸에 */
 function diyBoxDirect(e) {   // 보유 세트 바로 고치기: 저장 = 물류앱에 바로
   var h = diyBoxBody(e);
-  return '<h2>보유 세트 고치기</h2><p class="meta">저장하면 물류앱 세트도 바로 바뀌어요</p>' + h
+  var cur = e.photo || ((S.ps.sets || []).filter(function (x) { return x.id === e.directId; })[0] || {}).photo || '';
+  var ph = '<div class="field"><span>세트 실제 사진</span><div class="set-photo">' + (cur ? '<span class="diy-img set-ph">' + imgHtml(cur) + '</span>' : '<span class="set-ph none">사진 없음</span>')
+    + '<label class="btn"><input type="file" accept="image/*" hidden onchange="psSetPhoto(this)">' + (cur ? '사진 바꾸기' : '📷 사진 올리기') + '</label><span id="setPhMsg" class="meta"></span></div></div>';
+  return '<h2>보유 세트 고치기</h2><p class="meta">저장하면 물류앱 세트도 바로 바뀌어요</p>' + ph + h
     + '<div class="ps-act"><button type="button" class="btn pri" onclick="psSaveDirect()">저장 (물류앱에 바로 반영)</button><button type="button" class="btn" onclick="S.psEditing=psNewDraft();renderSetTab()">닫기</button><button type="button" class="btn danger" onclick="psDeleteDirect()">세트 삭제</button></div>';
+}
+/* 0927 세트 사진: 폰에서 줄여서(긴 변 1600px) 올린다 → 저장하면 물류앱 세트 사진에도 */
+function psSetPhoto(inp) {
+  var f = inp.files && inp.files[0]; if (!f) return; var msg = $('setPhMsg'); if (msg) msg.textContent = '올리는 중…';
+  var url = URL.createObjectURL(f), im = new Image();
+  im.onload = function () {
+    var sc = Math.min(1, 1600 / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * sc); cv.height = Math.round(im.height * sc);
+    cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+    call('uploadSetPhotoTL', [cv.toDataURL('image/jpeg', 0.85), S.psEditing.name], function (r) { if (!r || !r.ok) { if ($('setPhMsg')) $('setPhMsg').textContent = (r && r.msg) || '올리지 못했어요'; return; } S.psEditing.photo = r.url; diyBox(); toast('사진을 올렸어요 · [저장]을 누르면 물류앱에도 들어가요'); }, function () { if ($('setPhMsg')) $('setPhMsg').textContent = '올리지 못했어요'; });
+  };
+  im.onerror = function () { if (msg) msg.textContent = '사진을 읽지 못했어요'; }; im.src = url;
 }
 function psSaveDirect() {
   if (S.saving) return; var e = S.psEditing; e.name = String(e.name || '').trim();
   if (!e.name || !e.items.length) { $('mtErr').textContent = '세트 이름과 상품을 넣어 주세요'; return; }
   S.saving = true;
-  call('savePharmacySet', [{ id: e.directId, name: e.name, box: e.box, memo: e.memo, items: e.items }], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('저장했어요 · 물류앱에도 반영됐어요'); S.psEditing = psNewDraft(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; });
+  call('savePharmacySet', [{ id: e.directId, name: e.name, box: e.box, memo: e.memo, items: e.items, photo: e.photo || '' }], function (r) { S.saving = false; if (!r || !r.ok) { $('mtErr').textContent = (r && r.msg) || '저장하지 못했어요'; return; } toast('저장했어요 · 물류앱에도 반영됐어요'); S.psEditing = psNewDraft(); loadSetTab(); }, function () { S.saving = false; $('mtErr').textContent = '저장하지 못했어요'; });
 }
 function psDeleteDirect() { var e = S.psEditing; if (!confirm('[' + e.name + '] 세트를 지울까요? 물류앱에서도 지워져요')) return; call('deletePharmacySet', [e.directId], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } toast('지웠어요'); S.psEditing = psNewDraft(); loadSetTab(); }); }
 function psNamesHtml() { var r = S.psNameSug; if (!r) return ''; if (r.loading) return '<p class="meta">이름을 짓는 중이에요…</p>';
