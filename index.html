@@ -880,7 +880,7 @@ function fastCall(fn, ok, fail) {
   if (cached && cached.ok) { shown = true; try { ok(cached); } catch (e) {} }
   call(fn, [], function (res) {
     if (res && res.ok) { try { localStorage.setItem(key, JSON.stringify(res)); } catch (e) {} }
-    if (!shown || JSON.stringify(res) !== JSON.stringify(cached)) ok(res);
+    ok(res);   /* 0927 같은 내용이어도 다시 그린다: 저장본으로 먼저 그린 뒤 홈이 다시 그려지며 대시보드 칸을 지우면, 건너뛸 경우 회색 칸이 남던 문제 */
   }, shown ? function () {} : fail);
 }
 function call(fn, args, ok, fail, tries) {
