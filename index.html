@@ -610,9 +610,7 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
 .fx-u{font-size:11.5px;color:#8a8a8a;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tour-h{font-size:14px;font-weight:700;margin:18px 0 6px}.tour-h small{font-weight:400;font-size:12px;color:#8a8a8a;margin-left:6px}
 .tour-list{display:grid;gap:0}
-.tour-row{display:grid;grid-template-columns:72px minmax(0,1fr) 96px 86px;align-items:center;gap:10px;min-height:40px;border-top:1px solid #ececec;font-size:13px}
-.tour-n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tour-row .pill{justify-self:end}
-@media(max-width:420px){.tour-row{grid-template-columns:48px minmax(0,1fr) 76px 92px;gap:6px}.fx-tile{padding:10px}.fx-tile b{font-size:15px}}
+@media(max-width:420px){.fx-tile{padding:10px}.fx-tile b{font-size:15px}}
 .sp-sum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:#6e6e73}.sp-sum b{font-size:20px;color:#1d1d1f}
 .sp-bars{display:flex;align-items:flex-end;gap:2px;height:90px;margin:10px 0 4px}
 .sp-bars span{flex:1;display:flex;flex-direction:column-reverse;height:100%;min-width:0}
@@ -761,23 +759,26 @@ main,main>*,.card,.top-row>*,.hero-tiles>*,.step2-grid>*,.step5-grid>*,.vz-grid>
 .tn-mix i{display:block;height:100%}
 .tn-key{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:#4b5563;margin-bottom:10px}
 .tn-key b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
-.tn-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:6px}
-.tn-card{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:#f5f7fb}
-.tn-rank{font-size:12px;font-weight:700;color:#0066cc}.tn-nat{font-size:16px}.tn-num{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
-.tn-sub{font-size:12px;color:#6b7280;margin-bottom:4px}.tn-card .pill{align-self:flex-start}
-@media(max-width:520px){.tn-top{grid-template-columns:minmax(0,1fr)}.tn-card{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}}
 
-/* 0927 지역별 외국인: 요약 타일 + 선그래프 */
-.sp-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:8px 0 10px}
-.sp-tile{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;background:#f5f7fb;min-width:0}
-.sp-name{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}.sp-name b{width:10px;height:10px;border-radius:3px;display:inline-block}
-.sp-big{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}.sp-big small{font-size:12px;font-weight:600;color:#6b7280;margin-left:3px}
-.sp-meta{font-size:12.5px;color:#4b5563;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
-.sp-cn{display:block;height:6px;border-radius:999px;background:#d1d5db;overflow:hidden;margin-top:2px}.sp-cn i{display:block;height:100%;background:#e8453c}
-.sp-chart svg{width:100%;height:auto;display:block}
-.tour-row{grid-template-columns:104px minmax(0,1fr) 110px 86px}
-.sp-chart{max-width:900px}
-</style>
+
+/* 0927 주식 차트형: 캔들(전날→그날, 늘면 빨강·줄면 파랑) + 평균선, 나라별은 관심종목 목록 */
+.stk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;margin:8px 0 6px}
+.stk-card{min-width:0;padding:14px 14px 10px;border-radius:14px;background:#fff;border:1px solid #ececec}
+.stk-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:6px}
+.stk-name{font-size:14px;width:100%}
+.stk-v{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}.stk-v small{font-size:13px;font-weight:600;color:#6b7280;margin-left:2px}
+.stk-c{font-weight:700;font-variant-numeric:tabular-nums;color:#6b7280;white-space:nowrap}.stk-c.up{color:#d92d36}.stk-c.dn{color:#1f63c4}
+.stk-d{font-size:12px;color:#6b7280}
+.stk-svg{width:100%;height:auto;display:block}
+.stk-meta{margin:4px 0 0;font-size:12.5px;color:#4b5563}
+.stk-key{display:block;line-height:1.8}.stk-key i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 8px;vertical-align:-1px}.stk-key i:first-child{margin-left:0}.stk-key i.ln{height:2px;width:14px;background:#111;opacity:.55;vertical-align:3px}
+.wl{border-top:1px solid #ececec;margin-top:4px}
+.wl-row{display:grid;grid-template-columns:minmax(96px,1.2fr) minmax(90px,2fr) minmax(64px,.8fr) minmax(64px,.8fr) minmax(64px,.8fr);align-items:center;gap:12px;min-height:48px;border-bottom:1px solid #f0f0f0;font-size:13.5px}
+.wl-hd{min-height:34px;font-size:12px;color:#6b7280;font-weight:600}
+.wl-nat{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wl-nat em{font-style:normal;color:#9ca3af;font-weight:600;display:inline-block;min-width:22px}
+.wl-sp{min-width:0}.stk-mini{width:100%;height:34px;display:block}
+.wl-n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.wl-n b{font-size:15px;margin-right:1px}
+@media(max-width:560px){.wl-row{grid-template-columns:minmax(80px,1fr) minmax(64px,1.2fr) auto auto;gap:8px}.wl-y{display:none}.stk-v{font-size:22px}}</style>
 </head>
 <body>
 <header class="topbar">
@@ -1528,6 +1529,35 @@ function gtHtml(v, src) {
 }
 /* 0926 관광객 · 환율 */
 var FX_NAME = { CNY: ['중국 위안', '1위안'], JPY: ['일본 엔', '100엔'], USD: ['미국 달러', '1달러'], TWD: ['대만 달러', '1대만달러'], HKD: ['홍콩 달러', '1홍콩달러'], THB: ['태국 바트', '1바트'] };
+/* 0927 주식 차트처럼: 막대(캔들) 하나 = 전날 → 오늘. 늘면 빨강, 줄면 파랑(한국 증권 색) · 검은 선 = 7일(또는 3달) 평균 */
+var UP = '#e0323c', DN = '#1f6fd6';
+function stkChg(a, b) { if (a == null || b == null || !a) return null; return { d: b - a, p: Math.round((b - a) / a * 1000) / 10 }; }
+function stkTxt(c, unit) { if (!c) return '<span class="stk-c">–</span>'; var up = c.d > 0, dn = c.d < 0; return '<span class="stk-c ' + (up ? 'up' : dn ? 'dn' : '') + '">' + (up ? '▲ ' : dn ? '▼ ' : '') + Math.abs(c.d).toLocaleString('ko-KR') + (unit || '') + ' (' + (c.p > 0 ? '+' : '') + c.p + '%)</span>'; }
+function candleSvg(vals, labels, o) {
+  o = o || {}; var W = o.W || 440, H = o.H || 170, ax = !o.mini, L = ax ? 46 : 2, R = ax ? 8 : 2, T = ax ? 10 : 2, B = ax ? 24 : 2, n = vals.length;
+  var nums = vals.filter(function (v) { return v != null; }); if (nums.length < 2) return '';
+  var lo = Math.min.apply(null, nums), hi = Math.max.apply(null, nums), pad = (hi - lo) * 0.08 || hi * 0.05 || 1; lo = Math.max(0, lo - pad); hi += pad;
+  var step = (W - L - R) / n, xs = function (k) { return L + step * (k + 0.5); }, ys = function (v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }, bw = Math.max(1.5, step * 0.62);
+  var lab = function (v) { return v >= 10000 ? (Math.round(v / 1000) / 10) + '만' : Math.round(v).toLocaleString('ko-KR'); };
+  var g = ax ? [lo, (lo + hi) / 2, hi].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v).toFixed(1) + '" y2="' + ys(v).toFixed(1) + '" stroke="#eceef1"/><text x="' + (L - 6) + '" y="' + (ys(v) + 4).toFixed(1) + '" text-anchor="end" font-size="10" fill="#6b7280">' + lab(v) + '</text>'; }).join('')
+    + labels.map(function (d, k) { return (k % (o.tick || 7) === 0 || k === n - 1) ? '<text x="' + xs(k).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + esc(d) + '</text>' : ''; }).join('') : '';
+  var c = '', hit = '', ma = [], M = o.ma || 7;
+  vals.forEach(function (v, k) {
+    var p = k ? vals[k - 1] : null;
+    if (v != null && p != null) { var y1 = ys(p), y2 = ys(v), top = Math.min(y1, y2), h = Math.max(1.5, Math.abs(y2 - y1)); c += '<rect x="' + (xs(k) - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="1" fill="' + (v > p ? UP : v < p ? DN : '#9ca3af') + '"/>'; }
+    var win = vals.slice(Math.max(0, k - M + 1), k + 1).filter(function (x) { return x != null; }); if (k >= M - 1 && win.length) ma.push(xs(k).toFixed(1) + ',' + ys(win.reduce(function (a, b) { return a + b; }, 0) / win.length).toFixed(1));
+    if (ax && v != null) { var ch = stkChg(p, v); hit += '<rect x="' + (xs(k) - step / 2).toFixed(1) + '" y="' + T + '" width="' + step.toFixed(1) + '" height="' + (H - T - B) + '" fill="transparent"><title>' + esc(labels[k]) + ' · ' + v.toLocaleString('ko-KR') + (o.unit || '') + (ch ? ' · ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + (ch.p > 0 ? '+' : '') + ch.p + '%)' : '') + '</title></rect>'; }
+  });
+  var line = ma.length > 1 ? '<polyline fill="none" stroke="#111" stroke-opacity=".55" stroke-width="' + (ax ? 1.5 : 1) + '" stroke-linejoin="round" points="' + ma.join(' ') + '"/>' : '';
+  return '<svg class="' + (ax ? 'stk-svg' : 'stk-mini') + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.what || '추이') + '"' + (ax ? '' : ' preserveAspectRatio="none"') + '>' + g + c + line + hit + '</svg>';
+}
+function stkCard(ar, key, unit, what, sub) {
+  var s = ar.series || [], v = s.map(function (x) { return x[key]; }), last = s[s.length - 1] || {}, prev = s[s.length - 2] || {};
+  return '<div class="stk-card"><div class="stk-head"><b class="stk-name">' + esc(ar.label) + '</b><span class="stk-v">' + (last[key] || 0).toLocaleString('ko-KR') + '<small>' + esc(unit) + '</small></span>' + stkTxt(stkChg(prev[key], last[key])) + '<span class="stk-d">' + esc(String(last.d || '').slice(5)) + ' · 전날 대비</span></div>'
+    + candleSvg(v, s.map(function (x) { return String(x.d).slice(5); }), { what: ar.label + ' ' + what, unit: unit })
+    + '<p class="stk-meta">7일 평균 ' + ar.week.toLocaleString('ko-KR') + unit + ' ' + (ar.growth == null ? '' : '<span class="stk-c ' + (ar.growth > 0 ? 'up' : ar.growth < 0 ? 'dn' : '') + '">' + (ar.growth > 0 ? '▲' : ar.growth < 0 ? '▼' : '') + Math.abs(ar.growth) + '%</span> 지난주 대비') + (sub ? ' · ' + sub : '') + '</p></div>';
+}
+var STK_KEY = '<p class="vz-key stk-key"><i style="background:' + UP + '"></i>전날보다 늘어남 <i style="background:' + DN + '"></i>줄어듦 <i class="ln"></i>평균선 · 막대 하나가 전날 → 그날이에요 · 손가락을 대면 숫자가 나와요</p>';
 function tourHtml(v) {
   var t = (v && v.tourism) || {}, h = '<div class="card-head"><h2>관광객 · 환율</h2>' + (t.fx ? '<span class="chip date-chip">' + esc(t.fx.date) + '</span>' : '') + '</div>';
   var sign = function (n) { return n == null ? '' : n > 0 ? '<span class="pill pill-up">+' + n + '%</span>' : n < 0 ? '<span class="pill pill-down">' + n + '%</span>' : '<span class="pill">0%</span>'; };
@@ -1537,45 +1567,31 @@ function tourHtml(v) {
   }).join('') + '</div>';
   else h += '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>';
   if (t.tour && t.tour.items.length) {
-    var ym = t.tour.ym.slice(0, 4) + '년 ' + (+t.tour.ym.slice(4)) + '월', it = t.tour.items, tot = t.tour.total || 1;
+    var ym = t.tour.ym.slice(0, 4) + '년 ' + (+t.tour.ym.slice(4)) + '월', it = t.tour.items;
     var man = function (n) { return n >= 10000 ? (Math.round(n / 1000) / 10).toLocaleString('ko-KR') + '만' : n.toLocaleString('ko-KR'); };
-    var yoy = function (x) { return x.yoy == null ? '<span class="pill">작년 자료 없음</span>' : sign(x.yoy).replace('%<', '% 작년 대비<'); };
+    var pc = function (n) { return n == null ? '<span class="stk-c">–</span>' : '<span class="stk-c ' + (n > 0 ? 'up' : n < 0 ? 'dn' : '') + '">' + (n > 0 ? '▲ ' : n < 0 ? '▼ ' : '') + Math.abs(n) + '%</span>'; };
     var COL = ['#0066cc', '#2e8ae6', '#6aaef0', '#a6cdf5', '#cfe3fa'];
     var top5 = it.slice(0, 5), restShare = Math.max(0, 100 - top5.reduce(function (a, x) { return a + (+x.share || 0); }, 0));
-    h += '<h3 class="tour-h">나라별 방한 외국인 <small>' + esc(ym) + ' · 전국 ' + man(t.tour.total) + '명</small></h3>'
+    var mlab = (t.tour.months || []).map(function (m) { return (+m.slice(4)) + '월'; });
+    h += '<h3 class="tour-h">나라별 방한 외국인 <small>' + esc(ym) + ' · 전국 ' + man(t.tour.total) + '명 · 달마다</small></h3>'
       + '<div class="tn-mix" role="img" aria-label="나라별 비중">' + top5.map(function (x, i) { return '<i style="width:' + (+x.share || 0) + '%;background:' + COL[i] + '" title="' + esc(x.nat + ' ' + x.share + '%') + '"></i>'; }).join('') + '<i style="width:' + restShare + '%;background:#e5e7eb" title="그 외 ' + restShare.toFixed(0) + '%"></i></div>'
       + '<div class="tn-key">' + top5.map(function (x, i) { return '<span><b style="background:' + COL[i] + '"></b>' + esc(x.nat) + ' ' + x.share + '%</span>'; }).join('') + '<span><b style="background:#e5e7eb"></b>그 외 ' + restShare.toFixed(0) + '%</span></div>'
-      + '<div class="tn-top">' + it.slice(0, 3).map(function (x, i) { return '<div class="tn-card"><span class="tn-rank">' + (i + 1) + '위</span><b class="tn-nat">' + esc(x.nat) + '</b><span class="tn-num">' + man(x.num) + '명</span><span class="tn-sub">전체의 ' + x.share + '%</span>' + yoy(x) + '</div>'; }).join('') + '</div>';
-    var rest = it.slice(3, 10), rmax = rest.length ? rest[0].num || 1 : 1;
-    if (rest.length) h += '<div class="tour-list">' + rest.map(function (x, i) {
-      return '<div class="tour-row"><span class="tour-n">' + (i + 4) + '. ' + esc(x.nat) + '</span><span class="nb-bar"><i style="width:' + Math.max(3, Math.round(x.num / rmax * 100)) + '%;background:#6aaef0"></i></span><span class="tour-v">' + man(x.num) + '명 · ' + x.share + '%</span>' + (x.yoy != null ? sign(x.yoy).replace('%<', '% 작년<') : '<span class="pill">–</span>') + '</div>';
-    }).join('') + '</div><p class="sub" style="margin-top:6px">4위부터는 막대 길이를 4위 기준으로 맞춰서 작은 나라끼리도 차이가 보여요</p>';
+      + '<div class="wl" role="table" aria-label="나라별 방한 외국인"><div class="wl-row wl-hd" role="row"><span>나라</span><span class="wl-sp">최근 1년 (달마다)</span><span class="wl-n">' + esc((+t.tour.ym.slice(4)) + '월') + '</span><span class="wl-n">전달 대비</span><span class="wl-n wl-y">작년 대비</span></div>'
+      + it.map(function (x, i) {
+        var sp = x.series && x.series.filter(function (q) { return q != null; }).length > 1 ? candleSvg(x.series, mlab, { mini: 1, W: 160, H: 34, ma: 3 }) : '';
+        return '<div class="wl-row" role="row" title="' + esc(x.nat + ' · ' + (x.series ? x.series.map(function (q, k) { return (mlab[k] || '') + ' ' + (q == null ? '-' : man(q)); }).join(' · ') : '')) + '"><span class="wl-nat"><em>' + (i + 1) + '</em>' + esc(x.nat) + '</span><span class="wl-sp">' + sp + '</span><span class="wl-n"><b>' + man(x.num) + '</b>명</span><span class="wl-n">' + pc(x.mom) + '</span><span class="wl-n wl-y">' + pc(x.yoy) + '</span></div>';
+      }).join('') + '</div>';
   } else h += '<h3 class="tour-h">나라별 방한 외국인</h3><p class="empty">공공데이터포털 인증키를 넣으면 달마다 나라별로 떠요</p>';
   var areas = (t.spop && t.spop.areas) || [];
   if (areas.length) {
-    /* 0927 보기 쉽게: 지역별 요약 타일 + 한 눈금 선그래프(지역끼리 바로 비교) */
-    var SC = ['#2a78d6', '#d4661f', '#7a5bd6', '#1f9e7a'], DOWK = ['일', '월', '화', '수', '목', '금', '토'];
-    var busy = function (ser) { var sum = [0, 0, 0, 0, 0, 0, 0], cnt = [0, 0, 0, 0, 0, 0, 0]; ser.forEach(function (x) { var p = String(x.d).split('.'), wd = new Date(+p[0], +p[1] - 1, +p[2]).getDay(); if (!isNaN(wd)) { sum[wd] += x.total; cnt[wd]++; } }); var best = 0; for (var k = 1; k < 7; k++) if (cnt[k] && sum[k] / cnt[k] > (cnt[best] ? sum[best] / cnt[best] : 0)) best = k; return DOWK[best]; };
     h += '<h3 class="tour-h">지역별 외국인 (단기 체류) <small>' + esc(areas[0].last) + '까지 · 영업시간(10~21시) 하루 평균 · 서울시 자료라 두 달쯤 늦게 나와요</small></h3>'
-      + '<div class="sp-tiles">' + areas.map(function (ar, i) {
-        return '<div class="sp-tile"><span class="sp-name"><b style="background:' + SC[i % 4] + '"></b>' + esc(ar.label) + '</span><span class="sp-big">' + ar.week.toLocaleString('ko-KR') + '<small>명/일</small></span><span class="sp-meta">최근 7일 평균 ' + sign(ar.growth).replace('%<', '% 지난주 대비<') + '</span>'
-          + '<span class="sp-cn"><i style="width:' + ar.chinaShare + '%"></i></span><span class="sp-meta">중국 ' + ar.chinaShare + '% · 그 외 ' + (100 - ar.chinaShare) + '% · 가장 붐비는 요일 <b>' + busy(ar.series) + '요일</b></span></div>';
-      }).join('') + '</div>';
-    var W = 640, H = 210, L = 44, R = 64, T = 14, B = 28, all = areas.reduce(function (a, ar) { return a.concat(ar.series.map(function (x) { return x.total; })); }, []);
-    var ymax = Math.max.apply(null, all.concat([1])), step = Math.pow(10, Math.floor(Math.log10(ymax))) * (ymax / Math.pow(10, Math.floor(Math.log10(ymax))) > 5 ? 2 : 1), top = Math.ceil(ymax / step) * step;
-    var n = Math.max.apply(null, areas.map(function (ar) { return ar.series.length; })), xs = function (k) { return L + (n <= 1 ? 0 : k / (n - 1) * (W - L - R)); }, ys = function (v) { return T + (1 - v / top) * (H - T - B); };
-    var grid = [0, top / 2, top].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v) + '" y2="' + ys(v) + '" stroke="#e5e7eb"/><text x="' + (L - 6) + '" y="' + (ys(v) + 4) + '" text-anchor="end" font-size="10" fill="#6b7280">' + (v >= 10000 ? (v / 10000) + '만' : v.toLocaleString('ko-KR')) + '</text>'; }).join('');
-    var ser0 = areas[0].series, ticks = ser0.map(function (x, k) { return k % 7 === 0 || k === ser0.length - 1 ? '<text x="' + xs(k) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + esc(String(x.d).slice(5)) + '</text>' : ''; }).join('');
-    var lines = areas.map(function (ar, i) {
-      var pts = ar.series.map(function (x, k) { return xs(k).toFixed(1) + ',' + ys(x.total).toFixed(1); }), last = ar.series[ar.series.length - 1] || { total: 0 };
-      return '<polyline fill="none" stroke="' + SC[i % 4] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="' + pts.join(' ') + '"/>'
-        + '<circle cx="' + xs(ar.series.length - 1) + '" cy="' + ys(last.total) + '" r="4" fill="' + SC[i % 4] + '" stroke="#fff" stroke-width="2"/>'
-        + '<text x="' + (xs(ar.series.length - 1) + 8) + '" y="' + (ys(last.total) + 4) + '" font-size="11.5" font-weight="700" fill="#1d1d1f">' + esc(ar.label) + '</text>';
-    }).join('');
-    var hits = ser0.map(function (x, k) { var tip = esc(x.d) + ' · ' + areas.map(function (ar) { var y = ar.series[k]; return esc(ar.label) + ' ' + (y ? y.total.toLocaleString('ko-KR') : '-') + '명'; }).join(' · '); var w = (W - L - R) / Math.max(1, n - 1); return '<rect x="' + (xs(k) - w / 2) + '" y="' + T + '" width="' + w + '" height="' + (H - T - B) + '" fill="transparent"><title>' + tip + '</title></rect>'; }).join('');
-    h += '<div class="sp-chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="지역별 하루 외국인 수 추이">' + grid + ticks + lines + hits + '</svg></div>'
-      + '<p class="vz-key">' + areas.map(function (ar, i) { return '<i style="background:' + SC[i % 4] + '"></i>' + esc(ar.label); }).join(' ') + ' · 하루 외국인 수(같은 눈금) · 막대 대신 선으로 지역끼리 바로 비교해요. 그래프에 손가락을 대면 날짜별 숫자가 나와요</p>';
+      + '<div class="stk-grid">' + areas.map(function (ar) { return stkCard(ar, 'total', '명', '하루 외국인', '중국 ' + ar.chinaShare + '%'); }).join('') + '</div>' + STK_KEY;
   } else h += '<h3 class="tour-h">지역별 외국인 (성수동 · 명동)</h3><p class="empty">서울 열린데이터광장 인증키를 넣으면 날짜별로 떠요</p>';
+  var ka = (t.kto && t.kto.areas) || [];
+  if (ka.length) {
+    h += '<h3 class="tour-h">4구역 방문자 <small>' + esc(ka[0].last) + '까지 · 한국관광공사 빅데이터(통신사 기반) · 시·군·구 하루 외국인 방문자 · 한 달쯤 늦게 나와요</small></h3>'
+      + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + ar.outWeek.toLocaleString('ko-KR') + '명/일'); }).join('') + '</div>' + STK_KEY;
+  }
   return h;
 }
 /* 0926 네이버 블로그 언급량: 최근 7일 글 수 vs 그 전 7일 */
@@ -2277,6 +2293,12 @@ document.addEventListener('keydown', function (e) { var z = $('imgZoom'); if (e.
 
 /* 0927 창을 오래 열어 둔 채 다시 보면 상태 띠(수집 성공/실패)가 옛날 것 → 20분 넘었으면 새로 받기 */
 document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && S.homeAt && Date.now() - S.homeAt > 20 * 60 * 1000) loadHome(); });
+/* 0927 트랙패드로 확대(핀치)된 채면 페이지 오른쪽이 잘려 보이고 Cmd+0 으로도 안 풀린다 → 한 번 알려준다 */
+(function () {
+  if (!window.visualViewport || !matchMedia('(pointer:fine)').matches) return;
+  var said = 0, chk = function () { if (!said && visualViewport.scale > 1.05) { said = 1; toast('화면이 확대돼 있어요 · 트랙패드에서 두 손가락을 오므리면 원래대로 돌아와요'); } };
+  visualViewport.addEventListener('resize', chk); setTimeout(chk, 1500);
+})();
 </script>
 </body>
 </html>
