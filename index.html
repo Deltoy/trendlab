@@ -721,6 +721,28 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
   .diy-right{position:static;height:100%;max-height:none;overflow:auto}
 }
 .dx-h{margin:14px 0 4px;font-weight:700;font-size:13px}.dx-h small{font-weight:400;color:#8a8a8a;margin-left:6px}.cat-b.oy{background:#fdecef;color:#c4163a}.cat-b.web{background:#eefaf1;color:#1d7a36}
+/* 0927 창 크기를 줄여도 가운데 정렬 유지 + 비율대로 줄어들게 (900~1280px 구간) */
+.topbar-inner{min-width:0}
+.tabs{min-width:0}
+.tabs button{white-space:nowrap}
+.topsearch-wrap{flex:0 1 260px;min-width:150px;width:auto}
+@media(min-width:900px) and (max-width:1279px){
+  .topbar-inner{gap:12px;padding:10px 20px}
+  .tabs button{padding:0 9px;font-size:14px}
+  .owner-pill .op-org,.owner-pill .op-dot{display:none}
+  .layout,.status{padding-left:20px;padding-right:20px}
+}
+@media(min-width:900px) and (max-width:1079px){
+  .owner-pill{display:none}
+  .topsearch-wrap{flex-basis:200px}
+}
+@media(min-width:900px) and (max-width:1179px){
+  .diy{grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr)!important}
+  .diy-left{grid-template-columns:150px minmax(0,1fr)}
+  .diy-side .grp-chips .chip{padding:0 8px;font-size:12.5px}
+  .diy-row{grid-template-columns:48px minmax(0,1fr) auto;gap:8px}
+  .diy-img{width:48px;height:48px}
+}
 </style>
 </head>
 <body>
@@ -940,7 +962,7 @@ function loadHome() {
   call('getHome', [], function (h) {
     if (rev !== S.rev.home) return;
     if (!h || !h.ok) { $('home').innerHTML = '<div class="msg">' + esc((h && h.msg) || '불러오지 못했어요') + '</div>'; return; }
-    S.home = h; renderStatus(h); renderHome();
+    S.home = h; S.homeAt = Date.now(); renderStatus(h); renderHome();
   }, function () { if (rev === S.rev.home) $('home').innerHTML = '<div class="msg">불러오지 못했어요. 잠시 뒤 새로고침해주세요</div>'; });
 }
 /* ── 홈: ①~⑤ 순서대로 하는 워크플로우 ── */
@@ -2181,6 +2203,9 @@ document.addEventListener('click', function (e) {
   z.hidden = false;
 });
 document.addEventListener('keydown', function (e) { var z = $('imgZoom'); if (e.key === 'Escape' && z && !z.hidden) z.hidden = true; });
+
+/* 0927 창을 오래 열어 둔 채 다시 보면 상태 띠(수집 성공/실패)가 옛날 것 → 20분 넘었으면 새로 받기 */
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && S.homeAt && Date.now() - S.homeAt > 20 * 60 * 1000) loadHome(); });
 </script>
 </body>
 </html>
