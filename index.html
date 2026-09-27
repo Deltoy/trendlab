@@ -743,6 +743,10 @@ body.not-home .filter-col,body.not-home .filter-mobile{display:none!important}
   .diy-row{grid-template-columns:48px minmax(0,1fr) auto;gap:8px}
   .diy-img{width:48px;height:48px}
 }
+/* 0927 사용자 요청: 창을 줄이거나 넓혀도 양옆 빈 여백 없이 항상 꽉 차게 (최대 폭 1400px 제한 해제) */
+.topbar-inner,.status,.layout{max-width:none}
+@media(min-width:900px){.status.bad{max-width:none;margin:12px 24px 0}}
+@media(min-width:900px) and (max-width:1279px){.status.bad{margin:12px 20px 0}}
 </style>
 </head>
 <body>
