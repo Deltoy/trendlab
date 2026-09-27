@@ -701,6 +701,13 @@ button.vz-row{min-height:44px}
 .card>h2+.seg{margin-top:12px}
 
 @media(min-width:900px){.vz-full{grid-column:1/-1}}   /* 0927 한눈에 보기: 높이 비슷한 것끼리 한 줄(도넛·흐름 / 브랜드·키워드 / 가격대·행사), 순위 변동은 전체 폭 */
+
+/* 0927 환율 타일 = 버튼 (누르면 추이) */
+.kpi-btn{font:inherit;text-align:left;border:0;cursor:pointer;width:100%}
+@media(hover:hover){.kpi-btn:hover{background:var(--fill-2)}}
+.fx-stats{margin:16px 0 8px}
+#fxChart .chart{max-width:none}
+.sheet-foot:empty{display:none}
 </style>
 </head>
 <body>
@@ -1596,11 +1603,43 @@ function areaDonut(ka, title) {
   return dnWrap(donutSvg(ka.map(function (ar, i) { return { label: ar.label, v: ar.week || 0, color: catColor(i) }; }), manTxt(tot), '하루 평균', title)
     + '<div class="dn-list">' + ka.map(function (ar, i) { return '<div class="dn-row"><b style="background:' + catColor(i) + '"></b><span class="dn-n">' + esc(ar.label) + '</span><span class="dn-v">' + manTxt(ar.week || 0) + '명</span><span class="dn-p">' + (tot ? Math.round((ar.week || 0) / tot * 100) : 0) + '%</span>' + pctTxt(ar.growth) + '</div>'; }).join('') + '<p class="stk-meta">최근 7일 하루 평균 · ▲▼ 지난주 대비</p></div>', mixHtml(ka));
 }
+/* 0927 환율 타일 누르면 추이 (ECB 기준 공개 API · 대만 달러는 없어서 매일 모은 값) */
+var FX_DAYS = { '1개월': 31, '3개월': 92, '1년': 366 };
+function openFx(cur, span) {
+  span = span || '3개월'; var n = FX_NAME[cur] || [cur, cur], unit = cur === 'JPY' ? 100 : 1;
+  $('mtTitle').textContent = n[0] + ' 환율';
+  $('mtBody').innerHTML = '<div class="seg" role="tablist">' + Object.keys(FX_DAYS).map(function (k) { return '<button type="button" role="tab" aria-selected="' + (k === span) + '" class="' + (k === span ? 'on' : '') + '" data-c="' + esc(cur) + '" data-s="' + esc(k) + '" onclick="openFx(this.dataset.c,this.dataset.s)">' + esc(k) + '</button>'; }).join('') + '</div><div id="fxChart">' + skel(2) + '</div>';
+  $('mtFoot').innerHTML = '';
+  if (!$('mt').classList.contains('on')) { $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
+  var draw = function (pts, src) { $('fxChart').innerHTML = fxChartHtml(pts, n, src); fitSvgText($('fxChart')); };
+  var fromServer = function () { var it = ((S.viz || {}).tourism || {}).fx; it = it && it.items.filter(function (x) { return x.cur === cur; })[0]; draw((it && it.series || []).map(function (v, i, a) { return { d: (a.length - 1 - i) + '일 전', v: v }; }), '매일 아침 모은 값'); };
+  if (cur === 'TWD') { fromServer(); return; }
+  var start = new Date(Date.now() - FX_DAYS[span] * 864e5).toISOString().slice(0, 10);
+  fetch('https://api.frankfurter.dev/v1/' + start + '..?base=' + encodeURIComponent(cur) + '&symbols=KRW').then(function (r) { return r.json(); }).then(function (j) {
+    var pts = Object.keys(j.rates || {}).sort().map(function (d) { return { d: d, v: Math.round(j.rates[d].KRW * unit * 100) / 100 }; });
+    if (pts.length < 2) throw new Error('empty'); draw(pts, '유럽중앙은행 기준 환율 (영업일)');
+  }).catch(fromServer);
+}
+function fxChartHtml(pts, n, src) {
+  if (pts.length < 2) return '<p class="empty">아직 모은 날이 적어요. 며칠 지나면 추이가 보여요</p>';
+  var vals = pts.map(function (p) { return p.v; }), lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), pad = (hi - lo) * 0.1 || hi * 0.01;
+  var W = 640, H = 240, L = 52, R = 16, T = 16, B = 28, ymin = lo - pad, ymax = hi + pad;
+  var X = function (i) { return L + (W - L - R) * i / (pts.length - 1); }, Y = function (v) { return T + (H - T - B) * (1 - (v - ymin) / (ymax - ymin)); };
+  var f = function (v) { return v.toLocaleString('ko-KR', { maximumFractionDigits: v >= 100 ? 1 : 2 }); };
+  var first = vals[0], last = vals[vals.length - 1], ch = Math.round((last - first) / first * 1000) / 10;
+  var grid = [ymin + pad, (lo + hi) / 2, ymax - pad].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '" stroke="' + TOK.line + '"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end" data-fs="12" fill="' + TOK.ink2 + '">' + f(v) + '</text>'; }).join('');
+  var ticks = [0, Math.floor((pts.length - 1) / 2), pts.length - 1].map(function (i) { return '<text x="' + X(i).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + (i === 0 ? 'start' : i === pts.length - 1 ? 'end' : 'middle') + '" data-fs="12" fill="' + TOK.ink2 + '">' + esc(String(pts[i].d).replace(/^20(\d\d)-(\d\d)-(\d\d)$/, function (m, y, mo, d) { return (+mo) + '.' + (+d); })) + '</text>'; }).join('');
+  var line = '<polyline fill="none" stroke="' + TOK.ink + '" stroke-width="2" stroke-linejoin="round" points="' + pts.map(function (p, i) { return X(i).toFixed(1) + ',' + Y(p.v).toFixed(1); }).join(' ') + '"/>';
+  var hits = pts.map(function (p, i) { var w = (W - L - R) / Math.max(1, pts.length - 1); return '<rect x="' + (X(i) - w / 2).toFixed(1) + '" y="' + T + '" width="' + w.toFixed(1) + '" height="' + (H - T - B) + '" fill="transparent"><title>' + esc(p.d + ' · ' + f(p.v) + '원') + '</title></rect>'; }).join('');
+  return '<div class="kpi-grid fx-stats">' + kpiHtml('지금', f(last) + '원', esc(n[1])) + kpiHtml('기간 변화', delta(ch, '%'), '처음 ' + f(first) + '원') + kpiHtml('최저 · 최고', f(lo) + ' ~ ' + f(hi), '원') + '</div>'
+    + '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" data-fit role="img" aria-label="' + esc(n[0]) + ' 환율 추이">' + grid + ticks + line + '<circle cx="' + X(pts.length - 1).toFixed(1) + '" cy="' + Y(last).toFixed(1) + '" r="4" fill="' + TOK.ink + '" stroke="#fff" stroke-width="2"/>' + hits + '</svg></div>'
+    + '<p class="sub">' + esc(src) + ' · 오르면(▲) 그 나라 손님이 한국에서 더 싸게 사요 · 선에 손가락을 대면 날짜별 값이 나와요</p>';
+}
 function tourHtml(v) {
   var t = (v && v.tourism) || {}, h = '<div class="card-head"><h2>관광객 · 환율</h2>' + (t.fx ? '<span class="meta">' + esc(shortDate(t.fx.date)) + '</span>' : '') + '</div>';
   if (t.fx) h += '<p class="sub">원화로 바꾼 값 · 1주 전보다 오르면(▲) 그 나라 손님이 한국에서 더 싸게 사요</p><div class="kpi-grid fx">' + t.fx.items.map(function (x) {
     var n = FX_NAME[x.cur] || [x.cur, x.cur];
-    return kpiHtml(n[0], x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원', esc(n[1]) + ' ' + delta(x.change, '%'));
+    return kpiHtml(n[0], x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원', esc(n[1]) + ' ' + delta(x.change, '%')).replace(/^<div class="kpi"/, '<button type="button" class="kpi kpi-btn" data-cur="' + esc(x.cur) + '" onclick="openFx(this.dataset.cur)" aria-label="' + esc(n[0]) + ' 환율 추이 보기"').replace(/<\/div>$/, '</button>');
   }).join('') + '</div>';
   else h += '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>';
   if (t.tour && t.tour.items.length) {
