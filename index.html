@@ -502,7 +502,7 @@ button.vz-row{min-height:44px}
 .vz-val{font-size:var(--fs-2);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .vz-key{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin:8px 0 0;font-size:var(--fs-1);color:var(--ink2)}
 .vz-key i{display:inline-block;width:12px;height:12px;border-radius:var(--r-mark);margin-right:4px;vertical-align:-2px}
-.vz-cols{display:flex;gap:8px;align-items:flex-end;height:132px;padding-top:8px}
+.vz-cols{display:flex;gap:12px;align-items:flex-end;height:168px;padding-top:8px}
 .vz-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
 .vz-cbar{width:70%;max-width:44px;background:var(--ink);border-radius:var(--r-mark) var(--r-mark) 0 0}
 .vz-cv{font-size:var(--fs-2);font-weight:600;font-variant-numeric:tabular-nums}
@@ -699,6 +699,8 @@ button.vz-row{min-height:44px}
 @media(prefers-reduced-motion:reduce){.skel-img,.skel-bar{animation:none}}
 .dn-hd>span{text-align:right}.dn-hd .dn-n{text-align:left}
 .card>h2+.seg{margin-top:12px}
+
+@media(min-width:900px){.vz-full{grid-column:1/-1}}   /* 0927 한눈에 보기: 높이 비슷한 것끼리 한 줄(도넛·흐름 / 브랜드·키워드 / 가격대·행사), 순위 변동은 전체 폭 */
 </style>
 </head>
 <body>
@@ -1492,7 +1494,7 @@ function vzMovers(m) {   /* 가운데서 갈라지는 막대: 오른쪽 오름(�
   };
   return m.up.map(row).join('') + m.down.map(row).join('');
 }
-function vzBlock(title, sub, body) { return '<div class="vz-block"><h3>' + title + '</h3>' + (sub ? '<p class="sub">' + sub + '</p>' : '') + body + '</div>'; }
+function vzBlock(title, sub, body) { return '<div class="vz-block' + (title === '순위 변동 TOP' ? ' vz-full' : '') + '"><h3>' + title + '</h3>' + (sub ? '<p class="sub">' + sub + '</p>' : '') + body + '</div>'; }
 function loadViz() {
   if (!$('c-viz')) return;
   var fail = function () { if (S.viz) return; S.vizFail = true; renderFilters(); VIZ_CARDS.forEach(function (id) { failBox($(id), 'retryViz()'); }); };
@@ -1733,11 +1735,11 @@ function renderViz() {
   var owned = v.brands.some(function (b) { return b.owned === true; });
   var h = '<h2>한눈에 보기</h2><p class="sub">' + esc(shortDate(v.date)) + ' · 올리브영 전체 100위 기준</p><div class="vz-grid">'
     + vzBlock('카테고리 구성', '전체 100위가 어떤 카테고리로 채워졌나', vzDonut(v.catMix, v.total, '전체 100위'))
-    + vzBlock('행사 비율', '100위 중 행사 표시가 붙은 상품 (겹칠 수 있음)', vzBars(v.flags.map(function (f) { return { label: f.label, value: f.pct, text: f.pct + '%' }; })))
-    + vzBlock('가격대', '판매가 기준 상품 수', vzColumns(v.priceBins))
+    + vzBlock('카테고리 흐름', '날짜별 전체 100위 안 상품 수', v.catTrend.days.length >= 2 ? '<div class="vz-multi">' + v.catTrend.series.map(function (s, i) { var c = catColor(i, s.label); return '<div class="vz-sm"><span class="vz-smlab"><i style="background:' + c + '"></i>' + esc(s.label) + '</span>' + vzSpark(s.points, c) + '<b>' + esc(s.points[s.points.length - 1]) + '개</b></div>'; }).join('') + '</div>' : '<p class="empty">이틀 이상 쌓이면 흐름이 보여요</p>')
     + vzBlock('브랜드 TOP10', '점수 = 1위 100점 … 100위 1점 합', vzBars(v.brands.map(function (b) { return { label: b.brand, value: b.score, text: b.score + '점', brand: b.brand, color: b.owned === true ? TOK.cat[3] : TOK.ink }; }), { legend: '<p class="vz-key"><span><i style="background:' + TOK.ink + '"></i>브랜드</span>' + (owned ? '<span><i style="background:' + TOK.cat[3] + '"></i>약국 취급 브랜드</span>' : '') + '</p>' }))
     + vzBlock('상품명 키워드', v.keywordBase ? esc(shortDate(v.keywordBase)) + ' 대비' : '100위 상품명에 몇 번 나왔나', vzBars(v.keywords.map(function (k) { var d = k.prev == null ? '' : (k.now - k.prev > 0 ? ' ▲' + (k.now - k.prev) : k.now - k.prev < 0 ? ' ▼' + (k.prev - k.now) : ''); return { label: k.word, value: k.now, text: k.now + '회' + d }; })))
-    + vzBlock('카테고리 흐름', '날짜별 전체 100위 안 상품 수', v.catTrend.days.length >= 2 ? '<div class="vz-multi">' + v.catTrend.series.map(function (s, i) { var c = catColor(i, s.label); return '<div class="vz-sm"><span class="vz-smlab"><i style="background:' + c + '"></i>' + esc(s.label) + '</span>' + vzSpark(s.points, c) + '<b>' + esc(s.points[s.points.length - 1]) + '개</b></div>'; }).join('') + '</div>' : '<p class="empty">이틀 이상 쌓이면 흐름이 보여요</p>')
+    + vzBlock('가격대', '판매가 기준 상품 수', vzColumns(v.priceBins))
+    + vzBlock('행사 비율', '100위 중 행사 표시가 붙은 상품 (겹칠 수 있음)', vzBars(v.flags.map(function (f) { return { label: f.label, value: f.pct, text: f.pct + '%' }; })))
     + vzBlock('순위 변동 TOP', v.movers.ready ? esc(shortDate(v.movers.baseDate)) + ' 대비 · 누르면 상품 상세' : '', v.movers.ready ? vzMovers(v.movers) : '<p class="empty">일주일 가까이 쌓이면 크게 오르내린 상품이 보여요</p>')
     + '</div>';
   el.innerHTML = h;
