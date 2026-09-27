@@ -772,13 +772,13 @@ main,main>*,.card,.top-row>*,.hero-tiles>*,.step2-grid>*,.step5-grid>*,.vz-grid>
 .stk-svg{width:100%;height:auto;display:block}
 .stk-meta{margin:4px 0 0;font-size:12.5px;color:#4b5563}
 .stk-key{display:block;line-height:1.8}.stk-key i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 8px;vertical-align:-1px}.stk-key i:first-child{margin-left:0}.stk-key i.ln{height:2px;width:14px;background:#111;opacity:.55;vertical-align:3px}
-.wl{border-top:1px solid #ececec;margin-top:4px}
-.wl-row{display:grid;grid-template-columns:minmax(96px,1.2fr) minmax(90px,2fr) minmax(64px,.8fr) minmax(64px,.8fr) minmax(64px,.8fr);align-items:center;gap:12px;min-height:48px;border-bottom:1px solid #f0f0f0;font-size:13.5px}
-.wl-hd{min-height:34px;font-size:12px;color:#6b7280;font-weight:600}
-.wl-nat{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wl-nat em{font-style:normal;color:#9ca3af;font-weight:600;display:inline-block;min-width:22px}
-.wl-sp{min-width:0}.stk-mini{width:100%;height:34px;display:block}
-.wl-n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.wl-n b{font-size:15px;margin-right:1px}
-@media(max-width:560px){.wl-row{grid-template-columns:minmax(80px,1fr) minmax(64px,1.2fr) auto auto;gap:8px}.wl-y{display:none}.stk-v{font-size:22px}}</style>
+.dn-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:6px 0 12px}
+.dn-svg{width:170px;height:170px;flex:none}
+.dn-list{flex:1;min-width:min(100%,320px)}
+.dn-row{display:grid;grid-template-columns:12px minmax(70px,1fr) 64px 48px 64px 64px;align-items:center;gap:8px;min-height:34px;border-bottom:1px solid #f0f0f0;font-size:13.5px}
+.dn-row b{width:12px;height:12px;border-radius:3px}.dn-hd{min-height:28px;font-size:12px;color:#6b7280;font-weight:600}
+.dn-n{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dn-v,.dn-p{text-align:right;font-variant-numeric:tabular-nums}.dn-p{color:#6b7280}.dn-row .stk-c{text-align:right}
+@media(max-width:560px){.dn-row{grid-template-columns:12px minmax(60px,1fr) 58px 40px 60px}.dn-y{display:none}.dn-wrap{justify-content:center}}</style>
 </head>
 <body>
 <header class="topbar">
@@ -1529,35 +1529,49 @@ function gtHtml(v, src) {
 }
 /* 0926 관광객 · 환율 */
 var FX_NAME = { CNY: ['중국 위안', '1위안'], JPY: ['일본 엔', '100엔'], USD: ['미국 달러', '1달러'], TWD: ['대만 달러', '1대만달러'], HKD: ['홍콩 달러', '1홍콩달러'], THB: ['태국 바트', '1바트'] };
-/* 0927 주식 차트처럼: 막대(캔들) 하나 = 전날 → 오늘. 늘면 빨강, 줄면 파랑(한국 증권 색) · 검은 선 = 7일(또는 3달) 평균 */
-var UP = '#e0323c', DN = '#1f6fd6';
+/* 0927 보기 쉬운 그래프: 비중은 도넛, 하루 방문자는 0부터 막대(전날보다 늘면 빨강·줄면 파랑) */
+var UP = '#e0323c', DN = '#1f6fd6', CAT = ['#2a78d6', '#d4661f', '#7a5bd6', '#1f9e7a'];
 function stkChg(a, b) { if (a == null || b == null || !a) return null; return { d: b - a, p: Math.round((b - a) / a * 1000) / 10 }; }
-function stkTxt(c, unit) { if (!c) return '<span class="stk-c">–</span>'; var up = c.d > 0, dn = c.d < 0; return '<span class="stk-c ' + (up ? 'up' : dn ? 'dn' : '') + '">' + (up ? '▲ ' : dn ? '▼ ' : '') + Math.abs(c.d).toLocaleString('ko-KR') + (unit || '') + ' (' + (c.p > 0 ? '+' : '') + c.p + '%)</span>'; }
-function candleSvg(vals, labels, o) {
-  o = o || {}; var W = o.W || 440, H = o.H || 170, ax = !o.mini, L = ax ? 46 : 2, R = ax ? 8 : 2, T = ax ? 10 : 2, B = ax ? 24 : 2, n = vals.length;
-  var nums = vals.filter(function (v) { return v != null; }); if (nums.length < 2) return '';
-  var lo = Math.min.apply(null, nums), hi = Math.max.apply(null, nums), pad = (hi - lo) * 0.08 || hi * 0.05 || 1; lo = Math.max(0, lo - pad); hi += pad;
-  var step = (W - L - R) / n, xs = function (k) { return L + step * (k + 0.5); }, ys = function (v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }, bw = Math.max(1.5, step * 0.62);
-  var lab = function (v) { return v >= 10000 ? (Math.round(v / 1000) / 10) + '만' : Math.round(v).toLocaleString('ko-KR'); };
-  var g = ax ? [lo, (lo + hi) / 2, hi].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v).toFixed(1) + '" y2="' + ys(v).toFixed(1) + '" stroke="#eceef1"/><text x="' + (L - 6) + '" y="' + (ys(v) + 4).toFixed(1) + '" text-anchor="end" font-size="10" fill="#6b7280">' + lab(v) + '</text>'; }).join('')
-    + labels.map(function (d, k) { return (k % (o.tick || 7) === 0 || k === n - 1) ? '<text x="' + xs(k).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + esc(d) + '</text>' : ''; }).join('') : '';
-  var c = '', hit = '', ma = [], M = o.ma || 7;
-  vals.forEach(function (v, k) {
-    var p = k ? vals[k - 1] : null;
-    if (v != null && p != null) { var y1 = ys(p), y2 = ys(v), top = Math.min(y1, y2), h = Math.max(1.5, Math.abs(y2 - y1)); c += '<rect x="' + (xs(k) - bw / 2).toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="1" fill="' + (v > p ? UP : v < p ? DN : '#9ca3af') + '"/>'; }
-    var win = vals.slice(Math.max(0, k - M + 1), k + 1).filter(function (x) { return x != null; }); if (k >= M - 1 && win.length) ma.push(xs(k).toFixed(1) + ',' + ys(win.reduce(function (a, b) { return a + b; }, 0) / win.length).toFixed(1));
-    if (ax && v != null) { var ch = stkChg(p, v); hit += '<rect x="' + (xs(k) - step / 2).toFixed(1) + '" y="' + T + '" width="' + step.toFixed(1) + '" height="' + (H - T - B) + '" fill="transparent"><title>' + esc(labels[k]) + ' · ' + v.toLocaleString('ko-KR') + (o.unit || '') + (ch ? ' · ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + (ch.p > 0 ? '+' : '') + ch.p + '%)' : '') + '</title></rect>'; }
-  });
-  var line = ma.length > 1 ? '<polyline fill="none" stroke="#111" stroke-opacity=".55" stroke-width="' + (ax ? 1.5 : 1) + '" stroke-linejoin="round" points="' + ma.join(' ') + '"/>' : '';
-  return '<svg class="' + (ax ? 'stk-svg' : 'stk-mini') + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.what || '추이') + '"' + (ax ? '' : ' preserveAspectRatio="none"') + '>' + g + c + line + hit + '</svg>';
+function stkTxt(c) { if (!c) return '<span class="stk-c">–</span>'; var up = c.d > 0, dn = c.d < 0; return '<span class="stk-c ' + (up ? 'up' : dn ? 'dn' : '') + '">' + (up ? '▲ ' : dn ? '▼ ' : '') + Math.abs(c.d).toLocaleString('ko-KR') + ' (' + (c.p > 0 ? '+' : '') + c.p + '%)</span>'; }
+function pctTxt(n) { return n == null ? '<span class="stk-c">–</span>' : '<span class="stk-c ' + (n > 0 ? 'up' : n < 0 ? 'dn' : '') + '">' + (n > 0 ? '▲ ' : n < 0 ? '▼ ' : '') + Math.abs(n) + '%</span>'; }
+function manTxt(n) { return n >= 10000 ? (Math.round(n / 1000) / 10).toLocaleString('ko-KR') + '만' : Math.round(n).toLocaleString('ko-KR'); }
+/* 도넛: parts=[{label,v,color}] · 조각 사이 2px 틈 · 가운데 합계 */
+function donutSvg(parts, mid, sub, what) {
+  var tot = parts.reduce(function (a, p) { return a + p.v; }, 0) || 1, R = 62, C = 2 * Math.PI * R, off = 0;
+  var segs = parts.map(function (p) {
+    var len = p.v / tot * C, dash = Math.max(0, len - 2);
+    var s = '<circle cx="80" cy="80" r="' + R + '" fill="none" stroke="' + p.color + '" stroke-width="24" stroke-dasharray="' + dash.toFixed(2) + ' ' + (C - dash).toFixed(2) + '" stroke-dashoffset="' + (-off).toFixed(2) + '" transform="rotate(-90 80 80)"><title>' + esc(p.label + ' ' + manTxt(p.v) + ' · ' + Math.round(p.v / tot * 100) + '%') + '</title></circle>';
+    off += len; return s;
+  }).join('');
+  return '<svg class="dn-svg" viewBox="0 0 160 160" role="img" aria-label="' + esc(what) + '">' + segs + '<text x="80" y="78" text-anchor="middle" font-size="19" font-weight="800" fill="#111">' + esc(mid) + '</text><text x="80" y="97" text-anchor="middle" font-size="11" fill="#6b7280">' + esc(sub) + '</text></svg>';
+}
+/* 하루 막대: 최근 14일 · 0부터 · 전날 대비 색 */
+function dayBars(ser, key, unit, what) {
+  var s = ser.slice(-15), W = 440, H = 150, L = 38, R = 6, T = 18, B = 22, n = s.length - 1; if (n < 1) return '';
+  var vals = s.map(function (x) { return x[key] || 0; }), top = Math.max.apply(null, vals) * 1.12 || 1, step = (W - L - R) / n, bw = step * 0.62;
+  var ys = function (v) { return T + (1 - v / top) * (H - T - B); }, lab = function (v) { return v >= 10000 ? (Math.round(v / 1000) / 10) + '만' : Math.round(v).toLocaleString('ko-KR'); };
+  var g = [0, top / 2].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v).toFixed(1) + '" y2="' + ys(v).toFixed(1) + '" stroke="#eceef1"/><text x="' + (L - 5) + '" y="' + (ys(v) + 4).toFixed(1) + '" text-anchor="end" font-size="10" fill="#6b7280">' + lab(v) + '</text>'; }).join('');
+  var b = '';
+  for (var k = 1; k <= n; k++) {
+    var v = vals[k], p = vals[k - 1], x = L + step * (k - 0.5), col = v > p ? UP : v < p ? DN : '#9ca3af', y = ys(v), d = String(s[k].d).slice(5), ch = stkChg(p, v);
+    b += '<rect x="' + (x - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (ys(0) - y).toFixed(1) + '" rx="3" fill="' + col + '"><title>' + esc(d + ' · ' + v.toLocaleString('ko-KR') + unit + (ch ? ' · 전날보다 ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + (ch.p > 0 ? '+' : '') + ch.p + '%)' : '')) + '</title></rect>';
+    if (k % 2 === 1 || k === n) b += '<text x="' + x.toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + esc(d.replace(/^0/, '').replace('.', '/')) + '</text>';
+    if (k === n) b += '<text x="' + x.toFixed(1) + '" y="' + (y - 5).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#111">' + lab(v) + '</text>';
+  }
+  return '<svg class="stk-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(what) + ' 최근 2주">' + g + b + '</svg>';
 }
 function stkCard(ar, key, unit, what, sub) {
-  var s = ar.series || [], v = s.map(function (x) { return x[key]; }), last = s[s.length - 1] || {}, prev = s[s.length - 2] || {};
+  var s = ar.series || [], last = s[s.length - 1] || {}, prev = s[s.length - 2] || {};
   return '<div class="stk-card"><div class="stk-head"><b class="stk-name">' + esc(ar.label) + '</b><span class="stk-v">' + (last[key] || 0).toLocaleString('ko-KR') + '<small>' + esc(unit) + '</small></span>' + stkTxt(stkChg(prev[key], last[key])) + '<span class="stk-d">' + esc(String(last.d || '').slice(5)) + ' · 전날 대비</span></div>'
-    + candleSvg(v, s.map(function (x) { return String(x.d).slice(5); }), { what: ar.label + ' ' + what, unit: unit })
-    + '<p class="stk-meta">7일 평균 ' + ar.week.toLocaleString('ko-KR') + unit + ' ' + (ar.growth == null ? '' : '<span class="stk-c ' + (ar.growth > 0 ? 'up' : ar.growth < 0 ? 'dn' : '') + '">' + (ar.growth > 0 ? '▲' : ar.growth < 0 ? '▼' : '') + Math.abs(ar.growth) + '%</span> 지난주 대비') + (sub ? ' · ' + sub : '') + '</p></div>';
+    + dayBars(s, key, unit, ar.label + ' ' + what)
+    + '<p class="stk-meta">7일 평균 ' + ar.week.toLocaleString('ko-KR') + unit + ' ' + (ar.growth == null ? '' : pctTxt(ar.growth) + ' 지난주 대비') + (sub ? ' · ' + sub : '') + '</p></div>';
 }
-var STK_KEY = '<p class="vz-key stk-key"><i style="background:' + UP + '"></i>전날보다 늘어남 <i style="background:' + DN + '"></i>줄어듦 <i class="ln"></i>평균선 · 막대 하나가 전날 → 그날이에요 · 손가락을 대면 숫자가 나와요</p>';
+var STK_KEY = '<p class="vz-key stk-key"><i style="background:' + UP + '"></i>전날보다 늘어난 날 <i style="background:' + DN + '"></i>줄어든 날 · 최근 2주 · 막대에 손가락을 대면 숫자가 나와요</p>';
+function areaDonut(ka, key, title) {
+  var tot = ka.reduce(function (a, ar) { return a + (ar.week || 0); }, 0);
+  return '<div class="dn-wrap">' + donutSvg(ka.map(function (ar, i) { return { label: ar.label, v: ar.week || 0, color: CAT[i % 4] }; }), manTxt(tot), '하루 평균', title)
+    + '<div class="dn-list">' + ka.map(function (ar, i) { return '<div class="dn-row"><b style="background:' + CAT[i % 4] + '"></b><span class="dn-n">' + esc(ar.label) + '</span><span class="dn-v">' + manTxt(ar.week || 0) + '명</span><span class="dn-p">' + (tot ? Math.round((ar.week || 0) / tot * 100) : 0) + '%</span>' + pctTxt(ar.growth) + '</div>'; }).join('') + '<p class="stk-meta">최근 7일 하루 평균 · ▲▼ 지난주 대비</p></div></div>';
+}
 function tourHtml(v) {
   var t = (v && v.tourism) || {}, h = '<div class="card-head"><h2>관광객 · 환율</h2>' + (t.fx ? '<span class="chip date-chip">' + esc(t.fx.date) + '</span>' : '') + '</div>';
   var sign = function (n) { return n == null ? '' : n > 0 ? '<span class="pill pill-up">+' + n + '%</span>' : n < 0 ? '<span class="pill pill-down">' + n + '%</span>' : '<span class="pill">0%</span>'; };
@@ -1567,20 +1581,13 @@ function tourHtml(v) {
   }).join('') + '</div>';
   else h += '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>';
   if (t.tour && t.tour.items.length) {
-    var ym = t.tour.ym.slice(0, 4) + '년 ' + (+t.tour.ym.slice(4)) + '월', it = t.tour.items;
-    var man = function (n) { return n >= 10000 ? (Math.round(n / 1000) / 10).toLocaleString('ko-KR') + '만' : n.toLocaleString('ko-KR'); };
-    var pc = function (n) { return n == null ? '<span class="stk-c">–</span>' : '<span class="stk-c ' + (n > 0 ? 'up' : n < 0 ? 'dn' : '') + '">' + (n > 0 ? '▲ ' : n < 0 ? '▼ ' : '') + Math.abs(n) + '%</span>'; };
-    var COL = ['#0066cc', '#2e8ae6', '#6aaef0', '#a6cdf5', '#cfe3fa'];
-    var top5 = it.slice(0, 5), restShare = Math.max(0, 100 - top5.reduce(function (a, x) { return a + (+x.share || 0); }, 0));
-    var mlab = (t.tour.months || []).map(function (m) { return (+m.slice(4)) + '월'; });
-    h += '<h3 class="tour-h">나라별 방한 외국인 <small>' + esc(ym) + ' · 전국 ' + man(t.tour.total) + '명 · 달마다</small></h3>'
-      + '<div class="tn-mix" role="img" aria-label="나라별 비중">' + top5.map(function (x, i) { return '<i style="width:' + (+x.share || 0) + '%;background:' + COL[i] + '" title="' + esc(x.nat + ' ' + x.share + '%') + '"></i>'; }).join('') + '<i style="width:' + restShare + '%;background:#e5e7eb" title="그 외 ' + restShare.toFixed(0) + '%"></i></div>'
-      + '<div class="tn-key">' + top5.map(function (x, i) { return '<span><b style="background:' + COL[i] + '"></b>' + esc(x.nat) + ' ' + x.share + '%</span>'; }).join('') + '<span><b style="background:#e5e7eb"></b>그 외 ' + restShare.toFixed(0) + '%</span></div>'
-      + '<div class="wl" role="table" aria-label="나라별 방한 외국인"><div class="wl-row wl-hd" role="row"><span>나라</span><span class="wl-sp">최근 1년 (달마다)</span><span class="wl-n">' + esc((+t.tour.ym.slice(4)) + '월') + '</span><span class="wl-n">전달 대비</span><span class="wl-n wl-y">작년 대비</span></div>'
-      + it.map(function (x, i) {
-        var sp = x.series && x.series.filter(function (q) { return q != null; }).length > 1 ? candleSvg(x.series, mlab, { mini: 1, W: 160, H: 34, ma: 3 }) : '';
-        return '<div class="wl-row" role="row" title="' + esc(x.nat + ' · ' + (x.series ? x.series.map(function (q, k) { return (mlab[k] || '') + ' ' + (q == null ? '-' : man(q)); }).join(' · ') : '')) + '"><span class="wl-nat"><em>' + (i + 1) + '</em>' + esc(x.nat) + '</span><span class="wl-sp">' + sp + '</span><span class="wl-n"><b>' + man(x.num) + '</b>명</span><span class="wl-n">' + pc(x.mom) + '</span><span class="wl-n wl-y">' + pc(x.yoy) + '</span></div>';
-      }).join('') + '</div>';
+    var it = t.tour.items, mon = (+t.tour.ym.slice(4)) + '월', tot = t.tour.total || it.reduce(function (a, x) { return a + x.num; }, 0);
+    var top4 = it.slice(0, 4), rest = Math.max(0, tot - top4.reduce(function (a, x) { return a + x.num; }, 0));
+    var parts = top4.map(function (x, i) { return { label: x.nat, v: x.num, color: CAT[i] }; }).concat(rest ? [{ label: '그 외', v: rest, color: '#d1d5db' }] : []);
+    h += '<h3 class="tour-h">나라별 방한 외국인 <small>' + esc(t.tour.ym.slice(0, 4) + '년 ' + mon) + ' · 전국 · 달마다</small></h3>'
+      + '<div class="dn-wrap">' + donutSvg(parts, manTxt(tot), mon + ' 전체', '나라별 비중')
+      + '<div class="dn-list"><div class="dn-row dn-hd"><b></b><span class="dn-n">나라</span><span class="dn-v">' + esc(mon) + '</span><span class="dn-p">비중</span><span>전달 대비</span><span class="dn-y">작년 대비</span></div>'
+      + it.map(function (x, i) { return '<div class="dn-row"><b style="background:' + (i < 4 ? CAT[i] : '#d1d5db') + '"></b><span class="dn-n">' + esc(x.nat) + '</span><span class="dn-v">' + manTxt(x.num) + '명</span><span class="dn-p">' + x.share + '%</span>' + pctTxt(x.mom) + '<span class="dn-y">' + pctTxt(x.yoy) + '</span></div>'; }).join('') + '</div></div>';
   } else h += '<h3 class="tour-h">나라별 방한 외국인</h3><p class="empty">공공데이터포털 인증키를 넣으면 달마다 나라별로 떠요</p>';
   var areas = (t.spop && t.spop.areas) || [];
   if (areas.length) {
@@ -1589,7 +1596,8 @@ function tourHtml(v) {
   } else h += '<h3 class="tour-h">지역별 외국인 (성수동 · 명동)</h3><p class="empty">서울 열린데이터광장 인증키를 넣으면 날짜별로 떠요</p>';
   var ka = (t.kto && t.kto.areas) || [];
   if (ka.length) {
-    h += '<h3 class="tour-h">4구역 방문자 <small>' + esc(ka[0].last) + '까지 · 한국관광공사 빅데이터(통신사 기반) · 시·군·구 하루 외국인 방문자 · 한 달쯤 늦게 나와요</small></h3>'
+    h += '<h3 class="tour-h">4구역 외국인 방문자 <small>' + esc(ka[0].last) + '까지 · 한국관광공사 빅데이터(통신사 기반) · 시·군·구 · 한 달쯤 늦게 나와요</small></h3>'
+      + areaDonut(ka, 'fr', '4구역 외국인 비중')
       + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + ar.outWeek.toLocaleString('ko-KR') + '명/일'); }).join('') + '</div>' + STK_KEY;
   }
   return h;
