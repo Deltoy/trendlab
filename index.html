@@ -778,7 +778,13 @@ main,main>*,.card,.top-row>*,.hero-tiles>*,.step2-grid>*,.step5-grid>*,.vz-grid>
 .dn-row{display:grid;grid-template-columns:12px minmax(70px,1fr) 64px 48px 64px 64px;align-items:center;gap:8px;min-height:34px;border-bottom:1px solid #f0f0f0;font-size:13.5px}
 .dn-row b{width:12px;height:12px;border-radius:3px}.dn-hd{min-height:28px;font-size:12px;color:#6b7280;font-weight:600}
 .dn-n{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dn-v,.dn-p{text-align:right;font-variant-numeric:tabular-nums}.dn-p{color:#6b7280}.dn-row .stk-c{text-align:right}
-@media(max-width:560px){.dn-row{grid-template-columns:12px minmax(60px,1fr) 58px 40px 60px}.dn-y{display:none}.dn-wrap{justify-content:center}}</style>
+@media(max-width:560px){.dn-row{grid-template-columns:12px minmax(60px,1fr) 58px 40px 60px}.dn-y{display:none}.dn-wrap{justify-content:center}}
+/* 0927 쇼츠 보기 */
+.sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:8px}
+.sh-card{display:flex;flex-direction:column;gap:4px;color:inherit;text-decoration:none;min-width:0}
+.sh-card img{width:100%;aspect-ratio:9/12;object-fit:cover;border-radius:12px;background:#f5f5f5}
+.sh-v{font-size:12px;font-weight:700}.sh-card .nm1{font-size:13px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+</style>
 </head>
 <body>
 <header class="topbar">
@@ -1487,7 +1493,7 @@ function vzBars(items, opt) {   /* 가로 막대: 이름 · 막대 · 값(글자
   opt = opt || {}; var max = Math.max.apply(null, items.map(function (x) { return x.value; }).concat([1]));
   return '<div class="vz-bars">' + items.map(function (x) {
     var w = Math.max(2, Math.round(x.value / max * 100));
-    var tag = x.key ? 'button type="button" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"' : x.brand ? 'button type="button" data-b="' + esc(x.brand) + '" onclick="openBrand(this.dataset.b)"' : 'div';
+    var tag = x.yt != null ? 'button type="button" data-yt="' + esc(x.yt) + '" onclick="openShorts(this.dataset.yt)"' : x.key ? 'button type="button" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"' : x.brand ? 'button type="button" data-b="' + esc(x.brand) + '" onclick="openBrand(this.dataset.b)"' : 'div';
     return '<' + tag + ' class="vz-row"><span class="vz-lab">' + esc(x.label) + '</span><span class="vz-track"><span class="vz-fill" style="width:' + w + '%;background:' + (x.color || '#111111') + '"></span></span><span class="vz-val">' + esc(x.text != null ? x.text : x.value) + '</span></' + tag.split(' ')[0] + '>';
   }).join('') + '</div>' + (opt.legend || '');
 }
@@ -2281,9 +2287,20 @@ function renderYt() {
   var el = $('c-yt'), y = S.yt; step1Kpis(); if (!el) return;
   if (!y.total) { el.innerHTML = '<h2>유튜브 쇼츠</h2><p class="empty">최근 7일 인기 뷰티 쇼츠가 모이면 여기에 떠요</p>'; return; }
   el.innerHTML = '<h2>유튜브 쇼츠에서 뜨는 브랜드</h2><p class="sub">최근 7일 인기 뷰티 쇼츠 ' + y.total + '개 · 제목·태그에 나온 브랜드의 조회수 합</p>'
-    + (y.brands.length ? vzBars(y.brands.slice(0, 6).map(function (b) { return { label: b.brand, value: b.views, text: viewsKo(b.views) + '회 · ' + b.videos + '편', brand: b.brand }; })) : '<p class="empty">아직 브랜드가 언급된 영상이 없어요</p>')
-    + (y.items && y.items.length ? '<p class="sub yt-sub">뜨는 아이템 (영상 제목·태그 기준 조회수 합)</p>' + vzBars(y.items.slice(0, 6).map(function (x) { return { label: x.label, value: x.views, text: viewsKo(x.views) + '회 · ' + x.videos + '편' }; })) : '')
+    + (y.brands.length ? vzBars(y.brands.slice(0, 6).map(function (b, i) { return { label: b.brand, value: b.views, text: viewsKo(b.views) + '회 · ' + b.videos + '편', yt: 'b' + i }; })) : '<p class="empty">아직 브랜드가 언급된 영상이 없어요</p>')
+    + (y.items && y.items.length ? '<p class="sub yt-sub">뜨는 아이템 (영상 제목·태그 기준 조회수 합)</p>' + vzBars(y.items.slice(0, 6).map(function (x, i) { return { label: x.label, value: x.views, text: viewsKo(x.views) + '회 · ' + x.videos + '편', yt: 'i' + i }; })) : '')
     + '<p class="sub yt-sub">조회수 TOP 영상</p><div class="yt-list">' + y.videos.slice(0, 5).map(function (v) { return '<a class="yt-row" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><span class="yt-v">' + viewsKo(v.views) + '</span><span class="tx"><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel) + ' · ' + v.seconds + '초</span></span><span class="side">↗</span></a>'; }).join('') + '</div>';
+}
+/* 0927 뜨는 브랜드·아이템 누르면 그 쇼츠 바로 보기 (재료 창 재사용) */
+function openShorts(ref) {
+  var y = S.yt || {}, g = ref.charAt(0) === 'b' ? (y.brands || [])[+ref.slice(1)] : (y.items || [])[+ref.slice(1)]; if (!g) return;
+  var name = g.brand && ref.charAt(0) === 'b' ? g.brand : g.label, vids = g.vids || [];
+  $('mtTitle').textContent = name + ' 쇼츠';
+  $('mtBody').innerHTML = vids.length ? '<p class="sub">최근 7일 · 조회수 높은 순 · 누르면 유튜브에서 바로 재생돼요</p><div class="sh-grid">' + vids.map(function (v) {
+    return '<a class="sh-card" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/' + encodeURIComponent(v.id) + '/hqdefault.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"><span class="sh-v">' + viewsKo(v.views) + '회</span><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel || '') + (v.seconds ? ' · ' + v.seconds + '초' : '') + '</span></a>';
+  }).join('') + '</div>' : '<p class="empty">서버를 새 버전으로 붙여넣으면 여기에 쇼츠가 떠요</p>';
+  $('mtFoot').innerHTML = ref.charAt(0) === 'b' ? '<button type="button" class="btn" data-b="' + esc(g.brand) + '" onclick="closeMt();openBrand(this.dataset.b)">' + esc(g.brand) + ' 브랜드 보기</button>' : '';
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
 }
 function otherMallsHtml(list) {
   if (!list || !list.length) return '';
