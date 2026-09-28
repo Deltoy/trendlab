@@ -1322,6 +1322,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 
 @media(min-width:1600px){.vz-row,button.vz-row{min-height:48px}.vz-donut svg{width:clamp(128px,36%,280px)}}
 @media(min-width:1800px){.vz-row,button.vz-row{min-height:52px}}
+.grp h2 small.meta,.card h2 small.meta{display:inline;margin-top:0}
 </style>
 </head>
 <body data-tab="today">
@@ -3595,7 +3596,7 @@ function planStrip() {
   var soon = ((S.set && S.set.mats) || []).filter(function (x) { return x.status === '곧 종료'; }).sort(function (x, y) { return (x.dday || 0) - (y.dday || 0); })[0];
   var tile = function (sub, l, b, sm) { return '<button type="button" class="kpi kpi-btn" onclick="route(\'plan\',\'' + sub + '\')"><span class="kpi-l">' + l + '</span><b>' + b + '</b><span class="kpi-s">' + sm + '</span></button>'; };
   return '<nav class="plan-strip" aria-label="행사 준비 한눈에">' + tile('board', '담은 상품', nB + '개', nMiss ? '약국에 없는 ' + nMiss + '개' : '모두 약국에 있음')
-    + tile('mat', '협업 마감', soon ? 'D-' + esc(soon.dday) : '없음', soon ? esc(soon.name).slice(0, 18) : '재료함 ' + (((S.set && S.set.mats) || []).length) + '개')
+    + tile('mat', '협업 마감', soon ? 'D-' + esc(soon.dday) : '없음', soon ? esc(String(soon.name).slice(0, 18)) : '재료함 ' + (((S.set && S.set.mats) || []).length) + '개')
     + tile('tour', '성수동 외국인', a ? manTxt(a.week || 0) + '명' : '–', a ? '7일 평균 ' + pctTxt(a.growth) + (cny ? ' · 위안 ' + Math.round(cny.won) + '원' : '') : '자료 없음')
     + tile('price', '할인 중', c.price && c.price.avg != null ? Math.round(c.price.saleRate * 100) + '%' : '–', c.price && c.price.avg != null ? '평균 ' + won(c.price.avg) : '상위 30위') + '</nav>';
 }
