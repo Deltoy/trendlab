@@ -804,6 +804,57 @@ button.vz-row{min-height:44px}
 }}
 
 @media(max-width:412px){.kpi b{font-size:var(--fs-5);overflow-wrap:anywhere}}   /* 0927 폰에서 18,500원 같은 값 잘림 */
+/* ── 0929 약국 베스트 (판매수량 순위 · 세트에 담기 · 세트 예상 이익률) ── */
+.xs-hide{font-style:normal}
+@media(max-width:420px){.xs-hide{display:none}.set-sub{justify-self:stretch}.set-sub button{flex:1 1 auto}}
+.pb-empty{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pb-empty-tx{flex:1 1 200px;min-width:0}.pb-empty-tx .sub{margin:4px 0 0}
+.pb-empty-ic{flex:none;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:var(--r-tile);background:var(--fill);color:var(--ink)}
+.pb-empty-ic .ic{width:24px;height:24px}
+@media(max-width:599px){.pb-empty .btn{width:100%}}
+.pb-left .card-head h2 small{display:inline;margin-left:8px;font-weight:400}
+.pb-left .card-head .btn .ic,.pb-empty .btn .ic{width:18px;height:18px}
+.pb-per{margin-bottom:0}
+.pb-cats{margin:0 0 4px}.pb-cats .chip em{margin-left:4px;font-style:normal;color:var(--ink2)}.pb-cats .chip.on em{color:inherit;opacity:.8}
+.pb-row{display:grid;grid-template-columns:40px 56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.pb-list>.pb-row:first-child{border-top:0}
+.pb-rk{display:flex;flex-direction:column;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.pb-rk b{font-size:var(--fs-4);font-weight:700;line-height:1}
+.pb-rk .tag{height:20px;padding:0 6px}
+.pb-row .tx{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pb-row .nm1{font-size:var(--fs-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-row .meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0}
+.pb-bar{flex:1 1 56px;min-width:40px;height:6px;border-radius:var(--pill);background:var(--fill);overflow:hidden}.pb-bar i{display:block;height:100%;border-radius:inherit;background:var(--ink2)}
+.pb-q,.pb-rk-s{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.pb-add .ic{width:18px;height:18px}
+.pb-add.on{border-color:var(--ink);background:var(--ink);color:#fff}
+@media(max-width:480px){
+  .pb-row{grid-template-columns:28px 48px minmax(0,1fr) 44px;gap:8px}
+  .pb-row .diy-img{width:48px;height:48px}
+  .pb-add{width:44px;padding:0}.pb-add span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+@media(min-width:900px){
+  .pb-left{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden}
+  .pb-list{flex:1;min-height:0;overflow:auto}
+}
+.pb-mg{margin:0 0 12px;padding:12px 16px;border-radius:var(--r-tile);background:var(--fill)}
+.pb-mg-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pb-mg-top span{font-size:var(--fs-2);font-weight:600;color:var(--ink2)}
+.pb-mg-top b{font-size:var(--fs-6);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pb-mg-top b.neg{color:var(--bad)}
+.pb-mg-line{margin:4px 0 0;font-size:var(--fs-2)}
+.pb-mg-note{margin:4px 0 0;font-size:var(--fs-1);color:var(--ink2)}
+.pb-mg-none{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin:0 0 12px;padding:12px 16px;border-radius:var(--r-tile);background:var(--fill);font-size:var(--fs-2);color:var(--ink2)}
+.diy-mhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.diy-mhead h2{margin:0}
+.diy-mode button{padding:0 12px}
+.pb-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.pb-kpi .kpi:last-child{grid-column:1/-1}.pb-kpi .kpi:last-child b{font-size:var(--fs-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-dates{margin-top:12px}.pb-dates>div{display:flex;align-items:center;gap:8px}.pb-dates input{flex:1;min-width:0}
+.pb-err{margin:0 0 8px;font-size:var(--fs-3);font-weight:600;color:var(--bad)}
+.pb-warn{color:var(--warn)}
+.diy-bar{white-space:nowrap}
+@media(max-width:899px){body:has(.diy-bar:not([hidden])) .toast{bottom:calc(128px + env(safe-area-inset-bottom))}}   /* 떠 있는 '세트 N개' 막대 위로 알림 */
+.pb-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}.pb-meta .tag{margin-right:0}
 </style>
 </head>
 <body>
@@ -894,7 +945,7 @@ function delta(n, unit, body) {
 }
 function newTag() { return '<span class="tag t-ink">NEW</span>'; }
 /* 선 아이콘 (lucide · 선 1.5) */
-var ICONS = { bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>' };
+var ICONS = { bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>' };
 function icon(n, cls) { return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[n] + '</svg>'; }
 /* 짧은 날짜: 2026.09.24 → 9.24 */
 function shortDate(d) { var m = /(\d{4})[.\-](\d{1,2})[.\-](\d{1,2})/.exec(String(d || '')); return m ? (+m[2]) + '.' + (+m[3]) : String(d || ''); }
@@ -1921,6 +1972,7 @@ function renderViz() {
 /* ── 세트: 재료함 + AI 세트 추천 ── */
 S.set = { mats: null, meta: null, sets: null, mode: 'own', showEnded: false, edit: null, poll: null };
 function loadSetTab() {
+  pbLoad();
   call('getPharmacySets', [], function (r) { S.ps = r && r.ok ? r : { err: (r && r.msg) || '물류앱 세트를 불러오지 못했어요' }; renderSetTab(); psPoll(); }, function () { S.ps = { err: '물류앱 세트를 불러오지 못했어요' }; renderSetTab(); });
   call('getMaterials', [], function (r) { if (!r || !r.ok) { $('set').innerHTML = '<div class="empty">불러오지 못했어요</div>'; return; } S.set.mats = r.items; S.set.meta = r; renderSetTab(); });
   call('getSets', [], function (r) { if (r && r.ok) { S.set.sets = r; renderSetTab(); setPollIfPending(); } });
@@ -1937,8 +1989,9 @@ function matStatusBadge(m) {
 }
 function renderSetTab() {
   var el = $('set'); if (!S.set.mats) { el.innerHTML = skel(3); return; }
-  var sub = S.setSub || 'have', subs = [['have', '보유 세트'], ['diy', '세트 DIY'], ['ai', 'AI 세트 추천'], ['uses', '용도별 상품']];
+  var sub = S.setSub || 'have', subs = [['have', '보유 세트'], ['diy', '세트 DIY'], ['best', '약국 베스트'], ['ai', 'AI <i class="xs-hide">세트 </i>추천'], ['uses', '용도별<i class="xs-hide"> 상품</i>']];
   var tabs = '<div class="seg set-sub" role="tablist" aria-label="세트 메뉴">' + subs.map(function (x) { var on = sub === x[0]; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-s="' + x[0] + '" onclick="S.setSub=this.dataset.s;renderSetTab()">' + x[1] + '</button>'; }).join('') + '</div>';
+  if (sub === 'best') { el.innerHTML = tabs + pbHtml(); dragScroll(document.querySelector('#set .pb-cats')); return; }
   if (sub !== 'ai') { el.innerHTML = tabs + psHtml(sub); return; }
   var ph = tabs;
   var live = S.set.mats.filter(function (m) { return m.status !== '종료'; }), ended = S.set.mats.filter(function (m) { return m.status === '종료'; });
@@ -1982,7 +2035,7 @@ function psHtml(sub) {
   if (sub === 'uses') return h + psUsesHtml(p) + '</article>';
   h += p.sets.length ? '<div class="ps-grid">' + p.sets.map(function (s) {
     return '<div class="ps-card">' + (/^https:\/\//.test(s.photo || '') ? '<div class="ps-ph">' + imgHtml(s.photo) + '</div>' : '')
-      + '<h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '박스 ' + esc(s.box) + ' · ' : '') + '상품 ' + s.items.length + '종 · ' + s.items.reduce(function (a, it) { return a + it.qty; }, 0) + '개</p>'
+      + '<h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '박스 ' + esc(s.box) + ' · ' : '') + '상품 ' + s.items.length + '종 · ' + s.items.reduce(function (a, it) { return a + it.qty; }, 0) + '개' + pbRateTag(s.items) + '</p>'
       + '<ul class="ps-items">' + s.items.map(function (it) { return '<li>' + esc(it.name) + (it.qty > 1 ? ' <b>×' + it.qty + '</b>' : '') + '</li>'; }).join('') + '</ul>'
       + (s.tags.length ? '<div class="grp-chips">' + s.tags.map(function (t) { return tag(t); }).join('') + '</div>' : '')
       + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEditHave(this.dataset.id)">고치기</button></div></div>';
@@ -1996,7 +2049,7 @@ function diyListCard(p) {
   return h + '<div class="ps-grid">' + ds.map(function (s) {
     var rv = s.review && s.review.result, st = s.status === '반영됨' ? tag('물류앱 반영됨', 't-ok') : s.status === '반영 후 수정' ? tag('반영 후 고침 · 다시 반영 필요', 't-warn') : tag('테스트');
     psNeedImgs(s.items.map(function (x) { return x.name; }));
-    return '<div class="ps-card"><div class="ps-main"><div class="ps-st">' + st + (s.linked ? '<span class="meta">물류앱 ' + esc(s.linked) + '</span>' : '') + '</div><h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '박스 ' + esc(s.box) + ' · ' : '') + s.items.length + '종 · ' + esc(s.at) + '</p>'
+    return '<div class="ps-card"><div class="ps-main"><div class="ps-st">' + st + (s.linked ? '<span class="meta">물류앱 ' + esc(s.linked) + '</span>' : '') + pbRateTag(s.items) + '</div><h3>' + esc(s.name) + '</h3><p class="meta">' + (s.box ? '박스 ' + esc(s.box) + ' · ' : '') + s.items.length + '종 · ' + esc(s.at) + '</p>'
       + '<div class="ps-thumbs">' + s.items.map(function (it) { return '<span class="diy-img" title="' + esc(it.name + (it.qty > 1 ? ' ×' + it.qty : '')) + '">' + imgHtml(psImgFor(it.name)) + '</span>'; }).join('') + '</div>'
       + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEdit(this.dataset.id)">열기</button><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="diyCopy(this.dataset.id)">복사</button>'
       + (s.pending ? '<span class="tag t-warn">AI 검토 중</span>' : '<button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psReview(this.dataset.id)">AI 검토' + (rv ? ' 다시' : '') + '</button>')
@@ -2071,24 +2124,25 @@ function diyHtml(p) {
   if (!S.diyUses) S.diyUses = us.length ? [us[0]] : [];
   var cs = {}; p.products.forEach(function (x) { if (x.cat) cs[x.cat] = (cs[x.cat] || 0) + 1; }); S.diyCats = S.diyCats || [];
   var catChips = '<div class="grp-chips diy-cats" aria-label="분류">' + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { var on = S.diyCats.indexOf(c) !== -1; return '<button type="button" class="chip cat' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(c) + '" onclick="diyCatToggle(this.dataset.c)">' + esc(c) + ' <em>' + cs[c] + '</em></button>'; }).join('') + '</div>';
-  return '<div class="diy"><section class="card diy-left"><nav class="diy-side" aria-label="분류 · 용도"><p class="diy-lab">분류</p>' + catChips + '<p class="diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
+  return '<div class="diy"><section class="card diy-left"><nav class="diy-side" aria-label="분류 · 용도"><p class="diy-lab">분류</p>' + catChips + '<p class="diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1 && !S.diyBest; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
     + '<label class="diy-and"><input type="checkbox" id="diyAnd"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"> 고른 용도를 모두 가진 상품만</label></nav>'
-    + '<div class="diy-main"><h2>상품</h2><input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList();diyExtSearch(this.value)">'
+    + '<div class="diy-main"><div class="diy-mhead"><h2>상품</h2>' + diyModeHtml() + '</div><input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList();diyExtSearch(this.value)">'
     + '<div id="diyList" class="diy-list">' + diyListHtml() + '</div>'
     + '<details class="diy-oy"><summary>올리브영 상품 넣기</summary><input id="psQ" class="diy-q" placeholder="올리브영 상품 이름" oninput="psSearch(this.value)"><div id="psFound" class="diy-list">' + psFoundHtml() + '</div></details></div></section>'
     + '<aside class="card diy-right" id="diyBox">' + diyBoxHtml() + '</aside></div>'
-    + '<button type="button" class="diy-bar" id="diyBar"' + (e.items.length ? '' : ' hidden') + ' onclick="$(\'diyBox\').scrollIntoView({block:\'start\',behavior:\'smooth\'})">담은 상품 <b id="diyBarN">' + e.items.length + '</b>개 · 세트 보기</button>';
+    + diyBarHtml();
 }
 function diyRows() {
   var p = S.ps, q = String(S.diyQ || '').replace(/\s+/g, '').toLowerCase(), sel = S.diyUses || [], cats = S.diyCats || [];
   var inCat = function (x) { return !cats.length || cats.indexOf(x.cat) !== -1; };
   if (q) return p.products.filter(function (x) { return inCat(x) && x.name.replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1; }).slice(0, 80);
+  if (S.diyBest) return pbDiyRows(inCat);
   if (!sel.length) return cats.length ? p.products.filter(inCat).slice(0, 150) : [];
   return p.products.filter(function (x) { var hit = sel.filter(function (u) { return x.tags.indexOf(u) !== -1; }).length; return inCat(x) && (S.diyAnd ? hit === sel.length : hit > 0); })
     .sort(function (a, b) { var ha = sel.filter(function (u) { return a.tags.indexOf(u) !== -1; }).length, hb = sel.filter(function (u) { return b.tags.indexOf(u) !== -1; }).length; return hb - ha; }).slice(0, 150);
 }
 function diyCatToggle(c) { var a = S.diyCats, i = a.indexOf(c); if (i !== -1) a.splice(i, 1); else a.push(c); [].forEach.call(document.querySelectorAll('.diy-cats .chip'), function (b) { var on = a.indexOf(b.dataset.c) !== -1; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); diyList(); }
-function diyUseToggle(u) { var a = S.diyUses, i = a.indexOf(u); if (i !== -1) a.splice(i, 1); else a.push(u); S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; diyList(); }
+function diyUseToggle(u) { var wasBest = S.diyBest; S.diyBest = false; var a = S.diyUses, i = a.indexOf(u); if (i !== -1 && !wasBest) a.splice(i, 1); else if (i === -1) a.push(u);   /* 약국 베스트 보던 중이면 누른 용도로 바로 */ S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; diyList(); }
 function diyHas(name) { return (S.psEditing.items || []).some(function (y) { return y.name === name; }); }
 /* 0927 약국에 없는 상품: 이름으로 찾으면 올리브영 · 인터넷 공식 사진 후보도 → 담기 · 약국 상품으로 미리 등록 */
 var _dxT = null;
@@ -2123,11 +2177,12 @@ function diyRegSave() {
 }
 function diyListHtml() {
   var rows = diyRows(); psNeedImgs(rows.map(function (x) { return x.name; }));
+  if (!rows.length && S.diyBest && !S.diyQ) return pbDiyEmpty();
   if (!rows.length) return '<p class="empty">' + (S.diyQ ? '약국에는 없어요' : (S.diyUses || []).length || (S.diyCats || []).length ? '조건에 맞는 상품이 없어요' : '분류나 용도를 골라 주세요') + '</p>' + diyExtHtml();
   return rows.map(function (x) { var has = diyHas(x.name);
-    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta">' + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + '</span></span>'
+    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta' + (x.best ? ' pb-meta' : '') + '">' + (x.best ? '<b class="pb-rk-s">' + x.best.r + '위</b> ' + x.best.q.toLocaleString('ko-KR') + '개<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.best.q / (S.pb.list[0].q || 1) * 100)) + '%"></i></span>' : '') + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + (x.best && x.best.o ? ' ' + tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
       + (function () { var z = psSizeOf(x.name); return '<span class="diy-sz">' + (z ? z.w + '×' + z.d + '×' + z.h + 'mm' : '크기 미등록') + '</span>'; })()
-      + '<span class="diy-btns"><button type="button" class="btn" data-n="' + esc(x.name) + '" aria-label="용도 고치기" onclick="psUses(this.dataset.n)">용도</button><button type="button" class="btn' + (has ? '' : ' pri') + '" data-n="' + esc(x.name) + '" onclick="diyAdd(this.dataset.n)"' + (has ? ' disabled' : '') + '>' + (has ? '담김' : '담기') + '</button></span></div>'; }).join('') + diyExtHtml();
+      + '<span class="diy-btns">' + (x.best && !x.best.m ? '' : '<button type="button" class="btn" data-n="' + esc(x.name) + '" aria-label="용도 고치기" onclick="psUses(this.dataset.n)">용도</button>') + '<button type="button" class="btn' + (has ? '' : ' pri') + '" data-n="' + esc(x.name) + '" onclick="diyAdd(this.dataset.n)"' + (has ? ' disabled' : '') + '>' + (has ? '담김' : '담기') + '</button></span></div>'; }).join('') + diyExtHtml();
 }
 function diyBoxHtml() {
   var e = S.psEditing, s = e.id ? psFind(e.id) : null;
@@ -2150,6 +2205,7 @@ function diyBoxBody(e) {
         + (function () { var pr = (S.ps.products || []).filter(function (y) { return y.name === x.name; })[0]; return pr && pr.cat ? tag(pr.cat) : ''; })()
         + psSizeTag(x.name) + (/^\[올리브영\]/.test(x.name) ? '' : '<button type="button" class="bx-size" data-n="' + esc(x.name) + '" onclick="psPhotoEdit(this.dataset.n)">사진 바꾸기</button>')
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">' + icon('x') + '</button></div>'; }).join('') : '<p class="empty">왼쪽에서 상품을 담으면 여기에 사진으로 쌓여요</p>') + '</div>'
+    + pbMarginHtml(e.items)
     + boxPreviewHtml(e)
     + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>';
 }
@@ -2294,8 +2350,8 @@ function psNamesHtml() { var r = S.psNameSug; if (!r) return ''; if (r.loading) 
 function psNames() { var e = S.psEditing; if (!e.items.length) { toast('상품을 먼저 담아 주세요'); return; } S.psNameSug = { loading: true }; var b = $('psNameBox'); if (b) b.innerHTML = psNamesHtml();
   call('suggestSetNames', [e.items], function (r) { S.psNameSug = r && r.ok ? r : null; var bb = $('psNameBox'); if (bb) bb.innerHTML = psNamesHtml(); if (!r || !r.ok) toast((r && r.msg) || '이름을 못 지었어요'); }, function () { S.psNameSug = null; var bb = $('psNameBox'); if (bb) bb.innerHTML = ''; toast('이름을 못 지었어요'); }); }
 function psNamePick(i) { var x = S.psNameSug && S.psNameSug.names[i]; if (!x) return; S.psEditing.name = x.name; var n = $('psName'); if (n) n.value = x.name; toast('이름을 넣었어요'); }
-function diyList() { var l = $('diyList'); if (l) l.innerHTML = diyListHtml(); [].forEach.call(document.querySelectorAll('.diy-chips .chip'), function (b) { var on = (S.diyUses || []).indexOf(b.dataset.u) !== -1 && !S.diyQ; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); }
-function diyBox() { var b = $('diyBox'); if (b) b.innerHTML = diyBoxHtml(); var n = S.psEditing.items.length, bar = $('diyBar'); if (bar) { bar.hidden = !n; $('diyBarN').textContent = n; } psNeedImgs(S.psEditing.items.map(function (x) { return x.name; })); }
+function diyList() { pbList(); diyModeSync(); var l = $('diyList'); if (l) l.innerHTML = diyListHtml(); [].forEach.call(document.querySelectorAll('.diy-chips .chip'), function (b) { var on = (S.diyUses || []).indexOf(b.dataset.u) !== -1 && !S.diyQ && !S.diyBest; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); }
+function diyBox() { var b = $('diyBox'); if (b && S.ps && !S.ps.err) b.innerHTML = diyBoxHtml(); var n = S.psEditing.items.length, bar = $('diyBar'); if (bar) { bar.hidden = !n; $('diyBarN').textContent = n; $('diyBarR').textContent = pbRateText(S.psEditing.items); } psNeedImgs(S.psEditing.items.map(function (x) { return x.name; })); }
 function diyAdd(name, img) { if (diyHas(name)) { toast('이미 담았어요'); return; } if (img) S.psImg[name] = img; S.psEditing.items.push({ name: name, qty: 1 }); diyBox(); diyList(); toast('담았어요 · ' + S.psEditing.items.length + '개'); }
 function diyQty(i, d) { var x = S.psEditing.items[i]; if (!x) return; x.qty = Math.max(1, Math.min(999, x.qty + d)); diyBox(); }
 function diyRemove(i) { S.psEditing.items.splice(i, 1); diyBox(); diyList(); }
@@ -2304,7 +2360,7 @@ function psNeedImgs(names) {
   var need = names.filter(function (n) { return !(n in S.psImg) && !/^\[올리브영\]/.test(n); }).slice(0, 150);
   if (!need.length) return;
   need.forEach(function (n) { S.psImg[n] = ''; });
-  call('getProductImages', [need], function (r) { if (!r || !r.ok) return; Object.keys(r.imgs).forEach(function (n) { S.psImg[n] = r.imgs[n]; }); diyList(); var b = $('diyBox'); if (b) b.innerHTML = diyBoxHtml(); });
+  call('getProductImages', [need], function (r) { if (!r || !r.ok) return; Object.keys(r.imgs).forEach(function (n) { S.psImg[n] = r.imgs[n]; }); diyList(); var b = $('diyBox'); if (b && S.ps && !S.ps.err) b.innerHTML = diyBoxHtml(); });
 }
 function psFoundHtml() { return (S.psFound || []).map(function (x, i) { var has = diyHas(x.name); return '<div class="diy-row"><span class="diy-img">' + imgHtml(x.img || '') + '</span><span class="tx"><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + '</span><span class="meta">' + (x.src === 'oy' ? '올리브영' : '약국') + '</span></span><button type="button" class="btn' + (has ? '' : ' pri') + '" data-i="' + i + '" onclick="psAdd(+this.dataset.i)"' + (has ? ' disabled' : '') + '>' + (has ? '담김' : '담기') + '</button></div>'; }).join(''); }
 var _psQT = null;
@@ -2322,6 +2378,198 @@ function psReview(id) { call('requestSetReview', [id], function (r) { if (!r || 
 function psPoll() { clearTimeout(S.psPollT); if (S.tab === 'set' && S.ps && S.ps.sets && (S.ps.sizePending || S.ps.sets.some(function (s) { return s.pending; }))) S.psPollT = setTimeout(function () { call('getPharmacySets', [], function (r) { if (r && r.ok) { S.ps = r; renderSetTab(); psPoll(); } }); }, 30000); }
 function psAddon(id, i) { var s = psFind(id), a = s && s.review.result.addons[i]; if (!a) return; var d = JSON.parse(JSON.stringify(s)); if (!d.items.some(function (x) { return x.name === a.name; })) d.items.push({ name: a.name, qty: 1 }); psEdit(id, d); }
 function psFromDerived(id, i) { var s = psFind(id), d = s && s.review.result.sets[i]; if (!d) return; psEdit('', { name: d.name, box: '', memo: d.reason || '', items: d.items.map(function (x) { return { name: x.name, qty: 1 }; }) }); }
+/* ── 0929 우리 약국 베스트: POS 판매 통계 엑셀(보통 15일)을 올리면 판매수량 순위 · 지난번 대비 ▲▼ · 세트에 담기 · 세트 예상 이익률 ──
+   목록에는 판매수량만 (상품별 이익은 보이지 않는다). 매출·사입가는 세트 예상 이익률 계산에만 쓴다 */
+S.pb = null; S.pbN = 50; S.pbCat = ''; S.pbQ = '';
+var PB_XLSX = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', PB_SRI = 'sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==';
+function pbPrep(r) {
+  if (!r || !r.ok) return { err: (r && r.msg) || '약국 베스트를 불러오지 못했어요' };
+  var by = {}, list = (r.items || []).map(function (a) { var x = { r: a[0], n: String(a[1]), q: +a[2] || 0, s: +a[3] || 0, c: +a[4] || 0, p: a[5], m: a[6] || '', g: a[7] || '', o: !!a[8] }; if (!by[x.n]) by[x.n] = x; if (x.m && !by[x.m]) by[x.m] = x; return x; });
+  return { ok: true, empty: !!r.empty || !list.length, meta: r.meta || {}, prev: r.prev || null, list: list, by: by };
+}
+function pbLoad() { swrCall('getPharmacyBest', [], function (r) { S.pb = pbPrep(r); pbRefresh(); }, function () { S.pb = { err: '약국 베스트를 불러오지 못했어요' }; pbRefresh(); }); }
+function pbRefresh() {   /* 다시 그려도 찾기 칸 입력은 이어지게 */
+  if (S.tab !== 'set' || (S.setSub || 'have') === 'ai') return;
+  var a = document.activeElement, id = a && (a.id === 'pbQ' || a.id === 'diyQ') ? a.id : '', pos = id ? a.selectionStart : 0;
+  renderSetTab();
+  if (id && $(id)) { $(id).focus(); try { $(id).setSelectionRange(pos, pos); } catch (e) {} }
+}
+function md(d) { return shortDate(d).replace('.', '/'); }
+/* 세트 예상 이익률: 상품마다 최근 판매 평균가(매출 ÷ 수량) · 평균 사입가(사입가 ÷ 수량) × 담은 수량 */
+function pbMargin(items) {
+  var pb = S.pb; if (!pb || !pb.by || !items || !items.length) return null;
+  var P = 0, C = 0, n = 0, miss = 0;
+  items.forEach(function (it) { var x = pb.by[it.name]; if (x && x.q > 0 && x.s > 0 && x.c > 0) { P += x.s / x.q * it.qty; C += x.c / x.q * it.qty; n++; } else miss++; });
+  return n ? { price: P, cost: C, profit: P - C, rate: (P - C) / P, miss: miss, n: n } : { none: true, miss: miss };
+}
+function pbPct(v) { return (Math.round(v * 1000) / 10).toLocaleString('ko-KR') + '%'; }
+function pbRateText(items) { var m = pbMargin(items); return m && !m.none ? ' · 이익률 ' + pbPct(m.rate) : ''; }
+function pbRateTag(items) { var m = pbMargin(items); return m && !m.none ? ' ' + tag('예상 이익률 ' + pbPct(m.rate), m.rate < 0 ? 't-warn' : 't-ok') : ''; }
+function pbMarginHtml(items) {
+  if (!items || !items.length || !S.pb || S.pb.err) return '';
+  if (S.pb.empty) return '<div class="pb-mg-none"><span>약국 판매 엑셀을 올리면 세트 예상 이익률이 나와요</span><button type="button" class="btn" onclick="pbPick()">엑셀 올리기</button></div>';
+  var m = pbMargin(items);
+  if (m.none) return '<p class="pb-mg-none">담은 상품이 판매 기록에 없어 이익률을 계산할 수 없어요</p>';
+  var d = m.price * 0.9, r9 = (d - m.cost) / d, ten = function (v) { return won(Math.round(v / 10) * 10); };
+  return '<div class="pb-mg" role="status" aria-live="polite"><div class="pb-mg-top"><span>세트 예상 이익률</span><b' + (m.rate < 0 ? ' class="neg"' : '') + '>' + pbPct(m.rate) + '</b></div>'
+    + '<p class="pb-mg-line">세트 하나 순이익 약 <b>' + ten(m.profit) + '</b> · 판매가 합계 ' + ten(m.price) + '</p>'
+    + '<p class="pb-mg-note">최근 판매 평균가·사입가 기준 · 세트가를 10% 낮추면 ' + pbPct(r9) + (m.miss ? ' · 판매 기록 없는 ' + m.miss + '개는 빠졌어요' : '') + '</p></div>';
+}
+/* 목록 */
+function pbRows() {
+  var pb = S.pb, q = String(S.pbQ || '').replace(/\s+/g, '').toLowerCase(), c = S.pbCat;
+  return pb.list.filter(function (x) { return (!c || (c === '@oy' ? x.o : x.g === c)) && (!q || (x.n + '|' + x.m).replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1); });
+}
+function pbMove(x) { return x.p < 0 ? '' : x.p === 0 ? newTag() : delta(x.p - x.r || null); }
+function pbRowHtml(x, max) {
+  var name = x.m || x.n, has = diyHas(name);
+  return '<div class="pb-row"><span class="pb-rk"><b>' + x.r + '</b>' + pbMove(x) + '</span><span class="diy-img">' + imgHtml(x.m ? psImgFor(x.m) : '') + '</span>'
+    + '<span class="tx"><span class="nm1">' + esc(x.n) + '</span><span class="meta"><b class="pb-q">' + x.q.toLocaleString('ko-KR') + '개</b><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / (max || x.q) * 100)) + '%"></i></span>' + (x.g ? tag(x.g) : '') + (x.o ? tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
+    + '<button type="button" class="btn pb-add' + (has ? ' on' : '') + '" data-n="' + esc(name) + '" aria-pressed="' + has + '" aria-label="' + (has ? '세트에서 빼기' : '세트에 담기') + '" onclick="pbAdd(this.dataset.n)">' + icon(has ? 'check' : 'plus') + '<span>' + (has ? '담김' : '세트에 담기') + '</span></button></div>';
+}
+function pbListHtml() {
+  var rows = pbRows(), n = S.pbN, shown = rows.slice(0, n);
+  psNeedImgs(shown.filter(function (x) { return x.m; }).map(function (x) { return x.m; }));
+  if (!rows.length) return '<p class="empty">' + (S.pbQ ? '찾는 상품이 판매 기록에 없어요' : '이 분류는 판매 기록이 없어요') + '</p>';
+  return shown.map(function (x) { return pbRowHtml(x, rows[0].q); }).join('') + (rows.length > n ? '<button type="button" class="more" onclick="S.pbN+=100;pbList()">더 보기 (' + n + ' / ' + rows.length.toLocaleString('ko-KR') + ')</button>' : '');
+}
+function pbList() { var l = $('pbList'); if (l && S.pb && S.pb.list) l.innerHTML = pbListHtml(); }
+function pbCatsHtml() {
+  var cs = {}, oy = 0; S.pb.list.forEach(function (x) { if (x.g) cs[x.g] = (cs[x.g] || 0) + 1; if (x.o) oy++; });
+  var chip = function (v, label, n) { var on = S.pbCat === v; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(v) + '" onclick="pbSetCat(this.dataset.c)">' + esc(label) + ' <em>' + n.toLocaleString('ko-KR') + '</em></button>'; };
+  return chip('', '전체', S.pb.list.length) + (oy ? chip('@oy', '올리브영에서도 인기', oy) : '') + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { return chip(c, c, cs[c]); }).join('');
+}
+function pbSetCat(c) { S.pbCat = c; S.pbN = 50; [].forEach.call(document.querySelectorAll('#set .pb-cats .chip'), function (b) { var on = b.dataset.c === c; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); pbList(); var l = $('pbList'); if (l) l.scrollTop = 0; }
+function pbAdd(name) {
+  S.psEditing = S.psEditing || psNewDraft();
+  var i = -1; S.psEditing.items.forEach(function (x, j) { if (x.name === name) i = j; });
+  if (i !== -1) { diyRemove(i); toast('세트에서 뺐어요'); return; }
+  diyAdd(name, S.psImg[name] || '');
+}
+function pbPeriodText() {
+  var m = S.pb.meta, t = m.from && m.to ? md(m.from) + '~' + md(m.to) + ' 판매' + (m.days ? ' (' + m.days + '일)' : '') : '판매 기간 모름';
+  return t + ' · ' + md(m.at) + ' 올림 · ' + (S.pb.prev ? '▲▼는 ' + md(S.pb.prev.at) + '에 올린 자료와 비교' : '다음에 새로 올리면 순위 변화(▲▼)가 나와요');
+}
+function pbHtml() {
+  var pb = S.pb;
+  if (!pb) return '<article class="card">' + skel(3) + '</article>';
+  if (pb.err) return '<article class="card">' + emptyHtml(pb.err, '다시 불러오기', 'pbLoad()') + '</article>';
+  if (pb.empty) return '<article class="card pb-empty" id="pbEmpty"><span class="pb-empty-ic">' + icon('upload') + '</span><div class="pb-empty-tx"><h2>약국 베스트</h2><p class="sub">POS 판매 통계(상품별) 엑셀을 그대로 올리면 많이 팔린 순서로 보여요. 매주 올리면 순위 변화도 나와요</p></div><button type="button" class="btn pri" onclick="pbPick()">' + icon('upload') + '엑셀 올리기</button></article>';
+  S.psEditing = S.psEditing || psNewDraft();
+  var right = !S.ps ? skel(2) : S.ps.err ? '<p class="empty">' + esc(S.ps.err) + '</p>' : diyBoxHtml();
+  return '<div class="diy pb-wrap"><section class="card pb-left" aria-label="약국 베스트"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순</small></h2><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></div>'
+    + '<p class="sub pb-per">' + esc(pbPeriodText()) + '</p>'
+    + '<input id="pbQ" type="search" class="diy-q" placeholder="상품 이름으로 찾기" aria-label="약국 베스트에서 찾기" value="' + esc(S.pbQ) + '" oninput="S.pbQ=this.value;S.pbN=50;pbList()">'
+    + '<div class="chips pb-cats" role="group" aria-label="분류">' + pbCatsHtml() + '</div>'
+    + '<div id="pbList" class="pb-list">' + pbListHtml() + '</div></section>'
+    + '<aside class="card diy-right" id="diyBox">' + right + '</aside></div>' + diyBarHtml();
+}
+/* 세트 DIY 안: 상품 칸을 '약국 베스트' 로 바꿔 고르기 */
+function diyModeHtml() { var b = !!S.diyBest; return '<div class="seg diy-mode" role="group" aria-label="상품 고르는 방법"><button type="button" data-m="use" class="' + (b ? '' : 'on') + '" aria-pressed="' + !b + '" onclick="diyMode(0)">용도·분류</button><button type="button" data-m="best" class="' + (b ? 'on' : '') + '" aria-pressed="' + b + '" onclick="diyMode(1)">약국 베스트</button></div>'; }
+function diyModeSync() { [].forEach.call(document.querySelectorAll('.diy-mode button'), function (x) { var on = (x.dataset.m === 'best') === !!S.diyBest; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); }
+function diyMode(b) { S.diyBest = !!b; if (b) { S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; S.diyExt = null; } diyList(); var l = $('diyList'); if (l) l.scrollTop = 0; }
+function pbDiyRows(inCat) {
+  var pb = S.pb; if (!pb || !pb.list) return [];
+  var pr = {}; ((S.ps && S.ps.products) || []).forEach(function (p) { pr[p.name] = p; });
+  return pb.list.filter(function (x) { return inCat({ cat: x.g }); }).slice(0, 150).map(function (x) { var nm = x.m || x.n, p = pr[nm]; return { name: nm, cat: x.g || (p && p.cat) || '', tags: (p && p.tags) || [], best: x }; });
+}
+function pbDiyEmpty() {
+  if (!S.pb) return '<p class="meta">약국 베스트를 불러오는 중…</p>';
+  if (S.pb.err) return emptyHtml(S.pb.err, '다시 불러오기', 'pbLoad()');
+  if (S.pb.empty) return emptyHtml('약국 판매 엑셀을 올리면 많이 팔린 순서로 여기서 바로 담을 수 있어요', '엑셀 올리기', 'pbPick()');
+  return '<p class="empty">고른 분류에는 판매 기록이 없어요</p>';
+}
+function diyBarHtml() { var n = (S.psEditing && S.psEditing.items.length) || 0; return '<button type="button" class="diy-bar" id="diyBar"' + (n ? '' : ' hidden') + ' onclick="$(\'diyBox\').scrollIntoView({block:\'start\',behavior:\'smooth\'})">세트 <b id="diyBarN">' + n + '</b>개<span id="diyBarR">' + esc(pbRateText(n ? S.psEditing.items : [])) + '</span> · 세트 보기</button>'; }
+/* 엑셀 올리기: 화면에서 읽고(SheetJS) → 미리 보기 · 판매 기간 확인 → 서버에 줄만 보낸다 */
+function pbPick() {
+  var i = $('pbFile');
+  if (!i) { i = document.createElement('input'); i.type = 'file'; i.id = 'pbFile'; i.accept = '.xlsx,.xls,.csv'; i.hidden = true; i.onchange = function () { var f = i.files && i.files[0]; i.value = ''; pbFile(f); }; document.body.appendChild(i); }
+  i.click();
+}
+function pbSheet(body, foot) {
+  if (!$('mt').classList.contains('on')) { S.mtFrom = document.activeElement; $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
+  $('mtTitle').textContent = '약국 판매 엑셀 올리기'; $('mtBody').innerHTML = body; $('mtFoot').innerHTML = foot;
+}
+function pbXlsx(ok, fail) {
+  if (window.XLSX && window.XLSX.read) { ok(window.XLSX); return; }
+  var s = document.createElement('script'); s.src = PB_XLSX; s.integrity = PB_SRI; s.crossOrigin = 'anonymous';
+  s.onload = function () { if (window.XLSX && window.XLSX.read) ok(window.XLSX); else fail(); }; s.onerror = fail; document.head.appendChild(s);
+}
+function pbFile(f) {
+  if (!f) return;
+  if (!/\.(xlsx|xls|csv)$/i.test(f.name)) { toast('엑셀 파일(.xlsx)을 골라 주세요'); return; }
+  if (f.size > 15 * 1024 * 1024) { toast('파일이 너무 커요 · 15MB까지 올릴 수 있어요'); return; }
+  pbSheet('<p class="meta" role="status">엑셀을 읽는 중이에요…</p>', '');
+  pbXlsx(function (X) {
+    var rd = new FileReader();
+    rd.onload = function () { var r; try { r = pbParse(X, new Uint8Array(rd.result), f.name); } catch (e) { r = { err: '엑셀을 읽지 못했어요 · 파일이 깨졌거나 암호가 걸려 있을 수 있어요' }; } pbPreview(r); };
+    rd.onerror = function () { pbPreview({ err: '파일을 읽지 못했어요' }); };
+    rd.readAsArrayBuffer(f);
+  }, function () { pbPreview({ err: '엑셀 도구를 불러오지 못했어요 · 인터넷 연결을 확인해 주세요' }); });
+}
+/** 머리글 줄은 위치가 아니라 칸 이름으로 찾는다 (위에 제목·기간 줄이 있어도 됨) */
+function pbCols(row) {
+  var h = row.map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ''); }), f = function (re) { for (var i = 0; i < h.length; i++) if (re.test(h[i])) return i; return -1; };
+  var c = { rank: f(/^순위$/), name: f(/^(판매)?상품명$|^품명$|^제품명$/), maker: f(/^제조사$/), qty: f(/^판매수량$|^수량$/), sales: f(/^매출(금액|액)?$|^판매금액$/), disc: f(/^할인(금액)?$/), cost: f(/^사입가$|^매입가$|^원가$/), profit: f(/^순이익$/), rate: f(/^이익률/) };
+  return c.name >= 0 && c.qty >= 0 ? c : null;
+}
+function pbNum(v) { if (typeof v === 'number') return isFinite(v) ? v : 0; var n = Number(String(v == null ? '' : v).replace(/[^\d.\-]/g, '')); return isFinite(n) ? n : 0; }
+function pbParse(X, data, fname) {
+  var wb = X.read(data, { type: 'array' }), got = null;
+  wb.SheetNames.some(function (sn) {
+    var a = X.utils.sheet_to_json(wb.Sheets[sn], { header: 1, defval: '', raw: true, blankrows: false });
+    for (var i = 0; i < Math.min(a.length, 30); i++) { var c = pbCols(a[i] || []); if (c) { got = { a: a, h: i, c: c }; return true; } }
+    return false;
+  });
+  if (!got) return { err: "'판매 상품명'과 '판매수량' 칸을 찾지 못했어요 · POS 판매 통계(상품별) 엑셀이 맞는지 확인해 주세요" };
+  var c = got.c, rows = [], skip = 0, cell = function (r, i) { return i < 0 ? '' : r[i]; };
+  got.a.slice(got.h + 1).forEach(function (r) {
+    var name = String(cell(r, c.name) == null ? '' : cell(r, c.name)).replace(/\s+/g, ' ').trim(), q = pbNum(cell(r, c.qty)), s = pbNum(cell(r, c.sales)), co = pbNum(cell(r, c.cost));
+    if (!name && !q) return;
+    if (!name || name === '미등록상품' || /^(합계|총계|소계)/.test(name) || !(q > 0) || (c.sales >= 0 && s <= 0 && co <= 0)) { skip++; return; }   // 안 팔린 줄 · 쿠폰처럼 금액 없는 줄
+    rows.push([0, name.slice(0, 120), String(cell(r, c.maker) || '').slice(0, 40), q, s, pbNum(cell(r, c.disc)), co, pbNum(cell(r, c.profit)), pbNum(cell(r, c.rate))]);
+  });
+  rows.sort(function (a, b) { return b[3] - a[3]; });
+  var cut = Math.max(0, rows.length - 3000); if (cut) rows = rows.slice(0, 3000);
+  if (!rows.length) return { err: '팔린 상품이 한 줄도 없어요 · 판매 통계 엑셀이 맞는지 확인해 주세요' };
+  var head = got.a.slice(0, got.h).map(function (r) { return r.join(' '); }).join(' ');
+  return { rows: rows, skip: skip, cut: cut, fileName: String(fname || '').slice(0, 80), period: pbFindPeriod(fname + ' ' + head), noCost: c.cost < 0 || c.sales < 0 };
+}
+function pbIso(d) { var p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+function pbFindPeriod(t) {
+  var ds = [], re = /(20\d{2})[.\-\/년 ]{0,2}(\d{1,2})[.\-\/월 ]{0,2}(\d{1,2})/g, m;
+  while ((m = re.exec(String(t)))) { var mo = +m[2], d = +m[3]; if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ds.push(m[1] + '-' + (mo < 10 ? '0' : '') + mo + '-' + (d < 10 ? '0' : '') + d); }
+  ds.sort(); if (ds.length >= 2) return { from: ds[0], to: ds[ds.length - 1] };
+  var to = new Date(Date.now() - 864e5), from = new Date(to.getTime() - 14 * 864e5);   // 모르면 어제까지 15일
+  return { from: pbIso(from), to: pbIso(to), guess: true };
+}
+function pbPreview(r) {
+  if (r.err) { S.pbUp = null; pbSheet('<p class="pb-err" role="alert">' + esc(r.err) + '</p><p class="meta">POS 에서 상품별 판매 통계를 엑셀로 저장한 파일을 그대로 올려 주세요. 판매 상품명 · 판매수량 칸이 꼭 있어야 해요</p>', '<button type="button" class="btn pri" onclick="pbPick()">다른 파일 고르기</button>'); return; }
+  S.pbUp = r;
+  var tot = r.rows.reduce(function (a, x) { return a + x[3]; }, 0), top = r.rows[0];
+  pbSheet('<p class="sub"><b>' + esc(r.fileName) + '</b></p><div class="kpi-grid pb-kpi">' + kpiHtml('상품', r.rows.length.toLocaleString('ko-KR') + '개', '') + kpiHtml('판매 개수', tot.toLocaleString('ko-KR') + '개', '') + kpiHtml('판매 1위', esc(top[1]), esc(top[3].toLocaleString('ko-KR') + '개')) + '</div>'
+    + '<div class="field pb-dates"><span>판매 기간' + (r.period.guess ? ' (파일에 날짜가 없어 어제까지 15일로 넣었어요 · 맞게 고쳐 주세요)' : '') + '</span><div><input type="date" id="pbFrom" aria-label="시작일" value="' + r.period.from + '"><span aria-hidden="true">~</span><input type="date" id="pbTo" aria-label="끝일" value="' + r.period.to + '"></div></div>'
+    + (r.skip ? '<p class="meta">안 팔린 줄·금액 없는 줄(쿠폰·미등록 상품) ' + r.skip.toLocaleString('ko-KR') + '개는 뺐어요</p>' : '')
+    + (r.cut ? '<p class="meta">상품이 너무 많아 많이 팔린 3,000개만 올려요</p>' : '')
+    + (r.noCost ? '<p class="meta pb-warn">매출·사입가 칸이 없어 세트 예상 이익률은 계산되지 않아요</p>' : '')
+    + '<p class="meta">올리면 지금 자료가 바뀌고, 지난번 자료는 순위 비교(▲▼)용으로 남아요</p><p class="np-err" id="mtErr" role="alert"></p>',
+    '<button type="button" class="btn pri" id="pbSend" onclick="pbSend()">올리기</button>');
+}
+function pbSend() {
+  var u = S.pbUp, f = $('pbFrom').value, t = $('pbTo').value, err = $('mtErr'), b = $('pbSend');
+  if (!u || S.saving) return;
+  if (!f || !t) { err.textContent = '판매 기간을 넣어 주세요'; return; }
+  if (f > t) { err.textContent = '시작일이 끝일보다 늦어요'; return; }
+  S.saving = true; b.disabled = true; b.textContent = '올리는 중…';
+  var again = function (msg) { S.saving = false; b.disabled = false; b.textContent = '다시 올리기'; err.textContent = msg; };
+  call('savePharmacySales', [u.rows, { from: f.replace(/-/g, '.'), to: t.replace(/-/g, '.'), fileName: u.fileName }], function (r) {
+    if (!r || !r.ok) { again((r && r.msg) || '올리지 못했어요'); return; }
+    S.saving = false; S.pbUp = null; S.pb = pbPrep(r); S.pbCat = ''; S.pbQ = ''; S.pbN = 50;
+    try { localStorage.setItem('tl_c_getPharmacyBest:[]', JSON.stringify({ t: Date.now(), r: r })); } catch (e) {}
+    closeMt(); toast(r.same ? '지난번과 같은 자료예요 · 순위 비교는 그대로 두고 기간만 고쳤어요' : '올렸어요 · 상품 ' + S.pb.list.length.toLocaleString('ko-KR') + '개');
+    if (S.setSub !== 'diy') S.setSub = 'best'; renderSetTab();
+  }, function () { again('서버와 연결하지 못했어요 · 잠시 뒤 다시 올려 주세요'); });
+}
 function reqSets() {
   var mode = S.set.mode;
   call('requestSets', [mode], function (r) {
