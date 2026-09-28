@@ -941,6 +941,37 @@ function fastCall(fn, ok, fail) {
     ok(res);   /* 0927 같은 내용이어도 다시 그린다: 저장본으로 먼저 그린 뒤 홈이 다시 그려지며 대시보드 칸을 지우면, 건너뛸 경우 회색 칸이 남던 문제 */
   }, shown ? function () {} : fail);
 }
+/* 0928 빠르게 보이기: 읽기 전용 호출은 지난번 결과를 먼저 그리고(12시간 안), 서버 답이 다르면 다시 그린다. 저장본은 최근 40개만 */
+var SWR_MAX = 40, SWR_TTL = 12 * 3600e3;
+function swrCall(fn, args, ok, fail) {
+  var key = 'tl_c_' + fn + ':' + JSON.stringify(args || []), hit = null, shown = false;
+  try { hit = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
+  if (hit && hit.r && hit.r.ok && Date.now() - hit.t < SWR_TTL) { shown = true; try { ok(hit.r); } catch (e) {} }
+  call(fn, args, function (res) {
+    if (res && res.ok) {
+      var js = JSON.stringify(res);
+      try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), r: res })); swrTrim(key); } catch (e) { try { swrTrim(key, true); } catch (e2) {} }
+      if (shown && hit && JSON.stringify(hit.r) === js) return;   // 같으면 다시 그리지 않음
+    } else if (shown) return;   // 저장본을 이미 보여 줬으면 실패 화면으로 덮지 않음
+    ok(res);
+  }, shown ? function () {} : fail);
+}
+/* 0928 미리 받아 두기: 홈이 뜬 뒤 쉬는 동안 자주 여는 것(리포트 · 랭킹 · 브랜드 · 위쪽 상품 상세)을 하나씩 받아 저장 → 누르면 바로 */
+function prefetch(h) {
+  if (prefetch.done) return; prefetch.done = true;
+  var fresh = function (fn, args) { try { var x = JSON.parse(localStorage.getItem('tl_c_' + fn + ':' + JSON.stringify(args)) || 'null'); return x && Date.now() - x.t < 2 * 3600e3; } catch (e) { return false; } };
+  var q = [['getReport', ['']], ['getRanking', ['all', 'day']], ['getBrands', ['all']]], keys = {};
+  ['risers', 'new', 'missing'].forEach(function (k) { var c = h.cards && h.cards[k]; ((c && c.items) || []).slice(0, 3).forEach(function (x) { if (x.key && !keys[x.key]) { keys[x.key] = 1; q.push(['getProduct', [x.key]]); } }); });
+  q = q.filter(function (x) { return !fresh(x[0], x[1]); });
+  var next = function () { var x = q.shift(); if (!x || document.hidden) return; swrCall(x[0], x[1], function () {}, function () {}); setTimeout(next, 1200); };
+  setTimeout(next, 2500);
+}
+function swrTrim(keep, hard) {
+  var ks = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf('tl_c_') === 0 && k !== keep) { var t = 0; try { t = JSON.parse(localStorage.getItem(k)).t || 0; } catch (e) {} ks.push([t, k]); } }
+  ks.sort(function (a, b) { return a[0] - b[0]; });
+  var over = ks.length - (hard ? Math.floor(SWR_MAX / 2) : SWR_MAX - 1);
+  for (var j = 0; j < over; j++) localStorage.removeItem(ks[j][1]);
+}
 function call(fn, args, ok, fail, tries) {
   tries = tries || 0;
   var again = function () { setTimeout(function () { call(fn, args, ok, fail, tries + 1); }, 1500 * (tries + 1)); };
@@ -1068,7 +1099,7 @@ function loadHome() {
   fastCall('getHome', function (h) {
     if (rev !== S.rev.home) return;
     if (!h || !h.ok) { if (!S.home) $('home').innerHTML = emptyHtml((h && h.msg) || '불러오지 못했어요', '다시 불러오기', 'loadHome()'); return; }
-    S.home = h; S.homeAt = Date.now(); renderStatus(h); renderHome();
+    S.home = h; S.homeAt = Date.now(); renderStatus(h); renderHome(); prefetch(h);
   }, function () { if (rev === S.rev.home && !S.home) failBox($('home'), 'loadHome()'); });
 }
 /* ── 홈: ①~⑤ 순서대로 하는 워크플로우 ── */
@@ -1213,7 +1244,7 @@ function loadRank() {
   renderChips();
   var rev = ++S.rev.rank;
   $('rankList').innerHTML = skel(3);
-  call('getRanking', [S.rank.cat, S.rank.mode], function (r) {
+  swrCall('getRanking', [S.rank.cat, S.rank.mode], function (r) {
     if (rev !== S.rev.rank) return;
     if (!r || !r.ok) { $('rankList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadRank()'); return; }
     S.rank.data = r;
@@ -1245,7 +1276,7 @@ function openPd(key) {
 }
 function loadPd() {
   var rev = ++S.rev.pd, key = S.pdKey;
-  call('getProduct', [key], function (r) {
+  swrCall('getProduct', [key], function (r) {
     if (rev !== S.rev.pd || key !== S.pdKey) return;
     if (!r || !r.ok) { $('pdBody').innerHTML = '<div class="empty">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
     renderPd(r);
@@ -1437,7 +1468,7 @@ function loadBrands() {
   renderBrandChips();
   var rev = ++S.rev.brands;
   $('brandList').innerHTML = skel(3);
-  call('getBrands', [S.brand.cat], function (r) {
+  swrCall('getBrands', [S.brand.cat], function (r) {
     if (rev !== S.rev.brands) return;
     if (!r || !r.ok) { $('brandList').innerHTML = '<div class="empty">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
     S.brand.data = r;
@@ -1490,7 +1521,7 @@ function openBrand(b, fromPd) {
 }
 function loadBrandDetail(b) {
   var rev = ++S.rev.bs;
-  call('getBrand', [b, S.brand.cat], function (r) {
+  swrCall('getBrand', [b, S.brand.cat], function (r) {
     if (rev !== S.rev.bs) return;
     if (!r || !r.ok) { $('bsBody').innerHTML = '<div class="empty">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
     var bw = $('bsWatch'); bw.hidden = false; bw.dataset.b = r.brand; setHeart(bw, r.watched);
@@ -1520,7 +1551,7 @@ function openReport(date) {
 }
 function loadReport(date) {
   var rev = S.rev.rp = (S.rev.rp || 0) + 1;
-  call('getReport', [date || ''], function (r) {
+  swrCall('getReport', [date || ''], function (r) {
     if (rev !== S.rev.rp) return;
     if (!r || !r.ok) { $('rpBody').innerHTML = '<div class="empty">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
     renderReport(r);
