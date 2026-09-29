@@ -1543,6 +1543,9 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(max-width:599px){#planSeg button{flex:none}}   /* 기획 메뉴 7개: 폰에서는 옆으로 밀어 보기 */
 @media(max-width:599px){.se-strip{--se-l:112px}.se-mhead span:nth-child(even){color:transparent}.se-mhead span{padding-left:2px;overflow:visible}}   /* 폰: 달 이름은 두 달마다 */
 @media(max-width:599px){.med-r{grid-template-columns:minmax(56px,1fr) 60px 56px 64px}.med-r .pb-bar,.med-hd span:nth-child(3){display:none}}
+
+/* 0929 관광데이터랩 돈 타일: 좁은 폰에서 "283.8…" 잘림 방지 → 2열 + 셋째는 한 줄 전체, 큰 숫자는 살짝 작게 */
+@media(max-width:600px){.kpi-grid.med-k{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-grid.med-k .kpi:nth-child(3){grid-column:1/-1}.kpi-grid.med-k .kpi b{font-size:var(--fs-5)}}
 </style>
 </head>
 <body data-tab="today">
@@ -2406,7 +2409,7 @@ function donutSvg(parts, mid, sub, what) {
 /* 하루 막대: 최근 14일 · 0부터 · 전날 대비 색 */
 function dayBars(ser, key, unit, what, span) {
   var fmt = unit === '원' ? function (v) { return eok(v) + '원'; } : manTxt;   // 0929 돈은 억원·만원으로
-  var s = ser.slice(-15), W = 440, H = 150, L = 52, R = 8, T = 20, B = 26, n = s.length - 1; if (n < 1) return '';
+  var s = ser.slice(-15), W = 440, H = 150, L = unit === '원' ? 74 : 52, R = 8, T = 20, B = 26, n = s.length - 1; if (n < 1) return '';
   var vals = s.map(function (x) { return x[key] || 0; }), top = Math.max.apply(null, vals) * 1.12 || 1, step = (W - L - R) / n, bw = step * 0.62;
   var ys = function (v) { return T + (1 - v / top) * (H - T - B); };
   var tx = function (x, y, anchor, t, bold) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + anchor + '" data-fs="12" font-size="12"' + (bold ? ' font-weight="700"' : '') + ' fill="' + (bold ? TOK.ink : TOK.ink2) + '">' + esc(t) + '</text>'; };
