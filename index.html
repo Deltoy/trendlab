@@ -2405,17 +2405,18 @@ function donutSvg(parts, mid, sub, what) {
 }
 /* 하루 막대: 최근 14일 · 0부터 · 전날 대비 색 */
 function dayBars(ser, key, unit, what, span) {
+  var fmt = unit === '원' ? function (v) { return eok(v) + '원'; } : manTxt;   // 0929 돈은 억원·만원으로
   var s = ser.slice(-15), W = 440, H = 150, L = 52, R = 8, T = 20, B = 26, n = s.length - 1; if (n < 1) return '';
   var vals = s.map(function (x) { return x[key] || 0; }), top = Math.max.apply(null, vals) * 1.12 || 1, step = (W - L - R) / n, bw = step * 0.62;
   var ys = function (v) { return T + (1 - v / top) * (H - T - B); };
   var tx = function (x, y, anchor, t, bold) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + anchor + '" data-fs="12" font-size="12"' + (bold ? ' font-weight="700"' : '') + ' fill="' + (bold ? TOK.ink : TOK.ink2) + '">' + esc(t) + '</text>'; };
-  var g = [0, top / 2].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v).toFixed(1) + '" y2="' + ys(v).toFixed(1) + '" stroke="' + TOK.line + '"/>' + tx(L - 8, (ys(v) + 4).toFixed(1), 'end', manTxt(v)); }).join('');
+  var g = [0, top / 2].map(function (v) { return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + ys(v).toFixed(1) + '" y2="' + ys(v).toFixed(1) + '" stroke="' + TOK.line + '"/>' + tx(L - 8, (ys(v) + 4).toFixed(1), 'end', fmt(v)); }).join('');
   var b = '';
   for (var k = 1; k <= n; k++) {
     var v = vals[k], p = vals[k - 1], x = L + step * (k - 0.5), col = v > p ? TOK.up : v < p ? TOK.down : TOK.flat, y = ys(v), d = shortDate(s[k].d), ch = stkChg(p, v);
     b += '<rect x="' + (x - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (ys(0) - y).toFixed(1) + '" rx="2" fill="' + col + '"><title>' + esc(d + ' · ' + v.toLocaleString('ko-KR') + unit + (ch ? ' · 전날보다 ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + Math.abs(ch.p) + '%)' : '')) + '</title></rect>';
     if ((n - k) % 2 === 0) b += tx(x.toFixed(1), H - 8, 'middle', d);   /* 마지막 날부터 하루 걸러 → 끝에서 글자가 안 겹친다 */
-    if (k === n) b += tx(x.toFixed(1), (y - 6).toFixed(1), 'middle', manTxt(v), true);
+    if (k === n) b += tx(x.toFixed(1), (y - 6).toFixed(1), 'middle', fmt(v), true);
   }
   return '<svg class="stk-svg" viewBox="0 0 ' + W + ' ' + H + '" data-fit role="img" aria-label="' + esc(what + (span || ' 최근 2주')) + '">' + g + b + '</svg>';
 }
@@ -4109,11 +4110,11 @@ function medHtml(m) {
   var nat = (m.byNation || []).slice(0, 8), nmax = Math.max.apply(null, nat.map(function (x) { return (x['약국'] || {}).amt || 0; }).concat(1));
   var calc = { at: String(ym).slice(0, 4) + '.' + (+String(ym).slice(4)) + '월 자료', calc: '외국인 카드 의료 소비 중 진료과목별 금액·비중 · 전국', lim: '카드 소비 기준 · 실제 조제·상담과 다를 수 있어요' };
   return '<section class="card tour-card med-card"><div class="card-head"><h2>외국인 의료 소비 중 약국 · 피부과 <small>전국 · 달마다</small></h2><span class="asof">' + esc(mon) + ' 기준</span></div>'
-    + '<div class="kpi-grid med-k">' + kpiHtml('약국 ' + mon, lp ? eok(lp.amt) + '원' : '–', lp ? '전체 의료 소비의 ' + lp.rate + '%' + (pp ? ' · 전달 ' + pp.rate + '%' : '') : '') + kpiHtml('피부과 ' + mon, ld ? eok(ld.amt) + '원' : '–', ld ? '전체의 ' + ld.rate + '%' : '') + kpiHtml('외국인 의료 전체', eok(m.total[m.total.length - 1] || 0) + '원', mon + ' 카드 결제') + '</div>'
+    + '<div class="kpi-grid med-k">' + kpiHtml('약국 ' + mon, lp ? eok(lp.amt) + '원' : '–', lp ? '전체 의료 소비의 ' + Math.round(lp.rate) + '%' + (pp ? ' · 전달 ' + Math.round(pp.rate) + '%' : '') : '') + kpiHtml('피부과 ' + mon, ld ? eok(ld.amt) + '원' : '–', ld ? '전체의 ' + Math.round(ld.rate) + '%' : '') + kpiHtml('외국인 의료 전체', eok(m.total[m.total.length - 1] || 0) + '원', mon + ' 카드 결제') + '</div>'
     + (ser.length > 1 ? '<h4 class="med-h">약국 소비 달마다 <small>전달보다 늘면 빨강</small></h4>' + dayBars(ser, 'v', '원', '외국인 약국 소비', ' 최근 ' + ser.length + '달') : '')
     + srcLine(['kdatalab'], calc) + '</section>'
     + (nat.length ? '<section class="card tour-card med-card"><div class="card-head"><h2>나라별 약국 · 피부과 소비 <small>약국 많이 쓰는 순 · ' + esc(mon) + '</small></h2></div><div class="med-nat"><div class="med-r med-hd"><span>나라</span><span>약국</span><span></span><span>약국 비중</span><span>피부과 비중</span></div>'
-      + nat.map(function (x) { var p = x['약국'] || {}, d = x['피부과'] || {}; return '<div class="med-r"><b>' + esc(x.nat) + '</b><span class="num">' + (p.amt ? eok(p.amt) : '–') + '</span><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round((p.amt || 0) / nmax * 100)) + '%"></i></span><span class="num">' + (p.rate != null ? p.rate + '%' : '–') + '</span><span class="num">' + (d.rate != null ? d.rate + '%' : '–') + '</span></div>'; }).join('')
+      + nat.map(function (x) { var p = x['약국'] || {}, d = x['피부과'] || {}; return '<div class="med-r"><b>' + esc(x.nat) + '</b><span class="num">' + (p.amt ? eok(p.amt) + '원' : '–') + '</span><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round((p.amt || 0) / nmax * 100)) + '%"></i></span><span class="num">' + (p.rate != null ? Math.round(p.rate) + '%' : '–') + '</span><span class="num">' + (d.rate != null ? Math.round(d.rate) + '%' : '–') + '</span></div>'; }).join('')
       + '</div><p class="sub med-note">비중 = 그 나라 손님 의료 소비 중 약국·피부과 몫 · 대만·일본 손님은 약국 비중이 높아요</p>' + srcLine(['kdatalab'], calc) + '</section>' : '');
 }
 
