@@ -678,9 +678,13 @@ button.vz-row{min-height:44px}
 /* ── 사이트 비교 ── */
 .cmp{display:grid;gap:2px}
 .cmp-row{display:grid;gap:4px;align-items:center;width:100%;min-height:44px;border:0;background:transparent;padding:2px 0;text-align:left;font-size:var(--fs-2);color:var(--ink)}
-.cmp-head{position:sticky;top:calc(var(--top-h) + 64px);z-index:2;min-height:32px;background:var(--card);font-size:var(--fs-1);color:var(--ink2)}
-.cmp-head span{overflow:hidden;text-align:left;text-overflow:ellipsis;white-space:nowrap;padding-left:4px}
-.cmp-head em{font-style:normal}
+/* 0929d 사이트 이름 머리줄: 불투명 바탕 · 굵은 본문색 · 두 줄(아마존 / 미국) · 해외 표시 · 스크롤해도 위에 붙어 있음 */
+.cmp-head{position:sticky;top:var(--top-h);z-index:5;min-height:56px;margin:0 -16px;padding:6px 16px;background:var(--card);border-bottom:1px solid var(--line-strong);box-shadow:0 6px 10px -8px rgba(16,24,40,.18);font-size:14px;font-weight:700;color:var(--ink);align-items:end}
+.cmp-head .cmp-hb{padding-left:4px;font-weight:800}
+.cmp-hm{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;min-width:0;text-align:center;line-height:1.2;word-break:keep-all}
+.cmp-hm b{font-weight:700;color:var(--ink)}
+.cmp-hm small{display:inline-flex;align-items:center;gap:3px;font-size:var(--fs-1);font-weight:600;color:var(--ink2)}
+.cmp-hm em{font-style:normal;padding:0 4px;border-radius:var(--pill);background:var(--fill-2);color:var(--ink2);font-size:var(--fs-1);font-weight:700}
 .cmp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cmp-name .tag{margin-right:4px}
 .cmp-cell{display:flex;align-items:center;justify-content:center;height:32px;border-radius:var(--r-tag);font-size:var(--fs-1);font-weight:600;font-variant-numeric:tabular-nums}
 .cmp-cell.none{color:var(--ink3);font-weight:400}
@@ -1084,7 +1088,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .menu-card.info{cursor:default}
 .mc-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;background:var(--pri-soft);color:var(--pri-text)}
 .mc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
-.mc-tx b{font-size:var(--fs-4);font-weight:700}.mc-tx span{font-size:var(--fs-2);color:var(--ink2);line-height:1.45}
+.mc-tx b{font-size:var(--fs-4);font-weight:800;letter-spacing:-.01em;color:var(--ink)}.mc-tx span{font-size:var(--fs-2);color:var(--ink2);line-height:1.45}
 .menu-card>.ic:last-child{color:var(--ink3);width:18px;height:18px}
 @media(hover:hover){button.menu-card:hover{border-color:color-mix(in srgb,var(--pri) 35%,var(--line));box-shadow:0 8px 24px rgba(16,24,40,.08);transform:translateY(-1px)}}
 @media(min-width:1100px){.menu-card{flex-direction:column;align-items:flex-start;min-height:176px}.menu-card>.ic:last-child{display:none}}
@@ -1332,6 +1336,86 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(hover:hover){.rp-nl:hover b{text-decoration:underline;text-underline-offset:3px}}
 .rp-nl:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px}
 @media(prefers-color-scheme:dark){.logo-text b{background-image:linear-gradient(90deg,#6B9BFF,#A78BFA)}}
+/* ══ 0929d MD 업무 5가지 ══ */
+/* ① ABC 등급 칩 · 요약 */
+.tag.abc{justify-content:center;min-width:22px;padding:0 6px;font-weight:700}
+.abc-A{background:var(--pri-soft);color:var(--pri-text)}
+.abc-B{background:var(--fill-2);color:var(--ink2)}
+.abc-C{background:var(--warn-soft);color:var(--warn)}
+.abc-card{margin-top:12px}
+.abc-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.abc-seg{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-height:44px;padding:8px 12px;border:1px solid transparent;border-radius:var(--r-tile);background:var(--fill);text-align:left;font-size:var(--fs-2);color:var(--ink2)}
+.abc-seg b{font-size:var(--fs-4);color:var(--ink);font-variant-numeric:tabular-nums}
+.abc-seg span:last-child{flex-basis:100%}
+.abc-seg.on{border-color:var(--pri);background:var(--pri-soft)}
+@media(hover:hover){.abc-seg:hover{background:var(--fill-2)}.abc-seg.on:hover{background:var(--pri-soft)}}
+.abc-note{margin:6px 0 0;font-size:var(--fs-1);color:var(--ink3)}
+.abc-hints{margin-top:10px;padding:10px 12px;border-radius:var(--r-tile);background:var(--amber);border:1px solid var(--amber-line)}
+.abc-hl{display:flex;align-items:center;gap:6px;margin:0 0 4px;font-size:var(--fs-2);font-weight:700;color:var(--amber-ink)}
+.abc-hl small{font-weight:500}
+.abc-hint{display:flex;align-items:center;gap:8px;margin:4px 0 0;min-width:0}
+.abc-hint .nm1{flex:1;min-width:0;font-size:var(--fs-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.abc-hint .meta{margin:0;flex:none;font-size:var(--fs-1)}
+@media(max-width:600px){.abc-hint{flex-wrap:wrap}.abc-hint .nm1{flex-basis:calc(100% - 40px)}}
+.dt-c.c-abc{display:flex;align-items:center}
+/* ② 품평회 메모 */
+.la-memo{width:100%;min-height:36px;padding:0 10px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--card);font-size:var(--fs-2)}
+.la-memo:focus{outline:2px solid var(--ring);border-color:var(--pri)}
+@media(max-width:1099px){.la-memo{min-height:44px;font-size:16px}}
+.dt:not(.dt-wide) .dt-side:has(.la-memo){flex:0 1 45%;min-width:150px}.dt:not(.dt-wide) .c-memo{flex:1}
+@media(max-width:600px){.dt:not(.dt-wide) .dt-row:has(.la-memo){flex-wrap:wrap}.dt:not(.dt-wide) .dt-side:has(.la-memo){flex-basis:100%}.dt:not(.dt-wide) .c-memo{flex:1}}
+/* ③ 소싱 후보 이유 */
+.src-why{display:block;font-size:var(--fs-2);color:var(--ink2);line-height:1.45}
+.dt-c.c-brand .tag{margin-top:4px}
+/* ⑤ 행사 캘린더 */
+.cal-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+@media(min-width:840px){.cal-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cal-key{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 8px;font-size:var(--fs-1);color:var(--ink2)}
+.cal-key span{display:inline-flex;align-items:center;gap:6px}
+.cal-key .cal-pin{width:12px;height:12px;border:0}
+.cal-key .cal-bar{position:static;display:inline-block;width:24px;height:8px}
+.cal{border-top:1px solid var(--line)}
+.cal-row{display:grid;grid-template-columns:minmax(96px,160px) minmax(0,1fr);gap:12px;align-items:center;min-height:40px;border-bottom:1px solid var(--line)}
+.cal-head{min-height:32px;font-size:var(--fs-1);color:var(--ink3)}
+.cal-b{min-width:0}
+.cal-b .nm1{font-size:var(--fs-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-b small{display:block;font-size:var(--fs-1);color:var(--ink3)}
+.cal-track{position:relative;display:grid;align-items:center;min-height:32px}
+.cal-d{grid-row:1;text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden}
+.cal-d.wk{color:var(--ink);font-weight:600}
+.cal-d.today{color:var(--pri-text);font-weight:700}
+.cal-now{grid-row:1;align-self:stretch;background:var(--pri-soft);border-radius:4px}
+.cal-bar{grid-row:1;height:8px;border-radius:var(--pill);background:var(--cat-2);opacity:.55}
+.cal-dot{grid-row:1;justify-self:center;position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0 -20px;padding:0;border:0;background:none}
+.cal-pin{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:2px solid var(--card);border-radius:50%;background:var(--pri);color:#fff;font-size:10px;font-weight:700;line-height:1;font-style:normal;transition:transform var(--t)}
+@media(hover:hover){.cal-dot:hover .cal-pin{transform:scale(1.2)}}
+.cal-dot:focus-visible{outline:none}.cal-dot:focus-visible .cal-pin{box-shadow:0 0 0 3px var(--ring)}
+.cal-track{padding:0 20px}
+@media(max-width:1099px){.cal-track{padding:0 22px}}
+@media(max-width:1099px){.cal-dot{width:44px;height:44px;margin:0 -22px}}
+@media(max-width:839px){.cal-d:not(.wk):not(.today){visibility:hidden}.cal-row{grid-template-columns:84px minmax(0,1fr);gap:8px}.cal-pin{width:14px;height:14px;font-size:0}}
+/* 0929d 담당자 표시: 레디영 MD · 송주희 주임 전용 (v3 로고 파랑→보라 테두리 알약 · 글자는 본문색) */
+.owner-pill{display:inline-flex;align-items:center;gap:6px;flex:none;height:26px;padding:0 10px 0 8px;font-size:var(--fs-1);font-weight:600;color:var(--ink);white-space:nowrap;letter-spacing:-.01em;border:1px solid transparent;border-radius:var(--pill);
+  background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(120deg,rgba(21,94,239,.55),rgba(139,92,246,.55)) border-box}
+.owner-pill .op-ic{width:13px;height:13px;flex:none;color:var(--pri-text)}
+.owner-pill .op-org{color:var(--ink2);font-weight:500}
+.owner-pill .op-dot{width:3px;height:3px;border-radius:50%;background:var(--ink3);flex:none}
+.owner-pill .op-name{font-weight:700;color:var(--ink)}
+/* 폰·폴드(840 미만): 워드마크 아래 줄에 이름만 · 840~1099: 워드마크 옆에 전부 */
+@media(max-width:839px){
+  .topbar .logo{display:grid;grid-template-columns:auto auto;column-gap:8px;row-gap:2px;align-items:center}
+  .topbar .logo-mark{grid-row:1/3}
+  .topbar .logo-text{line-height:1.1}
+  .topbar .owner-pill{grid-column:2;justify-self:start;height:19px;padding:0 7px 0 5px;gap:3px;font-size:var(--fs-1)}
+  .topbar .owner-pill .op-org,.topbar .owner-pill .op-dot{display:none}
+  .topbar .owner-pill .op-ic{width:11px;height:11px}
+}
+.tabs .side-owner{display:none}
+@media(min-width:1100px){.topbar .owner-pill{display:none}.tabs .side-owner{display:inline-flex;align-self:flex-start;margin:-14px 0 20px 12px;padding:0 8px 0 7px;gap:5px}}
+@media(min-width:1100px) and (max-width:1439px){.tabs .side-owner{margin-left:4px;letter-spacing:-.03em}}
+@media(max-width:839px){.cmp-head{font-size:12px;min-height:48px}.cmp-hm b,.cmp-hm small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cmp-hm em{display:none}}
+.la-by{display:block;font-size:var(--fs-1);color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-sh{margin-left:6px;font-size:var(--fs-2);color:var(--ink2);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body data-tab="today">
@@ -1340,7 +1424,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 <div class="col">
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>
+    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span><span class="owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span></span>
     <button type="button" class="status-dot" id="statusDot" onclick="openStatus()" aria-label="수집 상태"><i aria-hidden="true"></i><span id="statusTime">수집 확인 중</span></button>
     <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="검색 (상품 · 브랜드 · 약국 상품)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 약국 상품 검색</span><kbd>⌘K</kbd></button>
   </div>
@@ -1360,7 +1444,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
       <div class="split"><div id="rankList" class="list"></div><aside class="split-side" id="rankSide" aria-label="상품 상세"></aside></div>
     </div>
     <div id="tv-brand" class="tsub" hidden>
-      <div class="rank-head"><div class="seg" id="brandView" role="group" aria-label="브랜드 보기"><button type="button" data-v="oy" class="on" aria-pressed="true" onclick="setBrandView(this.dataset.v)">올리브영</button><button type="button" data-v="cmp" aria-pressed="false" onclick="setBrandView(this.dataset.v)">여러 사이트</button></div><div class="chips" id="brandChips" role="group" aria-label="카테고리"></div></div>
+      <div class="rank-head"><div class="seg" id="brandView" role="group" aria-label="브랜드 보기"><button type="button" data-v="oy" class="on" aria-pressed="true" onclick="setBrandView(this.dataset.v)">올리브영</button><button type="button" data-v="cmp" aria-pressed="false" onclick="setBrandView(this.dataset.v)">사이트 비교</button><button type="button" data-v="src" aria-pressed="false" onclick="setBrandView(this.dataset.v)">소싱 후보</button></div><div class="chips" id="brandChips" role="group" aria-label="카테고리"></div></div>
       <div class="split"><div id="brandList" class="list"></div><aside class="split-side" id="brandSide" aria-label="브랜드 상세"></aside></div>
     </div>
     <div id="tv-keyword" class="tsub" hidden></div>
@@ -1554,12 +1638,12 @@ function dragScroll(el) {
 
 /* ── v3 화면 이동: 탭 6개 + 하위 화면 · 이동마다 기록(안드로이드 뒤로 = 앱 안에서) · #trend/product 주소 ── */
 var TABS = [['today', '오늘', 'house'], ['report', '리포트', 'file'], ['trend', '트렌드', 'trend'], ['set', '세트', 'package'], ['plan', '기획', 'calendar'], ['more', '더 보기', 'grid']];
-var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'tour', 'price'], more: ['', 'analysis', 'find', 'filters', 'watch'] };
+var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price'], more: ['', 'analysis', 'find', 'filters', 'watch'] };
 function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; return w ? (w.items || []).length + (w.brands || []).length : 0; }
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
 function renderTabs() {
-  $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>'
+  $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>' + (document.querySelector('.topbar .owner-pill') || { outerHTML: '' }).outerHTML.replace('owner-pill', 'owner-pill side-owner')
     + TABS.map(function (t, i) { var on = S.tab === t[0]; return '<button type="button" role="tab" data-tab="' + t[0] + '" class="' + (on ? 'on' : '') + '" aria-selected="' + on + '" title="' + t[1] + ' (' + (i + 1) + ')" onclick="tabTap(this.dataset.tab)">' + icon(t[2]) + '<span>' + t[1] + '</span></button>'; }).join('')
     + '<button type="button" class="side-status" id="sideStatus" onclick="openStatus()"><i aria-hidden="true"></i><span>수집 확인 중</span></button>';
 }
@@ -1967,7 +2051,7 @@ function loadBrands() {
 }
 /* ── 폴드(840+)·PC 에선 트렌드 상품·브랜드 상세를 팝업 대신 목록 옆 칸에 바로 보여준다 ── */
 var DOCK = { pd: { sub: 'product', side: 'rankSide' }, bs: { sub: 'brand', side: 'brandSide' } };
-function canDock(id) { var d = DOCK[id]; return innerWidth >= 840 && S.tab === 'trend' && S.trend.sub === d.sub && (id !== 'bs' || (S.brand.view || 'oy') === 'oy'); }
+function canDock(id) { var d = DOCK[id]; return innerWidth >= 840 && S.tab === 'trend' && S.trend.sub === d.sub && (id !== 'bs' || (S.brand.view || 'oy') === 'oy') && (id !== 'pd' || S.trend.f !== 'week'); }
 function isDocked(id) { return $(id).classList.contains('docked'); }
 function dockSheet(id) {
   var el = $(id), side = $(DOCK[id].side), li = S.layers.indexOf(id);
@@ -2246,7 +2330,7 @@ function heroSitesText(k) {
 function renderViz() { renderView(); }
 /* 분석 모음(더 보기): 한 질문에 그래프 하나 · 상품명 키워드는 트렌드 > 키워드, 가격대는 기획 > 가격 참고로 옮김 */
 function vizHtml(v) {
-  if (!v || v.empty) return '<h2>분석 모음</h2><p class="empty">수집 기록이 쌓이면 그래프가 나와요</p>';
+  if (!v || v.empty) return '<h2>카테고리 · 브랜드 분석</h2><p class="empty">수집 기록이 쌓이면 그래프가 나와요</p>';
   var owned = v.brands.some(function (b) { return b.owned === true; });
   return '<div class="card-head"><h2>올리브영 전체 100위 한눈에</h2>' + asOf(v.date) + '</div><div class="vz-grid">'
     + vzBlock('어느 카테고리가 100위를 채우나?', '전체 100위 카테고리 구성', vzDonut(v.catMix, v.total, '전체 100위'))
@@ -2282,7 +2366,7 @@ function renderSetTab() {
   var el = $('set'); if (!S.set.mats) { el.innerHTML = skel(3); return; }
   var sub = S.setSub = { have: 'list' }[S.setSub] || S.setSub || 'diy', hid = { ai: 'AI 세트 추천', uses: '용도별 상품 · 사진 확인' }[sub];
   var tabs = '<div class="view-head">' + (hid ? '<button type="button" class="back-btn" onclick="subBack(\'set\',\'diy\')">' + icon('left') + '만들기</button><h2 class="view-title">' + hid + '</h2>'
-    : '<div class="seg set-sub" role="tablist" aria-label="세트 메뉴">' + segHtml('', SET_SUBS, sub, "route('set',this.dataset.s)") + '</div><button type="button" class="btn ghost" onclick="route(\'set\',\'ai\')" title="재료함 제품으로 AI가 세트를 짜 줘요">' + icon('spark') + 'AI 세트 추천</button>') + '</div>';
+    : '<div class="seg set-sub" role="tablist" aria-label="세트 메뉴">' + segHtml('', SET_SUBS, sub, "route('set',this.dataset.s)") + '</div><button type="button" class="btn ghost" onclick="route(\'set\',\'ai\')" title="협업·자사 재료로 AI가 세트를 짜 줘요">' + icon('spark') + 'AI 세트 추천</button>') + '</div>';
   if (sub === 'best') { el.innerHTML = tabs + (S.pbView === 'table' && innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? pbTableHtml() : pbToggle(pbHtml())); dragScroll(document.querySelector('#set .pb-cats')); if (S.pbView === 'table') pbTableMount(); return; }
   if (sub === 'ai') { el.innerHTML = tabs + aiHtml(); return; }
   el.innerHTML = tabs + psHtml(sub);
@@ -2291,7 +2375,7 @@ function renderSetTab() {
 function pbToggle(h) { return innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? h.replace('<button type="button" class="btn" onclick="pbPick()">', function () { return '<button type="button" class="btn ghost" onclick="S.pbView=\'table\';renderSetTab()">' + icon('columns') + '표로 보기</button><button type="button" class="btn" onclick="pbPick()">'; }) : h; }
 function pbTableHtml() {
   S.psEditing = S.psEditing || psNewDraft();
-  return '<section class="card pb-left pb-tbl" aria-label="약국 베스트 표"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순 · 표</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="S.pbView=\'\';renderSetTab()">목록으로</button><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></span></div><p class="sub pb-per">' + esc(pbPeriodText()) + '</p><div id="pbTable"></div></section>'
+  return '<section class="card pb-left pb-tbl" aria-label="약국 베스트 표"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순 · 표</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="S.pbView=\'\';renderSetTab()">목록으로</button><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></span></div><p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml(1) + '<div id="pbTable"></div></section>'
     + diyBarHtml().replace('class="diy-bar"', 'class="diy-bar float"').replace('onclick="openDiySheet()"', 'onclick="S.pbView=\'\';route(\'set\',\'diy\')"');
 }
 function pbTableMount() {
@@ -2303,13 +2387,16 @@ function pbTableMount() {
       { k: 'r', label: '순위', w: '40px', num: 1, m: 'lead', html: function (x) { return '<span class="rk">' + x.r + '</span>'; } },
       { k: 'n', label: '판매 상품명', w: 'minmax(160px,1.4fr)', m: 'title', filter: 1, html: function (x) { return '<span class="nm1">' + esc(x.n) + '</span>' + (x.m && x.m !== x.n ? '<span class="meta">물류앱 ' + esc(x.m) + '</span>' : ''); } },
       { k: 'm', label: '물류앱 이름', csvOnly: 1 },
-      { k: 'q', label: '판매수량', w: 'minmax(150px,1.2fr)', num: 1, desc: 1, m: 'sub', filter: 1, html: function (x, wide) { return (wide ? '<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / ((S.pb.list[0] || {}).q || 1) * 100)) + '%"></i></span>' : '') + '<b>' + x.q.toLocaleString('ko-KR') + '개</b>'; } },
+      { k: 'abc', label: 'ABC', w: 'minmax(80px,.5fr)', desc: 1, m: 'lead', v: function (x) { return x.sh; }, csv: function (x) { return x.abc; }, html: function (x, wide) { return abcChip(x) + (wide ? '<small class="abc-sh">' + abcShare(x.sh) + '</small>' : ''); } },
+      { k: 'sh', label: '비중', csvOnly: 1, csv: function (x) { return Math.round(x.sh * 10000) / 100; } },
+      { k: 'q', label: '판매수량', w: 'minmax(120px,1fr)', num: 1, desc: 1, m: 'sub', filter: 1, html: function (x, wide) { return (wide ? '<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / ((S.pb.list[0] || {}).q || 1) * 100)) + '%"></i></span>' : '') + '<b>' + x.q.toLocaleString('ko-KR') + '개</b>'; } },
       { k: 'mv', label: '지난번 대비', w: 'minmax(80px,.7fr)', num: 1, desc: 1, m: 'side', v: function (x) { return x.p > 0 ? x.p - x.r : x.p === 0 ? 999 : null; }, csv: function (x) { return x.p < 0 ? '' : x.p === 0 ? 'NEW' : x.p - x.r; }, html: function (x) { return pbMove(x) || '<span class="meta">–</span>'; } },
       { k: 'g', label: '분류', w: 'minmax(88px,.8fr)', m: 'sub', filter: 1, html: function (x) { return x.g ? tag(x.g) : '<span class="meta">–</span>'; } },
-      { k: 'o', label: '올리브영', w: 'minmax(84px,.6fr)', m: 'side', v: function (x) { return x.o ? '인기' : ''; }, html: function (x) { return x.o ? tag('올영 인기', 't-ink') : '<span class="meta">–</span>'; } }
+      { k: 'o', label: '올리브영', w: 'minmax(76px,.6fr)', m: 'side', v: function (x) { return x.o ? '인기' : ''; }, html: function (x) { return x.o ? tag('올영 인기', 't-ink') : '<span class="meta">–</span>'; } }
     ],
-    facets: [{ k: 'o', opts: [['y', '올리브영에서도 인기', S.pb.list.filter(function (x) { return x.o; }).length]], tone: 'tog', test: function (x) { return x.o; } }, { k: 'lg', opts: [['y', '물류앱에 있는 상품만']], tone: 'tog', test: function (x) { return !!x.m; } }, { k: 'g', label: '분류', type: 'select', opts: function () { return Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; }).map(function (c) { return [c, c + ' ' + cats[c]]; }); }, test: function (x, v) { return x.g === v; } }],
-    groups: [['g', '분류', function (x) { return x.g || '분류 없음'; }], ['o', '올리브영 인기', function (x) { return x.o ? '올리브영에서도 인기' : '약국에서만'; }]],
+    facets: [{ k: 'abc', opts: ['A', 'B', 'C'].map(function (g) { return [g, g + '등급', S.pb.list.filter(function (x) { return x.abc === g; }).length]; }), test: function (x, v) { return x.abc === v; } }, { k: 'o', opts: [['y', '올리브영에서도 인기', S.pb.list.filter(function (x) { return x.o; }).length]], tone: 'tog', test: function (x) { return x.o; } }, { k: 'lg', opts: [['y', '물류앱에 있는 상품만']], tone: 'tog', test: function (x) { return !!x.m; } }, { k: 'g', label: '분류', type: 'select', opts: function () { return Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; }).map(function (c) { return [c, c + ' ' + cats[c]]; }); }, test: function (x, v) { return x.g === v; } }],
+    after: function () { [].forEach.call(document.querySelectorAll('#set .abc-seg'), function (b) { var on = dtSt('pbt').fac.abc === b.dataset.c.slice(5); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); },
+    groups: [['abc', 'ABC 등급', function (x) { return x.abc + '등급'; }], ['g', '분류', function (x) { return x.g || '분류 없음'; }], ['o', '올리브영 인기', function (x) { return x.o ? '올리브영에서도 인기' : '약국에서만'; }]],
     pivot: [['상품 수', function (rs) { return rs.length; }], ['판매수량 합', function (rs) { return rs.reduce(function (a, x) { return a + x.q; }, 0); }, function (v) { return v.toLocaleString('ko-KR') + '개'; }], ['평균 순위', function (rs) { return dtAvg(rs, function (x) { return x.r; }); }]]
   });
 }
@@ -2317,7 +2404,7 @@ function pbTableMount() {
 function matCardHtml() {
   var live = S.set.mats.filter(function (m) { return m.status !== '종료'; }), ended = S.set.mats.filter(function (m) { return m.status === '종료'; });
   var row = function (m) { return '<button type="button" class="mrow" data-id="' + esc(m.id) + '" onclick="openMat(this.dataset.id)"><span class="tx"><span class="br">' + matStatusBadge(m) + esc(m.brand) + '</span><span class="nm1">' + esc(m.name) + cdots(m.colors) + '</span><span class="meta">' + esc([m.category].concat(m.uses).filter(Boolean).join(' · ')) + (m.price ? ' · ' + won(m.price) : '') + '</span></span></button>'; };
-  return '<article class="card" id="matCard"><div class="card-head"><h2>세트 재료함 <small class="meta">' + live.length + '개</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="route(\'set\',\'ai\')">' + icon('spark') + 'AI 세트 추천</button><button type="button" class="btn pri" onclick="openMat(\'\')">' + icon('plus') + '재료 추가</button></span></div>'
+  return '<article class="card" id="matCard"><div class="card-head"><h2>협업·자사 재료 <small class="meta">' + live.length + '개</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="route(\'set\',\'ai\')">' + icon('spark') + 'AI 세트 추천</button><button type="button" class="btn pri" onclick="openMat(\'\')">' + icon('plus') + '재료 추가</button></span></div>'
     + '<p class="sub">자사 제품과 협업 제품을 넣어 두면 AI가 세트를 짜 줘요. 협업은 기간이 끝나면 자동으로 빠져요</p>'
     + (live.length ? '<div class="mat-list">' + live.map(row).join('') + '</div>' : '<p class="empty">아직 재료가 없어요. 자사·협업 제품을 먼저 넣어 주세요</p>')
     + (ended.length ? '<button type="button" class="more" onclick="S.set.showEnded=!S.set.showEnded;setDataChanged()">' + (S.set.showEnded ? '종료된 협업 접기' : '종료된 협업 ' + ended.length + '개 보기') + '</button>' + (S.set.showEnded ? '<div class="mat-list">' + ended.map(row).join('') + '</div>' : '') : '')
@@ -2326,13 +2413,13 @@ function matCardHtml() {
 /* 세트 > AI 세트 추천 (만들기 안 버튼으로 들어온다) */
 function aiHtml() {
   var live = S.set.mats.filter(function (m) { return m.status !== '종료'; }), ss = S.set.sets, cur = ss ? ss[S.set.mode] : null;
-  var h = '<article class="card"><div class="card-head"><h2>AI 세트 추천</h2><button type="button" class="lnk-more" onclick="route(\'plan\',\'mat\')">재료함 ' + live.length + '개 · 기획 탭에서 관리' + icon('chev') + '</button></div><div class="seg" role="group" aria-label="추천 방식">'
-    + ['own', 'mix'].map(function (m) { return '<button type="button" data-m="' + m + '" class="' + (S.set.mode === m ? 'on' : '') + '" aria-pressed="' + (S.set.mode === m) + '" onclick="S.set.mode=this.dataset.m;renderSetTab()">' + (m === 'own' ? '재료함 세트' : '트렌드 믹스') + '</button>'; }).join('') + '</div>'
-    + '<p class="sub">' + (S.set.mode === 'own' ? '자사·협업 제품만으로 바로 팔 수 있는 세트' : '재료함 제품 + 지금 뜨는 올리브영 상품으로 객단가를 높이는 세트') + '</p>';
+  var h = '<article class="card"><div class="card-head"><h2>AI 세트 추천</h2><button type="button" class="lnk-more" onclick="route(\'plan\',\'mat\')">재료 ' + live.length + '개 · 기획 탭에서 관리' + icon('chev') + '</button></div><div class="seg" role="group" aria-label="추천 방식">'
+    + ['own', 'mix'].map(function (m) { return '<button type="button" data-m="' + m + '" class="' + (S.set.mode === m ? 'on' : '') + '" aria-pressed="' + (S.set.mode === m) + '" onclick="S.set.mode=this.dataset.m;renderSetTab()">' + (m === 'own' ? '우리 재료만' : '트렌드 믹스') + '</button>'; }).join('') + '</div>'
+    + '<p class="sub">' + (S.set.mode === 'own' ? '자사·협업 제품만으로 바로 팔 수 있는 세트' : '협업·자사 재료 + 지금 뜨는 올리브영 상품으로 객단가를 높이는 세트') + '</p>';
   if (cur && cur.pending) {
     var mins = cur.waitingSince ? Math.max(0, Math.round((Date.now() - new Date(cur.waitingSince.replace(/\./g, '-').replace(' ', 'T') + ':00+09:00').getTime()) / 60000)) : 0;
     h += '<div class="empty">추천을 만드는 중이에요 (보통 5~10분). 맥에서 제가 쓰고 있어요 · 다 되면 오늘 화면 세트 작업 카드에도 떠요' + (mins >= 30 ? '<br><b>30분 넘게 걸리고 있어요 — 맥이 꺼져 있거나 잠자기 상태일 수 있어요</b>' : '') + '</div>';
-  } else h += '<button type="button" class="btn pri block" data-act="req-sets" onclick="reqSets()"' + (live.length ? '' : ' disabled') + '>' + icon('spark') + (S.set.mode === 'own' ? '재료함 세트' : '트렌드 믹스') + ' 추천 받기</button>';
+  } else h += '<button type="button" class="btn pri block" data-act="req-sets" onclick="reqSets()"' + (live.length ? '' : ' disabled') + '>' + icon('spark') + (S.set.mode === 'own' ? '우리 재료만' : '트렌드 믹스') + ' 추천 받기</button>';
   if (cur && cur.sets && cur.sets.length) {
     h += '<p class="note">' + esc(cur.date) + ' 추천</p><div class="set-grid">' + cur.sets.map(function (s, i) {
       var disc = s.price && s.sum ? Math.round((1 - s.price / s.sum) * 100) : null;
@@ -2451,9 +2538,8 @@ function diyUses(p) { return Object.keys(p.uses).sort(function (a, b) { return p
 function diyHtml(p) {
   var e = S.psEditing = S.psEditing || psNewDraft(), us = diyUses(p);
   if (!S.diyUses) S.diyUses = us.length ? [us[0]] : [];
-  var cs = {}; p.products.forEach(function (x) { if (x.cat) cs[x.cat] = (cs[x.cat] || 0) + 1; }); S.diyCats = S.diyCats || [];
-  var catChips = '<div class="grp-chips diy-cats" aria-label="분류">' + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { var on = S.diyCats.indexOf(c) !== -1; return '<button type="button" class="chip cat' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(c) + '" onclick="diyCatToggle(this.dataset.c)">' + esc(c) + ' <em>' + cs[c] + '</em></button>'; }).join('') + '</div>';
-  return '<div class="diy"><section class="card diy-left"><nav class="diy-side" aria-label="분류 · 용도"><p class="diy-lab">분류</p>' + catChips + '<p class="diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1 && !S.diyBest; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
+  S.diyCats = [];   /* 0929d 사용자: 세트 만들기는 용도만 (분류 칸 뺌) */
+  return '<div class="diy"><section class="card diy-left"><nav class="diy-side" aria-label="용도"><p class="diy-lab">용도</p><div class="grp-chips diy-chips">' + us.map(function (u) { var on = S.diyUses.indexOf(u) !== -1 && !S.diyBest; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-u="' + esc(u) + '" onclick="diyUseToggle(this.dataset.u)">' + esc(u) + ' <em>' + p.uses[u].length + '</em></button>'; }).join('') + '</div>'
     + '<label class="diy-and sw-row"><input type="checkbox" id="diyAnd" role="switch"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"><span class="sw" aria-hidden="true"></span>고른 용도를 모두 가진 상품만</label></nav>'
     + '<div class="diy-main"><div class="diy-mhead"><h2>상품</h2>' + diyModeHtml() + '</div><div class="diy-tools"><button type="button" class="chip tog' + (S.diyOwn ? ' on' : '') + '" id="diyOwn" aria-pressed="' + !!S.diyOwn + '" onclick="S.diyOwn=!S.diyOwn;this.classList.toggle(\'on\',S.diyOwn);this.setAttribute(\'aria-pressed\',S.diyOwn);diyList()">우리 약국 제품만</button><label class="dt-sel"><span class="sr-only">정렬</span><select id="diySort" onchange="S.diySort=this.value;diyList()">' + [['', '기본 순서'], ['pb', '약국 순위순'], ['name', '이름순']].map(function (o) { return '<option value="' + o[0] + '"' + ((S.diySort || '') === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label></div><input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList();diyExtSearch(this.value)">'
     + '<div id="diyList" class="diy-list">' + diyListHtml() + '</div>'
@@ -2474,11 +2560,10 @@ function diyRows0() {
   var inCat = function (x) { return !cats.length || cats.indexOf(x.cat) !== -1; };
   if (q) return p.products.filter(function (x) { return inCat(x) && x.name.replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1; }).slice(0, 80);
   if (S.diyBest) return pbDiyRows(inCat);
-  if (!sel.length) return cats.length ? p.products.filter(inCat).slice(0, 150) : [];
+  if (!sel.length) return p.products.filter(inCat).slice(0, 150);   /* 용도를 다 끄면 전체 */
   return p.products.filter(function (x) { var hit = sel.filter(function (u) { return x.tags.indexOf(u) !== -1; }).length; return inCat(x) && (S.diyAnd ? hit === sel.length : hit > 0); })
     .sort(function (a, b) { var ha = sel.filter(function (u) { return a.tags.indexOf(u) !== -1; }).length, hb = sel.filter(function (u) { return b.tags.indexOf(u) !== -1; }).length; return hb - ha; }).slice(0, 150);
 }
-function diyCatToggle(c) { var a = S.diyCats, i = a.indexOf(c); if (i !== -1) a.splice(i, 1); else a.push(c); [].forEach.call(document.querySelectorAll('.diy-cats .chip'), function (b) { var on = a.indexOf(b.dataset.c) !== -1; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); diyList(); }
 function diyUseToggle(u) { var wasBest = S.diyBest; S.diyBest = false; var a = S.diyUses, i = a.indexOf(u); if (i !== -1 && !wasBest) a.splice(i, 1); else if (i === -1) a.push(u);   /* 약국 베스트 보던 중이면 누른 용도로 바로 */ S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; diyList(); }
 function diyHas(name) { return (S.psEditing.items || []).some(function (y) { return y.name === name; }); }
 /* 0927 약국에 없는 상품: 이름으로 찾으면 올리브영 · 인터넷 공식 사진 후보도 → 담기 · 약국 상품으로 미리 등록 */
@@ -2515,9 +2600,9 @@ function diyRegSave() {
 function diyListHtml() {
   var rows = diyRows(); psNeedImgs(rows.map(function (x) { return x.name; }));
   if (!rows.length && S.diyBest && !S.diyQ) return pbDiyEmpty();
-  if (!rows.length) return '<p class="empty">' + (S.diyQ ? '약국에는 없어요' : (S.diyUses || []).length || (S.diyCats || []).length ? '조건에 맞는 상품이 없어요' : '분류나 용도를 골라 주세요') + '</p>' + diyExtHtml();
+  if (!rows.length) return '<p class="empty">' + (S.diyQ ? '약국에는 없어요' : '조건에 맞는 상품이 없어요') + '</p>' + diyExtHtml();
   return rows.map(function (x) { var has = diyHas(x.name);
-    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta' + (x.best ? ' pb-meta' : '') + '">' + (x.best ? '<b class="pb-rk-s">' + x.best.r + '위</b> ' + x.best.q.toLocaleString('ko-KR') + '개<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.best.q / (S.pb.list[0].q || 1) * 100)) + '%"></i></span>' : '') + (x.best ? '' : pbChip(pbRankOf(x.name)) + ' ') + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + (x.best && x.best.o ? ' ' + tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
+    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta' + (x.best ? ' pb-meta' : '') + '">' + (x.best ? abcChip(x.best) + '<b class="pb-rk-s">' + x.best.r + '위</b> ' + x.best.q.toLocaleString('ko-KR') + '개<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.best.q / (S.pb.list[0].q || 1) * 100)) + '%"></i></span>' : '') + (x.best ? '' : pbChip(pbRankOf(x.name)) + abcChip(S.pb && S.pb.by && S.pb.by[x.name]) + ' ') + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + (x.best && x.best.o ? ' ' + tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
       + (function () { var z = psSizeOf(x.name); return '<span class="diy-sz">' + (z ? z.w + '×' + z.d + '×' + z.h + 'mm' : '크기 미등록') + '</span>'; })()
       + '<span class="diy-btns">' + (x.best && !x.best.m ? '' : '<button type="button" class="btn" data-n="' + esc(x.name) + '" aria-label="용도 고치기" onclick="psUses(this.dataset.n)">용도</button>') + '<button type="button" class="btn add' + (has ? ' on' : '') + '" data-act="diy-add" data-n="' + esc(x.name) + '" onclick="diyAdd(this.dataset.n)"' + (has ? ' disabled' : '') + '>' + (has ? icon('check') + '넣음' : icon('plus') + '넣기') + '</button></span></div>'; }).join('') + diyExtHtml();
 }
@@ -2560,7 +2645,7 @@ function psBoxOf(name) { return ((S.ps && S.ps.boxes) || []).filter(function (b)
 function psBoxField(e) {
   var bs = (S.ps && S.ps.boxes) || [], known = psBoxOf(e.box);
   return '<div class="field"><span>박스</span><div class="bx-sel"><select id="psBox" onchange="S.psEditing.box=this.value;diyBox()"><option value="">박스 고르기</option>' + bs.map(function (b) { return '<option value="' + esc(b.name) + '"' + (b.name === e.box ? ' selected' : '') + '>' + esc(b.name) + ' · ' + b.w + '×' + b.d + '×' + b.h + 'mm</option>'; }).join('')
-    + (e.box && !known ? '<option value="' + esc(e.box) + '" selected>' + esc(e.box) + ' (크기 미등록)</option>' : '') + '</select><button type="button" class="btn" onclick="boxManage()">박스 관리</button></div></div>';
+    + (e.box && !known ? '<option value="' + esc(e.box) + '" selected>' + esc(e.box) + ' (크기 미등록)</option>' : '') + '</select><button type="button" class="btn" onclick="boxManage()">박스 크기</button></div></div>';
 }
 function psImgFor(name) { var c = S.ps && S.ps.cutouts && S.ps.cutouts[name]; return (c && (c.cut || c.photo)) || S.psImg[name] || ''; }
 function psPhotoEdit(name) {
@@ -2596,7 +2681,7 @@ function boxPreviewHtml(e) {
   var box = psBoxOf(e.box), U = psUnits(e), h = '<div class="bx"><h3 class="tour-h">박스에 넣어 보기</h3>';
   if (U.miss.length) h += '<p class="meta">크기를 모르는 상품: ' + U.miss.map(esc).join(', ') + ' — 카드의 [크기 넣기]로 넣거나 <button type="button" class="linkbtn" onclick="psSizeGuess()"' + (S.ps.sizePending ? ' disabled' : '') + '>' + (S.ps.sizePending ? 'AI 추정 중 (5~10분)' : 'AI로 크기 추정') + '</button></p>';
   var bs = ((S.ps && S.ps.boxes) || []).filter(function (b) { return b.w && b.d && b.h; });
-  if (!bs.length) return h + '<p class="empty">[박스 관리]에서 투명박스 크기를 먼저 넣어 주세요</p></div>';
+  if (!bs.length) return h + '<p class="empty">[박스 크기]에서 투명박스 크기를 먼저 넣어 주세요</p></div>';
   if (!U.units.length) return h + '</div>';
   var best = bs.map(function (b) { return { b: b, r: psPack(U.units, b) }; }).filter(function (x) { return x.r.fit; }).sort(function (a, c) { return a.b.w * a.b.d * a.b.h - c.b.w * c.b.d * c.b.h; })[0];
   if (!box) return h + (best ? '<p class="bx-ok">추천 박스: <b>' + esc(best.b.name) + '</b> (' + best.r.fill + '% 참) <button type="button" class="btn" data-b="' + esc(best.b.name) + '" onclick="S.psEditing.box=this.dataset.b;diyBox()">이 박스로</button></p>' : '<p class="bx-no">등록된 박스 중 들어가는 게 없어요</p>') + '</div>';
@@ -2629,7 +2714,7 @@ function psSizeSave() {
 }
 function psSizeGuess() { call('requestSizeGuess', [], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '요청하지 못했어요'); return; } S.ps.sizePending = true; diyBox(); toast('AI 크기 추정을 요청했어요 · 저장된 세트의 상품만 · 5~10분'); psPoll(); }); }
 function boxManage() {
-  S.mtFrom = document.activeElement; $('mtTitle').textContent = '박스 관리';
+  S.mtFrom = document.activeElement; $('mtTitle').textContent = '세트 박스 크기';
   var bs = (S.ps && S.ps.boxes) || [];
   $('mtBody').innerHTML = '<p class="sub">투명박스 안쪽 크기(mm)를 넣어 두면 세트가 들어가는지 그려 봐요. 박스 이름은 물류앱 세트의 "박스" 칸에 그대로 들어가요</p>'
     + (bs.length ? bs.map(function (b) { return '<div class="sitem"><span class="tx"><span class="nm1">' + esc(b.name) + '</span><span class="meta">' + b.w + '×' + b.d + '×' + b.h + 'mm' + (b.memo ? ' · ' + esc(b.memo) : '') + '</span></span><button type="button" class="btn" data-b="' + esc(b.name) + '" onclick="boxFill(this.dataset.b)">고치기</button></div>'; }).join('') : '<p class="empty">아직 박스가 없어요</p>')
@@ -2732,7 +2817,7 @@ var PB_XLSX = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.
 function pbPrep(r) {
   if (!r || !r.ok) return { err: (r && r.msg) || '약국 베스트를 불러오지 못했어요' };
   var by = {}, list = (r.items || []).map(function (a) { var x = { r: a[0], n: String(a[1]), q: +a[2] || 0, s: +a[3] || 0, c: +a[4] || 0, p: a[5], m: a[6] || '', g: a[7] || '', o: !!a[8] }; if (!by[x.n]) by[x.n] = x; if (x.m && !by[x.m]) by[x.m] = x; return x; });
-  return { ok: true, empty: !!r.empty || !list.length, meta: r.meta || {}, prev: r.prev || null, list: list, by: by };
+  return { ok: true, empty: !!r.empty || !list.length, meta: r.meta || {}, prev: r.prev || null, list: list, by: by, abcBy: pbAbc(list) };
 }
 function pbLoad() { swrCall('getPharmacyBest', [], function (r) { S.pb = pbPrep(r); pbRefresh(); }, function () { S.pb = { err: '약국 베스트를 불러오지 못했어요' }; pbRefresh(); }); }
 function pbRefresh() {   /* 다시 그려도 찾기 칸 입력은 이어지게 */
@@ -2768,13 +2853,13 @@ function pbMarginHtml(items) {
 /* 목록 */
 function pbRows() {
   var pb = S.pb, q = String(S.pbQ || '').replace(/\s+/g, '').toLowerCase(), c = S.pbCat;
-  return pb.list.filter(function (x) { return (!c || (c === '@oy' ? x.o : x.g === c)) && (!q || (x.n + '|' + x.m).replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1); });
+  return pb.list.filter(function (x) { return (!c || (c === '@oy' ? x.o : c.indexOf('@abc:') === 0 ? x.abc === c.slice(5) : x.g === c)) && (!q || (x.n + '|' + x.m).replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1); });
 }
 function pbMove(x) { return x.p < 0 ? '' : x.p === 0 ? newTag() : delta(x.p - x.r || null); }
 function pbRowHtml(x, max) {
   var name = x.m || x.n, has = diyHas(name);
   return '<div class="pb-row"><span class="pb-rk"><b>' + x.r + '</b>' + pbMove(x) + '</span><span class="diy-img">' + imgHtml(x.m ? psImgFor(x.m) : '') + '</span>'
-    + '<span class="tx"><span class="nm1">' + esc(x.n) + '</span><span class="meta"><b class="pb-q">' + x.q.toLocaleString('ko-KR') + '개</b><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / (max || x.q) * 100)) + '%"></i></span>' + (x.g ? tag(x.g) : '') + (x.o ? tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
+    + '<span class="tx"><span class="nm1">' + esc(x.n) + '</span><span class="meta">' + abcChip(x) + '<b class="pb-q">' + x.q.toLocaleString('ko-KR') + '개</b><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / (max || x.q) * 100)) + '%"></i></span>' + (x.g ? tag(x.g) : '') + (x.o ? tag('올리브영에서도 인기', 't-ink') : '') + pbHintOf(x) + '</span></span>'
     + '<button type="button" class="btn pb-add' + (has ? ' on' : '') + '" data-n="' + esc(name) + '" aria-pressed="' + has + '" aria-label="' + (has ? '세트에서 빼기' : '세트에 담기') + '" onclick="pbAdd(this.dataset.n)">' + icon(has ? 'check' : 'plus') + '<span>' + (has ? '담김' : '세트에 담기') + '</span></button></div>';
 }
 function pbListHtml() {
@@ -2789,7 +2874,7 @@ function pbCatsHtml() {
   var chip = function (v, label, n) { var on = S.pbCat === v; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-c="' + esc(v) + '" onclick="pbSetCat(this.dataset.c)">' + esc(label) + ' <em>' + n.toLocaleString('ko-KR') + '</em></button>'; };
   return chip('', '전체', S.pb.list.length) + (oy ? chip('@oy', '올리브영에서도 인기', oy) : '') + Object.keys(cs).sort(function (a, b) { return cs[b] - cs[a]; }).map(function (c) { return chip(c, c, cs[c]); }).join('');
 }
-function pbSetCat(c) { S.pbCat = c; S.pbN = 50; [].forEach.call(document.querySelectorAll('#set .pb-cats .chip'), function (b) { var on = b.dataset.c === c; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); pbList(); var l = $('pbList'); if (l) l.scrollTop = 0; }
+function pbSetCat(c) { S.pbCat = c; S.pbN = 50; [].forEach.call(document.querySelectorAll('#set .pb-cats .chip, #set .abc-seg'), function (b) { var on = b.dataset.c === c; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); pbList(); var l = $('pbList'); if (l) l.scrollTop = 0; }
 function pbAdd(name) {
   S.psEditing = S.psEditing || psNewDraft();
   var i = -1; S.psEditing.items.forEach(function (x, j) { if (x.name === name) i = j; });
@@ -2808,14 +2893,14 @@ function pbHtml() {
   S.psEditing = S.psEditing || psNewDraft();
   var right = !S.ps ? skel(2) : S.ps.err ? '<p class="empty">' + esc(S.ps.err) + '</p>' : diyBoxHtml();
   return '<div class="diy pb-wrap"><section class="card pb-left" aria-label="약국 베스트"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순</small></h2><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></div>'
-    + '<p class="sub pb-per">' + esc(pbPeriodText()) + '</p>'
+    + '<p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml()
     + '<input id="pbQ" type="search" class="diy-q" placeholder="상품 이름으로 찾기" aria-label="약국 베스트에서 찾기" value="' + esc(S.pbQ) + '" oninput="S.pbQ=this.value;S.pbN=50;pbList()">'
     + '<div class="chips pb-cats" role="group" aria-label="분류">' + pbCatsHtml() + '</div>'
     + '<div id="pbList" class="pb-list">' + pbListHtml() + '</div></section>'
     + '<aside class="card diy-right" id="diyBox">' + right + '</aside></div>' + diyBarHtml();
 }
 /* 세트 DIY 안: 상품 칸을 '약국 베스트' 로 바꿔 고르기 */
-function diyModeHtml() { var b = !!S.diyBest; return '<div class="seg diy-mode" role="group" aria-label="상품 고르는 방법"><button type="button" data-m="use" class="' + (b ? '' : 'on') + '" aria-pressed="' + !b + '" onclick="diyMode(0)">용도·분류</button><button type="button" data-m="best" class="' + (b ? 'on' : '') + '" aria-pressed="' + b + '" onclick="diyMode(1)">약국 베스트</button></div>'; }
+function diyModeHtml() { var b = !!S.diyBest; return '<div class="seg diy-mode" role="group" aria-label="상품 고르는 방법"><button type="button" data-m="use" class="' + (b ? '' : 'on') + '" aria-pressed="' + !b + '" onclick="diyMode(0)">용도별</button><button type="button" data-m="best" class="' + (b ? 'on' : '') + '" aria-pressed="' + b + '" onclick="diyMode(1)">약국 베스트</button></div>'; }
 function diyModeSync() { [].forEach.call(document.querySelectorAll('.diy-mode button'), function (x) { var on = (x.dataset.m === 'best') === !!S.diyBest; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); }
 function diyMode(b) { S.diyBest = !!b; if (b) { S.diyQ = ''; var q = $('diyQ'); if (q) q.value = ''; S.diyExt = null; } diyList(); var l = $('diyList'); if (l) l.scrollTop = 0; }
 function pbDiyRows(inCat) {
@@ -2991,13 +3076,13 @@ function loadCompare() {
   $('brandList').classList.remove('dt', 'dt-wide'); $('brandList').innerHTML = skel(4);
   call('getCompare', [], function (c) {
     if (!c || !c.ok) { $('brandList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadCompare()'); return; }
-    S.cmp = c; renderCompare();
+    S.cmp = c; if (S.brand.view === 'src') renderSourcing(); else renderCompare();
   });
 }
 function renderCompare() {
   var c = S.cmp, el = $('brandList');
   if (!c.malls.length || c.malls.length < 2) { el.innerHTML = '<div class="empty">다른 사이트 수집이 쌓이면 비교표가 나와요 (올리브영 글로벌·화해·다이소·무신사·큐텐·아마존)</div>'; return; }
-  var head = '<div class="cmp-row cmp-head" style="grid-template-columns:minmax(128px,min(30%,260px)) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span>브랜드</span>' + c.malls.map(function (m) { return '<span title="' + esc(m.label + ' · ' + m.date) + '">' + esc(m.label.replace('올리브영 ', '').replace('올리브영', '올영')) + (m.abroad ? ' <em>해외</em>' : '') + '</span>'; }).join('') + '</div>';
+  var head = '<div class="cmp-row cmp-head" style="grid-template-columns:minmax(128px,min(30%,260px)) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span class="cmp-hb">브랜드</span>' + c.malls.map(function (m) { var w = String(m.label).split(' '), a = w.shift(); return '<span class="cmp-hm" title="' + esc(m.label + ' · ' + m.date + ' 수집') + '"><b>' + esc(a) + '</b>' + (w.length || m.abroad ? '<small>' + esc(w.join(' ')) + (m.abroad ? '<em>해외</em>' : '') + '</small>' : '') + '</span>'; }).join('') + '</div>';
   var rows = c.brands.map(function (b) {
     var t = CMP_TYPE[b.type] || ['', ''];
     return '<button type="button" class="cmp-row" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)" style="grid-template-columns:minmax(128px,min(30%,260px)) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span class="cmp-name">' + (t[0] ? '<span class="tag t-neutral" title="' + t[1] + ' 뜨는 브랜드">' + t[0] + '</span>' : '') + esc(b.brand) + (b.owned === true ? ' ' + tag('약국', 't-ok') : '') + '</span>'
@@ -3005,7 +3090,7 @@ function renderCompare() {
   }).join('');
   el.innerHTML = '<p class="note">칸 숫자 = 그 사이트에서 이 브랜드의 가장 높은 순위 (진할수록 상위) · 전역 3곳 이상 · 해외 해외에서만 · 국내 국내에서만</p><div class="cmp">' + head + rows + '</div>';
 }
-function setBrandView(v) { S.brand.view = v; if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; $('brandList').classList.remove('dt', 'dt-wide'); document.body.classList.toggle('cmp-on', v === 'cmp'); if (v === 'cmp') loadCompare(); else loadBrands(); }
+function setBrandView(v) { S.brand.view = v; if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; $('brandList').classList.remove('dt', 'dt-wide'); document.body.classList.toggle('cmp-on', v === 'cmp'); if (v === 'cmp' || v === 'src') { if (S.cmp) (v === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else loadBrands(); }
 /* ── 브랜드 검색 (화해 전체 상품 + 우리 약국 보유) ── */
 function safeUrl(u) { return /^https:\/\//.test(String(u || '')) ? u : ''; }
 function loadFind() {
@@ -3175,7 +3260,7 @@ function dtMount(T) {
   if (wide) {
     tools = (T.groups ? '<label class="dt-sel"><span class="sr-only">묶어 보기</span><select onchange="dtGroup(' + q() + ',this.value)"><option value="">묶어 보기 없음</option>' + T.groups.map(function (g) { return '<option value="' + esc(g[0]) + '"' + (st.group === g[0] ? ' selected' : '') + '>' + esc(g[1]) + '별로 묶기</option>'; }).join('') + '</select></label>' : '')
       + views.map(function (v, i) { return '<span class="dt-view"><button type="button" class="chip" data-i="' + i + '" onclick="dtViewLoad(' + q() + ',+this.dataset.i)" title="저장한 보기 불러오기">' + icon('layers') + esc(v.name) + '</button><button type="button" class="dt-x" data-i="' + i + '" aria-label="' + esc(v.name) + ' 보기 지우기" onclick="dtViewDel(' + q() + ',+this.dataset.i)">' + icon('x') + '</button></span>'; }).join('')
-      + (st.saving ? '<form class="dt-vform" onsubmit="event.preventDefault();dtViewSave(' + q() + ')"><input id="dtvn-' + id + '" maxlength="20" placeholder="보기 이름" aria-label="보기 이름" required><button type="submit" class="btn">저장</button></form>' : '<button type="button" class="btn ghost" onclick="dtSt(' + q() + ').saving=1;dtMount(DT[' + q() + ']);var i=$(\'dtvn-' + id + '\');if(i)i.focus()" title="지금 정렬·거르기를 이 기기에 저장">' + icon('save') + '<span>보기 저장</span></button>')
+      + (st.saving ? '<form class="dt-vform" onsubmit="event.preventDefault();dtViewSave(' + q() + ')"><input id="dtvn-' + id + '" maxlength="20" placeholder="보기 이름" aria-label="보기 이름" required><button type="submit" class="btn">저장</button></form>' : '<button type="button" class="btn ghost" onclick="dtSt(' + q() + ').saving=1;dtMount(DT[' + q() + ']);var i=$(\'dtvn-' + id + '\');if(i)i.focus()" title="지금 정렬·거르기를 이 기기에 저장">' + icon('save') + '<span>이 조건 저장</span></button>')
       + (T.cols.some(function (c) { return c.filter; }) ? '<button type="button" class="btn ghost' + (st.showF ? ' on-soft' : '') + '" aria-pressed="' + !!st.showF + '" onclick="var s=dtSt(' + q() + ');s.showF=!s.showF;dtMount(DT[' + q() + '])" title="칸마다 거르기 (예: 1만-2만 · 10 이하)">' + icon('sort') + '<span>칸 거르기</span></button>' : '')
       + '<button type="button" class="btn ghost" onclick="dtCsv(' + q() + ')" title="지금 보이는 표를 엑셀용 CSV로">' + icon('download') + '<span>CSV</span></button>';
   }
@@ -3192,8 +3277,8 @@ function dtMount(T) {
   else if (!rows.length) body = '<p class="empty">' + (T.rows.length ? '조건에 맞는 줄이 없어요' : esc(T.emptyMsg || '아직 자료가 없어요')) + (T.rows.length ? ' <button type="button" class="linkbtn" onclick="dtReset(' + q() + ')">거르기 풀기</button>' : '') + '</p>';
   else body = rows.slice(0, st.n).map(function (r, i) { return dtRowHtml(T, cols, r, i, wide, sel, st); }).join('') + (rows.length > st.n ? '<button type="button" class="more" onclick="dtSt(' + q() + ').n+=200;dtMount(DT[' + q() + '])">더 보기 (' + st.n + ' / ' + rows.length.toLocaleString('ko-KR') + ')</button>' : '');
   var filtered = rows.length !== T.rows.length;
-  var foot = wide || filtered ? '<div class="dt-foot"><span>' + (filtered ? rows.length.toLocaleString('ko-KR') + ' / ' : '') + T.rows.length.toLocaleString('ko-KR') + '개' + (T.note ? ' · ' + T.note : '') + '</span>' + (filtered || st.k ? '<button type="button" class="linkbtn" onclick="dtReset(' + q() + ')">처음처럼</button>' : '') + '</div>' : '';
-  el.classList.add('dt'); el.classList.toggle('dt-wide', wide);
+  var foot = wide || filtered ? '<div class="dt-foot"><span>' + (filtered ? rows.length.toLocaleString('ko-KR') + ' / ' : '') + T.rows.length.toLocaleString('ko-KR') + '개' + (T.note ? ' · ' + T.note : '') + '</span>' + (filtered || st.k ? '<button type="button" class="linkbtn" onclick="dtReset(' + q() + ')">정렬·거르기 풀기</button>' : '') + '</div>' : '';
+  el.classList.add('dt'); el.classList.toggle('dt-wide', wide); el.dataset.dt = T.id;
   el.style.setProperty('--dt-cols', tpl);
   el.innerHTML = bar + selbar + '<div class="dt-table" role="table" aria-label="' + esc(T.label || '') + '">' + head + '<div class="dt-body" role="rowgroup">' + body + '</div></div>' + foot;
   if (fk) { var inp = el.querySelector('[data-dtq="' + fk + '"]'); if (inp) { inp.focus(); try { inp.setSelectionRange(pos, pos); } catch (e) {} } }
@@ -3229,7 +3314,7 @@ function dtOpen(id, i) { var T = DT[id], r = dtRows(T)[i]; if (r && T.open) T.op
 function dtSel(id, k, on) { var st = dtSt(id), i = st.sel.indexOf(k); if (on && i === -1) st.sel.push(k); if (!on && i !== -1) st.sel.splice(i, 1); dtMount(DT[id]); }
 function dtSelAll(id, on) { var T = DT[id], st = dtSt(id); st.sel = on ? dtRows(T).slice(0, st.n).map(T.key) : []; dtMount(T); }
 function dtPicked(id) { var T = DT[id], st = dtSt(id); return T.rows.filter(function (r) { return st.sel.indexOf(T.key(r)) !== -1; }); }
-function dtResize() { Object.keys(DT).forEach(function (id) { var T = DT[id], el = $(T.el); if (el && el.offsetParent && el.classList.contains('dt') && dtWide(T, el) !== T.wide) dtMount(T); }); }   /* 다른 화면(사이트 비교 등)이 그 칸을 쓰는 중이면 건드리지 않는다 */
+function dtResize() { Object.keys(DT).forEach(function (id) { var T = DT[id], el = $(T.el); if (el && el.offsetParent && el.classList.contains('dt') && el.dataset.dt === id && dtWide(T, el) !== T.wide) dtMount(T); }); }   /* 다른 화면(사이트 비교 등)이 그 칸을 쓰는 중이면 건드리지 않는다 */
 if (window.ResizeObserver) new ResizeObserver(function () { clearTimeout(dtResize._t); dtResize._t = setTimeout(dtResize, 60); }).observe(document.getElementById('main'));
 /* CSV: 엑셀에서 한글이 깨지지 않게 BOM · = + - @ 로 시작하는 글자는 수식이 되지 않게 ' 를 붙인다 */
 function csvCell(v) { if (v == null) return ''; if (typeof v === 'number') return String(v); v = String(v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
@@ -3316,12 +3401,13 @@ function renderBrief() {
       : '<p class="rp-one">07시 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>') + '</article>';
   var cnt = function (m) { return m && m.ready !== false ? m.items.length : '–'; };
   var kpis = '<nav class="bc-kpis sum card" aria-label="오늘 숫자">' + [['missing', '들여올 후보', '약국에 없는 상위 상품', 'warn'], ['risers', '급상승', '크게 오른 상품', 'up'], ['new', 'NEW', '새로 들어온 상품', 'ink']].map(function (k) {
-    return '<button type="button" class="kpi kpi-btn ' + k[3] + '" data-f="' + k[0] + '" onclick="setTrendFrom(this.dataset.f)"><span class="kpi-l">' + k[1] + '</span><b>' + cnt(c[k[0]]) + '</b><span class="kpi-s">' + k[2] + icon('chev') + '</span></button>'; }).join('') + '</nav>';
+    var wk = k[0] === 'new' && S.la && S.la.items ? laWeek().length : -1;   /* 0929d 이번 주 신상(품평회 표)으로 */
+    return '<button type="button" class="kpi kpi-btn ' + k[3] + '" data-f="' + (wk >= 0 ? 'week' : k[0]) + '" onclick="setTrendFrom(this.dataset.f)"><span class="kpi-l">' + k[1] + '</span><b>' + cnt(c[k[0]]) + '</b><span class="kpi-s">' + (wk >= 0 ? '이번 주 신상 ' + wk + '개 · 품평회 표' : k[2]) + icon('chev') + '</span></button>'; }).join('') + '</nav>';
   var m = c.missing, top = '';
   if (m && m.ready !== false && m.items.length) {
     var hot = function (p) { return missMove(p) ? 1 : 0; };
     var its = m.items.slice().sort(function (a, b) { return hot(b) - hot(a) || a.rank - b.rank; }).slice(0, 8);
-    top = '<article class="card bc-top" data-card="missing" id="c-missing"><div class="card-head"><h2>들여올 것 <small>약국에 없는데 뜨는 중</small></h2><button type="button" class="lnk-more" onclick="setTrendFrom(\'missing\')">' + m.items.length + '개 전체' + icon('chev') + '</button></div><div class="bc-picks">' + its.map(pickCardHtml).join('') + '</div></article>';
+    top = '<article class="card bc-top" data-card="missing" id="c-missing"><div class="card-head"><h2>들여올 후보 <small>약국에 없는데 뜨는 중</small></h2><button type="button" class="lnk-more" onclick="setTrendFrom(\'missing\')">' + m.items.length + '개 전체' + icon('chev') + '</button></div><div class="bc-picks">' + its.map(pickCardHtml).join('') + '</div></article>';
   }
   var small = [];
   var w = c.watch, wi = w ? (w.items || []).filter(function (x) { return x.type !== 'same'; }) : [], wb = w ? (w.brands || []) : [];
@@ -3358,6 +3444,7 @@ function renderBrief() {
   small = small.slice(0, innerWidth < 600 ? 3 : 4);
   el.innerHTML = '<div class="brief">' + banner + '<header class="page-h"><p class="eyebrow">' + dl + '</p><h1 class="view-h1">오늘의 MD 브리핑</h1></header><div class="brief-top">' + rep + kpis + '</div>' + top + (small.length ? '<div class="brief-grid" data-n="' + small.length + '">' + small.join('') + '</div>' : '') + '</div>';
   if (!S.viz && !S.vizLoading) loadViz();
+  if (!S.la && !S.laBusy) laLoad();
 }
 function tourLine(v) {
   var t = v && v.tourism; if (!t) return '';
@@ -3377,14 +3464,14 @@ function briefReqSets() {
 function setTrendFrom(f) { S.trend.f = f; if (S.rank.cat !== 'all') { S.rank.cat = 'all'; S.rank.data = null; } route('trend', 'product'); }
 
 /* ── 트렌드 ── */
-var TREND_SUBS = [['product', '상품'], ['brand', '브랜드'], ['keyword', '키워드'], ['shorts', '쇼츠']];
-var TF = [['rank', '순위'], ['risers', '급상승'], ['new', 'NEW'], ['steady', '꾸준'], ['falling', '하락'], ['missing', '약국에 없음']];
+var TREND_SUBS = [['product', '상품'], ['brand', '브랜드'], ['keyword', '키워드'], ['shorts', '유튜브 쇼츠']];
+var TF = [['rank', '순위'], ['risers', '급상승'], ['new', 'NEW'], ['week', '이번 주 신상'], ['steady', '꾸준히 상위'], ['falling', '하락 중'], ['missing', '약국에 없음']];
 function renderTrend() {
   var sub = S.trend.sub;
   $('trendSeg').innerHTML = segHtml('trendSeg', TREND_SUBS, sub, "route('trend',this.dataset.s)");
   TREND_SUBS.forEach(function (s) { $('tv-' + s[0]).hidden = s[0] !== sub; });
   if (sub === 'product') { if (!S.home) loadHome(); renderChips(); if (!S.rank.data) loadRank(); else renderTrendList(); }
-  else if (sub === 'brand') { if (S.brand.view === 'cmp') { if (S.cmp) renderCompare(); else loadCompare(); } else if (!S.brand.data) loadBrands(); else { brandTable(S.brand.data); ensureDock('bs'); } }
+  else if (sub === 'brand') { if (S.brand.view === 'cmp' || S.brand.view === 'src') { if (S.cmp) (S.brand.view === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else if (!S.brand.data) loadBrands(); else { brandTable(S.brand.data); ensureDock('bs'); } }
   else if (sub === 'keyword') { if (S.viz) renderKeywords(); else { $('tv-keyword').innerHTML = skel(5); loadViz(); } }
   else if (sub === 'shorts') loadYt();
 }
@@ -3412,6 +3499,7 @@ function renderTrendF() {
   $('trendF').innerHTML = TF.map(function (f) {
     var n = null, dis = !all && (f[0] === 'steady' || f[0] === 'falling');
     if (f[0] === 'rank') n = r ? r.items.length : null;
+    else if (f[0] === 'week') n = S.la && S.la.items ? laWeek().length : null;
     else if (all) n = c && c[f[0]] && c[f[0]].ready !== false ? c[f[0]].items.length : null;
     else if (r && !dis) n = r.items.filter(function (p) { return f[0] === 'risers' ? typeof p.move === 'number' && p.move > 0 : f[0] === 'new' ? p.move === 'NEW' : p.owned === false; }).length;
     var on = S.trend.f === f[0];
@@ -3423,6 +3511,12 @@ function renderTrendList() {
   var el = $('rankList'); if (!el) return; renderTrendF();
   var t = trendSrc(), f = S.trend.f;
   $('rankMode').hidden = f !== 'rank';
+  if (f === 'week') {   /* 0929d 이번 주 신상품 (품평회 표) */
+    undockSheet('pd');
+    $('rankInfo').innerHTML = (S.la && S.la.today ? '<span class="asof">' + esc(shortDate(laDay(S.la.today, -6))) + '~' + esc(shortDate(S.la.today)) + '</span>' : '') + '<span>최근 7일 처음 100위 안에 들어온 상품 · 품평회 메모는 이 기기에 저장</span>';
+    if (!S.la || S.la.err) { el.classList.remove('dt', 'dt-wide'); el.innerHTML = S.la ? emptyHtml(S.la.err, '다시 불러오기', 'S.la=null;laLoad()') : skel(6); if (!S.la) laLoad(); return; }
+    dtMount(laTable(laWeek())); return;
+  }
   $('rankInfo').innerHTML = (t.date ? '<span class="asof">' + esc(shortDate(t.date)) + ' 기준</span>' : '') + (t.sub ? '<span>' + esc(t.sub) + '</span>' : '') + (t.fb ? '<span class="asof">' + t.fb + '</span>' : '');
   if (t.wait) { el.classList.remove('dt', 'dt-wide'); el.innerHTML = skel(6); return; }
   if (t.only) { el.classList.remove('dt', 'dt-wide'); el.innerHTML = emptyHtml('꾸준 · 하락은 전체 카테고리에서만 볼 수 있어요', '전체로 보기', "setCat('all')"); return; }
@@ -3607,14 +3701,14 @@ function rpFillChips() {
 }
 
 /* ── 기획 (행사 · 운영 준비): 담은 상품 · 재료함 · 손님·환율 · 가격 참고 ── */
-var PLAN_SUBS = [['board', '담은 상품'], ['mat', '재료함'], ['tour', '손님 · 환율'], ['price', '가격 참고']];
+var PLAN_SUBS = [['board', '담은 상품'], ['mat', '협업·자사 재료'], ['cal', '행사 캘린더'], ['tour', '손님 · 환율'], ['price', '가격대 · 할인']];
 function planStrip() {
   var c = (S.home && S.home.cards) || {}, v = S.viz, t = v && v.tourism, a = t && t.spop && t.spop.areas && t.spop.areas[0], cny = t && t.fx && t.fx.items.filter(function (x) { return x.cur === 'CNY'; })[0];
   var grp = (S.board && S.board.groups) || [], nB = grp.reduce(function (n, g) { return n + g.items.length; }, 0), nMiss = grp.reduce(function (n, g) { return n + g.items.filter(function (p) { return !(p.logi && p.logi.length); }).length; }, 0);
   var soon = ((S.set && S.set.mats) || []).filter(function (x) { return x.status === '곧 종료'; }).sort(function (x, y) { return (x.dday || 0) - (y.dday || 0); })[0];
   var tile = function (sub, l, b, sm) { return '<button type="button" class="kpi kpi-btn" onclick="route(\'plan\',\'' + sub + '\')"><span class="kpi-l">' + l + '</span><b>' + b + '</b><span class="kpi-s">' + sm + '</span></button>'; };
   return '<nav class="plan-strip" aria-label="행사 준비 한눈에">' + tile('board', '담은 상품', nB + '개', nMiss ? '약국에 없는 ' + nMiss + '개' : '모두 약국에 있음')
-    + tile('mat', '협업 마감', soon ? 'D-' + esc(soon.dday) : '없음', soon ? esc(String(soon.name).slice(0, 18)) : '재료함 ' + (((S.set && S.set.mats) || []).length) + '개')
+    + tile('mat', '협업 마감', soon ? 'D-' + esc(soon.dday) : '없음', soon ? esc(String(soon.name).slice(0, 18)) : '재료 ' + (((S.set && S.set.mats) || []).length) + '개')
     + tile('tour', '성수동 외국인', a ? manTxt(a.week || 0) + '명' : '–', a ? '7일 평균 ' + pctTxt(a.growth) + (cny ? ' · 위안 ' + Math.round(cny.won) + '원' : '') : '자료 없음')
     + tile('price', '할인 중', c.price && c.price.avg != null ? Math.round(c.price.saleRate * 100) + '%' : '–', c.price && c.price.avg != null ? '평균 ' + won(c.price.avg) : '상위 30위') + '</nav>';
 }
@@ -3623,6 +3717,7 @@ function renderPlan() {
   var b = $('planBody'), s = S.planSub;
   if (s === 'board') { b.innerHTML = planStrip() + '<div id="board" class="board"></div>'; loadBoard(); if (!S.set.mats) loadSetTab(); }
   else if (s === 'mat') { if (S.set.mats) b.innerHTML = matCardHtml(); else { b.innerHTML = skel(3); loadSetTab(); } }
+  else if (s === 'cal') { if (!S.la) { b.innerHTML = skel(4); laLoad(); } else b.innerHTML = S.la.err ? '<article class="card">' + emptyHtml(S.la.err, '다시 불러오기', 'S.la=null;laLoad()') + '</article>' : calHtml(); }
   else if (s === 'tour') { if (S.viz) { b.innerHTML = tourPlanHtml(S.viz); fitSvgText(b); } else { b.innerHTML = skel(4); loadViz(); } }
   else if (s === 'price') {
     if (!S.viz || !S.home) { b.innerHTML = skel(3); if (!S.viz) loadViz(); if (!S.home) loadHome(); return; }
@@ -3662,7 +3757,7 @@ function renderMore() {
   var s = S.moreSub, el = $('more');
   S.bcOn = s === 'find'; if (s !== 'find') clearTimeout(S.bcTimer);
   var back = function (t) { return '<div class="view-head"><button type="button" class="back-btn" onclick="subBack(\'more\',\'\')">' + icon('left') + '더 보기</button><h2 class="view-title">' + t + '</h2></div>'; };
-  if (s === 'analysis') { el.innerHTML = back('분석 모음') + (S.viz && S.home ? analysisHtml() : skel(4)); if (!S.viz) loadViz(); if (!S.home) loadHome(); fitSvgText(el); if (innerWidth >= 840) balanceCols(el.querySelector('.vz-grid'), 2); return; }
+  if (s === 'analysis') { el.innerHTML = back('카테고리 · 브랜드 분석') + (S.viz && S.home ? analysisHtml() : skel(4)); if (!S.viz) loadViz(); if (!S.home) loadHome(); fitSvgText(el); if (innerWidth >= 840) balanceCols(el.querySelector('.vz-grid'), 2); return; }
   if (s === 'find') { el.innerHTML = back('화해 브랜드 전체 조사') + '<div id="findList"></div>'; loadFind(); return; }
   if (s === 'watch') {
     var w = (S.home && S.home.cards && S.home.cards.watch) || { items: [], brands: [] }, TY = { up: 'up', down: 'down', out: 'down', 'in': 'up', 'sale-on': 'sale' };
@@ -3672,16 +3767,16 @@ function renderMore() {
       : '<p class="empty-line">' + icon('bell') + '<span>아직 켠 알림이 없어요 · 상품·브랜드 창의 [변화 알림]을 켜면 매일 달라진 점이 모여요</span></p>');
     return;
   }
-  if (s === 'filters') { el.innerHTML = back('카테고리 · 사이트 바로가기') + '<div class="more-2"><section class="card"><h2>카테고리 <small>오늘 100위 안 상품 수 · 누르면 그 순위</small></h2><div class="filter-cats">' + filterCatsHtml() + '</div></section><section class="card"><h2>여러 사이트 <small>누르면 사이트별 브랜드 비교표</small></h2><div class="grp-chips">' + filterPlatformsHtml() + '</div></section></div>'; if (!S.viz) loadViz(); return; }
+  if (s === 'filters') { el.innerHTML = back('올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교') + '<div class="more-2"><section class="card"><h2>카테고리 <small>오늘 100위 안 상품 수 · 누르면 그 순위</small></h2><div class="filter-cats">' + filterCatsHtml() + '</div></section><section class="card"><h2>사이트별 브랜드 비교 <small>누르면 그 사이트 순위가 보이는 비교표</small></h2><div class="grp-chips">' + filterPlatformsHtml() + '</div></section></div>'; if (!S.viz) loadViz(); return; }
   var ph = ((S.ps && S.ps.photoNeeds) || []).length, nd = S.rp ? (S.rp.dates || []).length : 0;
   var card = function (ic, t, d, act) { return '<button type="button" class="card menu-card" onclick="' + act + '"><span class="mc-ic">' + icon(ic) + '</span><span class="mc-tx"><b>' + t + '</b><span>' + d + '</span></span>' + icon('chev') + '</button>'; };
   el.innerHTML = '<div class="menu-grid">'
-    + card('trend', '분석 모음', '카테고리 구성·흐름 · 브랜드 TOP10 · 순위 변동 · 생존율 · 컬러 · 행사 비율', "route('more','analysis')")
+    + card('trend', '카테고리 · 브랜드 분석', '카테고리 구성·흐름 · 브랜드 TOP10 · 순위 변동 · 생존율 · 컬러 · 행사 비율', "route('more','analysis')")
     + card('search', '화해 브랜드 전체 조사', '손님이 묻는 브랜드의 전체 상품을 화해에서 가져와 우리 약국 보유와 같이 봐요', "route('more','find')")
     + card('file', '지난 리포트', (nd ? nd + '일치 · ' : '') + '날짜를 골라 지난 인사이트와 오늘 할 일을 다시 봐요', "openReport('')")
     + card('package', '용도별 상품 · 사진 확인', (ph ? '사진 확인 필요 <b class="warn">' + ph + '개</b> · ' : '') + '물류앱 용도 고치기 · 사진 없는 상품에 맞는 사진 고르기', "route('set','uses')")
-    + card('columns', '박스 관리', '투명박스 안쪽 크기를 넣어 두면 세트가 들어가는지 실제 비율로 그려 봐요', 'moreBox()')
-    + card('grid', '카테고리 · 사이트 바로가기', '카테고리별 순위와 올리브영·화해·다이소·큐텐 사이트 비교표로 바로 가요', "route('more','filters')")
+    + card('columns', '세트 박스 크기', '투명박스 안쪽 크기를 넣어 두면 세트가 들어가는지 실제 비율로 그려 봐요', 'moreBox()')
+    + card('grid', '올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교', '사이트별 순위 비교표 · 카테고리별 순위', "route('more','filters')")
     + card('alert', '수집 상태', esc((S.stat && S.stat.text) || '쇼핑몰별 마지막 수집'), 'openStatus()')
     + card('bell', '변화 알림 목록', '알림을 켠 상품·브랜드 ' + watchCount() + '개 · 오늘 변화와 끄기', "route('more','watch')")
     + '</div><p class="app-info">' + icon('spark') + 'TRENDLAB v3.0 · 레디영 MD 송주희 주임 전용</p>';
@@ -3762,6 +3857,146 @@ document.addEventListener('keydown', function (e) {
   e.preventDefault(); nx.focus(); nx.scrollIntoView({ block: 'nearest' });
   if (nx.matches('.dt-row') && nx.closest('#rankList, #brandList') && canDock(nx.closest('#rankList') ? 'pd' : 'bs')) nx.click();
 });
+
+/* ══ 0929d MD 업무 5가지 (docs/md_marketer_research.md Top 5) ══════════════════ */
+/* ── ① 약국 베스트 ABC 분석: 매출 누적 70%까지 A · 다음 20% B · 나머지 C (매출이 없으면 판매수량). 상품별 이익·이익률은 어디에도 보이지 않는다 ── */
+function pbAbc(list) {
+  var by = list.some(function (x) { return x.s > 0; }) ? 's' : 'q', tot = list.reduce(function (a, x) { return a + Math.max(0, x[by]); }, 0), cum = 0;
+  list.slice().sort(function (a, b) { return b[by] - a[by]; }).forEach(function (x) { var v = Math.max(0, x[by]); x.abc = cum < tot * 0.7 ? 'A' : cum < tot * 0.9 ? 'B' : 'C'; x.sh = tot ? v / tot : 0; cum += v; });
+  return by;
+}
+function abcShare(v) { return (v >= 0.1 ? Math.round(v * 100) : Math.round(v * 1000) / 10).toLocaleString('ko-KR') + '%'; }
+function abcChip(x) { return x && x.abc ? '<span class="tag abc abc-' + x.abc + '" title="' + (S.pb.abcBy === 's' ? '매출' : '판매수량') + ' 비중 ' + abcShare(x.sh) + ' · ABC ' + x.abc + '등급">' + x.abc + '</span>' : ''; }
+/* MD 힌트: C 인데 올리브영에서 오르는 중 → 진열 위치 점검 · A 인데 올리브영 순위가 떨어지는 중 → 재고 과잉 주의 */
+function pbHints() {
+  var c = S.home && S.home.cards, pb = S.pb, out = [], seen = {}; if (!c || !pb || !pb.list || pb.empty) return out;
+  var put = function (arr, want, text, tone, why) { ((arr && arr.items) || []).forEach(function (p) { var x = pbItemOy(p); if (x && x.abc === want && !seen[x.n]) { seen[x.n] = 1; out.push({ x: x, p: p, text: text, tone: tone, why: why(p) }); } }); };
+  put(c.risers, 'C', '진열 위치 점검', 't-up', function (p) { return '올영 ' + p.rank + '위 · ' + (p.diff ? p.diff + '계단 오름' : '급상승'); });
+  put(c['new'], 'C', '진열 위치 점검', 't-up', function (p) { return '올영 ' + p.rank + '위 새로 진입'; });
+  put(c.falling, 'A', '재고 과잉 주의', 't-warn', function (p) { return '올영 순위 ' + (p.drop ? Math.round(p.drop) + '계단 내림' : '하락 중'); });
+  return out;
+}
+function pbHintOf(x) { if (!S.pb.hints) S.pb.hints = pbHints(); var h = S.pb.hints.filter(function (y) { return y.x === x; })[0]; return h ? ' ' + tag(h.text, h.tone) : ''; }
+function abcSumHtml(table) {
+  var pb = S.pb, g = { A: [0, 0], B: [0, 0], C: [0, 0] }; pb.list.forEach(function (x) { if (g[x.abc]) { g[x.abc][0]++; g[x.abc][1] += x.sh; } });
+  var basis = pb.abcBy === 's' ? '매출' : '판매수량', hints = S.pb.hints = pbHints();
+  return '<div class="abc-card"><div class="abc-sum" role="group" aria-label="ABC 등급으로 거르기">' + ['A', 'B', 'C'].map(function (k) { var on = table ? dtSt('pbt').fac.abc === k : S.pbCat === '@abc:' + k; return '<button type="button" class="abc-seg' + (on ? ' on' : '') + '" data-c="@abc:' + k + '" aria-pressed="' + on + '" onclick="' + (table ? 'dtFacet(\'pbt\',\'abc\',this.dataset.c.slice(5),1)' : 'pbSetCat(S.pbCat===this.dataset.c?\'\':this.dataset.c)') + '"><span class="tag abc abc-' + k + '">' + k + '</span><b>' + g[k][0].toLocaleString('ko-KR') + '개</b><span>' + basis + ' ' + abcShare(g[k][1]) + '</span></button>'; }).join('') + '</div>'
+    + '<p class="abc-note">' + basis + ' 누적 70%까지 A · 다음 20% B · 나머지 C' + (pb.abcBy === 's' ? '' : ' (매출 칸이 없어 판매수량 기준)') + '</p>'
+    + (hints.length ? '<div class="abc-hints"><p class="abc-hl">' + icon('spark') + 'MD 힌트 <small>올리브영 흐름과 엇갈리는 상품</small></p>' + hints.slice(0, 4).map(function (h) { return '<p class="abc-hint">' + abcChip(h.x) + '<span class="nm1">' + esc(h.x.n) + '</span><span class="meta">' + esc(h.why) + '</span>' + tag(h.text, h.tone) + '</p>'; }).join('') + '</div>' : '') + '</div>';
+}
+/* 올리브영 상품 → 약국 판매 상품 (pbRankOy 와 같은 규칙) */
+function pbItemOy(p) {
+  var pb = S.pb; if (!p || p.owned !== true || !pb || !pb.list || !pb.list.length) return null;
+  if (!pb.loose) pb.loose = pb.list.map(function (x) { return [loose(x.m || x.n), x]; }).filter(function (a) { return a[0].length >= 5; });
+  var hay = loose((p.brand || '') + (p.name || '')), hay2 = loose(p.name), best = null;
+  pb.loose.forEach(function (a) { if ((hay.indexOf(a[0]) !== -1 || hay2.indexOf(a[0]) !== -1) && (!best || a[0].length > best[0].length)) best = a; });
+  return best ? best[1] : null;
+}
+
+/* ── ②⑤ 최근 28일 신상품 · 행사 (getLaunches) ── */
+function laLoad() {
+  if (S.laBusy) return; S.laBusy = 1;
+  swrCall('getLaunches', [], function (r) { S.laBusy = 0; S.la = r && r.ok ? r : { err: (r && r.msg) || '불러오지 못했어요' }; laRefresh(); },
+    function () { S.laBusy = 0; S.la = { err: '서버 코드를 새로 붙여넣으면 나와요 (1_Code.gs)' }; laRefresh(); });
+}
+function laRefresh() { if (S.tab === 'today') renderBrief(); else if (S.tab === 'trend' && S.trend.sub === 'product') renderTrendList(); else if (S.tab === 'plan' && S.planSub === 'cal') renderPlan(); }
+function laDay(base, n) { var d = dateOf(base); if (!d) return ''; d.setDate(d.getDate() + n); return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0'); }
+function laWeek() {
+  var la = S.la; if (!la || !la.items) return [];
+  var from = laDay(la.today, -6), cl = S.rank.cat !== 'all' ? (CATS.filter(function (c) { return c[0] === S.rank.cat; })[0] || [])[1] : '';
+  return la.items.filter(function (x) { return x.first >= from && (!cl || x.cat === cl); });
+}
+function laMemos() { try { return JSON.parse(localStorage.getItem('tl_lamemo') || '{}'); } catch (e) { return {}; } }
+function laMemoSet(k, v) { var m = laMemos(); if (v.trim()) m[k] = v.slice(0, 120); else delete m[k]; try { localStorage.setItem('tl_lamemo', JSON.stringify(m)); } catch (e) { toast('이 기기에 저장하지 못했어요'); } }
+function laTable(items) {
+  var memo = laMemos(), cats = {}; items.forEach(function (p) { cats[p.cat] = (cats[p.cat] || 0) + 1; });
+  return { id: 'lau', el: 'rankList', label: '이번 주 신상품 (품평회)', rows: items, key: function (p) { return p.key; }, open: function (p) { openPd(p.key); }, file: '이번주신상품_품평회',
+    emptyMsg: '최근 7일 동안 새로 100위 안에 들어온 상품이 없어요', note: '메모는 이 기기에 저장 · CSV 에 같이 나가요',
+    attr: function (p) { return ' data-key="' + esc(p.key) + '"'; }, tip: function (p) { return p.brand + ' ' + p.name; }, act: function (p) { return saveBtnHtml(p.key); },
+    cols: [
+      { k: 'img', label: '', w: '0px', m: 'lead', nosort: 1, csv: false, wideHide: 1, html: function (p) { return imgHtml(p.img); } },
+      { k: 'name', label: '상품', w: 'minmax(180px,1fr)', m: 'title', filter: 1, v: function (p) { return p.brand + ' ' + p.name; }, csv: function (p) { return p.name; }, html: function (p, wide) { return (wide ? '<span class="dt-thumb">' + imgHtml(p.img) + '</span>' : '') + '<span class="dt-nm"><span class="br">' + esc(p.brand) + '</span><span class="nm">' + esc(p.name) + '</span></span>'; } },
+      { k: 'brand', label: '브랜드', csvOnly: 1 },
+      { k: 'price', label: '판매가', w: 'minmax(84px,.5fr)', num: 1, right: 1, m: 'sub', v: function (p) { return typeof p.salePrice === 'number' ? p.salePrice : null; }, html: function (p) { return typeof p.salePrice === 'number' ? '<span class="pr1"><b>' + won(p.salePrice) + '</b>' + (p.disc ? '<small>' + esc(p.disc) + '%</small>' : '') + '</span>' : '<span class="meta">–</span>'; } },
+      { k: 'cat', label: '카테고리', w: 'minmax(76px,.45fr)', m: 'sub', html: function (p) { return tag(p.cat); } },
+      { k: 'first', label: '처음 본 날', w: 'minmax(76px,.4fr)', desc: 1, m: 'sub', csv: function (p) { return p.first; }, html: function (p) { return '<span class="val">' + esc(shortDate(p.first)) + '</span>' + (S.la && p.first === S.la.today ? ' ' + newTag() : ''); } },
+      { k: 'best', label: '최고 순위', w: 'minmax(76px,.4fr)', num: 1, m: 'sub', v: function (p) { return +p.best || null; }, csv: function (p) { return (p.bestBy ? p.bestBy + ' ' : '') + p.best; }, html: function (p) { return '<b>' + esc(p.best) + '위</b>' + (p.bestBy ? '<small class="la-by" title="' + esc(p.bestBy) + ' 순위에서">' + esc(p.bestBy) + ' 순위</small>' : '<small class="la-by">전체 순위</small>'); } },
+      { k: 'own', label: '약국 보유', w: 'minmax(80px,.4fr)', m: 'sub', v: function (p) { return p.owned === true ? '있음' : p.owned === false ? '없음' : ''; }, html: function (p) { return ownHtml(p.owned) || '<span class="meta">–</span>'; } },
+      { k: 'memo', label: '품평회 메모', w: 'minmax(160px,1.4fr)', m: 'side', nosort: 1, v: function (p) { return laMemos()[p.key] || ''; }, html: function (p) { return '<input class="la-memo" data-k="' + esc(p.key) + '" value="' + esc(memo[p.key] || '') + '" maxlength="120" placeholder="예: 샘플 요청 · 3개 테스트" aria-label="' + esc(p.name) + ' 품평회 메모" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()" oninput="laMemoSet(this.dataset.k,this.value)">'; } },
+      { k: 'url', label: '링크', csvOnly: 1 }
+    ],
+    facets: [
+      { k: 'own', opts: [['n', '약국에 없는 것만', items.filter(function (p) { return p.owned === false; }).length]], tone: 'tog', test: function (p) { return p.owned === false; } },
+      { k: 'memo', opts: [['y', '메모한 것만']], tone: 'tog', test: function (p) { return !!laMemos()[p.key]; } },
+      { k: 'cat', label: '카테고리', type: 'select', opts: function () { return Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; }).map(function (c) { return [c, c + ' ' + cats[c]]; }); }, test: function (p, v) { return p.cat === v; } }
+    ],
+    groups: [['cat', '카테고리', function (p) { return p.cat; }], ['brand', '브랜드', function (p) { return p.brand; }], ['first', '처음 본 날', function (p) { return shortDate(p.first); }]],
+    pivot: [['상품 수', function (rs) { return rs.length; }], ['평균 최고 순위', function (rs) { return dtAvg(rs, function (p) { return +p.best; }); }], ['약국 없음', function (rs) { return rs.filter(function (p) { return p.owned === false; }).length; }]]
+  };
+}
+
+/* ── ③ 화해 × 올리브영 교차 소싱 후보 (getCompare 자료 그대로): 약국에 없는 브랜드 중
+   다른 사이트 상위인데 올영은 아직 낮음(먼저 들이기) · 올영 상위인데 화해엔 아직 없음(리뷰 쌓이기 전) ── */
+function srcRows(c) {
+  var lab = {}; c.malls.forEach(function (m) { lab[m.mall] = m.label.replace('올리브영 ', '올영 '); });
+  return c.brands.map(function (b) {
+    if (b.owned === true) return null;
+    var oy = b.ranks.oliveyoung, hw = b.ranks.hwahae, ot = Object.keys(b.ranks).filter(function (m) { return m !== 'oliveyoung'; }).sort(function (x, y) { return b.ranks[x] - b.ranks[y]; });
+    var hot = ot.filter(function (m) { return b.ranks[m] <= (m === 'hwahae' ? 30 : 20); }), where = function (ms) { return ms.slice(0, 2).map(function (m) { return (lab[m] || m) + ' ' + b.ranks[m] + '위'; }).join(' · '); };
+    if (hot.length && (!oy || oy > 30)) return Object.assign({ _t: 'first', _o: b.ranks[hot[0]], _why: where(hot) + (oy ? ' · 올영은 ' + oy + '위' : ' · 올영 100위 밖') + ' → 올영보다 먼저 들이면 선점' }, b);
+    if (oy && oy <= 20 && (!hw || hw > 50)) return Object.assign({ _t: 'rev', _o: oy, _why: '올영 ' + oy + '위인데 화해엔 ' + (hw ? hw + '위' : '아직 없음') + ' → 리뷰 쌓이기 전 약국 테스트 입점' }, b);
+    return null;
+  }).filter(Boolean).sort(function (a, b) { return (a._t === 'first' ? 0 : 1) - (b._t === 'first' ? 0 : 1) || a._o - b._o; });
+}
+function renderSourcing() {
+  var c = S.cmp, rows = srcRows(c), n1 = rows.filter(function (b) { return b._t === 'first'; }).length;
+  dtMount({ id: 'src', el: 'brandList', label: '소싱 후보 브랜드', rows: rows, key: function (b) { return b.brand; }, file: '소싱후보',
+    open: function (b) { if (b.ranks.oliveyoung) openBrand(b.brand); else toast('올리브영 100위 밖 브랜드라 상세가 없어요 · 더 보기 › 브랜드 찾기에서 화해 상품을 볼 수 있어요'); },
+    emptyMsg: '지금은 다른 사이트와 엇갈리는 브랜드가 없어요', note: '약국에 있는 브랜드는 뺐어요 · 사이트별 가장 최근 수집',
+    attr: function (b) { return ' data-b="' + esc(b.brand) + '"'; },
+    cols: [
+      { k: 'brand', label: '브랜드', w: 'minmax(120px,.9fr)', m: 'title', filter: 1, html: function (b) { return '<span class="nm1">' + esc(b.brand) + '</span>' + tag(b._t === 'first' ? '먼저 들이기' : '올영 먼저 뜸', b._t === 'first' ? 't-up' : 't-neutral'); } },
+      { k: '_why', label: '왜 후보인가', w: 'minmax(220px,1.6fr)', m: 'sub', filter: 1, html: function (b) { return '<span class="src-why">' + esc(b._why) + '</span>'; } },
+      { k: 'hw', label: '화해', w: 'minmax(56px,.5fr)', num: 1, right: 1, m: 'side', v: function (b) { return b.ranks.hwahae || null; }, html: function (b) { return b.ranks.hwahae ? '<b>' + b.ranks.hwahae + '위</b>' : '<span class="meta">–</span>'; } },
+      { k: 'oy', label: '올리브영', w: 'minmax(64px,.5fr)', num: 1, right: 1, m: 'side', v: function (b) { return b.ranks.oliveyoung || null; }, html: function (b) { return b.ranks.oliveyoung ? '<b>' + b.ranks.oliveyoung + '위</b>' : '<span class="meta">밖</span>'; } },
+      { k: 'hits', label: '사이트 수', w: 'minmax(64px,.5fr)', num: 1, desc: 1, right: 1, m: 'side', html: function (b) { return esc(b.hits) + '곳'; } },
+      { k: 'own', label: '약국', w: 'minmax(64px,.5fr)', m: 'side', v: function (b) { return b.owned === false ? '미취급' : '모름'; }, html: function (b) { return b.owned === false ? tag('미취급', 't-warn') : '<span class="meta">모름</span>'; } }
+    ],
+    facets: [{ k: 't', opts: [['first', '먼저 들이기', n1], ['rev', '올영 먼저 뜸', rows.length - n1]], test: function (b, v) { return b._t === v; } }]
+  });
+}
+
+/* ── ⑤ 경쟁 신상품 · 행사 캘린더 (기획 › 행사 캘린더): 4주 · 브랜드 줄 · 점 = 신상품 처음 본 날 · 막대 = 세일·쿠폰·증정 중 ── */
+function calHtml() {
+  var la = S.la, n = la.days || 28, days = [], col = {}; for (var i = 0; i < n; i++) days.push(laDay(la.from, i));
+  (la.collected || []).forEach(function (d) { col[d] = 1; });
+  var B = {}, row = function (b) { return B[b] = B[b] || { brand: b, dots: {}, n: 0, ev: [], t: [] }; };
+  la.items.forEach(function (x) { var i = days.indexOf(x.first); if (i === -1) return; var r = row(x.brand); (r.dots[i] = r.dots[i] || []).push(x); r.n++; });
+  Object.keys(la.ev || {}).forEach(function (b) { var r = row(b); r.ev = la.ev[b].d; r.t = la.ev[b].t; });
+  var rows = Object.keys(B).map(function (k) { return B[k]; }).sort(function (a, b) { return b.n - a.n || b.ev.length - a.ev.length; });
+  var shown = rows.slice(0, S.calAll ? rows.length : 16), wk = laDay(la.today, -6), wkN = la.items.filter(function (x) { return x.first >= wk; }).length;
+  var top = rows.filter(function (r) { return r.n; })[0], evB = rows.filter(function (r) { return r.ev.indexOf(n - 1) !== -1; }).length;
+  var runs = function (ev) {   /* 수집 없던 날은 앞날을 이어 간다 */
+    var on = {}, out = [], s = -1; ev.forEach(function (i) { on[i] = 1; });
+    for (var i = 0; i <= n; i++) { var v = i < n && (on[i] || (!col[days[i]] && s !== -1)); if (v && s === -1) s = i; if (!v && s !== -1) { out.push([s, i]); s = -1; } }
+    return out;
+  };
+  var tpl = 'style="grid-template-columns:repeat(' + n + ',minmax(0,1fr))"';
+  var head = '<div class="cal-row cal-head"><span class="cal-b">브랜드</span><div class="cal-track" ' + tpl + '>' + days.map(function (d, i) { var dt = dateOf(d), mon = dt.getDay() === 1; return '<span class="cal-d' + (mon || i === 0 ? ' wk' : '') + (i === n - 1 ? ' today' : '') + '" title="' + esc(d) + '">' + (mon || i === 0 ? (dt.getMonth() + 1) + '/' : '') + dt.getDate() + '</span>'; }).join('') + '</div></div>';
+  var body = shown.map(function (r) {
+    return '<div class="cal-row"><span class="cal-b"><b class="nm1">' + esc(r.brand) + '</b><small>' + (r.n ? '신상 ' + r.n : '') + (r.n && r.ev.length ? ' · ' : '') + (r.ev.length ? '행사 ' + r.ev.length + '일' : '') + '</small></span><div class="cal-track" ' + tpl + '>'
+      + days.map(function (d, i) { return i === n - 1 ? '<i class="cal-now" style="grid-column:' + (i + 1) + '" aria-hidden="true"></i>' : ''; }).join('')
+      + runs(r.ev).map(function (x) { return '<i class="cal-bar" style="grid-column:' + (x[0] + 1) + ' / ' + (x[1] + 1) + '" title="' + esc(r.brand + ' ' + (r.t.join('·') || '행사') + ' ' + shortDate(days[x[0]]) + '~' + shortDate(days[x[1] - 1])) + '"></i>'; }).join('')
+      + Object.keys(r.dots).map(function (i) { var its = r.dots[i]; return '<button type="button" class="cal-dot" style="grid-column:' + (+i + 1) + '" data-key="' + esc(its[0].key) + '" onclick="openPd(this.dataset.key)" title="' + esc(shortDate(days[i]) + ' 신상품 ' + its.length + '개 · ' + its.map(function (x) { return x.name; }).join(', ')) + '" aria-label="' + esc(r.brand + ' ' + shortDate(days[i]) + ' 신상품 ' + its.length + '개') + '"><span class="cal-pin">' + (its.length > 1 ? its.length : '') + '</span></button>'; }).join('')
+      + '</div></div>';
+  }).join('');
+  var late = la.dataStart && la.dataStart > la.from ? ' · 수집 시작(' + shortDate(la.dataStart) + ') 전은 비어 있어요' : '';
+  return '<article class="card cal-card"><div class="card-head"><h2>경쟁 신상품 · 행사 캘린더 <small>최근 4주 · 올리브영 100위 기준</small></h2>' + asOf(la.today) + '</div>'
+    + '<div class="cal-kpis"><button type="button" class="kpi kpi-btn" onclick="setTrendFrom(\'week\')"><span class="kpi-l">이번 주 신상품</span><b>' + wkN + '개</b><span class="kpi-s">품평회 표로 보기' + icon('chev') + '</span></button>'
+    + kpiHtml('4주 신상품', la.items.length + '개', rows.filter(function (r) { return r.n; }).length + '개 브랜드') + kpiHtml('가장 많이 낸 브랜드', top ? esc(top.brand) : '–', top ? '신상 ' + top.n + '개' : '4주 동안 없음') + kpiHtml('오늘 행사 중', evB + '곳', '세일·쿠폰·증정 브랜드') + '</div>'
+    + '<p class="cal-key"><span><i class="cal-pin" aria-hidden="true"></i>신상품 처음 본 날 (숫자 = 개수 · 누르면 상품)</span><span><i class="cal-bar" aria-hidden="true"></i>세일·쿠폰·증정 중</span>' + late + '</p>'
+    + (rows.length ? '<div class="cal" role="table" aria-label="브랜드별 신상품·행사 4주">' + head + body + '</div>' + (rows.length > 16 ? '<button type="button" class="more" onclick="S.calAll=!S.calAll;renderPlan()">' + (S.calAll ? '접기' : '브랜드 ' + (rows.length - 16) + '곳 더 보기') + '</button>' : '') : '<p class="empty">4주 동안 새 상품·행사 기록이 없어요</p>') + '</article>';
+}
 
 /* 시작은 맨 끝에서: 위의 S.set · S.pb 같은 값이 다 만들어진 뒤 */
 if (google.script.url && google.script.url.getLocation) google.script.url.getLocation(function (loc) { S.k = (loc && loc.parameter && loc.parameter.k) || ''; start(); });
