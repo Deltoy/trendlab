@@ -1083,7 +1083,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 /* 더 보기 */
 .menu-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 @media(min-width:840px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(min-width:1100px){.menu-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1100px){.menu-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}   /* 10장 = 5 × 2 (빈 칸 없음) */
 .menu-card{display:flex;align-items:center;gap:14px;min-height:88px;width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;transition:border-color var(--t),box-shadow var(--t),transform var(--t)}
 .menu-card.info{cursor:default}
 .mc-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;background:var(--pri-soft);color:var(--pri-text)}
@@ -1435,6 +1435,114 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .src-page .src-a{display:inline-flex;align-items:center;gap:4px;min-height:44px;min-width:44px;color:var(--ink)}
 .src-page .src-a .ic{width:13px;height:13px}
 .bc-tour .card-head .lnk-more{min-height:44px}
+/* ── 0929 PC 왼쪽 메뉴: 묶음 머리 + 촘촘한 줄(32px) · 길면 메뉴만 안에서 스크롤 ── */
+.snav{display:none}
+@media(min-width:1100px){
+  .tabs{gap:0;padding:14px 10px 10px}
+  .side-logo{margin:0 0 14px}
+  .tabs .side-owner{margin:-8px 0 10px 12px}
+  .snav{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;overflow-y:auto;margin:0 -4px;padding:0 4px;scrollbar-width:thin}
+  .snav-sec{display:flex;flex-direction:column;gap:1px;padding:0 0 6px}
+  .snav-sec+.snav-sec{border-top:1px solid var(--line);padding-top:6px}
+  .snav-h{margin:2px 10px 2px;font-size:var(--fs-1);font-weight:700;color:var(--ink3);letter-spacing:.02em;line-height:18px}
+  .tabs .snav .snav-i{min-height:0;min-width:0;display:flex;align-items:center;gap:10px;flex:none;height:32px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:var(--ink2);font-size:var(--fs-2);font-weight:600;text-align:left;white-space:nowrap;cursor:pointer;transition:background var(--t),color var(--t)}
+  .tabs .snav .snav-i span{overflow:hidden;text-overflow:ellipsis}
+  .tabs .snav .snav-i .ic{width:16px;height:16px;flex:none}
+  .tabs .snav .snav-i.on{background:var(--pri-soft);color:var(--pri-text);font-weight:700}
+  .tabs .snav .snav-i.on .ic{stroke-width:2}
+  .side-status{flex:none;margin-top:6px;min-height:36px}
+}
+@media(min-width:1100px) and (min-height:960px){.tabs .snav .snav-i{height:36px}.snav-sec{padding-bottom:8px}.snav-sec+.snav-sec{padding-top:8px}}
+@media(min-width:1100px) and (hover:hover){.tabs .snav .snav-i:not(.on):hover{background:var(--fill);color:var(--ink)}}
+/* 새 화면 공용 */
+.se-lab{margin:12px 0 6px;font-size:var(--fs-1);font-weight:700;color:var(--ink3)}
+.se-exi{display:inline-flex;align-items:center;gap:6px;min-height:28px;margin:0 6px 6px 0;padding:2px 4px 2px 10px;border:1px solid var(--line);border-radius:var(--pill);font-size:var(--fs-2);color:var(--ink)}
+.need-paste .empty{padding:12px 0}
+/* 시즌 준비 */
+.se-top{margin-bottom:16px}
+.se-strip{--se-l:150px;position:relative;margin-top:12px}
+.se-mhead{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));margin-left:var(--se-l);font-size:var(--fs-1);color:var(--ink3);font-weight:600}
+.se-mhead span{padding:0 0 4px 4px;border-left:1px solid var(--line);white-space:nowrap;overflow:hidden}
+.se-mhead .yr{color:var(--ink);border-left-color:var(--ink3)}
+.se-lane{display:grid;grid-template-columns:var(--se-l) minmax(0,1fr);align-items:center;height:24px}
+.se-ln{font-size:var(--fs-2);color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
+.se-track{position:relative;height:100%;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:calc(100% / 12) 100%}
+.se-win{position:absolute;top:7px;height:10px;border-radius:var(--pill);background:var(--pri)}
+.se-win.t-warn{background:var(--warn)}.se-win.t-ok{background:var(--ok)}.se-win.t-neutral{background:var(--ink3)}
+.se-ord{position:absolute;top:3px;width:3px;height:18px;margin-left:-1px;border-radius:2px;background:var(--up)}
+.se-now{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--ink);pointer-events:none}
+.vz-key .k-win{background:var(--pri)}.vz-key .k-ord{width:4px;background:var(--up)}.vz-key .k-now{width:0;border-left:1.5px dashed var(--ink);border-radius:0}
+.se-grid{display:flex;flex-direction:column;gap:16px}
+.se-grid.balanced{display:grid;grid-template-columns:repeat(var(--bal-n),minmax(0,1fr));gap:16px;align-items:start}
+.se-grid .bal-col,.st-grid .bal-col,.nv-grid .bal-col{gap:16px}
+.se-card h2,.st-card h2{margin:0;font-size:var(--fs-4)}
+.se-win-t{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;font-size:var(--fs-2);color:var(--ink2)}
+.se-win-t .ic{width:14px;height:14px}
+.se-why{margin:8px 0 0;font-size:var(--fs-2);color:var(--ink2)}
+.se-sig{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.se-sig li{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:var(--r-sm);background:var(--fill);font-size:var(--fs-2);color:var(--ink)}
+.se-sig .ic{width:16px;height:16px;flex:none;margin-top:2px;color:var(--pri-text)}
+.se-acts{display:flex;flex-direction:column}
+.se-act{display:flex;gap:10px;align-items:flex-start;min-height:36px;padding:6px 0;font-size:var(--fs-2);cursor:pointer;border-top:1px solid var(--line)}
+.se-act{position:relative}.se-act input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}   /* 줄 전체가 누르는 곳 · 네모는 그림 */
+.se-act span::before{content:'';display:inline-block;width:16px;height:16px;margin:0 10px -3px 0;border:1.5px solid var(--line-strong);border-radius:5px;background:var(--card)}
+.se-act input:checked+span{color:var(--ink3);text-decoration:line-through}.se-act input:checked+span::before{background:var(--pri);border-color:var(--pri);box-shadow:inset 0 0 0 3px var(--card)}
+.se-act input:focus-visible+span::before{outline:2px solid var(--pri);outline-offset:2px}
+@media(max-width:599px){.se-act{min-height:44px;align-items:center}}
+/* 뜨는 상권 */
+.ar-head{margin-bottom:16px}
+.ar-base{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;border-radius:var(--r-sm);background:var(--fill);font-size:var(--fs-2)}
+.ar-base .meta{margin:0}
+.ar-chips{display:flex;flex-wrap:wrap;gap:4px}
+.ar-next{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0;font-size:var(--fs-2)}
+.ar-gu{margin-top:2px;font-size:var(--fs-1)}
+.ar-why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:var(--fs-1)}
+#arTable{margin-top:12px}
+.ar-2{display:grid;gap:16px}
+@media(min-width:1100px){.ar-2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:stretch}.ar-2>.card{display:flex;flex-direction:column}.ar-2 .ar-map{flex:1}}
+.ar-map{display:block;width:100%;height:auto;max-height:400px;margin-top:8px}
+.ar-fd{display:flex;flex-direction:column;margin-top:8px}
+.ar-fdr{display:grid;grid-template-columns:minmax(0,1fr) minmax(56px,120px) 118px;gap:12px;align-items:center;min-height:36px;border-top:1px solid var(--line);font-size:var(--fs-2)}
+.ar-fn{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ar-fn b{display:inline-block;width:22px;color:var(--ink3)}.ar-fn small{font-size:var(--fs-1);color:var(--ink3)}
+.ar-fv{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}.ar-fv small{font-size:var(--fs-1);color:var(--ink3)}
+.ar-fdr .pb-bar i{background:var(--up)}
+/* 외국인 약국 · 피부과 소비 */
+.med-h{margin:16px 0 4px;font-size:var(--fs-2)}.med-h small{font-weight:500;color:var(--ink3)}
+.med-nat{display:flex;flex-direction:column;margin-top:8px}
+.med-r{display:grid;grid-template-columns:minmax(64px,1fr) 64px minmax(40px,1.2fr) 64px 72px;gap:10px;align-items:center;min-height:36px;border-top:1px solid var(--line);font-size:var(--fs-2)}
+.med-r .num{text-align:right;font-variant-numeric:tabular-nums}
+.med-hd{min-height:28px;border-top:0;font-size:var(--fs-1);color:var(--ink3);font-weight:600}.med-hd span:not(:first-child){text-align:right}
+.med-r .pb-bar i{background:var(--cat-1)}
+.med-note{margin:8px 0 0}
+/* 뉴스 · 업계 흐름 */
+.nv-head{margin-bottom:16px}.nv-head h2{margin:0;font-size:var(--fs-5)}
+.nv-grid{display:flex;flex-direction:column;gap:16px}
+.nv-grid.balanced{display:grid;grid-template-columns:repeat(var(--bal-n),minmax(0,1fr));gap:16px;align-items:start}
+.rp-players{margin:6px 0 0;font-size:var(--fs-2);color:var(--ink2)}
+.rp-players b{color:var(--ink)}.rp-players .lnk{min-height:0;min-width:0;color:var(--pri-text);font-weight:700}
+/* 브랜드 이야기 */
+.st-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:16px}.st-bar .meta{margin:0;flex:none}
+.st-q{height:48px;background:var(--card)}.st-q input{flex:1;min-width:0;border:0;background:transparent;font:inherit;color:var(--ink);outline:none}
+.st-grid{display:flex;flex-direction:column;gap:16px}
+.st-grid.balanced{display:grid;grid-template-columns:repeat(var(--bal-n),minmax(0,1fr));gap:16px;align-items:start}
+.st-motto{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--pri);background:var(--pri-soft);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:var(--fs-3);font-weight:700;color:var(--ink)}
+.st-story{margin:10px 0 0;font-size:var(--fs-3);line-height:1.65;color:var(--ink)}
+.st-sec p:not(.se-lab){margin:0;font-size:var(--fs-2);color:var(--ink2)}
+.st-pts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.st-pts li{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:var(--r-sm);background:var(--fill);font-size:var(--fs-2)}
+.st-pts a.st-pt{display:flex;flex-direction:column;gap:2px;margin:-8px -10px;padding:8px 10px;min-height:44px;border-radius:inherit;color:var(--ink);text-decoration:none}.st-pts a.st-pt small .ic{width:12px;height:12px;vertical-align:-2px}
+@media(hover:hover){.st-pts a.st-pt:hover{background:var(--fill-2)}}
+.st-pts small{font-size:var(--fs-1);color:var(--ink2)}.st-pts a{display:inline-flex;align-items:center;gap:2px}.st-pts a .ic{width:12px;height:12px}
+.st-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.st-co{display:inline-flex;flex-direction:column;padding:6px 12px;border:1px solid var(--line-strong);border-radius:var(--r-sm);font-size:var(--fs-2);line-height:1.3}.st-co small{font-size:var(--fs-1);color:var(--ink3)}
+.st-arr .ic{width:14px;height:14px;color:var(--ink3)}
+.st-tip{display:flex;gap:8px;margin:12px 0 0;padding:10px 12px;border-radius:var(--r-sm);background:var(--amber);border:1px solid var(--amber-line);color:var(--amber-ink);font-size:var(--fs-2)}.st-tip .ic{width:16px;height:16px;flex:none;margin-top:2px}
+.st-sheet{padding:0}
+.tag.t-story{gap:3px;border:0;cursor:pointer;background:var(--pri-soft);color:var(--pri-text);margin-left:6px;font-family:inherit}.tag.t-story .ic{width:12px;height:12px}
+.ar-nm{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}.ar-nm .tag{margin:0}
+@media(max-width:599px){#planSeg button{flex:none}}   /* 기획 메뉴 7개: 폰에서는 옆으로 밀어 보기 */
+@media(max-width:599px){.se-strip{--se-l:112px}.se-mhead span:nth-child(even){color:transparent}.se-mhead span{padding-left:2px;overflow:visible}}   /* 폰: 달 이름은 두 달마다 */
+@media(max-width:599px){.med-r{grid-template-columns:minmax(56px,1fr) 60px 56px 64px}.med-r .pb-bar,.med-hd span:nth-child(3){display:none}}
 </style>
 </head>
 <body data-tab="today">
@@ -1513,7 +1621,7 @@ function delta(n, unit, body) {
 }
 function newTag() { return '<span class="tag t-ink">NEW</span>'; }
 /* 선 아이콘 (lucide · 선 1.5) */
-var ICONS = { info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>', bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+var ICONS = { pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>', play: '<rect x="3" y="4" width="18" height="16" rx="4"/><path d="m10 9 5 3-5 3Z"/>', book: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>', sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/>', globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/>', tagi: '<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4Z"/><circle cx="7.5" cy="7.5" r="1"/>', bars: '<path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/>', info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>', bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   house: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>', trend: '<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>', package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>', calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>', grid: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>', search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>', up: '<path d="m18 15-6-6-6 6"/>', left: '<path d="m15 18-6-6 6-6"/>', alert: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>', spark: '<path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/>', download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>', columns: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/>', layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>', save: '<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>', sort: '<path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>', news: '<path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/>' };
 function icon(n, cls) { return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[n] + '</svg>'; }
 /* 짧은 날짜: 2026.09.24 → 9.24 */
@@ -1545,6 +1653,8 @@ var SRC = {
   setai: { n: 'AI 세트 추천', url: '', how: '맥의 Claude가 재료함 · 약국 상품 · 오늘 순위를 읽고 제안 (5분마다 요청 확인)', freq: '요청할 때 · 월요일 자동', lag: '요청 뒤 5~10분', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' },
   mat: { n: '재료함', url: '', how: 'MD가 트렌드랩에 직접 넣은 협업 · 자사 재료', freq: '넣을 때', lag: '실시간', lim: '직접 입력한 내용 그대로' },
   kdatalab: { n: '한국관광 데이터랩 의료관광 소비', url: 'https://datalab.visitkorea.or.kr/', how: '외국인 의료 소비액 월별 · 진료과목별(약국 · 피부과) 비율, 로그인 없이 되는 것만', freq: '매달', lag: '1~2달', lim: '전국 기준 · 지자체별은 로그인이 필요해 빠져요' },
+  season: { n: '시즌 달력 · 기상청 단기예보', url: 'https://www.data.go.kr/data/15084084/openapi.do', how: '맥이 시즌 달력(20개 시즌 · 준비 기간)과 네이버 검색 신호 · 기상청 단기예보 최저기온을 합쳐 매일 계산', freq: '매일 아침', lag: '당일', lim: '달력은 경험 규칙 · 신호가 없으면 달력 기준이에요' },
+  brief: { n: '아침 브리핑 조사', url: '', how: '맥의 아침 브리핑이 기사 · 인터뷰를 읽고 브랜드 이야기와 업계 관계(제조 · 원료 · 유통)를 정리', freq: '매일 아침(브랜드는 90일마다 다시)', lag: '조사한 날 기준', lim: 'AI 요약이에요 · 출처 링크로 확인' },
   areas: { n: '서울 상권분석서비스', url: 'https://golmok.seoul.go.kr/', how: '서울시 상권 추정매출(화장품 · 의약품 등) · 점포 개폐업 + 외국인 생활인구', freq: '분기', lag: '분기 끝나고 몇 달 뒤', lim: '카드 매출 추정치예요 · 작은 상권은 증감이 크게 튀어요' }
 };
 var MALL_SRC = { oliveyoung: 'oy', oyglobal: 'oyglobal', hwahae: 'hwahae', daiso: 'daiso', musinsa: 'musinsa', qoo10jp: 'qoo10', amazonus: 'amazon' };
@@ -1662,7 +1772,7 @@ function call(fn, args, ok, fail, tries) {
     if (res && res.ok === false && /잠시|오류|timeout|Lock/i.test(res.msg || '') && tries < 2) { again(); return; }
     ok && ok(res);
   }).withFailureHandler(function (e) {
-    if (tries < 2) { again(); return; }
+    if (tries < 2 && !/허용되지 않은/.test(String(e && e.message || e))) { again(); return; }
     (fail || function () { toast('서버와 연결하지 못했어요. 잠시 뒤 다시 시도해주세요'); })(e);
   });
   r[fn].apply(r, (args || []).concat([S.k || '']));   /* 서버가 암호를 다시 확인한다 */
@@ -1711,14 +1821,44 @@ function dragScroll(el) {
 
 /* ── v3 화면 이동: 탭 6개 + 하위 화면 · 이동마다 기록(안드로이드 뒤로 = 앱 안에서) · #trend/product 주소 ── */
 var TABS = [['today', '오늘', 'house'], ['report', '리포트', 'file'], ['trend', '트렌드', 'trend'], ['set', '세트', 'package'], ['plan', '기획', 'calendar'], ['more', '더 보기', 'grid']];
-var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources'] };
+var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price', 'season', 'areas'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources', 'news', 'story'] };
 function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; return w ? (w.items || []).length + (w.brands || []).length : 0; }
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
+/* 0929 PC 왼쪽 메뉴: MD·마케팅 중심 묶음(기본 · MD · 마케팅 · 데이터) · 줄마다 기존 화면으로 바로 · 폰은 아래 탭 그대로 */
+var NAV = [['기본', [['today', '오늘', 'house'], ['report', '리포트', 'file']]],
+  ['MD', [['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
+  ['마케팅', [['plan/cal', '행사 캘린더', 'calendar'], ['plan/areas', '뜨는 상권 · 팝업 후보', 'pin'], ['plan/tour', '외국인 손님', 'globe'], ['trend/keyword', '검색 반응 · 키워드', 'search'], ['trend/shorts', '쇼츠', 'play'], ['more/news', '뉴스 · 업계 흐름', 'news'], ['more/story', '브랜드 이야기', 'book']]],
+  ['데이터', [['trend/brand/cmp', '사이트 비교', 'columns'], ['more/analysis', '카테고리 · 브랜드 분석', 'grid'], ['more/sources', '데이터 출처 · 수집 상태', 'info'], ['more/', '더 보기', 'grid']]]];
+var NAV_TAB = { today: 'today', report: 'report', 'trend/product/rank': 'trend', 'set/diy': 'set', 'plan/cal': 'plan', 'more/': 'more' };   /* 탭 이름으로 찾는 곳(단축키·테스트)이 쓰는 대표 줄 */
+var PC_MQ = window.matchMedia ? matchMedia('(min-width:1100px)') : { matches: false };
 function renderTabs() {
+  var side = S.sideNav = !!PC_MQ.matches;
   $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>' + (document.querySelector('.topbar .owner-pill') || { outerHTML: '' }).outerHTML.replace('owner-pill', 'owner-pill side-owner')
-    + TABS.map(function (t, i) { var on = S.tab === t[0]; return '<button type="button" role="tab" data-tab="' + t[0] + '" class="' + (on ? 'on' : '') + '" aria-selected="' + on + '" title="' + t[1] + ' (' + (i + 1) + ')" onclick="tabTap(this.dataset.tab)">' + icon(t[2]) + '<span>' + t[1] + '</span></button>'; }).join('')
+    + (side ? '<div class="snav">' + NAV.map(function (sec) { return '<div class="snav-sec" role="group" aria-label="' + sec[0] + '"><p class="snav-h">' + sec[0] + '</p>' + sec[1].map(function (e) { return '<button type="button" class="snav-i" data-nav="' + e[0] + '"' + (NAV_TAB[e[0]] ? ' data-tab="' + NAV_TAB[e[0]] + '"' : '') + ' onclick="navGo(this.dataset.nav)">' + icon(e[2]) + '<span>' + e[1] + '</span></button>'; }).join('') + '</div>'; }).join('') + '</div>'
+      : TABS.map(function (t, i) { return '<button type="button" role="tab" data-tab="' + t[0] + '" title="' + t[1] + ' (' + (i + 1) + ')" onclick="tabTap(this.dataset.tab)">' + icon(t[2]) + '<span>' + t[1] + '</span></button>'; }).join(''))
     + '<button type="button" class="side-status" id="sideStatus" onclick="openStatus()"><i aria-hidden="true"></i><span>수집 확인 중</span></button>';
+  navSync(); if (S.stat) renderStatus(S.home);
+}
+if (PC_MQ.addEventListener) PC_MQ.addEventListener('change', renderTabs);
+/* 지금 화면의 메뉴 줄 이름: 트렌드 상품/이번 주 신상은 보기(f), 소싱/사이트 비교는 브랜드 보기(view)로 가른다 */
+function navKey() {
+  var t = S.tab, s = curSub(t);
+  if (t === 'trend' && s === 'product') return 'trend/product/' + (S.trend.f === 'week' ? 'week' : 'rank');
+  if (t === 'trend' && s === 'brand') return 'trend/brand/' + S.brand.view;
+  return SUBS[t] ? t + '/' + (s || '') : t;
+}
+function navSync() {
+  var k = navKey(), box = document.querySelector('#tabs .snav');
+  [].forEach.call(document.querySelectorAll('#tabs [data-nav]'), function (b) { var on = b.dataset.nav === k; b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    if (on && box) { var t = b.offsetTop - box.offsetTop; if (t < box.scrollTop || t + b.offsetHeight > box.scrollTop + box.clientHeight) box.scrollTop = t - box.clientHeight / 2; } });   /* 메뉴가 길어 안에서 스크롤될 때 지금 줄이 보이게 */
+  if (!S.sideNav) [].forEach.call(document.querySelectorAll('#tabs [data-tab]'), function (b) { var on = b.dataset.tab === S.tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+}
+function navGo(k) {
+  var a = k.split('/'), t = a[0], s = a[1], x = a[2];
+  if (t === 'trend' && s === 'product') { setTrendFrom(x === 'week' ? 'week' : 'rank'); return; }
+  if (t === 'trend' && s === 'brand') { S.brand.view = x; route(t, s); setBrandView(x); navSync(); return; }
+  route(t, s == null ? null : s);
 }
 /* 탭을 누르면 그 탭의 마지막 화면 · 이미 그 탭이면 처음 화면(맨 위)으로 */
 function subBack(t, s) { if (S.prevRoute && S.prevRoute.tab === t && S.prevRoute.sub === s) history.back(); else route(t, s); }
@@ -1735,7 +1875,7 @@ function route(tab, sub, opt) {
   S.scroll[S.tab + '/' + curSub()] = window.scrollY;
   S.tab = tab; setSubOf(tab, sub);
   document.body.dataset.tab = tab; document.body.dataset.sub = sub || '';
-  [].forEach.call(document.querySelectorAll('#tabs [data-tab]'), function (b) { var on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  navSync();
   [].forEach.call(document.querySelectorAll('.view'), function (v) { v.classList.toggle('on', v.id === tab); });
   if (tab !== 'set') { clearTimeout(S.set && S.set.poll); clearTimeout(S.psPollT); }
   [].forEach.call(document.querySelectorAll('.chips'), dragScroll);
@@ -1958,7 +2098,7 @@ function renderPd(r) {
   var groups = (S.board && S.board.groups || []).map(function (g) { return g.group; }).filter(Boolean);
   var oyUrl = esc(/^https:\/\//.test(c.url) ? c.url : 'https://www.oliveyoung.co.kr/');
   var pbr = (L.confirmed || []).map(pbRankOf).filter(Boolean)[0] || 0;
-  var h = '<div class="pd-top"><a class="pd-img" href="' + oyUrl + '" target="_blank" rel="noopener" aria-label="올리브영에서 보기">' + imgHtml(c.img) + '</a><div><div class="br">' + badgeHtml(c.badge) + '<button type="button" class="lnk" data-b="' + esc(c.brand) + '" onclick="openBrand(this.dataset.b, true)">' + esc(c.brand) + ' ›</button></div><h3><a class="pd-name" href="' + oyUrl + '" target="_blank" rel="noopener">' + esc(c.name) + ' ' + icon('ext') + '</a></h3>'
+  var h = '<div class="pd-top"><a class="pd-img" href="' + oyUrl + '" target="_blank" rel="noopener" aria-label="올리브영에서 보기">' + imgHtml(c.img) + '</a><div><div class="br">' + badgeHtml(c.badge) + '<button type="button" class="lnk" data-b="' + esc(c.brand) + '" onclick="openBrand(this.dataset.b, true)">' + esc(c.brand) + ' ›</button>' + storyChip(c.brand) + '</div><h3><a class="pd-name" href="' + oyUrl + '" target="_blank" rel="noopener">' + esc(c.name) + ' ' + icon('ext') + '</a></h3>'
     + (lp && typeof lp.salePrice === 'number' ? '<div class="pr"><b>' + won(lp.salePrice) + '</b>' + (lp.price && lp.price > lp.salePrice ? ' <s>' + won(lp.price) + '</s>' : '') + '</div>' : '')
     + '<div class="facts"><span>처음 본 날 <b>' + esc(c.first) + '</b></span><span>최고 <b>' + esc(c.best) + '위</b></span>' + (pbr ? pbChip(pbr) : '') + '</div></div></div>'
     + '<div class="pd-acts"><button type="button" class="btn ' + (onB ? 'on' : 'pri') + '" data-act="quick-board" aria-pressed="' + onB + '" onclick="pdQuickSave(this)">' + icon('bookmark') + (onB ? '담은 상품' : '담기') + '</button>'
@@ -2070,7 +2210,8 @@ function start() {
   route(ok ? m[1] : 'today', ok ? (m[2] || '') : '', { replace: true });
   if (S.tab !== 'today') loadHome();
   refreshBoardGroups();
-  setTimeout(function () { if (!S.set.mats) loadSetTab(); }, 700);   /* 오늘 카드(협업 마감 · 세트 작업)용 */
+  setTimeout(function () { if (!S.set.mats) loadSetTab(); }, 700);
+  setTimeout(function () { if (!S.stories) newLoad('getStories', 'stories', function () {}); }, 1500);   /* 상품·브랜드·세트 줄의 '스토리' 칩용 */   /* 오늘 카드(협업 마감 · 세트 작업)용 */
 }
 
 /* ── 2단계 묶음①: 관심 · 생존율 · 브랜드 ── */
@@ -2167,7 +2308,7 @@ function loadBrandDetail(b) {
     var bw = $('bsWatch'); bw.hidden = false; bw.dataset.b = r.brand; setHeart(bw, r.watched);
     var sv = r.survival || {};
     var last = r.series.length ? (r.series[r.series.length - 1].count || 0) : 0;
-    $('bsBody').innerHTML = '<p class="sub">' + esc(r.label) + ' 기준 · ' + r.items.length + '개 상품이 100위 안' + (r.owned === true ? ' ' + tag('약국 취급', 't-ok') : r.owned === false ? ' · 약국 미취급' : '') + '</p>'
+    $('bsBody').innerHTML = '<p class="sub">' + esc(r.label) + ' 기준 · ' + r.items.length + '개 상품이 100위 안' + (r.owned === true ? ' ' + tag('약국 취급', 't-ok') : r.owned === false ? ' · 약국 미취급' : '') + ' ' + storyChip(r.brand) + '</p>'
       + '<div class="pd-sec"><h4>100위 안 상품 수 흐름 · 오늘 ' + last + '개</h4>' + chartSvg({ s: r.series.map(function (x) { return { date: x.date, rank: x.count || 0 }; }) }, { s: '상품 수' }, true).replace(/<div class="legend">[\s\S]*?<\/div>/, '') + '</div>'
       + (r.catMix && r.catMix.length ? '<div class="pd-sec"><h4>이 브랜드 상품의 카테고리</h4>' + vzDonut(r.catMix, 0, '오늘 100위 안') + '</div>' : '')
       + '<div class="pd-sec"><h4>신제품 생존율</h4><div class="kpi-grid">' + survCell(sv.d7, '7일', '판단 전') + survCell(sv.d14, '14일', '판단 전') + survCell(sv.d30, '30일', '판단 전') + '</div></div>'
@@ -2676,7 +2817,7 @@ function diyListHtml() {
   if (!rows.length && S.diyBest && !S.diyQ) return pbDiyEmpty();
   if (!rows.length) return '<p class="empty">' + (S.diyQ ? '약국에는 없어요' : '조건에 맞는 상품이 없어요') + '</p>' + diyExtHtml();
   return rows.map(function (x) { var has = diyHas(x.name);
-    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta' + (x.best ? ' pb-meta' : '') + '">' + (x.best ? abcChip(x.best) + '<b class="pb-rk-s">' + x.best.r + '위</b> ' + x.best.q.toLocaleString('ko-KR') + '개<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.best.q / (S.pb.list[0].q || 1) * 100)) + '%"></i></span>' : '') + (x.best ? '' : pbChip(pbRankOf(x.name)) + abcChip(S.pb && S.pb.by && S.pb.by[x.name]) + ' ') + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + (x.best && x.best.o ? ' ' + tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
+    return '<div class="diy-row"><span class="diy-img">' + imgHtml(psImgFor(x.name)) + '</span><span class="tx"><span class="nm1">' + esc(x.name) + '</span><span class="meta' + (x.best ? ' pb-meta' : '') + '">' + storyChip(x.name) + (x.best ? abcChip(x.best) + '<b class="pb-rk-s">' + x.best.r + '위</b> ' + x.best.q.toLocaleString('ko-KR') + '개<span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.best.q / (S.pb.list[0].q || 1) * 100)) + '%"></i></span>' : '') + (x.best ? '' : pbChip(pbRankOf(x.name)) + abcChip(S.pb && S.pb.by && S.pb.by[x.name]) + ' ') + (x.cat ? tag(x.cat) + ' ' : '') + esc((x.tags || []).join(' · ')) + (x.best && x.best.o ? ' ' + tag('올리브영에서도 인기', 't-ink') : '') + '</span></span>'
       + (function () { var z = psSizeOf(x.name); return '<span class="diy-sz">' + (z ? z.w + '×' + z.d + '×' + z.h + 'mm' : '크기 미등록') + '</span>'; })()
       + '<span class="diy-btns">' + (x.best && !x.best.m ? '' : '<button type="button" class="btn" data-n="' + esc(x.name) + '" aria-label="용도 고치기" onclick="psUses(this.dataset.n)">용도</button>') + '<button type="button" class="btn add' + (has ? ' on' : '') + '" data-act="diy-add" data-n="' + esc(x.name) + '" onclick="diyAdd(this.dataset.n)"' + (has ? ' disabled' : '') + '>' + (has ? icon('check') + '넣음' : icon('plus') + '넣기') + '</button></span></div>'; }).join('') + diyExtHtml();
 }
@@ -3166,7 +3307,7 @@ function renderCompare() {
   el.innerHTML = '<p class="note">칸 숫자 = 그 사이트에서 이 브랜드의 가장 높은 순위 (진할수록 상위) · 전역 3곳 이상 · 해외 해외에서만 · 국내 국내에서만</p><div class="cmp">' + head + rows + '</div>' + mallSrc(c, '칸 숫자 = 그 사이트에서 브랜드의 가장 높은 순위');
 }
 function mallSrc(c, calc, extra) { var ds = c.malls.map(function (m) { return md(m.date); }).filter(function (d, i, a) { return a.indexOf(d) === i; }); return srcLine(c.malls.map(function (m) { return MALL_SRC[m.mall]; }).concat(extra || []), { at: '사이트별 최근 수집 ' + ds.join(' · '), calc: calc, lim: '사이트마다 순위 기준이 달라요 (판매 · 급상승 · 실시간) · 브랜드 이름은 영문·일본어를 한글로 맞춰요' }); }
-function setBrandView(v) { S.brand.view = v; if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; $('brandList').classList.remove('dt', 'dt-wide'); document.body.classList.toggle('cmp-on', v === 'cmp'); if (v === 'cmp' || v === 'src') { if (S.cmp) (v === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else loadBrands(); }
+function setBrandView(v) { S.brand.view = v; navSync(); if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; $('brandList').classList.remove('dt', 'dt-wide'); document.body.classList.toggle('cmp-on', v === 'cmp'); if (v === 'cmp' || v === 'src') { if (S.cmp) (v === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else loadBrands(); }
 /* ── 브랜드 검색 (화해 전체 상품 + 우리 약국 보유) ── */
 function safeUrl(u) { return /^https:\/\//.test(String(u || '')) ? u : ''; }
 function loadFind() {
@@ -3582,7 +3723,7 @@ function renderTrendF() {
     return '<button type="button" class="chip' + (on ? ' on' : '') + (dis ? ' muted' : '') + '" data-f="' + f[0] + '" aria-pressed="' + on + '"' + (dis ? ' title="꾸준 · 하락은 전체 카테고리에서만 볼 수 있어요"' : '') + ' onclick="setTrendF(this.dataset.f)">' + f[1] + (n != null ? ' <em>' + n + '</em>' : '') + '</button>';
   }).join('');
 }
-function setTrendF(f) { S.trend.f = f; if (!S.rank.data) loadRank(); else renderTrendList(); }
+function setTrendF(f) { S.trend.f = f; navSync(); if (!S.rank.data) loadRank(); else renderTrendList(); }
 function renderTrendList() {
   var el = $('rankList'); if (!el) return; renderTrendF();
   var t = trendSrc(), f = S.trend.f;
@@ -3713,7 +3854,7 @@ function loadReport(date) {
   swrCall('getReport', [date || ''], function (r) {
     if (rev !== S.rev.rp) return;
     if (!r || !r.ok) { el.innerHTML = emptyHtml((r && r.msg) || '불러오지 못했어요', '다시 불러오기', "loadReport('')"); return; }
-    S.rp = r; S.rpDate = date || ''; renderReportView(r);
+    S.rp = r; S.rpDate = date || ''; renderReportView(r); if (S.tab === 'more' && S.moreSub === 'news') renderMore();
   }, function () { if (rev === S.rev.rp) failBox(el, "loadReport('')"); });
 }
 function rpProd(key) {
@@ -3745,7 +3886,7 @@ function renderReportView(r) {
   if (!p) { el.innerHTML = '<div class="view-head">' + sel + '</div>' + emptyHtml(dates.length ? '이 날짜의 리포트가 없어요' : '아직 리포트가 없어요. 매일 아침 수집이 끝나면 올라와요'); return; }
   var items = function (arr) { return '<div class="rp-items">' + arr.map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p>' + keyChips(c.keys) + '</div>'; }).join('') + '</div>'; };
   var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
-  var newsH = news.length ? '<section class="card rp-sec rp-news" data-sec="news"><h2>' + icon('news') + '오늘의 뉴스</h2><div class="rp-items">' + news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + '</div>'; }).join('') + '</div>' + rpSrc('news', r.date) + '</section>' : '';
+  var newsH = news.length ? '<section class="card rp-sec rp-news" data-sec="news"><h2>' + icon('news') + '오늘의 뉴스</h2><div class="rp-items">' + news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + playersLine(n.players) + '</div>'; }).join('') + '</div>' + rpSrc('news', r.date) + '</section>' : '';
   var secA = RP_SECS.filter(function (s) { return (p[s[0]] || []).length; }).map(function (s) { return '<section class="card rp-sec" data-sec="' + s[0] + '"><h2>' + icon(s[2]) + s[1] + '</h2>' + items(p[s[0]]) + rpSrc(s[0], r.date) + '</section>'; });
   if (newsH) secA.splice((p.changes || []).length ? 1 : 0, 0, newsH);   /* 뉴스는 '무엇이 바뀌었나' 바로 다음 */
   var hc = S.home && S.home.today === r.date && S.home.cards, thin = !['events', 'planning', 'tourist', 'news'].some(function (k) { return (p[k] || []).length; });
@@ -3785,7 +3926,7 @@ function rpFillChips() {
 }
 
 /* ── 기획 (행사 · 운영 준비): 담은 상품 · 재료함 · 손님·환율 · 가격 참고 ── */
-var PLAN_SUBS = [['board', '담은 상품'], ['mat', '협업·자사 재료'], ['cal', '행사 캘린더'], ['tour', '손님 · 환율'], ['price', '가격대 · 할인']];
+var PLAN_SUBS = [['board', '담은 상품'], ['mat', '협업·자사 재료'], ['cal', '행사 캘린더'], ['season', '시즌 준비'], ['areas', '뜨는 상권'], ['tour', '손님 · 환율'], ['price', '가격대 · 할인']];
 function planStrip() {
   var c = (S.home && S.home.cards) || {}, v = S.viz, t = v && v.tourism, a = t && t.spop && t.spop.areas && t.spop.areas[0], cny = t && t.fx && t.fx.items.filter(function (x) { return x.cur === 'CNY'; })[0];
   var grp = (S.board && S.board.groups) || [], nB = grp.reduce(function (n, g) { return n + g.items.length; }, 0), nMiss = grp.reduce(function (n, g) { return n + g.items.filter(function (p) { return !(p.logi && p.logi.length); }).length; }, 0);
@@ -3798,10 +3939,13 @@ function planStrip() {
 }
 function renderPlan() {
   $('planSeg').innerHTML = segHtml('planSeg', PLAN_SUBS, S.planSub, "route('plan',this.dataset.s)");
+  var sg = $('planSeg'), so = sg.querySelector('.on'); if (so && sg.scrollWidth > sg.clientWidth) sg.scrollLeft = so.offsetLeft - (sg.clientWidth - so.offsetWidth) / 2;
   var b = $('planBody'), s = S.planSub;
   if (s === 'board') { b.innerHTML = planStrip() + '<div id="board" class="board"></div>'; loadBoard(); if (!S.set.mats) loadSetTab(); }
   else if (s === 'mat') { if (S.set.mats) b.innerHTML = matCardHtml(); else { b.innerHTML = skel(3); loadSetTab(); } }
   else if (s === 'cal') { if (!S.la) { b.innerHTML = skel(4); laLoad(); } else b.innerHTML = S.la.err ? '<article class="card">' + emptyHtml(S.la.err, '다시 불러오기', 'S.la=null;laLoad()') + '</article>' : calHtml(); }
+  else if (s === 'season') { if (!S.season) seasonLoad(); b.innerHTML = seasonHtml(); balIf('seGrid'); }
+  else if (s === 'areas') { if (!S.areas) areasLoad(); b.innerHTML = areasHtml(); areasTable(); fitSvgText(b); }
   else if (s === 'tour') { if (S.viz) { b.innerHTML = tourPlanHtml(S.viz); fitSvgText(b); } else { b.innerHTML = skel(4); loadViz(); } }
   else if (s === 'price') {
     if (!S.viz || !S.home) { b.innerHTML = skel(3); if (!S.viz) loadViz(); if (!S.home) loadHome(); return; }
@@ -3828,6 +3972,7 @@ function tourPlanHtml(v) {
     + (t.fx ? '<div class="kpi-grid fx">' + t.fx.items.map(function (x) { var n = FX_NAME[x.cur] || [x.cur, x.cur]; return '<button type="button" class="kpi kpi-btn" data-cur="' + esc(x.cur) + '" onclick="openFx(this.dataset.cur)" aria-label="' + esc(n[0]) + ' 환율 추이 보기"><span class="kpi-l">' + esc(n[0]) + '</span><b>' + x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원</b><span class="kpi-s">' + esc(n[1]) + ' ' + delta(x.change, '%') + '</span></button>'; }).join('') + '</div>' : '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>') + (t.fx ? srcLine(['fx'], { at: md(t.fx.date), calc: '1 외화 = 원 (엔은 100엔) · ' + (t.fx.base ? md(t.fx.base) : '1주 전') + ' 대비 %' }) : '') + '</section>';
   var ka = (t.kto && t.kto.areas) || [];
   if (ka.length) h += '<details class="card tour-card tour-more"><summary><h2>4구역 외국인 방문자 <small>한국관광공사 · 통신사 기반</small></h2><span class="head-acts">' + asOf(ka[0].last) + '<span class="btn sm" aria-hidden="true">구역 더 보기</span></span></summary>' + areaDonut(ka, '4구역 외국인 비중') + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + manTxt(ar.outWeek || 0) + '명/일'); }).join('') + '</div>' + STK_KEY + srcLine(['ktoArea'], { at: md(ka[0].last) + ' 자료', calc: '시군구 하루 외국인 방문자 · 막대 색 = 전날 대비' }) + '</details>';
+  h += medHtml(t.med);
   return '<div class="tour-grid">' + h + '</div>';
 }
 function natBars(x, months) {
@@ -3836,12 +3981,210 @@ function natBars(x, months) {
   return '<h4>' + esc(x.nat) + ' 달마다 방한 외국인</h4><p class="sub">최근 ' + ser.length + '달 · 전달보다 늘면 빨강, 줄면 파랑</p>' + dayBars(ser, 'v', '명', x.nat + ' 달마다 방한 외국인', ' 최근 ' + ser.length + '달');
 }
 
+/* ── 0929 새 화면: 시즌 준비 · 뜨는 상권 · 외국인 약국·피부과 소비 · 뉴스·업계 흐름 · 브랜드 이야기 ── */
+/* 새 서버 함수(getSeason · getAreas · getStories)는 Code.gs 를 붙여넣어야 생긴다 → 없으면 '붙여넣기 후 표시' 한 줄 */
+var NEED_PASTE = '서버 코드(1_Code.gs) 붙여넣기 후 표시돼요';
+function balIf(id) {
+  var e = $(id); if (!(e && innerWidth >= 1100 && e.children.length >= 2)) return; balanceCols(e, 2);
+  /* 반 폭에서 실제 높이로 다시 맞춤: 긴 칸 맨 끝 카드를 짧은 칸으로 옮겨 차이가 줄면 옮긴다 */
+  var c = [].slice.call(e.children), H = function (x) { return x.getBoundingClientRect().height; };
+  if (c.length !== 2) return;
+  var a = H(c[0]) >= H(c[1]) ? 0 : 1, big = c[a], sm = c[1 - a], d0 = H(big) - H(sm), best = null, bd = d0;
+  [].forEach.call(big.children, function (x) { var hx = H(x); bd = Math.min(bd, Math.abs(d0 - 2 * (hx + 16))); if (Math.abs(d0 - 2 * (hx + 16)) === bd && bd < d0) best = [x, null];
+    [].forEach.call(sm.children, function (y) { var v = Math.abs(d0 - 2 * (hx - H(y))); if (v < bd) { bd = v; best = [x, y]; } }); });
+  if (best) { var ph = document.createComment(''); big.replaceChild(ph, best[0]); if (best[1]) { sm.replaceChild(best[0], best[1]); big.replaceChild(best[1], ph); } else { big.removeChild(ph); sm.appendChild(best[0]); } }   /* 두 칸 사이 카드 하나 옮기거나 바꿔 끝을 맞춤 */
+}   /* 한 장뿐이면 두 칸으로 안 나눔(빈 칸 방지) */
+function newLoad(fn, key, redraw) {
+  if (S[key + 'Busy']) return; S[key + 'Busy'] = 1;
+  call(fn, [], function (r) { S[key + 'Busy'] = 0; S[key] = r && r.ok ? r : { err: (r && r.msg) || '불러오지 못했어요' }; redraw(); },
+    function () { S[key + 'Busy'] = 0; S[key] = { missing: 1 }; redraw(); });
+}
+function newState(x, retry) {   /* 불러오는 중 · 서버 함수 없음 · 오류 · 아직 자료 없음 → 카드 한 장(null 이면 정상) */
+  if (!x) return SKL;
+  if (x.missing) return '<article class="card need-paste">' + emptyHtml(NEED_PASTE) + '</article>';
+  if (x.err) return '<article class="card">' + emptyHtml(x.err, '다시 불러오기', retry) + '</article>';
+  if (x.ready === false) return '<article class="card">' + emptyHtml('아직 자료가 없어요 · 맥 수집기가 처음 보내면 채워져요') + '</article>';
+  return null;
+}
+function dnum(d) { var t = dateOf(d); return t ? Math.round(t.getTime() / 86400000) : null; }
+function pctChip(v, label) { return v == null ? '<span class="tag t-neutral">' + esc(label) + ' –</span>' : '<span class="tag ' + (v > 0 ? 't-up' : v < 0 ? 't-down' : 't-neutral') + '">' + esc(label) + ' ' + (v > 0 ? '+' : '') + v + '%</span>'; }
+function lsGet(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+/* 시즌 준비 */
+var SE_PHASE = { '준비': 't-warn', '진행 중': 't-ok', '마무리': 't-neutral', '대기': 't-neutral' };
+var SE_SIG = { search: 'search', weather: 'sun', calendar: 'calendar' };
+function seasonAll(r) { return (r.now || []).concat(r.next || []); }
+function seasonDday(x, today) {
+  var d = dnum(x.orderBy) - dnum(today);
+  return d > 0 ? { t: '발주 D-' + d, tone: d <= 14 ? 't-up' : 't-neutral' } : d === 0 ? { t: '오늘 발주 마감', tone: 't-up' } : { t: x.phase === '대기' ? '발주 D+' + (-d) : '발주 시기 지남', tone: 't-neutral' };
+}
+function seasonStrip(items, today) {   /* 12달 띠: 이번 달부터 12칸, 시즌마다 창(막대) + 발주 마감(점) */
+  var t = dateOf(today) || new Date(), y0 = t.getFullYear(), m0 = t.getMonth(), start = Date.UTC(y0, m0, 1) / 864e5, end = Date.UTC(y0, m0 + 12, 1) / 864e5, span = end - start;
+  var pos = function (d) { var n = dnum(d); return Math.max(0, Math.min(100, (n - start) / span * 100)); };
+  var head = '<div class="se-mhead">' + Array.from({ length: 12 }, function (_, i) { var m = (m0 + i) % 12 + 1; return '<span' + (m === 1 ? ' class="yr"' : '') + '>' + (m === 1 ? String(y0 + 1).slice(2) + '년 ' : '') + m + '월</span>'; }).join('') + '</div>';
+  var now = (dnum(today) - start) / span * 100;
+  return '<div class="se-strip" role="img" aria-label="앞으로 12달 시즌 창과 발주 마감">' + head + items.map(function (x) {
+    var a = pos(x.window.from), b = pos(x.window.to), o = pos(x.orderBy);
+    return '<div class="se-lane"><span class="se-ln">' + esc(x.title) + '</span><span class="se-track"><i class="se-win ' + (SE_PHASE[x.phase] || '') + '" style="left:' + a + '%;width:' + Math.max(1.2, b - a) + '%"></i><i class="se-ord" style="left:' + o + '%" title="발주 마감 ' + esc(md(x.orderBy)) + '"></i></span></div>';
+  }).join('') + '<i class="se-now" style="left:calc(var(--se-l) + (100% - var(--se-l)) * ' + (now / 100).toFixed(4) + ')" aria-hidden="true"></i></div>'
+    + '<p class="vz-key"><span><i class="k-win"></i>시즌 창</span><span><i class="k-ord"></i>발주 마감</span><span><i class="k-now"></i>오늘</span></p>';
+}
+function seasonCard(x, today) {
+  var dd = seasonDday(x, today), done = lsGet('tl_season_done', {}), key = x.id + ':' + x.window.from;
+  return '<article class="card se-card" data-id="' + esc(x.id) + '"><div class="card-head"><h2>' + esc(x.title) + '</h2><span class="head-acts">' + tag(x.phase, SE_PHASE[x.phase]) + tag(dd.t, dd.tone) + '</span></div>'
+    + '<p class="se-win-t">' + icon('calendar') + '시즌 ' + esc(md(x.window.from)) + ' ~ ' + esc(md(x.window.to)) + ' · 발주 ' + esc(md(x.orderBy)) + '까지' + (x.confidence === 'high' ? ' · ' + tag('신호 있음', 't-ok') : '') + '</p>'
+    + (x.why ? '<p class="se-why">' + esc(x.why) + '</p>' : '')
+    + '<ul class="se-sig">' + (x.signals || []).map(function (g) { return '<li>' + icon(SE_SIG[g.kind] || 'info') + '<span>' + esc(g.text) + '</span></li>'; }).join('') + '</ul>'
+    + ((x.examples || []).length ? '<div class="se-ex"><p class="se-lab">우리 약국 상품 예시</p>' + x.examples.map(function (e) { return '<span class="se-exi">' + esc(e.name) + (e.rank ? pbChip(e.rank) : tag(e.source === '약국 베스트' ? '약국 베스트' : '물류앱', 't-neutral')) + '</span>'; }).join('') + '</div>' : '<p class="se-lab">약국 상품 예시 없음 · 키워드: ' + esc((x.keywords || []).slice(0, 4).join(' · ')) + '</p>')
+    + ((x.actions || []).length ? '<div class="se-acts"><p class="se-lab">할 일</p>' + x.actions.map(function (a, i) { var on = !!(done[key] || {})[i]; return '<label class="se-act"><input type="checkbox" data-k="' + esc(key) + '" data-i="' + i + '"' + (on ? ' checked' : '') + ' onchange="seasonTick(this)"><span>' + esc(a) + '</span></label>'; }).join('') + '</div>' : '')
+    + '</article>';
+}
+function seasonTick(b) { var d = lsGet('tl_season_done', {}), k = b.dataset.k; d[k] = d[k] || {}; d[k][b.dataset.i] = b.checked; lsSet('tl_season_done', d); }
+function seasonHtml() {
+  var st = newState(S.season, "S.season=null;seasonLoad()"); if (st) return st;
+  var r = S.season, all = seasonAll(r); if (!all.length) return '<article class="card">' + emptyHtml('앞으로 8주 안에 준비할 시즌이 없어요') + '</article>';
+  return '<article class="card se-top"><div class="card-head"><h2>시즌 준비 <small>급한 것부터 · 발주 마감(D-day)은 시즌 시작 전 준비 기간 기준</small></h2>' + asOf(r.date) + '</div>' + seasonStrip(all, r.date)
+    + srcLine(['season', 'naverDatalab'], { at: md(r.date) + ' 계산', calc: '시즌 창·준비 기간 = 시즌 달력(20개) · 신호 = 네이버 검색 지수 최근 1주 vs 이전 1주 ±10% 이상, 기상청 단기예보 최저기온 · 예시 = 약국 베스트·물류앱 상품명에 키워드가 들어간 것' }) + '</article>'
+    + '<div class="se-grid" id="seGrid">' + all.map(function (x) { return seasonCard(x, r.date); }).join('') + '</div>';
+}
+function seasonLoad() { newLoad('getSeason', 'season', function () { if (S.tab === 'plan' && S.planSub === 'season') renderPlan(); }); }
+
+/* 뜨는 상권 · 팝업 후보 */
+var AR_G = [['beauty', '화장품'], ['pharmacy', '약국'], ['cafe', '카페'], ['fashion', '패션'], ['foreign', '외국인']];
+function qLabel(q) { q = String(q || ''); return q.length === 5 ? q.slice(0, 4) + '년 ' + q.slice(4) + '분기' : q; }
+function areasLag(a) { var f = a.meta && a.meta.foreignLatestDate; return qLabel(a.quarter) + ' 매출' + (f ? ' · 생활인구 ' + (+f.slice(4, 6)) + '/' + (+f.slice(6, 8)) + '까지' : ''); }
+function areasMap(a) {   /* 서울 좌표(상권 중심점) 그대로 점 찍기 · 성수는 대략 위치 기준점 */
+  var pts = (a.top || []).filter(function (x) { return x.x && x.y; }), S0 = { x: 204900, y: 449500 };
+  if (!pts.length) return '';
+  var xs = pts.map(function (p) { return p.x; }).concat(S0.x), ys = pts.map(function (p) { return p.y; }).concat(S0.y);
+  var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  var W = 520, H = 360, P = 36, sc = Math.min((W - 2 * P) / ((x1 - x0) || 1), (H - 2 * P) / ((y1 - y0) || 1));
+  var px = function (x) { return P + (x - x0) * sc + ((W - 2 * P) - (x1 - x0) * sc) / 2; }, py = function (y) { return H - P - (y - y0) * sc - ((H - 2 * P) - (y1 - y0) * sc) / 2; };
+  var mx = Math.max.apply(null, pts.map(function (p) { return p.score; })) || 1;
+  var placed = [{ x: px(S0.x) + 10, y: py(S0.y), w: 96 }];   /* 이름표가 겹치면 그 이름은 빼고 점만(마우스를 올리면 이름) */
+  var dots = pts.map(function (p, i) { var r = 5 + 9 * Math.max(0, p.score) / mx, cx = px(p.x), cy = py(p.y), nm = p.name.length > 9 ? p.name.slice(0, 8) + '…' : p.name, lw = nm.length * 12 + 4, left = cx + r + 3 + lw > W - 4, lx = left ? cx - r - 3 - lw : cx + r + 3;
+    var hit = placed.some(function (q) { return Math.abs(q.y - cy) < 14 && lx < q.x + q.w && lx + lw > q.x; }); if (!hit) placed.push({ x: lx, y: cy, w: lw });
+    return '<g><circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + (p.nextSeongsu ? TOK.up : TOK.cat[0]) + '" fill-opacity=".78"><title>' + esc((i + 1) + '. ' + p.name + ' · 점수 ' + p.score) + '</title></circle>' + (hit ? '' : '<text x="' + lx.toFixed(1) + '" y="' + (cy + 4).toFixed(1) + '" data-fs="12" font-size="12" fill="' + TOK.ink2 + '">' + esc(nm) + '</text>') + '</g>'; }).join('');
+  var sx = px(S0.x), sy = py(S0.y);
+  return '<svg class="ar-map" viewBox="0 0 ' + W + ' ' + H + '" data-fit role="img" aria-label="상위 상권 위치(서울 좌표)"><rect x="1" y="1" width="' + (W - 2) + '" height="' + (H - 2) + '" rx="12" fill="' + TOK.fill + '"/>' + dots
+    + '<rect x="' + (sx - 6).toFixed(1) + '" y="' + (sy - 6).toFixed(1) + '" width="12" height="12" rx="3" fill="' + TOK.ink + '"/><text x="' + (sx + 10).toFixed(1) + '" y="' + (sy + 4).toFixed(1) + '" data-fs="12" font-size="12" font-weight="700" fill="' + TOK.ink + '">성수(우리 약국)</text></svg>'
+    + '<p class="vz-key"><span><i style="background:' + TOK.cat[0] + '"></i>상위 상권 · 점이 클수록 점수 높음</span><span><i style="background:' + TOK.up + '"></i>다음 성수 후보</span><span>서울 지도 위 실제 위치 비율 · 지도 없음</span></p>';
+}
+function areasHtml() {
+  var st = newState(S.areas, "S.areas=null;areasLoad()"); if (st) return st;
+  var a = S.areas, ss = a.seongsu || {}, g = ss.growth || {}, sh = ss.share || {}, lag = areasLag(a), next = (a.top || []).filter(function (x) { return x.nextSeongsu; });
+  var fd = (a.foreignDong || []).slice(0, 10), fmax = Math.max.apply(null, fd.map(function (x) { return x.pct; }).concat(1));
+  return '<article class="card ar-head"><div class="card-head"><h2>뜨는 상권 · 팝업 후보 <small>서울 상권 ' + ((a.meta && a.meta.areasScored) || '') + '곳 중 점수 상위 15</small></h2>' + tag(lag, 't-warn') + '</div>'
+    + '<p class="sub">분기 자료라 약 3개월 늦어요 · 팝업·행사 장소를 고를 때 참고로만 · 점수 = 화장품·약국·카페·패션 매출 증가 + 외국인 유동 + 주말·20·30대 비중 + 개업률 (서울 전체 대비)</p>'
+    + '<div class="ar-base"><b>기준선 · ' + esc(ss.name || '성수동(전체)') + '</b><span class="ar-chips">' + AR_G.slice(0, 4).map(function (k) { return pctChip(g[k[0]], k[1]); }).join('') + '</span><span class="meta">주말 ' + (sh.weekend == null ? '–' : sh.weekend + '%') + ' · 20·30대 ' + (sh.age2030 == null ? '–' : sh.age2030 + '%') + '</span></div>'
+    + (next.length ? '<p class="ar-next">' + tag('다음 성수', 't-up') + '<span>성수보다 화장품·카페가 더 빨리 크는 곳: ' + next.map(function (x) { return '<b>' + esc(x.name) + '</b>'; }).join(' · ') + '</span></p>' : '')
+    + '<div id="arTable"></div></article>'
+    + '<div class="ar-2"><article class="card"><h2>어디쯤인가? <small>상위 상권 위치</small></h2>' + areasMap(a) + srcLine(['areas'], { at: qLabel(a.quarter), calc: '상권 중심 좌표(서울시 상권영역) · 성수 표시는 대략 위치' }) + '</article>'
+    + '<article class="card"><h2>외국인이 갑자기 는 동네 <small>최근 1주 vs 8주 평균</small></h2><div class="ar-fd">' + fd.map(function (x, i) { return '<div class="ar-fdr"><span class="ar-fn"><b>' + (i + 1) + '</b>' + esc(x.dong) + ' <small>' + esc(x.gu) + '</small></span><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(3, Math.round(x.pct / fmax * 100)) + '%"></i></span><span class="ar-fv">' + delta(x.pct, '%') + '<small>' + esc(x.base) + '→' + esc(x.lastWeek) + '명</small></span></div>'; }).join('') + '</div>' + srcLine(['spop'], { at: a.meta && a.meta.foreignLatestDate ? md(a.meta.foreignLatestDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')) + '까지' : '', calc: '단기체류 외국인 · 영업시간 대표 4개 시각 평균 · 행정동' }) + '</div></article></div>';
+}
+function areasTable() {
+  if (!$('arTable') || !S.areas || !S.areas.top) return;
+  dtMount({ id: 'areas', el: 'arTable', label: '뜨는 상권 상위 15', rows: S.areas.top.map(function (x, i) { return Object.assign({ no: i + 1 }, x); }), key: function (x) { return x.trdarCd || x.name; }, file: '뜨는상권',
+    note: areasLag(S.areas), src: [['areas', 'spop'], { at: areasLag(S.areas), calc: '증감 = 직전 분기 대비(QoQ) · 외국인 = 최근 1주 / 8주 평균 대비 · 5배 넘게 튄 값은 이상치로 비움' }],
+    cols: [
+      { k: 'no', label: '순위', w: '52px', m: 'side', right: 1, nosort: 1 },
+      { k: 'name', label: '상권', w: 'minmax(150px,1.2fr)', m: 'title', filter: 1, html: function (x) { return '<span class="ar-nm"><b>' + esc(x.name) + '</b><small class="meta ar-gu">' + esc([x.gu, x.dong].filter(Boolean).join(' ')) + '</small>' + (x.nextSeongsu ? tag('다음 성수', 't-up') : '') + '</span>'; } },
+      { k: 'score', label: '점수', w: '64px', right: 1, m: 'side', html: function (x) { return '<b>' + x.score.toFixed(2) + '</b>'; } },
+      { k: 'gb', label: '증감(직전 분기)', w: 'minmax(250px,2fr)', m: 'sub', nosort: 1, v: function (x) { return AR_G.map(function (k) { return k[1] + ' ' + (x.growth[k[0]] == null ? '–' : x.growth[k[0]] + '%'); }).join(' · '); }, html: function (x) { return '<span class="ar-chips">' + AR_G.map(function (k) { return pctChip(x.growth[k[0]], k[1]); }).join('') + '</span>'; } },
+      { k: 'wk', label: '주말', w: '60px', right: 1, m: 'sub', v: function (x) { return x.share.weekend; }, html: function (x) { return x.share.weekend == null ? '–' : x.share.weekend + '%'; } },
+      { k: 'age', label: '20·30대', w: '68px', right: 1, m: 'sub', v: function (x) { return x.share.age2030; }, html: function (x) { return x.share.age2030 == null ? '–' : x.share.age2030 + '%'; } },
+      { k: 'openRate', label: '개업률', w: '64px', right: 1, m: 'sub', html: function (x) { return x.openRate == null ? '–' : x.openRate + '%'; } },
+      { k: 'reason', label: '이유', w: 'minmax(220px,2.4fr)', m: 'sub', wideHide: 0, filter: 1, html: function (x) { return '<span class="src-why ar-why">' + esc(x.reason) + '</span>'; } }
+    ] });
+}
+function areasLoad() { newLoad('getAreas', 'areas', function () { if (S.tab === 'plan' && S.planSub === 'areas') renderPlan(); }); }
+
+/* 외국인 약국 · 피부과 소비 (한국관광 데이터랩, 월 단위) — 관광 화면 안 카드 두 장 */
+function eok(n) { return n >= 1e8 ? (Math.round(n / 1e7) / 10).toLocaleString('ko-KR') + '억' : manTxt(n); }
+function medHtml(m) {
+  if (!m || !(m.months || []).length) return '';
+  var ph = m.byDept['약국'] || [], dm = m.byDept['피부과'] || [], lp = ph[ph.length - 1], ld = dm[dm.length - 1], pp = ph[ph.length - 2], ym = m.ym || m.months[m.months.length - 1], mon = (+String(ym).slice(4)) + '월';
+  var ser = ph.map(function (x) { return { d: x.ym.slice(0, 4) + '.' + x.ym.slice(4) + '.01', v: x.amt }; });
+  var nat = (m.byNation || []).slice(0, 8), nmax = Math.max.apply(null, nat.map(function (x) { return (x['약국'] || {}).amt || 0; }).concat(1));
+  var calc = { at: String(ym).slice(0, 4) + '.' + (+String(ym).slice(4)) + '월 자료', calc: '외국인 카드 의료 소비 중 진료과목별 금액·비중 · 전국', lim: '카드 소비 기준 · 실제 조제·상담과 다를 수 있어요' };
+  return '<section class="card tour-card med-card"><div class="card-head"><h2>외국인 의료 소비 중 약국 · 피부과 <small>전국 · 달마다</small></h2><span class="asof">' + esc(mon) + ' 기준</span></div>'
+    + '<div class="kpi-grid med-k">' + kpiHtml('약국 ' + mon, lp ? eok(lp.amt) + '원' : '–', lp ? '전체 의료 소비의 ' + lp.rate + '%' + (pp ? ' · 전달 ' + pp.rate + '%' : '') : '') + kpiHtml('피부과 ' + mon, ld ? eok(ld.amt) + '원' : '–', ld ? '전체의 ' + ld.rate + '%' : '') + kpiHtml('외국인 의료 전체', eok(m.total[m.total.length - 1] || 0) + '원', mon + ' 카드 결제') + '</div>'
+    + (ser.length > 1 ? '<h4 class="med-h">약국 소비 달마다 <small>전달보다 늘면 빨강</small></h4>' + dayBars(ser, 'v', '원', '외국인 약국 소비', ' 최근 ' + ser.length + '달') : '')
+    + srcLine(['kdatalab'], calc) + '</section>'
+    + (nat.length ? '<section class="card tour-card med-card"><div class="card-head"><h2>나라별 약국 · 피부과 소비 <small>약국 많이 쓰는 순 · ' + esc(mon) + '</small></h2></div><div class="med-nat"><div class="med-r med-hd"><span>나라</span><span>약국</span><span></span><span>약국 비중</span><span>피부과 비중</span></div>'
+      + nat.map(function (x) { var p = x['약국'] || {}, d = x['피부과'] || {}; return '<div class="med-r"><b>' + esc(x.nat) + '</b><span class="num">' + (p.amt ? eok(p.amt) : '–') + '</span><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round((p.amt || 0) / nmax * 100)) + '%"></i></span><span class="num">' + (p.rate != null ? p.rate + '%' : '–') + '</span><span class="num">' + (d.rate != null ? d.rate + '%' : '–') + '</span></div>'; }).join('')
+      + '</div><p class="sub med-note">비중 = 그 나라 손님 의료 소비 중 약국·피부과 몫 · 대만·일본 손님은 약국 비중이 높아요</p>' + srcLine(['kdatalab'], calc) + '</section>' : '');
+}
+
+/* 뉴스 · 업계 흐름: 오늘 리포트의 뉴스 + 요즘 대세 + 행사 흐름을 한 번에 읽기 */
+function playersLine(ps) {
+  if (!(ps || []).length) return '';
+  return '<p class="rp-players">관련 기업: ' + ps.map(function (x) { return '<b>' + esc(x.name) + '</b>(' + esc(x.role) + ')'; }).join(' · ') + '</p>';
+}
+function newsItemsHtml(news) {
+  return news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + playersLine(n.players) + '</div>'; }).join('');
+}
+function newsViewHtml() {
+  var r = S.rp; if (!r) return SKL;
+  var p = r.report; if (!p) return '<article class="card">' + emptyHtml('아직 리포트가 없어요 · 매일 아침 수집이 끝나면 올라와요') + '</article>';
+  var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
+  var sec = function (k, t, ic) { var a = p[k] || []; return a.length ? '<section class="card rp-sec"><h2>' + icon(ic) + t + '</h2><div class="rp-items">' + a.map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p></div>'; }).join('') + '</div>' + rpSrc(k, r.date) + '</section>' : ''; };
+  var h = (news.length ? '<section class="card rp-sec rp-news"><h2>' + icon('news') + '오늘의 뉴스 <small>' + news.length + '건</small></h2><div class="rp-items">' + newsItemsHtml(news) + '</div>' + rpSrc('news', r.date) + '</section>' : '')
+    + sec('trends', '요즘 대세', 'spark') + sec('events', '행사 · 이벤트 흐름', 'calendar');
+  return '<article class="card nv-head"><div class="card-head"><h2>' + esc(p.headline || '오늘의 업계 흐름') + '</h2><span class="head-acts">' + asOf(r.date) + '<button type="button" class="btn ghost" onclick="route(\'report\')">' + icon('file') + '리포트 전체</button></span></div></article>'
+    + (h ? '<div class="nv-grid" id="nvGrid">' + h + '</div>' : '<article class="card">' + emptyHtml('이 날 리포트에는 뉴스·흐름 칸이 없어요') + '</article>');
+}
+
+/* 브랜드 이야기: 아침 브리핑이 조사한 브랜드 프로필 + 업계 관계(가치사슬) */
+function storiesLoad() { newLoad('getStories', 'stories', function () { if (S.tab === 'more' && S.moreSub === 'story') renderMore(); }); }
+function storyOf(name) {
+  var st = S.stories; if (!name || !st || !st.brands) return null; var n = loose(name);
+  if (n.length < 2) return null;
+  for (var i = 0; i < st.brands.length; i++) { var b = st.brands[i], bn = loose(b.name); if (bn && (bn === n || n.indexOf(bn) === 0 || loose(b.company) === n)) return b; }
+  return null;
+}
+function storyChip(name) { var b = storyOf(name); return b ? '<button type="button" class="tag t-story" data-b="' + esc(b.name) + '" onclick="event.stopPropagation();openStory(this.dataset.b)" title="' + esc(b.name) + ' 브랜드 이야기">' + icon('book') + '스토리</button>' : ''; }
+function storyPlayers(b) {   /* 업계 관계: 브랜드·회사·대표 상품 이름이 match 에 걸리는 kb 항목의 players */
+  var keys = [b.name, b.company].concat(b.hero_products || []).filter(Boolean), seen = {}, out = [];
+  ((S.stories && S.stories.kb) || []).forEach(function (e) { if ((e.match || []).some(function (m) { return m && keys.some(function (k) { return String(k).indexOf(m) !== -1 || String(m).indexOf(k) !== -1; }); })) (e.players || []).forEach(function (p) { if (!seen[p.name]) { seen[p.name] = 1; out.push(Object.assign({ src: e.src }, p)); } }); });
+  return out;
+}
+function ownedMark(name) { var r = pbRankOf(name) || (S.pb && S.pb.list ? (S.pb.list.filter(function (x) { return loose(x.n || x.name).indexOf(loose(name).slice(0, 8)) !== -1; })[0] || {}).r : 0); return r ? pbChip(r) : tag('약국 미확인', 't-neutral'); }
+function storyHtml(b, full) {
+  var ps = storyPlayers(b), url = function (u) { return /^https?:\/\//.test(u || '') ? u : ''; };
+  return '<article class="card st-card" data-b="' + esc(b.name) + '"><div class="card-head"><h2>' + esc(b.name) + ' <small>' + esc([b.company, b.founder_or_ceo, b.founded].filter(Boolean).join(' · ')) + '</small></h2>' + (b.ts ? '<span class="asof">' + esc(md(b.ts)) + ' 조사</span>' : '') + '</div>'
+    + (b.motto ? '<p class="st-motto">“' + esc(b.motto) + '”</p>' : '')
+    + (b.story ? '<p class="st-story">' + esc(b.story) + '</p>' : '')
+    + (b.ceo_mind ? '<div class="st-sec"><p class="se-lab">경영 철학</p><p>' + esc(b.ceo_mind) + '</p></div>' : '')
+    + ((b.selling_points || []).length ? '<div class="st-sec"><p class="se-lab">손님에게 이렇게 말해 보세요</p><ul class="st-pts">' + b.selling_points.map(function (p) { var in_ = '<b>' + esc(p.point) + '</b><small>' + esc(p.basis) + (url(p.src) ? ' · 출처 ' + icon('ext') : '') + '</small>'; return '<li>' + (url(p.src) ? '<a class="st-pt" href="' + esc(p.src) + '" target="_blank" rel="noopener noreferrer">' + in_ + '</a>' : in_) + '</li>'; }).join('') + '</ul></div>' : '')
+    + (ps.length ? '<div class="st-sec"><p class="se-lab">관련 기업 · 가치사슬</p><div class="st-chain">' + ps.map(function (p) { return '<span class="st-co"><b>' + esc(p.name) + '</b><small>' + esc(p.role) + '</small></span>'; }).join('<span class="st-arr" aria-hidden="true">' + icon('chev') + '</span>') + '</div></div>' : '')
+    + ((b.hero_products || []).length ? '<div class="st-sec"><p class="se-lab">대표 상품</p><div class="st-hero">' + b.hero_products.map(function (h) { return '<span class="se-exi">' + esc(h) + ownedMark(h) + '</span>'; }).join('') + '</div></div>' : '')
+    + (b.pharmacy_tip ? '<p class="st-tip">' + icon('spark') + esc(b.pharmacy_tip) + '</p>' : '')
+    + srcLine(['brief'], { at: b.ts ? md(b.ts) + ' 조사' : '', calc: '아침 브리핑이 기사·인터뷰를 읽고 정리 · 말하기 포인트마다 출처 링크' }) + '</article>';
+}
+function storiesViewHtml() {
+  var st = newState(S.stories, "S.stories=null;storiesLoad()"); if (st) return st;
+  var q = loose(S.storyQ || ''), list = (S.stories.brands || []).filter(function (b) { return !q || loose([b.name, b.company, (b.hero_products || []).join(' ')].join(' ')).indexOf(q) !== -1; });
+  return '<div class="st-bar"><label class="sr-box st-q">' + icon('search') + '<input id="stQ" type="search" placeholder="브랜드 · 회사 · 상품 이름" value="' + esc(S.storyQ || '') + '" oninput="S.storyQ=this.value;clearTimeout(S.stT);S.stT=setTimeout(storyList,150)" aria-label="브랜드 이야기 찾기"></label><span class="meta">' + (S.stories.brands || []).length + '개 브랜드 · 관계 ' + ((S.stories.kb || []).length) + '건</span></div>'
+    + '<div class="st-grid" id="stGrid">' + (list.length ? list.map(function (b) { return storyHtml(b); }).join('') : '<article class="card">' + emptyHtml('찾는 브랜드가 없어요') + '</article>') + '</div>';
+}
+function storyList() { var g = $('stGrid'), tmp = document.createElement('div'); if (!g) return; tmp.innerHTML = storiesViewHtml(); g.replaceWith(tmp.querySelector('#stGrid')); balIf('stGrid'); }
+function openStory(name) {
+  var b = storyOf(name); if (!b) return;
+  S.mtFrom = document.activeElement; $('mtTitle').textContent = '브랜드 이야기';
+  $('mtBody').innerHTML = storyHtml(b).replace('class="card st-card"', 'class="st-card st-sheet"'); $('mtFoot').innerHTML = '<button type="button" class="btn" onclick="closeMt();route(\'more\',\'story\')">' + icon('book') + '브랜드 이야기 전체</button>';
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+}
+
 /* ── 더 보기: 가끔 보는 것 · 관리 ── */
 function renderMore() {
   var s = S.moreSub, el = $('more');
   S.bcOn = s === 'find'; if (s !== 'find') clearTimeout(S.bcTimer);
   var back = function (t) { return '<div class="view-head"><button type="button" class="back-btn" onclick="subBack(\'more\',\'\')">' + icon('left') + '더 보기</button><h2 class="view-title">' + t + '</h2></div>'; };
   if (s === 'analysis') { el.innerHTML = back('카테고리 · 브랜드 분석') + (S.viz && S.home ? analysisHtml() : skel(4)); if (!S.viz) loadViz(); if (!S.home) loadHome(); fitSvgText(el); if (innerWidth >= 840) balanceCols(el.querySelector('.vz-grid'), 2); return; }
+  if (s === 'news') { if (!S.rp) loadReport(''); if (!S.stories) storiesLoad(); el.innerHTML = back('뉴스 · 업계 흐름') + newsViewHtml(); return; }
+  if (s === 'story') { if (!S.stories) storiesLoad(); if (!S.pb) pbLoad(); el.innerHTML = back('브랜드 이야기') + storiesViewHtml(); balIf('stGrid'); return; }
   if (s === 'find') { el.innerHTML = back('화해 브랜드 전체 조사') + '<div id="findList"></div>'; loadFind(); return; }
   if (s === 'watch') {
     var w = (S.home && S.home.cards && S.home.cards.watch) || { items: [], brands: [] }, TY = { up: 'up', down: 'down', out: 'down', 'in': 'up', 'sale-on': 'sale' };
@@ -3862,6 +4205,8 @@ function renderMore() {
     + card('package', '용도별 상품 · 사진 확인', (ph ? '사진 확인 필요 <b class="warn">' + ph + '개</b> · ' : '') + '물류앱 용도 고치기 · 사진 없는 상품에 맞는 사진 고르기', "route('set','uses')")
     + card('columns', '세트 박스 크기', '투명박스 안쪽 크기를 넣어 두면 세트가 들어가는지 실제 비율로 그려 봐요', 'moreBox()')
     + card('grid', '올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교', '사이트별 순위 비교표 · 카테고리별 순위', "route('more','filters')")
+    + card('news', '뉴스 · 업계 흐름', '오늘 리포트의 뉴스 · 요즘 대세 · 행사 흐름을 한 번에', "route('more','news')")
+    + card('book', '브랜드 이야기', '브랜드 · 회사 · 대표 상품 이야기와 손님에게 할 말 · 관련 기업', "route('more','story')")
     + card('info', '데이터 출처 · 수집 상태', (S.stat ? esc(S.stat.time) + ' · ' : '') + '모든 숫자의 출처 · 주기 · 늦음 · 한계', "route('more','sources')")
     + card('bell', '변화 알림 목록', '알림을 켠 상품·브랜드 ' + watchCount() + '개 · 오늘 변화와 끄기', "route('more','watch')")
     + '</div><p class="app-info">' + icon('spark') + 'TRENDLAB v3.0 · 레디영 MD 송주희 주임 전용</p>';
