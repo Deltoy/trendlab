@@ -1416,6 +1416,25 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(max-width:839px){.cmp-head{font-size:12px;min-height:48px}.cmp-hm b,.cmp-hm small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cmp-hm em{display:none}}
 .la-by{display:block;font-size:var(--fs-1);color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .abc-sh{margin-left:6px;font-size:var(--fs-2);color:var(--ink2);font-variant-numeric:tabular-nums}
+/* 0929 데이터 출처 한 줄 (srcLine) · ⓘ 설명 창 · 데이터 출처 표 */
+.src{display:flex;align-items:center;gap:2px;margin:12px 0 0;min-width:0;font-size:var(--fs-1);line-height:1.4;color:var(--ink3);font-weight:400;letter-spacing:0}
+.src-tx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src-i{flex:none;display:inline-grid;place-items:center;width:44px;height:44px;margin:-14px 0 -14px -4px;padding:0;border:0;border-radius:50%;background:none;color:var(--ink3);cursor:pointer}
+.src-i:hover{background:var(--fill);color:var(--ink)}.src-i:focus-visible{outline:2px solid var(--pri);outline-offset:-2px}
+.src-i .ic{width:15px;height:15px}
+.bc-kpis .src{grid-column:1/-1;margin:2px 0 0}
+.dt .src{padding:0 4px;margin-bottom:14px}
+.src-pop{position:fixed;inset:auto;margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.16);font-size:var(--fs-2);line-height:1.5;max-height:70vh;overflow:auto}
+.src-pop .sp-src{padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.src-pop .sp-src p{margin:2px 0;color:var(--ink2)}.src-pop .sp-src .meta{color:var(--ink3)}
+.src-pop .sp-src a{display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.src-pop .sp-src a .ic{width:13px;height:13px}
+.src-pop .sp-lim{color:var(--warn)}
+.src-pop .sp-row{display:flex;gap:10px;margin:4px 0;color:var(--ink2)}.src-pop .sp-row b{flex:none;min-width:28px;color:var(--ink);font-weight:600}
+.src-pop .lnk{margin-top:6px;min-height:44px}
+.src-page .src-a{display:inline-flex;align-items:center;gap:4px;min-height:44px;min-width:44px;color:var(--ink)}
+.src-page .src-a .ic{width:13px;height:13px}
+.bc-tour .card-head .lnk-more{min-height:44px}
 </style>
 </head>
 <body data-tab="today">
@@ -1494,7 +1513,7 @@ function delta(n, unit, body) {
 }
 function newTag() { return '<span class="tag t-ink">NEW</span>'; }
 /* 선 아이콘 (lucide · 선 1.5) */
-var ICONS = { bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+var ICONS = { info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>', bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>', ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', check: '<path d="M20 6 9 17l-5-5"/>', x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', chev: '<path d="m9 18 6-6-6-6"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   house: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>', trend: '<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>', package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>', calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>', grid: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>', search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>', up: '<path d="m18 15-6-6-6 6"/>', left: '<path d="m15 18-6-6 6-6"/>', alert: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>', spark: '<path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/>', download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>', columns: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/>', layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>', save: '<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>', sort: '<path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>', news: '<path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/>' };
 function icon(n, cls) { return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[n] + '</svg>'; }
 /* 짧은 날짜: 2026.09.24 → 9.24 */
@@ -1502,6 +1521,60 @@ function shortDate(d) { var m = /(\d{4})[.\-](\d{1,2})[.\-](\d{1,2})/.exec(Strin
 function dateOf(d) { var m = /(\d{4})[.\-](\d{1,2})[.\-](\d{1,2})/.exec(String(d || '')); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; }
 /* 오늘이 아닌 자료는 제목 옆 회색 알약 "7.31 기준" */
 function asOf(d) { var h = S.home; return d && (!h || String(d).slice(0, 10) !== h.today) ? '<span class="asof">' + esc(shortDate(d)) + ' 기준</span>' : ''; }
+/* ── 0929 데이터 출처: 한 곳(SRC)에 적고 카드·표·그래프 아래 한 줄(srcLine) + ⓘ 설명 + CSV · 복사에 같이 싣는다 ── */
+var SRC = {
+  oy: { n: '올리브영 랭킹', url: 'https://www.oliveyoung.co.kr/store/main/getBestList.do', how: '맥의 실제 크롬이 전체 + 10개 카테고리 100위를 수집 (07시, 실패하면 09·12시 다시)', freq: '매일 07시', lag: '당일', lim: '판매량이 아니라 올리브영이 매긴 순위예요' },
+  oyglobal: { n: '올리브영 글로벌', url: 'https://global.oliveyoung.com/display/page/best-seller', how: '올리브영 수집 뒤 맥이 이어서 베스트셀러를 수집', freq: '매일 07시', lag: '당일', lim: '해외 고객 순위 · 가격은 달러 그대로' },
+  hwahae: { n: '화해', url: 'https://www.hwahae.co.kr/rankings', how: '화해 급상승 랭킹(카테고리 전체) 50위, 광고 상품은 빼고 순서대로', freq: '매일 07시', lag: '당일', lim: '판매 순위가 아니라 화해 급상승 순위 · 약국 보유 매칭은 브랜드·상품명 기준' },
+  daiso: { n: '다이소몰', url: 'https://www.daisomall.co.kr/ds/rank/C105', how: '다이소몰 판매 랭킹(일간) 스킨케어 · 마스크팩 각 30위', freq: '매일 07시', lag: '당일', lim: '두 카테고리만 봐요' },
+  musinsa: { n: '무신사 뷰티', url: 'https://www.musinsa.com/main/beauty/ranking?storeCode=beauty&sectionId=231&categoryCode=104001', how: '무신사 뷰티 랭킹(실시간) 스킨케어 100위', freq: '매일 07시', lag: '수집 순간', lim: '실시간 순위라 시각에 따라 달라요' },
+  qoo10: { n: '큐텐 재팬', url: 'https://www.qoo10.jp/gmkt.inc/Bestsellers/?g=2', how: '큐텐 재팬 뷰티 베스트셀러에서 한국 판매자 상품만 남김', freq: '매일 07시', lag: '당일', lim: '순위는 원래 전체 순위 그대로 · 가격은 엔화' },
+  amazon: { n: '아마존 미국', url: 'https://www.amazon.com/Best-Sellers-Beauty-Personal-Care-Skin-Care-Products/zgbs/beauty/11060451', how: '아마존 미국 스킨케어 베스트셀러 100위', freq: '매일 07시', lag: '당일', lim: '목록에 브랜드 칸이 없어 상품 이름으로 맞춰요 · 가격은 달러' },
+  naverDatalab: { n: '네이버 데이터랩', url: 'https://datalab.naver.com/keyword/trendSearch.naver', how: '수집 뒤 맥이 검색어마다 데이터랩 검색어 트렌드 곡선을 받음 (로그인 없음)', freq: '매일 아침', lag: '1~2일', lim: '검색 수가 아니라 0~100 상대값이에요' },
+  naverBlog: { n: '네이버 블로그', url: 'https://section.blog.naver.com/', how: '검색어마다 최근 7일 블로그 글 수 vs 그 전 7일', freq: '매일 아침', lag: '당일', lim: '네이버가 1000건에서 잘라 큰 검색어는 1000+로만 보여요' },
+  gtrends: { n: '구글 트렌드', url: 'https://trends.google.com/trends/?geo=KR', how: '맥의 크롬이 대한민국 · 최근 3개월 검색어 곡선을 받음', freq: '매일 아침', lag: '1~2일', lim: '검색 수가 아니라 0~100 상대값이에요' },
+  youtube: { n: '유튜브', url: 'https://www.youtube.com/', how: 'YouTube Data API로 뷰티 검색어 6개 · 한국 · 최근 7일 쇼츠를 조회수순으로', freq: '매일 아침', lag: '당일', lim: '제목·태그에 브랜드 이름이 나온 영상만 세요' },
+  tourKto: { n: '한국관광공사 출입국관광통계', url: 'https://www.data.go.kr/data/15158830/openapi.do', how: '공공데이터포털(data.go.kr) 방한 외래객 나라별 월 통계', freq: '매달', lag: '한 달쯤 뒤 발표 (발표 전 달은 건너뜀)', lim: '전국 합계 · 달 단위' },
+  ktoArea: { n: '한국관광 데이터랩 지역 방문자', url: 'https://datalab.visitkorea.or.kr/', how: '한국관광공사 빅데이터(통신사 기반) 시군구 하루 방문자 · 성동구 · 서울 중구 · 부산 중구 · 제주시', freq: '매일 아침', lag: '며칠 늦음', lim: '시군구 단위라 성수 · 명동보다 넓어요' },
+  spop: { n: '서울 열린데이터 생활인구', url: 'https://data.seoul.go.kr/', how: '단기체류 외국인 생활인구 · 행정동 시간대별 → 영업시간 10~21시 하루 평균 (성수동 = 성수1가1·2동 · 성수2가1·3동 합, 명동)', freq: '매일 아침', lag: '약 2달 늦음', lim: '국적은 중국 / 그 외 두 가지뿐' },
+  fx: { n: '환율 open.er-api.com', url: 'https://open.er-api.com/v6/latest/KRW', how: '1 외화 = 몇 원 (엔은 100엔) · 1주 전과 비교', freq: '매일 아침', lag: '하루 한 번 갱신', lim: '기준 환율 · 은행 고시 환율과 조금 달라요' },
+  pos: { n: '약국 POS 엑셀', url: '', how: 'MD가 올린 POS 상품별 통계 엑셀의 판매수량 순 (올린 날짜 · 기간 그대로)', freq: 'MD가 올릴 때', lag: '올린 기간까지', lim: '상품별 이익률은 보여 주지 않아요 · 우리 약국 한 곳 기준' },
+  logi: { n: '레디영 물류앱 상품 시트', url: '', how: '서버가 물류앱 구글 시트(상품 · 세트 · 용도)를 읽어 상품 이름으로 연결', freq: '열 때마다 (10~15분 캐시)', lag: '거의 실시간', lim: '이름이 다르게 적히면 연결이 빠질 수 있어요' },
+  news: { n: '뉴스 RSS', url: 'https://news.google.com/', how: '구글 뉴스 RSS + 전문지 RSS(코스모닝 · 뷰티누리 · 장업신문 · 데일리팜 · 약사공론) 최근 3일 기사', freq: '매일 리포트 때', lag: '최근 3일', lim: '기사 제목·요약 기준 · 원문 링크로 확인' },
+  report: { n: 'AI 리포트', url: '', how: '수집 뒤 맥의 Claude가 그날 자료(DATA)를 읽고 작성 · 못 쓴 날은 Gemini', freq: '매일 아침', lag: '당일', lim: 'AI 해석이 들어가요 · 숫자는 원자료 카드로 확인' },
+  setai: { n: 'AI 세트 추천', url: '', how: '맥의 Claude가 재료함 · 약국 상품 · 오늘 순위를 읽고 제안 (5분마다 요청 확인)', freq: '요청할 때 · 월요일 자동', lag: '요청 뒤 5~10분', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' },
+  mat: { n: '재료함', url: '', how: 'MD가 트렌드랩에 직접 넣은 협업 · 자사 재료', freq: '넣을 때', lag: '실시간', lim: '직접 입력한 내용 그대로' },
+  kdatalab: { n: '한국관광 데이터랩 의료관광 소비', url: 'https://datalab.visitkorea.or.kr/', how: '외국인 의료 소비액 월별 · 진료과목별(약국 · 피부과) 비율, 로그인 없이 되는 것만', freq: '매달', lag: '1~2달', lim: '전국 기준 · 지자체별은 로그인이 필요해 빠져요' },
+  areas: { n: '서울 상권분석서비스', url: 'https://golmok.seoul.go.kr/', how: '서울시 상권 추정매출(화장품 · 의약품 등) · 점포 개폐업 + 외국인 생활인구', freq: '분기', lag: '분기 끝나고 몇 달 뒤', lim: '카드 매출 추정치예요 · 작은 상권은 증감이 크게 튀어요' }
+};
+var MALL_SRC = { oliveyoung: 'oy', oyglobal: 'oyglobal', hwahae: 'hwahae', daiso: 'daiso', musinsa: 'musinsa', qoo10jp: 'qoo10', amazonus: 'amazon' };
+/* 올리브영 수집 시각: 오늘 수집분이면 'M/D HH:MM 수집' */
+function oyAt(d) { var lr = S.home && S.home.lastRun; d = d || (lr && lr.date); if (!d) return ''; return md(d) + (lr && lr.date === d && (lr.end || lr.start) ? ' ' + (lr.end || lr.start) : '') + ' 수집'; }
+function srcText(keys, o) { o = o || {}; return '출처: ' + keys.map(function (k) { return (SRC[k] || { n: k }).n; }).join(' · ') + (o.at ? ' · 기준: ' + o.at : '') + (o.calc ? ' · 계산: ' + o.calc : ''); }
+/* 카드 · 표 · 그래프 아래 한 줄: 출처 이름 · 기준 · 계산 + ⓘ(출처 사이트 링크 · 수집 방법 · 늦음 · 계산식 · 한계). 링크는 ⓘ 안에 둬서 한 줄이 탭 목표로 커지지 않게 */
+function srcLine(keys, o) {
+  o = o || {}; keys = keys.filter(function (k) { return SRC[k]; }); if (!keys.length) return '';
+  var nm = keys.map(function (k) { return esc(SRC[k].n); }).join(' · ');
+  return '<p class="src" data-k="' + esc(keys.join(',')) + '" data-at="' + esc(o.at || '') + '" data-calc="' + esc(o.calc || '') + '" data-lim="' + esc(o.lim || '') + '" data-t="' + esc(srcText(keys, o)) + '"><span class="src-tx">출처 ' + nm + (o.at ? ' · ' + esc(o.at) : '') + (o.calc ? ' · 계산: ' + esc(o.calc) : '') + '</span><button type="button" class="src-i" aria-label="출처 · 계산 자세히" aria-haspopup="dialog" onclick="srcPop(this)">' + icon('info') + '</button></p>';
+}
+function srcPop(b) {
+  var p = b.parentNode, d = p.dataset, pop = $('srcPop');
+  if (!pop) { pop = document.createElement('div'); pop.id = 'srcPop'; pop.className = 'src-pop'; pop.setAttribute('popover', ''); pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', '데이터 출처'); document.body.appendChild(pop); }
+  pop.innerHTML = d.k.split(',').map(function (k) { var s = SRC[k]; return '<div class="sp-src"><b>' + (s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">' + esc(s.n) + icon('ext') + '</a>' : esc(s.n)) + '</b><p>' + esc(s.how) + '</p><p class="meta">' + esc(s.freq) + ' · ' + esc(s.lag) + '</p>' + (s.lim ? '<p class="sp-lim">한계 · ' + esc(s.lim) + '</p>' : '') + '</div>'; }).join('')
+    + (d.at ? '<p class="sp-row"><b>기준</b>' + esc(d.at) + '</p>' : '') + (d.calc ? '<p class="sp-row"><b>계산</b>' + esc(d.calc) + '</p>' : '') + (d.lim ? '<p class="sp-row"><b>주의</b>' + esc(d.lim) + '</p>' : '')
+    + '<button type="button" class="lnk" onclick="document.getElementById(\'srcPop\').hidePopover();route(\'more\',\'sources\')">모든 데이터 출처 보기' + icon('chev') + '</button>';
+  try { pop.showPopover(); } catch (e) { pop.hidden = false; }
+  var r = b.getBoundingClientRect(), w = Math.min(340, innerWidth - 32), top = r.bottom + 6;
+  pop.style.width = w + 'px'; pop.style.left = Math.max(16, Math.min(r.right - w, innerWidth - w - 16)) + 'px';
+  if (top + pop.offsetHeight > innerHeight - 8) top = Math.max(8, r.top - pop.offsetHeight - 6);
+  pop.style.top = top + 'px';
+}
+/* 카드 · 표 글을 복사하면 출처 한 줄을 같이 붙인다 */
+document.addEventListener('copy', function (e) {
+  var s = getSelection(), n = s && s.rangeCount ? s.getRangeAt(0).commonAncestorContainer : null; n = n && (n.nodeType === 1 ? n : n.parentNode);
+  var c = n && n.closest && n.closest('.card, .dt'), l = c && c.querySelector('.src'); if (!l || !e.clipboardData) return;
+  e.clipboardData.setData('text/plain', s.toString().trim() + '\n' + l.dataset.t); e.preventDefault();
+});
 /* 빈 상태 · 불러오기 실패 (하나로 통일) */
 function emptyHtml(msg, btn, act) { return '<div class="empty"><p>' + esc(msg) + '</p>' + (btn ? '<button type="button" class="btn" onclick="' + act + '">' + esc(btn) + '</button>' : '') + '</div>'; }
 function failBox(el, act) { if (el) el.innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', act); }
@@ -1638,7 +1711,7 @@ function dragScroll(el) {
 
 /* ── v3 화면 이동: 탭 6개 + 하위 화면 · 이동마다 기록(안드로이드 뒤로 = 앱 안에서) · #trend/product 주소 ── */
 var TABS = [['today', '오늘', 'house'], ['report', '리포트', 'file'], ['trend', '트렌드', 'trend'], ['set', '세트', 'package'], ['plan', '기획', 'calendar'], ['more', '더 보기', 'grid']];
-var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price'], more: ['', 'analysis', 'find', 'filters', 'watch'] };
+var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources'] };
 function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; return w ? (w.items || []).length + (w.brands || []).length : 0; }
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
@@ -1906,6 +1979,7 @@ function renderPd(r) {
     + '<label class="field"><input id="pdGroup" maxlength="30" list="pdGroups" placeholder="묶음 이름 (선택 · 예: 가을 행사)" value="' + esc(r.board ? r.board.group : '') + '"></label>'
     + (groups.length ? '<div class="grp-chips">' + groups.map(function (g) { return '<button type="button" class="chip" data-g="' + esc(g) + '" onclick="pickGroup(this)">' + esc(g) + '</button>'; }).join('') + '</div>' : '')
     + '<div class="acts"><button type="button" class="btn" data-act="save-board" onclick="saveBoard()">' + (r.board ? '메모·묶음 저장' : icon('bookmark') + '메모와 함께 담기') + '</button>' + (r.board ? '<button type="button" class="btn danger" onclick="removeBoard()">담은 상품에서 빼기</button>' : '') + '</div></div>';
+  h += srcLine(['oy', 'logi'].concat(pbr ? ['pos'] : [], (r.otherMalls || []).map(function (x) { return MALL_SRC[x.mall]; })), { at: oyAt(c.last), calc: '최근 30일 순위 = 카테고리마다 날짜별 수집 순위 · 가격 = 마지막 수집 때 판매가' });
   $('pdBody').innerHTML = h; fitSvgText($('pdBody'));
   $('pdFoot').innerHTML = '';
 }
@@ -1978,7 +2052,7 @@ function renderBoard() {
       + g.items.map(function (p) {
         var extra = (p.memo ? '<span class="memo">' + esc(p.memo) + '</span>' : '') + (p.logi && p.logi.length ? '<span class="logi">약국: ' + esc(p.logi.join(', ')) + ' ' + pbChip(pbRankOf(p.logi[0])) + '</span>' : '');
         return rowHtml({ key: p.key, brand: p.brand, name: p.name, img: p.img, owned: p.logi && p.logi.length ? true : false }, '<span class="val">최고 ' + esc(p.rank) + '위</span>', false).replace('</span><span class="side">', function () { return extra + '</span><span class="side">'; });
-      }).join('') + '</div></section>';
+      }).join('') + '</div>' + srcLine(['oy', 'logi'], { at: oyAt(), calc: '최고 N위 = 이 상품이 100위 안에서 기록한 가장 높은 순위 · 약국 = 물류앱 상품 이름 연결' }) + '</section>';
   }).join('');
 }
 /* 묶음 전체를 만드는 세트로 (약국에 있으면 약국 이름, 없으면 [올리브영] 이름) */
@@ -2015,7 +2089,7 @@ function watchAct(btn) {
 function survivalCard(sv) {
   if (!sv) return '';
   return '<article id="c-survival" class="card" data-card="survival"><h2>신제품 생존율</h2><p class="sub">새로 100위에 들어온 상품이 N일 뒤에도 남아 있는 비율</p><div class="kpi-grid">'
-    + survCell(sv.d7, '7일', '아직 판단 전') + survCell(sv.d14, '14일', '아직 판단 전') + survCell(sv.d30, '30일', '아직 판단 전') + '</div></article>';
+    + survCell(sv.d7, '7일', '아직 판단 전') + survCell(sv.d14, '14일', '아직 판단 전') + survCell(sv.d30, '30일', '아직 판단 전') + '</div>' + srcLine(['oy'], { at: oyAt(), calc: '새로 100위에 들어온 상품 중 N일 뒤에도 100위 안에 남은 비율' }) + '</article>';
 }
 function survCell(x, label, wait) { var has = x && x.rate != null; return kpiHtml(label + ' 뒤', has ? Math.round(x.rate * 100) + '%' : '–', has ? esc(x.alive + '/' + x.n + '개 남음') : esc(wait)); }
 function flowCardHtml(flow) {
@@ -2024,7 +2098,7 @@ function flowCardHtml(flow) {
     + (flow.length ? flow.slice().sort(function (a, b) { return b.delta - a.delta; }).map(function (f) {   /* 가운데서 갈라지는 막대(순위 변동 TOP 과 같은 모양) */
       var w = Math.max(3, Math.round(Math.abs(f.delta) / fmax * 50)), up = f.delta > 0;
       return '<div class="flow-row"><span class="flow-l">' + esc(f.label) + '</span><span class="vz-mvtrack" aria-hidden="true">' + (f.delta ? '<span class="vz-mvfill" style="' + (up ? 'left:50%' : 'right:50%') + ';width:' + w + '%;background:' + (up ? TOK.up : TOK.down) + '"></span>' : '') + '</span>' + delta(f.delta) + '</div>'; }).join('') : '<p class="empty">카테고리 데이터가 없어요</p>')
-    + '</div></article>';
+    + '</div>' + srcLine(['oy'], { at: oyAt(), calc: '최근 7일 vs 이전 7일, 상위 30위에 머문 상품·일 수의 차이' }) + '</article>';
 }
 function priceCardHtml(price) {
   return '<article id="c-price" class="card" data-card="price"><h2>가격대 · 할인</h2><p class="sub">전체 상위 30위 판매가 기준</p>'
@@ -2097,7 +2171,7 @@ function loadBrandDetail(b) {
       + '<div class="pd-sec"><h4>100위 안 상품 수 흐름 · 오늘 ' + last + '개</h4>' + chartSvg({ s: r.series.map(function (x) { return { date: x.date, rank: x.count || 0 }; }) }, { s: '상품 수' }, true).replace(/<div class="legend">[\s\S]*?<\/div>/, '') + '</div>'
       + (r.catMix && r.catMix.length ? '<div class="pd-sec"><h4>이 브랜드 상품의 카테고리</h4>' + vzDonut(r.catMix, 0, '오늘 100위 안') + '</div>' : '')
       + '<div class="pd-sec"><h4>신제품 생존율</h4><div class="kpi-grid">' + survCell(sv.d7, '7일', '판단 전') + survCell(sv.d14, '14일', '판단 전') + survCell(sv.d30, '30일', '판단 전') + '</div></div>'
-      + '<div class="pd-sec bs-items"><h4>100위 안 상품</h4>' + (r.items.length ? r.items.map(function (p) { return itemHtml(Object.assign({}, p, { brand: '' }), ''); }).join('') : '<p class="empty">오늘은 100위 안에 상품이 없어요</p>') + '</div>';
+      + '<div class="pd-sec bs-items"><h4>100위 안 상품</h4>' + (r.items.length ? r.items.map(function (p) { return itemHtml(Object.assign({}, p, { brand: '' }), ''); }).join('') : '<p class="empty">오늘은 100위 안에 상품이 없어요</p>') + '</div>' + srcLine(['oy', 'logi'], { at: oyAt(r.date), calc: '상품 수 흐름 = 날짜별 100위 안 상품 수 · 생존율 = 새로 들어온 상품이 N일 뒤에도 남은 비율' });
     fitSvgText($('bsBody'));
   });
 }
@@ -2313,7 +2387,7 @@ function paletteHtml(v) {   /* 0926 도넛 하나: 조각 = 실제 색 · 가운
     + '<div class="pal-donut"><svg viewBox="0 0 128 128" data-fit role="img" aria-label="랭킹 상품 사진 색 비율 · 1위 ' + esc(top.name) + ' ' + top.pct + '%">'
     + '<circle cx="64" cy="64" r="58.5" fill="none" stroke="rgba(0,0,0,.08)"/><circle cx="64" cy="64" r="35.5" fill="none" stroke="rgba(0,0,0,.06)"/>' + paths
     + '<text class="pal-n" x="64" y="62" text-anchor="middle" data-fs="20" font-size="11" font-weight="700" fill="' + TOK.ink + '">' + esc(top.name) + '</text><text class="pal-p" x="64" y="76" text-anchor="middle" data-fs="13" font-size="7" fill="' + TOK.ink2 + '">' + top.pct + '%' + (top.prevPct != null ? ' · 지난주 ' + top.prevPct + '%' : '') + '</text></svg>'
-    + '<p class="sub">랭킹 상품 사진의 색 비율 · 가운데는 가장 많은 색 · 조각을 누르면 그 색이 보여요</p></div>';
+    + '<p class="sub">랭킹 상품 사진의 색 비율 · 가운데는 가장 많은 색 · 조각을 누르면 그 색이 보여요</p></div>' + srcLine(['oy'], { at: md(p.date), calc: '올리브영 전체 랭킹 상품 사진의 대표색 비율 · 가운데 = 지난주 비율', lim: '포장 사진 색이라 제품 색과 다를 수 있어요' });
 }
 function palPick(el) {
   var svg = el.ownerSVGElement; if (!svg) return;
@@ -2338,7 +2412,7 @@ function vizHtml(v) {
     + vzBlock('어느 브랜드가 강한가? (TOP10)', '점수 = 1위 100점 … 100위 1점 합', vzBars(v.brands.map(function (b) { return { label: b.brand, value: b.score, text: b.score + '점', brand: b.brand, color: b.owned === true ? TOK.cat[3] : TOK.ink }; }), { legend: '<p class="vz-key"><span><i style="background:' + TOK.ink + '"></i>브랜드</span>' + (owned ? '<span><i style="background:' + TOK.cat[3] + '"></i>약국 취급 브랜드</span>' : '') + '</p>' }))
     + vzBlock('행사 비율', '100위 중 행사 표시가 붙은 상품 (겹칠 수 있음)', vzBars(v.flags.map(function (f) { return { label: f.label, value: f.pct, text: f.pct + '%' }; })))
     + vzBlock('순위 변동 TOP', v.movers.ready ? esc(shortDate(v.movers.baseDate)) + ' 대비 · 누르면 상품 상세' : '', v.movers.ready ? vzMovers(v.movers) : '<p class="empty">일주일 가까이 쌓이면 크게 오르내린 상품이 보여요</p>')
-    + '</div>';
+    + '</div>' + srcLine(['oy', 'logi'], { at: oyAt(v.date), calc: '브랜드 점수 = 1위 100점 … 100위 1점 합 · 행사 비율 = 100위 중 행사 표시 상품 · 순위 변동 = ' + (v.movers.ready ? md(v.movers.baseDate) + ' 대비' : '일주일 전 대비') });
 }
 
 /* ── 세트: 재료함 + AI 세트 추천 ── */
@@ -2381,7 +2455,7 @@ function pbTableHtml() {
 function pbTableMount() {
   if (!$('pbTable')) return;
   var cats = {}; S.pb.list.forEach(function (x) { if (x.g) cats[x.g] = (cats[x.g] || 0) + 1; });
-  dtMount({ id: 'pbt', el: 'pbTable', label: '약국 베스트', rows: S.pb.list, key: function (x) { return x.n; }, file: '약국베스트',
+  dtMount({ id: 'pbt', el: 'pbTable', label: '약국 베스트', rows: S.pb.list, key: function (x) { return x.n; }, file: '약국베스트', src: pbSrc(1),
     act: function (x) { var nm = x.m || x.n, has = diyHas(nm); return '<button type="button" class="btn icon pb-add' + (has ? ' on' : '') + '" data-n="' + esc(nm) + '" aria-pressed="' + has + '" aria-label="' + (has ? '세트에서 빼기' : '세트에 담기') + '" title="' + (has ? '세트에서 빼기' : '세트에 담기') + '" onclick="pbAdd(this.dataset.n);dtMount(DT.pbt);var b=$(\'diyBar\');if(b){b.hidden=!S.psEditing.items.length;$(\'diyBarN\').textContent=S.psEditing.items.length;$(\'diyBarR\').textContent=pbRateText(S.psEditing.items);}">' + icon(has ? 'check' : 'plus') + '</button>'; },
     cols: [
       { k: 'r', label: '순위', w: '40px', num: 1, m: 'lead', html: function (x) { return '<span class="rk">' + x.r + '</span>'; } },
@@ -2408,7 +2482,7 @@ function matCardHtml() {
     + '<p class="sub">자사 제품과 협업 제품을 넣어 두면 AI가 세트를 짜 줘요. 협업은 기간이 끝나면 자동으로 빠져요</p>'
     + (live.length ? '<div class="mat-list">' + live.map(row).join('') + '</div>' : '<p class="empty">아직 재료가 없어요. 자사·협업 제품을 먼저 넣어 주세요</p>')
     + (ended.length ? '<button type="button" class="more" onclick="S.set.showEnded=!S.set.showEnded;setDataChanged()">' + (S.set.showEnded ? '종료된 협업 접기' : '종료된 협업 ' + ended.length + '개 보기') + '</button>' + (S.set.showEnded ? '<div class="mat-list">' + ended.map(row).join('') + '</div>' : '') : '')
-    + '</article>';
+    + srcLine(['mat'], { calc: '곧 종료 = 협업 종료일이 가까운 재료' }) + '</article>';
 }
 /* 세트 > AI 세트 추천 (만들기 안 버튼으로 들어온다) */
 function aiHtml() {
@@ -2432,7 +2506,7 @@ function aiHtml() {
         + '<button type="button" class="btn" data-i="' + i + '" onclick="copySet(+this.dataset.i)">텍스트 복사</button></div>';
     }).join('') + '</div>';
   } else if (cur && !cur.pending) h += '<p class="empty">아직 추천이 없어요. 위 버튼을 눌러 보세요</p>';
-  return h + '</article>';
+  return h + srcLine(['setai', 'mat', 'logi', 'oy'], { at: cur && cur.date ? md(cur.date) + ' 추천' : '', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' }) + '</article>';
 }
 /* ── 0926 약국 세트 (물류앱 '_세트상품_' 과 한 벌) · 직접 조합 · AI 검토 ── */
 S.ps = null;
@@ -2441,7 +2515,7 @@ function psHtml(sub) {
   if (!p) return '<article class="card" id="psCard">' + skel(2) + '</article>';
   if (p.err) return '<article class="card" id="psCard"><p class="empty">' + esc(p.err) + '</p></article>';
   if (sub === 'diy') return diyHtml(p);
-  if (sub === 'uses') return '<article class="card" id="psCard"><div class="card-head"><h2>용도별 상품</h2></div><p class="sub">물류앱에서 붙인 용도예요. 상품을 눌러 고치면 물류앱에도 바로 반영돼요</p>' + psUsesHtml(p) + '</article>';
+  if (sub === 'uses') return '<article class="card" id="psCard"><div class="card-head"><h2>용도별 상품</h2></div><p class="sub">물류앱에서 붙인 용도예요. 상품을 눌러 고치면 물류앱에도 바로 반영돼요</p>' + psUsesHtml(p) + srcLine(['logi']) + '</article>';
   return psListHtml(p);
 }
 /* 세트 > 세트 목록: 물류앱 세트(S…)와 테스트 세트(D…)를 한 목록에 · 상태 칩으로 거르기 · AI 검토가 붙은 카드는 한 줄 전체 */
@@ -2453,7 +2527,7 @@ function psListHtml(p) {
   var chips = '<div class="chips ps-f" role="group" aria-label="세트 상태">' + PS_F.map(function (x) { var on = f === x[0]; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-f="' + x[0] + '" onclick="S.psF=this.dataset.f;renderSetTab()">' + x[1] + ' <em>' + n(x[0]) + '</em></button>'; }).join('') + '</div>';
   var rv = list.filter(function (x) { return x.rv; }), rest = list.filter(function (x) { return !x.rv; });
   return '<article class="card" id="psCard"><div class="card-head"><h2>세트 목록 <small class="meta">' + all.length + '개</small></h2><button type="button" class="btn" onclick="S.psEditing=psNewDraft();route(\'set\',\'diy\')">' + icon('plus') + '새 세트 만들기</button></div><p class="sub">물류앱 세트와 테스트 세트를 한곳에서 봐요 · 테스트 세트는 [물류앱에 반영]을 눌러야 물류앱에 들어가요</p>' + chips
-    + (list.length ? (rv.length ? '<div class="ps-grid rv">' + rv.map(function (x) { return x.h; }).join('') + '</div>' : '') + (rest.length ? '<div class="ps-grid" data-n="' + rest.length + '">' + rest.map(function (x) { return x.h; }).join('') + '</div>' : '') : '<p class="empty">이 상태의 세트가 없어요</p>') + '</article>';
+    + (list.length ? (rv.length ? '<div class="ps-grid rv">' + rv.map(function (x) { return x.h; }).join('') + '</div>' : '') + (rest.length ? '<div class="ps-grid" data-n="' + rest.length + '">' + rest.map(function (x) { return x.h; }).join('') + '</div>' : '') : '<p class="empty">이 상태의 세트가 없어요</p>') + srcLine(['logi'], { calc: 'S… = 물류앱 세트 시트 · D… = 트렌드랩 테스트 세트' }) + '</article>';
 }
 function haveCardHtml(s) {
   return '<div class="ps-card"><div class="ps-main"><div class="ps-st">' + tag('물류앱', 't-ok') + '<span class="meta">' + esc(s.id) + '</span>' + pbRateTag(s.items) + '</div>' + (/^https:\/\//.test(s.photo || '') ? '<div class="ps-ph">' + imgHtml(s.photo) + '</div>' : '')
@@ -2543,7 +2617,7 @@ function diyHtml(p) {
     + '<label class="diy-and sw-row"><input type="checkbox" id="diyAnd" role="switch"' + (S.diyAnd ? ' checked' : '') + ' onchange="S.diyAnd=this.checked;diyList()"><span class="sw" aria-hidden="true"></span>고른 용도를 모두 가진 상품만</label></nav>'
     + '<div class="diy-main"><div class="diy-mhead"><h2>상품</h2>' + diyModeHtml() + '</div><div class="diy-tools"><button type="button" class="chip tog' + (S.diyOwn ? ' on' : '') + '" id="diyOwn" aria-pressed="' + !!S.diyOwn + '" onclick="S.diyOwn=!S.diyOwn;this.classList.toggle(\'on\',S.diyOwn);this.setAttribute(\'aria-pressed\',S.diyOwn);diyList()">우리 약국 제품만</button><label class="dt-sel"><span class="sr-only">정렬</span><select id="diySort" onchange="S.diySort=this.value;diyList()">' + [['', '기본 순서'], ['pb', '약국 순위순'], ['name', '이름순']].map(function (o) { return '<option value="' + o[0] + '"' + ((S.diySort || '') === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label></div><input id="diyQ" class="diy-q" placeholder="이름으로 찾기 (모든 약국 상품)" value="' + esc(S.diyQ || '') + '" oninput="S.diyQ=this.value;diyList();diyExtSearch(this.value)">'
     + '<div id="diyList" class="diy-list">' + diyListHtml() + '</div>'
-    + '<details class="diy-oy"><summary>올리브영 상품 넣기</summary><input id="psQ" class="diy-q" placeholder="올리브영 상품 이름" oninput="psSearch(this.value)"><div id="psFound" class="diy-list">' + psFoundHtml() + '</div></details></div></section>'
+    + '<details class="diy-oy"><summary>올리브영 상품 넣기</summary><input id="psQ" class="diy-q" placeholder="올리브영 상품 이름" oninput="psSearch(this.value)"><div id="psFound" class="diy-list">' + psFoundHtml() + '</div></details></div>' + srcLine(['logi', 'pos'], { calc: '용도 = 물류앱 상품 용도 칸 · 약국 N위 = POS 판매수량 순위' }) + '</section>'
     + '<aside class="card diy-right" id="diyBox">' + diyBoxHtml() + '</aside></div>'
     + diyBarHtml();
 }
@@ -2638,7 +2712,7 @@ function diyBoxBody(e) {
         + '<button type="button" class="diy-x" data-i="' + i + '" aria-label="빼기" onclick="diyRemove(+this.dataset.i)">' + icon('x') + '</button></div>'; }).join('') : diyQuickHtml()) + '</div>'
     + pbMarginHtml(e.items)
     + boxPreviewHtml(e)
-    + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>';
+    + '<label class="field"><span>메모</span><input id="psMemo" maxlength="200" value="' + esc(e.memo) + '" oninput="S.psEditing.memo=this.value"></label><p class="np-err" id="mtErr"></p>' + srcLine(['logi', 'pos'], { calc: '세트 예상 이익률 = (판매가 합 − 사입가 합) ÷ 판매가 합 · 상품마다 POS 매출÷수량 = 평균 판매가, 원가÷수량 = 사입가, 곱하기 담은 수량', lim: '판매 기록 있는 상품 2개 이상일 때만 · 상품 하나의 이익률은 보여 주지 않아요' });
 }
 /* ── 0926 박스에 넣어 보기: 박스 규격 · 상품 크기(mm) · 실제 비율 미리보기 · 들어가는지 판정 · 이미지 저장 ── */
 function psBoxOf(name) { return ((S.ps && S.ps.boxes) || []).filter(function (b) { return b.name === name; })[0] || null; }
@@ -2885,6 +2959,7 @@ function pbPeriodText() {
   var m = S.pb.meta, t = m.from && m.to ? md(m.from) + '~' + md(m.to) + ' 판매' + (m.days ? ' (' + m.days + '일)' : '') : '판매 기간 모름';
   return t + ' · ' + md(m.at) + ' 올림 · ' + (S.pb.prev ? '▲▼는 ' + md(S.pb.prev.at) + '에 올린 자료와 비교' : '다음에 새로 올리면 순위 변화(▲▼)가 나와요');
 }
+function pbSrc(raw) { var m = S.pb.meta, a = [['pos', 'logi', 'oy'], { at: 'POS ' + md(m.from) + '~' + md(m.to) + ' · ' + md(m.at) + ' 올림', calc: 'ABC = ' + (S.pb.abcBy === 's' ? '매출' : '판매수량') + ' 누적 70%까지 A · 90%까지 B · 나머지 C', lim: 'POS 기간 ' + md(m.from) + '~' + md(m.to) + ' · 상품별 이익률은 보여 주지 않아요' }]; return raw ? a : srcLine(a[0], a[1]); }
 function pbHtml() {
   var pb = S.pb;
   if (!pb) return '<article class="card">' + skel(3) + '</article>';
@@ -2896,7 +2971,7 @@ function pbHtml() {
     + '<p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml()
     + '<input id="pbQ" type="search" class="diy-q" placeholder="상품 이름으로 찾기" aria-label="약국 베스트에서 찾기" value="' + esc(S.pbQ) + '" oninput="S.pbQ=this.value;S.pbN=50;pbList()">'
     + '<div class="chips pb-cats" role="group" aria-label="분류">' + pbCatsHtml() + '</div>'
-    + '<div id="pbList" class="pb-list">' + pbListHtml() + '</div></section>'
+    + '<div id="pbList" class="pb-list">' + pbListHtml() + '</div>' + pbSrc() + '</section>'
     + '<aside class="card diy-right" id="diyBox">' + right + '</aside></div>' + diyBarHtml();
 }
 /* 세트 DIY 안: 상품 칸을 '약국 베스트' 로 바꿔 고르기 */
@@ -3088,8 +3163,9 @@ function renderCompare() {
     return '<button type="button" class="cmp-row" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)" style="grid-template-columns:minmax(128px,min(30%,260px)) repeat(' + c.malls.length + ',minmax(34px,1fr))"><span class="cmp-name">' + (t[0] ? '<span class="tag t-neutral" title="' + t[1] + ' 뜨는 브랜드">' + t[0] + '</span>' : '') + esc(b.brand) + (b.owned === true ? ' ' + tag('약국', 't-ok') : '') + '</span>'
       + c.malls.map(function (m) { var r = b.ranks[m.mall]; if (!r) return '<span class="cmp-cell none">·</span>'; var s = cmpShade(r); return '<span class="cmp-cell" style="background:' + s.bg + ';color:' + s.fg + '" title="' + esc(m.label + ' ' + r + '위 · ' + (b.counts[m.mall] || 1) + '개') + '">' + r + '</span>'; }).join('') + '</button>';
   }).join('');
-  el.innerHTML = '<p class="note">칸 숫자 = 그 사이트에서 이 브랜드의 가장 높은 순위 (진할수록 상위) · 전역 3곳 이상 · 해외 해외에서만 · 국내 국내에서만</p><div class="cmp">' + head + rows + '</div>';
+  el.innerHTML = '<p class="note">칸 숫자 = 그 사이트에서 이 브랜드의 가장 높은 순위 (진할수록 상위) · 전역 3곳 이상 · 해외 해외에서만 · 국내 국내에서만</p><div class="cmp">' + head + rows + '</div>' + mallSrc(c, '칸 숫자 = 그 사이트에서 브랜드의 가장 높은 순위');
 }
+function mallSrc(c, calc, extra) { var ds = c.malls.map(function (m) { return md(m.date); }).filter(function (d, i, a) { return a.indexOf(d) === i; }); return srcLine(c.malls.map(function (m) { return MALL_SRC[m.mall]; }).concat(extra || []), { at: '사이트별 최근 수집 ' + ds.join(' · '), calc: calc, lim: '사이트마다 순위 기준이 달라요 (판매 · 급상승 · 실시간) · 브랜드 이름은 영문·일본어를 한글로 맞춰요' }); }
 function setBrandView(v) { S.brand.view = v; if (v !== 'oy') undockSheet('bs'); [].forEach.call(document.querySelectorAll('#brandView button'), function (b) { var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); $('brandChips').hidden = v !== 'oy'; $('brandList').classList.remove('dt', 'dt-wide'); document.body.classList.toggle('cmp-on', v === 'cmp'); if (v === 'cmp' || v === 'src') { if (S.cmp) (v === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else loadBrands(); }
 /* ── 브랜드 검색 (화해 전체 상품 + 우리 약국 보유) ── */
 function safeUrl(u) { return /^https:\/\//.test(String(u || '')) ? u : ''; }
@@ -3122,7 +3198,7 @@ function findResult(r) {
     + '<div class="bc-stat"><span><b>' + live.length + '</b>판매 중</span><span><b>' + (r.logiOk ? own + '/' + live.length : '–') + '</b>우리 약국 보유</span><span><b>' + (r.items.length - live.length) + '</b>단종</span></div>'
     + (r.logiOk ? '<div class="bc-ratio" role="img" aria-label="보유 ' + pct + '%"><span style="width:' + pct + '%"></span></div><p class="sub">보유 ' + pct + '% · 나머지는 손님 문의 시 주문 검토 대상</p>' : '<p class="sub">물류앱을 읽지 못해 보유 여부는 알 수 없어요</p>')
     + (r.ours && r.ours.length ? '<details class="bc-ours"><summary>물류앱에 있는 ' + esc(r.brand.replace(/\s*\(.*\)/, '')) + ' 상품 ' + r.ours.length + '개</summary><ul>' + r.ours.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></details>' : '')
-    + '</article><div class="grp-chips bc-filter">' + chip('all', '전체') + chip('none', '우리 없음') + chip('own', '우리 있음')
+    + srcLine(['hwahae', 'logi'], { at: md(r.date) + ' 수집', calc: '보유 = 물류앱 상품 이름과 맞춘 화해 상품 수 ÷ 판매 중 상품 수', lim: '화해 매칭은 브랜드명 기준 · 단종은 화해 표시 그대로' }) + '</article><div class="grp-chips bc-filter">' + chip('all', '전체') + chip('none', '우리 없음') + chip('own', '우리 있음')
     + '<button type="button" class="chip' + (S.bc.old ? ' on' : '') + '" aria-pressed="' + S.bc.old + '" data-f="old" onclick="S.bc.old=!S.bc.old;renderFind()">단종 포함</button></div>'
     + (list.length ? '<div class="list bc-list">' + list.map(bcRow).join('') + '</div>' : '<p class="empty">해당하는 상품이 없어요</p>');
 }
@@ -3163,7 +3239,7 @@ function renderYt() {
   el.innerHTML = '<h2>유튜브 쇼츠에서 뜨는 브랜드</h2><p class="sub">최근 7일 인기 뷰티 쇼츠 ' + y.total + '개 · 제목·태그에 나온 브랜드의 조회수 합</p><div class="yt-grid"><div class="yt-col"><h3 class="yt-h">뜨는 브랜드</h3>'
     + (y.brands.length ? vzBars(y.brands.slice(0, 6).map(function (b, i) { return { label: b.brand, value: b.views, text: viewsKo(b.views) + '회 · ' + b.videos + '편', yt: 'b' + i }; })) : '<p class="empty">아직 브랜드가 언급된 영상이 없어요</p>') + '</div>'
     + (y.items && y.items.length ? '<div class="yt-col"><h3 class="yt-h">뜨는 아이템 <small>제목·태그 기준</small></h3>' + vzBars(y.items.slice(0, 6).map(function (x, i) { return { label: x.label, value: x.views, text: viewsKo(x.views) + '회 · ' + x.videos + '편', yt: 'i' + i }; })) + '</div>' : '')
-    + '<div class="yt-col yt-vids"><h3 class="yt-h">조회수 TOP 영상</h3><div class="yt-list">' + y.videos.slice(0, 5).map(function (v) { return '<a class="yt-row" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><span class="yt-v">' + viewsKo(v.views) + '</span><span class="tx"><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel) + ' · ' + v.seconds + '초</span></span><span class="side">' + icon('ext') + '</span></a>'; }).join('') + '</div></div></div>';
+    + '<div class="yt-col yt-vids"><h3 class="yt-h">조회수 TOP 영상</h3><div class="yt-list">' + y.videos.slice(0, 5).map(function (v) { return '<a class="yt-row" href="https://www.youtube.com/shorts/' + encodeURIComponent(v.id) + '" target="_blank" rel="noopener"><span class="yt-v">' + viewsKo(v.views) + '</span><span class="tx"><span class="nm1">' + esc(v.title) + '</span><span class="meta">' + esc(v.channel) + ' · ' + v.seconds + '초</span></span><span class="side">' + icon('ext') + '</span></a>'; }).join('') + '</div></div></div>' + srcLine(['youtube'], { at: md(y.date) + ' 수집', calc: '제목·태그에 나온 브랜드·아이템의 조회수 합 · 영상 수' });
 }
 /* 0927 뜨는 브랜드·아이템 누르면 그 쇼츠 바로 보기 (재료 창 재사용) */
 function openShorts(ref) {
@@ -3280,7 +3356,7 @@ function dtMount(T) {
   var foot = wide || filtered ? '<div class="dt-foot"><span>' + (filtered ? rows.length.toLocaleString('ko-KR') + ' / ' : '') + T.rows.length.toLocaleString('ko-KR') + '개' + (T.note ? ' · ' + T.note : '') + '</span>' + (filtered || st.k ? '<button type="button" class="linkbtn" onclick="dtReset(' + q() + ')">정렬·거르기 풀기</button>' : '') + '</div>' : '';
   el.classList.add('dt'); el.classList.toggle('dt-wide', wide); el.dataset.dt = T.id;
   el.style.setProperty('--dt-cols', tpl);
-  el.innerHTML = bar + selbar + '<div class="dt-table" role="table" aria-label="' + esc(T.label || '') + '">' + head + '<div class="dt-body" role="rowgroup">' + body + '</div></div>' + foot;
+  el.innerHTML = bar + selbar + '<div class="dt-table" role="table" aria-label="' + esc(T.label || '') + '">' + head + '<div class="dt-body" role="rowgroup">' + body + '</div></div>' + foot + (T.src ? srcLine(T.src[0], T.src[1]) : '');
   if (fk) { var inp = el.querySelector('[data-dtq="' + fk + '"]'); if (inp) { inp.focus(); try { inp.setSelectionRange(pos, pos); } catch (e) {} } }
   if (T.after) T.after();
 }
@@ -3320,7 +3396,7 @@ if (window.ResizeObserver) new ResizeObserver(function () { clearTimeout(dtResiz
 function csvCell(v) { if (v == null) return ''; if (typeof v === 'number') return String(v); v = String(v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
 function dtCsv(id) {
   var T = DT[id], rows = dtRows(T), cols = T.cols.filter(function (c) { return c.csv !== false; });
-  var lines = [cols.map(function (c) { return c.label || c.k; })].concat(rows.map(function (r) { return cols.map(function (c) { return c.csv ? c.csv(r) : dtVal(c, r); }); }));
+  var lines = [cols.map(function (c) { return c.label || c.k; })].concat(rows.map(function (r) { return cols.map(function (c) { return c.csv ? c.csv(r) : dtVal(c, r); }); })).concat(T.src ? [[], [srcText(T.src[0], T.src[1])]] : []);
   var d = new Date(), stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
   var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + lines.map(function (l) { return l.map(csvCell).join(','); }).join('\r\n')], { type: 'text/csv;charset=utf-8' }));
   a.download = 'TRENDLAB_' + (T.file || id) + '_' + stamp + '.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
@@ -3398,34 +3474,34 @@ function renderBrief() {
   var r = c.report;
   var rep = '<article class="card bc-report" data-card="report" id="c-report"><p class="rp-kicker">' + icon('file') + (r && r.date !== h.today ? esc(shortDate(r.date)) + ' 리포트' : '오늘의 리포트') + '</p>'
     + (r ? '<h2 class="rp-head">' + esc(r.headline) + '</h2>' + ((r.summary || []).length ? '<ul class="rp-sum">' + r.summary.slice(0, 2).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + '<button type="button" class="lnk-more" data-act="report-open" data-date="' + esc(r.date) + '" onclick="openReport(this.dataset.date)">' + rpTodoText(r.date) + '리포트 전체 보기' + icon('chev') + '</button>'
-      : '<p class="rp-one">07시 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>') + '</article>';
+      : '<p class="rp-one">07시 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>') + (r ? srcLine(['report'], { at: md(r.date) + ' 자료 · ' + (r.source === 'gemini' ? 'Gemini' : 'Claude') + ' 작성' }) : '') + '</article>';
   var cnt = function (m) { return m && m.ready !== false ? m.items.length : '–'; };
   var kpis = '<nav class="bc-kpis sum card" aria-label="오늘 숫자">' + [['missing', '들여올 후보', '약국에 없는 상위 상품', 'warn'], ['risers', '급상승', '크게 오른 상품', 'up'], ['new', 'NEW', '새로 들어온 상품', 'ink']].map(function (k) {
     var wk = k[0] === 'new' && S.la && S.la.items ? laWeek().length : -1;   /* 0929d 이번 주 신상(품평회 표)으로 */
-    return '<button type="button" class="kpi kpi-btn ' + k[3] + '" data-f="' + (wk >= 0 ? 'week' : k[0]) + '" onclick="setTrendFrom(this.dataset.f)"><span class="kpi-l">' + k[1] + '</span><b>' + cnt(c[k[0]]) + '</b><span class="kpi-s">' + (wk >= 0 ? '이번 주 신상 ' + wk + '개 · 품평회 표' : k[2]) + icon('chev') + '</span></button>'; }).join('') + '</nav>';
+    return '<button type="button" class="kpi kpi-btn ' + k[3] + '" data-f="' + (wk >= 0 ? 'week' : k[0]) + '" onclick="setTrendFrom(this.dataset.f)"><span class="kpi-l">' + k[1] + '</span><b>' + cnt(c[k[0]]) + '</b><span class="kpi-s">' + (wk >= 0 ? '이번 주 신상 ' + wk + '개 · 품평회 표' : k[2]) + icon('chev') + '</span></button>'; }).join('') + srcLine(['oy', 'logi'], { at: oyAt(), calc: '급상승 = ' + ((c.risers && c.risers.baseDays) || 7) + '일 전 순위와 비교 · NEW = 직전 수집 때 100위 밖 · 들여올 후보 = 물류앱에 없는 상위 상품' }) + '</nav>';
   var m = c.missing, top = '';
   if (m && m.ready !== false && m.items.length) {
     var hot = function (p) { return missMove(p) ? 1 : 0; };
     var its = m.items.slice().sort(function (a, b) { return hot(b) - hot(a) || a.rank - b.rank; }).slice(0, 8);
-    top = '<article class="card bc-top" data-card="missing" id="c-missing"><div class="card-head"><h2>들여올 후보 <small>약국에 없는데 뜨는 중</small></h2><button type="button" class="lnk-more" onclick="setTrendFrom(\'missing\')">' + m.items.length + '개 전체' + icon('chev') + '</button></div><div class="bc-picks">' + its.map(pickCardHtml).join('') + '</div></article>';
+    top = '<article class="card bc-top" data-card="missing" id="c-missing"><div class="card-head"><h2>들여올 후보 <small>약국에 없는데 뜨는 중</small></h2><button type="button" class="lnk-more" onclick="setTrendFrom(\'missing\')">' + m.items.length + '개 전체' + icon('chev') + '</button></div><div class="bc-picks">' + its.map(pickCardHtml).join('') + '</div>' + srcLine(['oy', 'logi'], { at: oyAt(), calc: '물류앱 상품 시트에 없는 올리브영 상위 상품 · 급상승·NEW 먼저', lim: '물류앱 연결은 상품 이름 기준이라 다르게 적힌 상품은 없다고 나올 수 있어요' }) + '</article>';
   }
   var small = [];
   var w = c.watch, wi = w ? (w.items || []).filter(function (x) { return x.type !== 'same'; }) : [], wb = w ? (w.brands || []) : [];
   if (wi.length || wb.length) {
     var TY = { up: 'up', down: 'down', out: 'down', 'in': 'up', 'sale-on': 'sale' };
     small.push('<article class="card bc-small" data-card="watch" id="c-watch"><div class="card-head"><h2>관심 목록 변화</h2></div>' + wi.map(function (x) { return '<button type="button" class="wrow" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"><span class="wtx"><span class="br">' + esc(x.brand) + '</span><span class="nm1">' + esc(x.name) + '</span></span><span class="wch ' + (TY[x.type] || '') + '">' + esc(x.text) + '</span></button>'; }).join('')
-      + wb.map(function (b) { return '<button type="button" class="wrow" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="wtx"><span class="br">브랜드</span><span class="nm1">' + esc(b.brand) + ' · ' + esc(b.count) + '개</span></span><span class="wch">' + (b.delta == null ? '비교 전' : delta(b.delta, '점')) + '</span></button>'; }).join('') + '</article>');
+      + wb.map(function (b) { return '<button type="button" class="wrow" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="wtx"><span class="br">브랜드</span><span class="nm1">' + esc(b.brand) + ' · ' + esc(b.count) + '개</span></span><span class="wch">' + (b.delta == null ? '비교 전' : delta(b.delta, '점')) + '</span></button>'; }).join('') + srcLine(['oy'], { at: oyAt(), calc: '알림을 켠 상품·브랜드의 어제 대비 변화 · 브랜드 점수 = 1위 100점 … 100위 1점 합' }) + '</article>');
   }
   var soon = ((S.set && S.set.mats) || []).filter(function (x) { return x.status === '곧 종료'; }).sort(function (a, b) { return (a.dday || 0) - (b.dday || 0); });
   if (soon.length) small.push('<article class="card bc-small" data-card="collab"><div class="card-head"><h2>협업 마감 ' + (soon[0].dday != null ? 'D-' + esc(soon[0].dday) : '') + '</h2>' + tag('곧 종료', 't-warn') + '</div>'
     + soon.slice(0, 2).map(function (x) { return '<p class="bc-line"><b>' + esc(x.name) + '</b> · ' + esc(x.brand) + (x.end ? ' · ' + esc(shortDate(x.end)) + ' 종료' : '') + '</p>'; }).join('')
-    + '<button type="button" class="' + btn('bc-act') + '" onclick="briefReqSets()">' + icon('spark') + '이 재료로 세트 추천받기</button></article>');
+    + '<button type="button" class="' + btn('bc-act') + '" onclick="briefReqSets()">' + icon('spark') + '이 재료로 세트 추천받기</button>' + srcLine(['mat'], { calc: '협업 종료일까지 남은 날' }) + '</article>');
   var pb = S.pb;
   if (pb && pb.list && !pb.empty && !pb.err) {
     var seen = {}, hotp = pb.list.filter(function (x) { var k = loose(x.m || x.n).replace(/(신형|대용량|\d+개입|\d+ml|\d+g)$/g, '').slice(0, 10); if (!x.o || seen[k]) return false; seen[k] = 1; return true; }).slice(0, 3), to = dateOf(pb.meta.to), td = dateOf(h.today), age = to && td ? Math.round((td - to) / 864e5) : 0;
     if (hotp.length || age > 15) small.push('<article class="card bc-small" data-card="pbest"><div class="card-head"><h2>올영에서도 뜨는 약국 베스트 <small>세트에 넣어 보세요</small></h2>' + asOf(pb.meta.to) + '</div>'
       + hotp.map(function (x) { var nm = x.m || x.n; return '<div class="bc-pb"><span class="pb-rk-s">' + x.r + '위</span><span class="nm1">' + esc(x.n) + '</span><button type="button" class="' + btn('sm') + '" data-n="' + esc(nm) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에</button></div>'; }).join('')
-      + (age > 15 ? '<p class="bc-line warn">판매 자료가 ' + age + '일 지났어요</p><button type="button" class="' + btn('bc-act') + '" onclick="pbPick()">' + icon('upload') + '새 판매 엑셀 올리기</button>' : '') + '</article>');
+      + (age > 15 ? '<p class="bc-line warn">판매 자료가 ' + age + '일 지났어요</p><button type="button" class="' + btn('bc-act') + '" onclick="pbPick()">' + icon('upload') + '새 판매 엑셀 올리기</button>' : '') + srcLine(['pos', 'oy'], { at: 'POS ' + md(pb.meta.from) + '~' + md(pb.meta.to), calc: '약국 판매수량 순위 중 올리브영 100위에도 있는 상품', lim: '약국 판매 기간 ' + md(pb.meta.from) + '~' + md(pb.meta.to) }) + '</article>');
   }
   var tl = tourLine(v); if (tl) small.push(tl);
   var ps = S.ps, ss = S.set && S.set.sets, today = h.today;
@@ -3451,11 +3527,11 @@ function tourLine(v) {
   var a = t.spop && t.spop.areas && t.spop.areas[0], fx = (t.fx && t.fx.items) || [], fxs = ['CNY', 'JPY'].map(function (cur) { return fx.filter(function (x) { return x.cur === cur; })[0]; }).filter(Boolean);
   if (!a && !fxs.length) return '';
   var nm = { CNY: '위안', JPY: '엔', USD: '달러', TWD: '대만 달러' }, a2 = t.spop && t.spop.areas && t.spop.areas[1], fx2 = ['USD', 'TWD'].map(function (cur) { return fx.filter(function (x) { return x.cur === cur; })[0]; }).filter(Boolean);
-  return '<a class="card bc-small bc-tour" data-card="tourism" id="tour-kw" href="#plan/tour" onclick="event.preventDefault();route(\'plan\',\'tour\')"><div class="card-head"><h2>손님 · 환율</h2><span class="lnk-more">전체' + icon('chev') + '</span></div>'
+  return '<article class="card bc-small bc-tour" data-card="tourism" id="tour-kw"><div class="card-head"><h2>손님 · 환율</h2><button type="button" class="lnk-more" onclick="route(\'plan\',\'tour\')">전체' + icon('chev') + '</button></div>'
     + (a ? '<p class="bc-line"><b>' + esc(a.label) + ' 외국인 ' + manTxt(a.week || 0) + '명/일</b> ' + pctTxt(a.growth) + ' · 중국 ' + esc(a.chinaShare) + '%</p><p class="bc-line sm">7일 평균 · 지난주 대비' + asOf(a.last) + '</p>' : '')
     + (a2 ? '<p class="bc-line">' + esc(a2.label) + ' 외국인 ' + manTxt(a2.week || 0) + '명/일 ' + pctTxt(a2.growth) + '</p>' : '')
     + (t.fx ? '<p class="bc-line sm">환율 · 1주 전 대비' + asOf(t.fx.date) + '</p>' : '') + [fxs].filter(function (g) { return g.length; }).map(function (g) { return '<p class="bc-line">' + g.map(function (x) { return esc(nm[x.cur]) + ' <b>' + x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원</b> ' + delta(x.change, '%'); }).join(' · ') + '</p>'; }).join('')
-    + '</a>';
+    + srcLine((a ? ['spop'] : []).concat(t.fx ? ['fx'] : []), { at: (a ? '생활인구 ' + md(a.last) : '') + (a && t.fx ? ' · ' : '') + (t.fx ? '환율 ' + md(t.fx.date) : ''), calc: '외국인 = 10~21시 하루 평균의 7일 평균, 지난주 대비 · 환율 = 1주 전 대비' }) + '</article>';
 }
 function briefReqSets() {
   if (!S.set.sets) { toast('세트 자료를 불러오는 중이에요 · 잠시 뒤 다시 눌러 주세요'); return; }
@@ -3528,7 +3604,7 @@ function renderTrendList() {
 function prodTable(items, t) {
   var brands = {}; items.forEach(function (p) { brands[p.brand] = (brands[p.brand] || 0) + 1; });
   var owned = items.filter(function (p) { return p.owned === true; }).length;
-  return { id: 'prod', el: 'rankList', label: '트렌드 상품', rows: items, selKey: function () { return isDocked('pd') ? S.pdKey : ''; }, key: function (p) { return p.key; }, open: function (p) { openPd(p.key); }, select: true, compare: true, file: '트렌드상품',
+  return { id: 'prod', el: 'rankList', label: '트렌드 상품', rows: items, selKey: function () { return isDocked('pd') ? S.pdKey : ''; }, key: function (p) { return p.key; }, open: function (p) { openPd(p.key); }, select: true, compare: true, file: '트렌드상품', src: prodSrc(t),
     emptyMsg: MOVE_EMPTY[S.trend.f] || (S.trend.f === 'missing' ? '상위 상품이 모두 약국에 있어요' : '이 카테고리는 아직 수집된 기록이 없어요'),
     attr: function (p) { return ' data-key="' + esc(p.key) + '"'; }, tip: function (p) { return p.brand + ' ' + p.name; },
     act: function (p) { return saveBtnHtml(p.key); },
@@ -3556,6 +3632,11 @@ function prodTable(items, t) {
     viewSet: function (x) { var ch = x.cat !== S.rank.cat || x.mode !== S.rank.mode; S.trend.f = x.f || 'rank'; S.rank.cat = x.cat || 'all'; S.rank.mode = x.mode || 'day'; if (ch) { S.rank.data = null; loadRank(); } else renderTrendList(); return true; }
   };
 }
+function prodSrc(t) {
+  var f = S.trend.f, c = S.home && S.home.cards, bd = (c && c.risers && c.risers.baseDays) || 7;
+  var calc = f === 'rank' ? (t.mode === 'week' ? '평균 = 최근 7일 평균 순위' : '움직임 = 직전 수집 순위와 비교') : f === 'risers' ? '급상승 = ' + bd + '일 전 순위와 비교' : f === 'new' ? 'NEW = 직전 수집 때 100위 밖' : f === 'missing' ? '물류앱 상품 시트에 없는 상위 상품' : MOVE_SUB[f] || '';
+  return [['oy', 'logi'].concat(S.pb && S.pb.list ? ['pos'] : []), { at: oyAt(t.date), calc: calc, lim: '약국 칸 = 물류앱 상품 이름으로 연결 · 약국 N위 = POS 판매수량 순위' }];
+}
 /* 트렌드 목록 옆 칸(폴드 840+ · PC): 옆 칸이 비지 않게 늘 한 개를 열어 둔다 */
 function ensureDock(id) {
   if (!canDock(id)) { if (isDocked(id)) undockSheet(id); return; }
@@ -3568,7 +3649,7 @@ function ensureDock(id) {
 }
 function brandTable(r) {
   var rows = r.brands.map(function (b, i) { return Object.assign({ _i: i + 1 }, b); });
-  dtMount({ id: 'brand', el: 'brandList', label: '올리브영 브랜드', rows: rows, selKey: function () { return isDocked('bs') ? S.brand.cur : ''; }, key: function (b) { return b.brand; }, open: function (b) { openBrand(b.brand); }, file: '브랜드',
+  dtMount({ id: 'brand', el: 'brandList', label: '올리브영 브랜드', rows: rows, selKey: function () { return isDocked('bs') ? S.brand.cur : ''; }, key: function (b) { return b.brand; }, open: function (b) { openBrand(b.brand); }, file: '브랜드', src: [['oy', 'logi'], { at: oyAt(r.date), calc: '100위 안 상품이 많고 순위가 높은 순 · 지난주 대비 = 브랜드 점수(1위 100점 … 100위 1점 합) 변화' }],
     note: '100위 안에 상품이 많고 순위가 높은 브랜드가 위로' + (r.compare ? '' : ' · 지난주 비교는 일주일 넘게 쌓이면'),
     attr: function (b) { return ' data-b="' + esc(b.brand) + '"'; },
     cols: [
@@ -3595,7 +3676,7 @@ function renderKeywords() {
   el.innerHTML = '<div class="kw-grid"><section class="card kw-card"><div class="card-head"><h2>이번 주 키워드 <small>상위 상품 이름에 몇 번 나왔나</small></h2><span class="meta">' + esc(range) + '</span></div><div id="kwTable"></div></section>'
     + '<section class="card kw-card"><div class="card-head"><h2>검색 반응 <small>최근 7일 vs 그 전 7일</small></h2>' + asOf(srcDate) + '</div><div id="sxTable"></div></section></div>';
   var kw = topKeywords(v);
-  dtMount({ id: 'kw', el: 'kwTable', label: '이번 주 키워드', rows: kw, key: function (k) { return k.word; }, open: function (k) { openSearch(k.word); }, tip: function (k) { return '#' + k.word + ' 들어간 상품 찾기'; }, file: '키워드',
+  dtMount({ id: 'kw', el: 'kwTable', label: '이번 주 키워드', rows: kw, key: function (k) { return k.word; }, open: function (k) { openSearch(k.word); }, tip: function (k) { return '#' + k.word + ' 들어간 상품 찾기'; }, file: '키워드', src: [['oy'].concat((v.keywordSites || []).map(function (m) { return MALL_SRC[m]; }).filter(function (m) { return m && m !== 'oy'; })), { at: range, calc: '상위 상품 이름에 키워드가 나온 상품 수 · 지난주와 비교' }],
     cols: [
       { k: 'word', label: '키워드', w: 'minmax(120px,1.3fr)', m: 'title', filter: 1, html: function (k) { return '<span class="kw">#' + esc(k.word) + '</span>'; } },
       { k: 'now', label: '지금', w: 'minmax(64px,.6fr)', num: 1, desc: 1, m: 'sub', html: function (k) { return '<b>' + esc(k.now) + '개</b>'; } },
@@ -3609,7 +3690,7 @@ function renderKeywords() {
   var terms = {}, order = [];
   [['g', v.gtrends], ['n', v.ndatalab], ['b', v.nblog]].forEach(function (s) { ((s[1] && s[1].items) || []).forEach(function (x) { if (!terms[x.term]) { terms[x.term] = { term: x.term, kind: x.kind }; order.push(x.term); } terms[x.term][s[0]] = x; }); });
   var gcell = function (x) { return x ? (x.growth == null ? (x.prev === 0 ? newTag() : delta(null)) : delta(x.growth, '%')) : '<span class="meta">–</span>'; };
-  dtMount({ id: 'sx', el: 'sxTable', label: '검색 반응', rows: order.map(function (t) { return terms[t]; }), key: function (x) { return x.term; }, open: function (x) { openSearch(x.term); }, file: '검색반응', emptyMsg: '매일 아침 수집 뒤 맥이 구글·네이버·블로그를 모으면 여기에 떠요',
+  dtMount({ id: 'sx', el: 'sxTable', label: '검색 반응', rows: order.map(function (t) { return terms[t]; }), key: function (x) { return x.term; }, open: function (x) { openSearch(x.term); }, file: '검색반응', src: [['gtrends', 'naverDatalab', 'naverBlog'], { at: srcDate ? md(srcDate) + ' 수집' : '', calc: '구글·네이버 = 최근 7일 평균 vs 그 전 7일 (%) · 블로그 = 최근 7일 글 수', lim: '구글·네이버는 0~100 상대값이라 검색어끼리 크기 비교는 안 돼요' }], emptyMsg: '매일 아침 수집 뒤 맥이 구글·네이버·블로그를 모으면 여기에 떠요',
     note: '블로그는 네이버가 1000건에서 잘라서 큰 검색어는 1000+로만 보여요',
     cols: [
       { k: 'term', label: '검색어', w: 'minmax(120px,1.4fr)', m: 'title', filter: 1, html: function (x) { return '<b>' + esc(x.term) + '</b> <span class="meta">' + esc(GT_KIND[x.kind] || '') + '</span>'; } },
@@ -3654,6 +3735,9 @@ function rpAct(cb) {
   var n = $('rpActN'), all = (S.rp.report.actions || []).length; if (n) n.textContent = Object.keys(o).filter(function (k) { return o[k]; }).length + ' / ' + all;
   cb.closest('.act-row').classList.toggle('done', cb.checked);
 }
+/* 리포트 칸마다 AI 가 읽은 원자료 */
+var RP_SRC = { changes: ['oy'], trends: ['oy', 'gtrends', 'naverDatalab'], events: ['oy'], planning: ['oy', 'logi', 'pos'], tourist: ['spop', 'tourKto', 'fx'], news: ['news'], search: ['gtrends', 'naverDatalab', 'naverBlog'], acts: [], picks: ['oy', 'logi'] };
+function rpSrc(k, d) { return srcLine(['report'].concat(RP_SRC[k] || []), { at: md(d) + ' 자료', lim: 'AI가 원자료를 읽고 쓴 해석이에요 · 숫자는 해당 카드에서 다시 확인' }); }
 var RP_SECS = [['changes', '무엇이 바뀌었나', 'trend'], ['trends', '요즘 대세', 'spark'], ['events', '행사 · 이벤트 인사이트', 'calendar'], ['planning', '상품 기획 제안', 'package'], ['tourist', '외국인 관광객 맞춤 행사', 'grid']];
 function renderReportView(r) {
   var el = $('report'), dates = r.dates || [], p = r.report;
@@ -3661,23 +3745,23 @@ function renderReportView(r) {
   if (!p) { el.innerHTML = '<div class="view-head">' + sel + '</div>' + emptyHtml(dates.length ? '이 날짜의 리포트가 없어요' : '아직 리포트가 없어요. 매일 아침 수집이 끝나면 올라와요'); return; }
   var items = function (arr) { return '<div class="rp-items">' + arr.map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p>' + keyChips(c.keys) + '</div>'; }).join('') + '</div>'; };
   var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
-  var newsH = news.length ? '<section class="card rp-sec rp-news" data-sec="news"><h2>' + icon('news') + '오늘의 뉴스</h2><div class="rp-items">' + news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + '</div>'; }).join('') + '</div></section>' : '';
-  var secA = RP_SECS.filter(function (s) { return (p[s[0]] || []).length; }).map(function (s) { return '<section class="card rp-sec" data-sec="' + s[0] + '"><h2>' + icon(s[2]) + s[1] + '</h2>' + items(p[s[0]]) + '</section>'; });
+  var newsH = news.length ? '<section class="card rp-sec rp-news" data-sec="news"><h2>' + icon('news') + '오늘의 뉴스</h2><div class="rp-items">' + news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + '</div>'; }).join('') + '</div>' + rpSrc('news', r.date) + '</section>' : '';
+  var secA = RP_SECS.filter(function (s) { return (p[s[0]] || []).length; }).map(function (s) { return '<section class="card rp-sec" data-sec="' + s[0] + '"><h2>' + icon(s[2]) + s[1] + '</h2>' + items(p[s[0]]) + rpSrc(s[0], r.date) + '</section>'; });
   if (newsH) secA.splice((p.changes || []).length ? 1 : 0, 0, newsH);   /* 뉴스는 '무엇이 바뀌었나' 바로 다음 */
   var hc = S.home && S.home.today === r.date && S.home.cards, thin = !['events', 'planning', 'tourist', 'news'].some(function (k) { return (p[k] || []).length; });
   if (thin && hc) {   /* 옛 모양(짧은) 리포트: 오늘 순위에서 새로 들어온·크게 오른 상품을 붙여 화면을 채운다 (같은 날짜일 때만) */
     var ai = [['new', '새로 들어온 상품', '오늘 전체 순위에 처음 보인 상품'], ['risers', '크게 오른 상품', '지난주보다 순위가 많이 오른 상품']].map(function (x) { var it = ((hc[x[0]] && hc[x[0]].ready !== false && hc[x[0]].items) || []).slice(0, 6); return it.length ? { title: x[1], detail: x[2] + ' ' + it.length + '개 · 누르면 상세', keys: it.map(function (y) { return y.key; }) } : null; }).filter(Boolean);
-    if (ai.length) secA.push('<section class="card rp-sec" data-sec="auto"><h2>' + icon('trend') + '오늘 순위 한눈에</h2>' + items(ai) + '</section>');
+    if (ai.length) secA.push('<section class="card rp-sec" data-sec="auto"><h2>' + icon('trend') + '오늘 순위 한눈에</h2>' + items(ai) + srcLine(['oy'], { at: oyAt(r.date), calc: '새로 들어온 = 직전 수집 때 100위 밖 · 크게 오른 = 지난주보다 순위가 많이 오른 상품' }) + '</section>');
   }
   var secs = secA.join('')
-    + (p.search ? '<section class="card rp-sec" data-sec="search"><h2>' + icon('search') + '검색량</h2><p class="rp-p">' + esc(p.search) + '</p></section>' : '');
+    + (p.search ? '<section class="card rp-sec" data-sec="search"><h2>' + icon('search') + '검색량</h2><p class="rp-p">' + esc(p.search) + '</p>' + rpSrc('search', r.date) + '</section>' : '');
   var done = rpDone(r.date), acts = p.actions || [], dn = acts.filter(function (a, i) { return done[i]; }).length;
   var order = acts.map(function (a, i) { return i; }).sort(function (x, y) { return (/오늘/.test(acts[x].when || '') ? 0 : 1) - (/오늘/.test(acts[y].when || '') ? 0 : 1) || x - y; }), lastWhen = null;
-  var actH = acts.length ? '<section class="card rp-acts"><div class="card-head"><h2>' + icon('check') + '할 일</h2><span class="meta" id="rpActN">' + dn + ' / ' + acts.length + '</span></div>' + order.map(function (i) { var a = acts[i], wn = /오늘/.test(a.when || '') ? '오늘' : (a.when || '이번 주'), hd = wn !== lastWhen ? '<p class="act-h">' + esc(wn) + '</p>' : ''; lastWhen = wn; return hd + '<label class="act-row' + (done[i] ? ' done' : '') + '"><input type="checkbox" data-i="' + i + '"' + (done[i] ? ' checked' : '') + ' onchange="rpAct(this)"><span class="act-tx"><b>' + esc(a.what) + '</b>' + (a.why ? '<small>' + esc(a.why) + '</small>' : '') + '</span></label>'; }).join('') + '<p class="meta act-note">체크는 이 기기에만 기억해요</p></section>' : '';
-  var picks = (p.picks || []).length ? '<section class="card rp-picks"><h2>볼만한 아이템</h2>' + p.picks.map(function (x) { return '<div class="prow">' + rowHtml({ key: x.key, brand: x.brand, name: x.name, img: x.img, owned: x.owned }, '', false).replace('</span><span class="side">', function () { return '<span class="rp-why">' + esc(x.reason) + '</span></span><span class="side">'; }) + saveBtnHtml(x.key) + '</div>'; }).join('') + '</section>' : '';
+  var actH = acts.length ? '<section class="card rp-acts"><div class="card-head"><h2>' + icon('check') + '할 일</h2><span class="meta" id="rpActN">' + dn + ' / ' + acts.length + '</span></div>' + order.map(function (i) { var a = acts[i], wn = /오늘/.test(a.when || '') ? '오늘' : (a.when || '이번 주'), hd = wn !== lastWhen ? '<p class="act-h">' + esc(wn) + '</p>' : ''; lastWhen = wn; return hd + '<label class="act-row' + (done[i] ? ' done' : '') + '"><input type="checkbox" data-i="' + i + '"' + (done[i] ? ' checked' : '') + ' onchange="rpAct(this)"><span class="act-tx"><b>' + esc(a.what) + '</b>' + (a.why ? '<small>' + esc(a.why) + '</small>' : '') + '</span></label>'; }).join('') + '<p class="meta act-note">체크는 이 기기에만 기억해요</p>' + rpSrc('acts', r.date) + '</section>' : '';
+  var picks = (p.picks || []).length ? '<section class="card rp-picks"><h2>볼만한 아이템</h2>' + p.picks.map(function (x) { return '<div class="prow">' + rowHtml({ key: x.key, brand: x.brand, name: x.name, img: x.img, owned: x.owned }, '', false).replace('</span><span class="side">', function () { return '<span class="rp-why">' + esc(x.reason) + '</span></span><span class="side">'; }) + saveBtnHtml(x.key) + '</div>'; }).join('') + rpSrc('picks', r.date) + '</section>' : '';
   var dl = dates.length > 1 ? '<section class="card rp-dates"><h2>지난 리포트</h2><div class="rp-dlist">' + dates.slice(0, 14).map(function (x) { var d = dateOf(x); return '<button type="button" class="rp-d' + (x === r.date ? ' on' : '') + '" data-d="' + esc(x) + '" aria-pressed="' + (x === r.date) + '" onclick="loadReport(this.dataset.d)"><b>' + esc(shortDate(x)) + '</b><span>' + (d ? '일월화수목금토'.charAt(d.getDay()) : '') + '</span></button>'; }).join('') + '</div></section>' : '';
   el.innerHTML = '<div class="rpv"><header class="rpv-head card"><div class="rpv-top"><p class="rp-kicker">' + icon('file') + esc(r.date) + ' · ' + (r.source === 'gemini' ? '비상용 AI 요약' : 'Claude 작성') + '</p>' + sel + '</div><h1 class="rp-title">' + esc(p.headline) + '</h1>'
-    + ((p.summary || []).length ? '<ul class="rp-sum">' + p.summary.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + (p.note ? '<p class="rp-note">※ ' + esc(p.note) + '</p>' : '') + '</header>'
+    + ((p.summary || []).length ? '<ul class="rp-sum">' + p.summary.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + (p.note ? '<p class="rp-note">※ ' + esc(p.note) + '</p>' : '') + srcLine(['report', 'oy'], { at: '리포트 작성: ' + (r.source === 'gemini' ? 'Gemini' : 'Claude') + ' · DATA 기준일 ' + md(r.date) }) + '</header>'
     + '<aside class="rpv-rail">' + actH + picks + dl + '</aside><div class="rpv-secs">' + (secs || '<p class="empty">이 날은 따로 정리한 인사이트가 없어요</p>') + '</div></div>';
   rpBalance();
   window.scrollTo({ top: 0, behavior: 'instant' });
@@ -3723,7 +3807,7 @@ function renderPlan() {
     if (!S.viz || !S.home) { b.innerHTML = skel(3); if (!S.viz) loadViz(); if (!S.home) loadHome(); return; }
     var v = S.viz, pc = S.home.cards.price;
     b.innerHTML = '<article class="card price-ref"><div class="card-head"><h2>가격대 · 할인 <small>행사 가격을 정할 때 참고</small></h2>' + asOf(v.date) + '</div><div class="pr-grid"><div class="pr-kpi">' + (pc && pc.avg != null ? kpiHtml('평균 판매가', won(pc.avg), '상위 30위') + kpiHtml('중앙값', won(pc.median), '상위 30위') + kpiHtml('할인 중', Math.round(pc.saleRate * 100) + '%', '상위 30위 중') : '<p class="empty">가격 정보가 없어요</p>') + '</div>'
-      + '<div class="pr-bins"><h3>어느 가격대가 100위를 채우나?</h3>' + ((v.priceBins || []).length ? vzColumns(v.priceBins) : '<p class="empty">가격 정보가 없어요</p>') + '</div></div></article>';
+      + '<div class="pr-bins"><h3>어느 가격대가 100위를 채우나?</h3>' + ((v.priceBins || []).length ? vzColumns(v.priceBins) : '<p class="empty">가격 정보가 없어요</p>') + '</div></div>' + srcLine(['oy'], { at: oyAt(v.date), calc: '평균·중앙값 = 전체 상위 30위 판매가 · 할인 중 = 상위 30위 중 정가보다 싸게 파는 비율 · 가격대 = 100위 상품 수' }) + '</article>';
   }
 }
 /* 성수동 → 나라별 → 환율 → 4구역(접기). 블록 제목 옆에 기준 날짜 */
@@ -3731,19 +3815,19 @@ function tourPlanHtml(v) {
   var t = (v && v.tourism) || {}, h = '';
   var areas = (t.spop && t.spop.areas) || [];
   h += '<section class="card tour-card"><div class="card-head"><h2>성수동 · 명동 외국인 손님이 늘었나?</h2>' + (areas.length ? asOf(areas[0].last) : '') + '</div>'
-    + (areas.length ? '<p class="sub">영업시간(10~21시) 하루 평균 · 서울시 자료라 두 달쯤 늦게 나와요</p><div class="stk-grid">' + areas.map(function (ar) { return stkCard(ar, 'total', '명', '하루 외국인', '중국 ' + ar.chinaShare + '%'); }).join('') + '</div>' + STK_KEY : '<p class="empty">서울 열린데이터광장 인증키를 넣으면 날짜별로 떠요</p>') + '</section>';
+    + (areas.length ? '<p class="sub">영업시간(10~21시) 하루 평균 · 서울시 자료라 두 달쯤 늦게 나와요</p><div class="stk-grid">' + areas.map(function (ar) { return stkCard(ar, 'total', '명', '하루 외국인', '중국 ' + ar.chinaShare + '%'); }).join('') + '</div>' + STK_KEY : '<p class="empty">서울 열린데이터광장 인증키를 넣으면 날짜별로 떠요</p>') + (areas.length ? srcLine(['spop'], { at: md(areas[0].last) + ' 자료 (약 2달 늦음)', calc: '영업시간 10~21시 하루 평균 · 막대 색 = 전날 대비' }) : '') + '</section>';
   if (t.tour && t.tour.items.length) {
     var it = t.tour.items, mon = (+t.tour.ym.slice(4)) + '월', tot = t.tour.total || it.reduce(function (a, x) { return a + x.num; }, 0), si = Math.min(S.natSel || 0, it.length - 1);
     var top4 = it.slice(0, 4), rest = Math.max(0, tot - top4.reduce(function (a, x) { return a + x.num; }, 0));
     var parts = top4.map(function (x, i) { return { label: x.nat, v: x.num, color: catColor(i) }; }).concat(rest ? [{ label: '그 외', v: rest, color: TOK.other }] : []);
     var hd = '<div class="dn-row dn-hd"><b></b><span class="dn-n">나라</span><span class="dn-v">' + esc(mon) + '</span><span class="dn-p">비중</span><span>전달 대비</span><span class="dn-y">작년 대비</span></div>';
     h += '<section class="card tour-card"><div class="card-head"><h2>어느 나라 손님이 오나? <small>전국 · 달마다 · 나라를 누르면 월별 막대</small></h2>' + '<span class="asof">' + (+t.tour.ym.slice(4)) + '월 기준</span>' + '</div>'
-      + dnWrap(donutSvg(parts, manTxt(tot), mon + ' 전체', '나라별 비중') + '<div class="dn-list">' + hd + it.slice(0, S.natAll ? it.length : 5).map(function (x, i) { return '<button type="button" class="dn-row' + (i === si ? ' on' : '') + '" data-i="' + i + '" aria-pressed="' + (i === si) + '" onclick="S.natSel=+this.dataset.i;renderPlan()"><b style="background:' + (i < 4 ? catColor(i) : TOK.other) + '"></b><span class="dn-n">' + esc(x.nat) + '</span><span class="dn-v">' + manTxt(x.num) + '명</span><span class="dn-p">' + esc(x.share) + '%</span>' + pctTxt(x.mom) + '<span class="dn-y">' + pctTxt(x.yoy) + '</span></button>'; }).join('') + (it.length > 5 ? '<button type="button" class="more" onclick="S.natAll=!S.natAll;renderPlan()">' + (S.natAll ? '접기' : '그 외 ' + (it.length - 5) + '개 나라 보기') + '</button>' : '') + '</div>', natBars(it[si], t.tour.months), 'nat') + '</section>';
+      + dnWrap(donutSvg(parts, manTxt(tot), mon + ' 전체', '나라별 비중') + '<div class="dn-list">' + hd + it.slice(0, S.natAll ? it.length : 5).map(function (x, i) { return '<button type="button" class="dn-row' + (i === si ? ' on' : '') + '" data-i="' + i + '" aria-pressed="' + (i === si) + '" onclick="S.natSel=+this.dataset.i;renderPlan()"><b style="background:' + (i < 4 ? catColor(i) : TOK.other) + '"></b><span class="dn-n">' + esc(x.nat) + '</span><span class="dn-v">' + manTxt(x.num) + '명</span><span class="dn-p">' + esc(x.share) + '%</span>' + pctTxt(x.mom) + '<span class="dn-y">' + pctTxt(x.yoy) + '</span></button>'; }).join('') + (it.length > 5 ? '<button type="button" class="more" onclick="S.natAll=!S.natAll;renderPlan()">' + (S.natAll ? '접기' : '그 외 ' + (it.length - 5) + '개 나라 보기') + '</button>' : '') + '</div>', natBars(it[si], t.tour.months), 'nat') + srcLine(['tourKto'], { at: t.tour.ym.slice(0, 4) + '년 ' + mon + ' 자료', calc: '비중 = 그 달 전체 방한 외래객 중 · 전달 · 작년 같은 달 대비 %' }) + '</section>';
   } else h += '<section class="card tour-card"><h2>어느 나라 손님이 오나?</h2><p class="empty">공공데이터포털 인증키를 넣으면 달마다 나라별로 떠요</p></section>';
   h += '<section class="card tour-card"><div class="card-head"><h2>환율 <small>1주 전보다 오르면(▲) 그 나라 손님이 한국에서 더 싸게 사요 · 누르면 추이</small></h2>' + (t.fx ? asOf(t.fx.date) : '') + '</div>'
-    + (t.fx ? '<div class="kpi-grid fx">' + t.fx.items.map(function (x) { var n = FX_NAME[x.cur] || [x.cur, x.cur]; return '<button type="button" class="kpi kpi-btn" data-cur="' + esc(x.cur) + '" onclick="openFx(this.dataset.cur)" aria-label="' + esc(n[0]) + ' 환율 추이 보기"><span class="kpi-l">' + esc(n[0]) + '</span><b>' + x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원</b><span class="kpi-s">' + esc(n[1]) + ' ' + delta(x.change, '%') + '</span></button>'; }).join('') + '</div>' : '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>') + '</section>';
+    + (t.fx ? '<div class="kpi-grid fx">' + t.fx.items.map(function (x) { var n = FX_NAME[x.cur] || [x.cur, x.cur]; return '<button type="button" class="kpi kpi-btn" data-cur="' + esc(x.cur) + '" onclick="openFx(this.dataset.cur)" aria-label="' + esc(n[0]) + ' 환율 추이 보기"><span class="kpi-l">' + esc(n[0]) + '</span><b>' + x.won.toLocaleString('ko-KR', { maximumFractionDigits: x.won >= 100 ? 0 : 1 }) + '원</b><span class="kpi-s">' + esc(n[1]) + ' ' + delta(x.change, '%') + '</span></button>'; }).join('') + '</div>' : '<p class="empty">매일 아침 수집 뒤 환율이 여기에 떠요</p>') + (t.fx ? srcLine(['fx'], { at: md(t.fx.date), calc: '1 외화 = 원 (엔은 100엔) · ' + (t.fx.base ? md(t.fx.base) : '1주 전') + ' 대비 %' }) : '') + '</section>';
   var ka = (t.kto && t.kto.areas) || [];
-  if (ka.length) h += '<details class="card tour-card tour-more"><summary><h2>4구역 외국인 방문자 <small>한국관광공사 · 통신사 기반</small></h2><span class="head-acts">' + asOf(ka[0].last) + '<span class="btn sm" aria-hidden="true">구역 더 보기</span></span></summary>' + areaDonut(ka, '4구역 외국인 비중') + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + manTxt(ar.outWeek || 0) + '명/일'); }).join('') + '</div>' + STK_KEY + '</details>';
+  if (ka.length) h += '<details class="card tour-card tour-more"><summary><h2>4구역 외국인 방문자 <small>한국관광공사 · 통신사 기반</small></h2><span class="head-acts">' + asOf(ka[0].last) + '<span class="btn sm" aria-hidden="true">구역 더 보기</span></span></summary>' + areaDonut(ka, '4구역 외국인 비중') + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + manTxt(ar.outWeek || 0) + '명/일'); }).join('') + '</div>' + STK_KEY + srcLine(['ktoArea'], { at: md(ka[0].last) + ' 자료', calc: '시군구 하루 외국인 방문자 · 막대 색 = 전날 대비' }) + '</details>';
   return '<div class="tour-grid">' + h + '</div>';
 }
 function natBars(x, months) {
@@ -3763,11 +3847,12 @@ function renderMore() {
     var w = (S.home && S.home.cards && S.home.cards.watch) || { items: [], brands: [] }, TY = { up: 'up', down: 'down', out: 'down', 'in': 'up', 'sale-on': 'sale' };
     el.innerHTML = back('변화 알림 목록') + ((w.items || []).length || (w.brands || []).length ? '<article class="card watch-all"><p class="sub">상품·브랜드 창의 [변화 알림]으로 켜고 꺼요 · 오늘 달라진 점</p><div class="watch-list">'
       + (w.items || []).map(function (x) { return '<button type="button" class="wrow" data-key="' + esc(x.key) + '" onclick="openPd(this.dataset.key)"><span class="wtx"><span class="br">' + esc(x.brand) + '</span><span class="nm1">' + esc(x.name) + '</span></span><span class="wch ' + (TY[x.type] || '') + '">' + esc(x.text) + '</span></button>'; }).join('')
-      + (w.brands || []).map(function (b) { return '<button type="button" class="wrow" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="wtx"><span class="br">브랜드</span><span class="nm1">' + esc(b.brand) + ' · ' + esc(b.count) + '개</span></span><span class="wch">' + (b.delta == null ? '비교 전' : delta(b.delta, '점')) + '</span></button>'; }).join('') + '</div></article>'
+      + (w.brands || []).map(function (b) { return '<button type="button" class="wrow" data-b="' + esc(b.brand) + '" onclick="openBrand(this.dataset.b)"><span class="wtx"><span class="br">브랜드</span><span class="nm1">' + esc(b.brand) + ' · ' + esc(b.count) + '개</span></span><span class="wch">' + (b.delta == null ? '비교 전' : delta(b.delta, '점')) + '</span></button>'; }).join('') + '</div>' + srcLine(['oy'], { at: oyAt(), calc: '알림을 켠 상품·브랜드의 어제 대비 변화' }) + '</article>'
       : '<p class="empty-line">' + icon('bell') + '<span>아직 켠 알림이 없어요 · 상품·브랜드 창의 [변화 알림]을 켜면 매일 달라진 점이 모여요</span></p>');
     return;
   }
-  if (s === 'filters') { el.innerHTML = back('올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교') + '<div class="more-2"><section class="card"><h2>카테고리 <small>오늘 100위 안 상품 수 · 누르면 그 순위</small></h2><div class="filter-cats">' + filterCatsHtml() + '</div></section><section class="card"><h2>사이트별 브랜드 비교 <small>누르면 그 사이트 순위가 보이는 비교표</small></h2><div class="grp-chips">' + filterPlatformsHtml() + '</div></section></div>'; if (!S.viz) loadViz(); return; }
+  if (s === 'sources') { el.innerHTML = back('데이터 출처') + '<article class="card src-page"><p class="sub">TRENDLAB 모든 숫자가 어디서 오는지 · 팀원과 이야기할 때 근거로 써요. 카드 아래 ⓘ를 누르면 그 카드의 계산식이 보여요 <button type="button" class="lnk" onclick="openStatus()">오늘 수집 상태 자세히</button></p><div id="srcTable"></div></article>'; srcTable(); if (!S.viz) loadViz(); if (!S.home) loadHome(); if (!S.cmp) loadCompare(); return; }
+  if (s === 'filters') { el.innerHTML = back('올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교') + '<div class="more-2"><section class="card"><h2>카테고리 <small>오늘 100위 안 상품 수 · 누르면 그 순위</small></h2><div class="filter-cats">' + filterCatsHtml() + '</div>' + srcLine(['oy'], { at: oyAt(), calc: '오늘 카테고리별 100위 안 상품 수' }) + '</section><section class="card"><h2>사이트별 브랜드 비교 <small>누르면 그 사이트 순위가 보이는 비교표</small></h2><div class="grp-chips">' + filterPlatformsHtml() + '</div>' + srcLine(['oy', 'oyglobal', 'hwahae', 'daiso', 'musinsa', 'qoo10', 'amazon'], { calc: '사이트마다 순위 기준이 달라요 (판매 · 급상승 · 실시간)' }) + '</section></div>'; if (!S.viz) loadViz(); return; }
   var ph = ((S.ps && S.ps.photoNeeds) || []).length, nd = S.rp ? (S.rp.dates || []).length : 0;
   var card = function (ic, t, d, act) { return '<button type="button" class="card menu-card" onclick="' + act + '"><span class="mc-ic">' + icon(ic) + '</span><span class="mc-tx"><b>' + t + '</b><span>' + d + '</span></span>' + icon('chev') + '</button>'; };
   el.innerHTML = '<div class="menu-grid">'
@@ -3777,9 +3862,37 @@ function renderMore() {
     + card('package', '용도별 상품 · 사진 확인', (ph ? '사진 확인 필요 <b class="warn">' + ph + '개</b> · ' : '') + '물류앱 용도 고치기 · 사진 없는 상품에 맞는 사진 고르기', "route('set','uses')")
     + card('columns', '세트 박스 크기', '투명박스 안쪽 크기를 넣어 두면 세트가 들어가는지 실제 비율로 그려 봐요', 'moreBox()')
     + card('grid', '올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교', '사이트별 순위 비교표 · 카테고리별 순위', "route('more','filters')")
-    + card('alert', '수집 상태', esc((S.stat && S.stat.text) || '쇼핑몰별 마지막 수집'), 'openStatus()')
+    + card('info', '데이터 출처 · 수집 상태', (S.stat ? esc(S.stat.time) + ' · ' : '') + '모든 숫자의 출처 · 주기 · 늦음 · 한계', "route('more','sources')")
     + card('bell', '변화 알림 목록', '알림을 켠 상품·브랜드 ' + watchCount() + '개 · 오늘 변화와 끄기', "route('more','watch')")
     + '</div><p class="app-info">' + icon('spark') + 'TRENDLAB v3.0 · 레디영 MD 송주희 주임 전용</p>';
+}
+/* 데이터 출처 표: 마지막 수집은 받아 둔 자료의 날짜 (없으면 –) */
+function srcLast() {
+  var h = S.home, v = S.viz || {}, t = v.tourism || {}, o = {}, at = function (d) { return d ? md(d) : ''; };
+  o.oy = oyAt();
+  ((S.cmp && S.cmp.malls) || []).forEach(function (m) { if (MALL_SRC[m.mall] && m.mall !== 'oliveyoung') o[MALL_SRC[m.mall]] = at(m.date) + ' 수집'; });
+  if (v.gtrends) o.gtrends = at(v.gtrends.date); if (v.ndatalab) o.naverDatalab = at(v.ndatalab.date); if (v.nblog) o.naverBlog = at(v.nblog.date);
+  if (t.fx) o.fx = at(t.fx.date); if (t.spop && t.spop.areas && t.spop.areas[0]) o.spop = at(t.spop.areas[0].last) + ' 자료';
+  if (t.tour && t.tour.ym) o.tourKto = t.tour.ym.slice(0, 4) + '.' + (+t.tour.ym.slice(4)) + '월 자료'; if (t.kto && t.kto.areas && t.kto.areas[0]) o.ktoArea = at(t.kto.areas[0].last) + ' 자료';
+  if (S.yt && S.yt.date) o.youtube = at(S.yt.date); if (S.pb && S.pb.meta && !S.pb.empty) o.pos = at(S.pb.meta.from) + '~' + at(S.pb.meta.to) + ' (' + at(S.pb.meta.at) + ' 올림)';
+  var rp = h && h.cards && h.cards.report; if (rp) { o.report = at(rp.date) + ' ' + (rp.source === 'gemini' ? 'Gemini' : 'Claude'); o.news = at(rp.date) + ' 리포트'; }
+  if (h && h.logi !== 'unavailable') o.logi = '열 때마다';
+  return o;
+}
+function srcTable() {
+  var last = srcLast();
+  dtMount({ id: 'srcs', el: 'srcTable', label: '데이터 출처', rows: Object.keys(SRC).map(function (k) { return Object.assign({ k: k, last: last[k] || '' }, SRC[k]); }), key: function (x) { return x.k; }, file: '데이터출처',
+    note: '마지막 수집 = 지금 받아 둔 자료 기준', src: [['oy'], { calc: '이 표는 수집기·서버 코드 기준으로 정리' }],
+    cols: [
+      { k: 'n', label: '출처', w: 'minmax(150px,1fr)', m: 'title', filter: 1, html: function (x) { return x.url ? '<a class="src-a" href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><b>' + esc(x.n) + '</b>' + icon('ext') + '</a>' : '<b>' + esc(x.n) + '</b>'; } },
+      { k: 'how', label: '무엇을 · 어떻게', w: 'minmax(240px,2.2fr)', m: 'sub', filter: 1, html: function (x) { return '<span class="src-why">' + esc(x.how) + '</span>'; } },
+      { k: 'freq', label: '주기', w: 'minmax(96px,.7fr)', m: 'sub' },
+      { k: 'lag', label: '늦음', w: 'minmax(96px,.7fr)', m: 'sub' },
+      { k: 'last', label: '마지막 수집', w: 'minmax(110px,.8fr)', m: 'sub', html: function (x) { return x.last ? '<b>' + esc(x.last) + '</b>' : '<span class="meta">–</span>'; } },
+      { k: 'lim', label: '한계', w: 'minmax(200px,1.6fr)', m: 'sub', html: function (x) { return '<span class="src-why">' + esc(x.lim || '') + '</span>'; } },
+      { k: 'url', label: '링크', csvOnly: 1 }
+    ]
+  });
 }
 function moreBox() { if (S.ps && !S.ps.err) { boxManage(); return; } toast('세트 자료를 불러오는 중이에요'); loadSetTab(); }
 function analysisHtml() {
@@ -3910,7 +4023,7 @@ function laMemos() { try { return JSON.parse(localStorage.getItem('tl_lamemo') |
 function laMemoSet(k, v) { var m = laMemos(); if (v.trim()) m[k] = v.slice(0, 120); else delete m[k]; try { localStorage.setItem('tl_lamemo', JSON.stringify(m)); } catch (e) { toast('이 기기에 저장하지 못했어요'); } }
 function laTable(items) {
   var memo = laMemos(), cats = {}; items.forEach(function (p) { cats[p.cat] = (cats[p.cat] || 0) + 1; });
-  return { id: 'lau', el: 'rankList', label: '이번 주 신상품 (품평회)', rows: items, key: function (p) { return p.key; }, open: function (p) { openPd(p.key); }, file: '이번주신상품_품평회',
+  return { id: 'lau', el: 'rankList', label: '이번 주 신상품 (품평회)', rows: items, key: function (p) { return p.key; }, open: function (p) { openPd(p.key); }, file: '이번주신상품_품평회', src: [['oy', 'logi'], { at: oyAt(S.la && S.la.today), calc: '최근 7일 안에 처음 100위 안에 들어온 상품 · 처음 본 날 기준', lim: S.la && S.la.dataStart && S.la.dataStart > S.la.from ? '수집 시작(' + md(S.la.dataStart) + ') 전은 비어 있어요' : '' }],
     emptyMsg: '최근 7일 동안 새로 100위 안에 들어온 상품이 없어요', note: '메모는 이 기기에 저장 · CSV 에 같이 나가요',
     attr: function (p) { return ' data-key="' + esc(p.key) + '"'; }, tip: function (p) { return p.brand + ' ' + p.name; }, act: function (p) { return saveBtnHtml(p.key); },
     cols: [
@@ -3950,7 +4063,7 @@ function srcRows(c) {
 }
 function renderSourcing() {
   var c = S.cmp, rows = srcRows(c), n1 = rows.filter(function (b) { return b._t === 'first'; }).length;
-  dtMount({ id: 'src', el: 'brandList', label: '소싱 후보 브랜드', rows: rows, key: function (b) { return b.brand; }, file: '소싱후보',
+  dtMount({ id: 'src', el: 'brandList', label: '소싱 후보 브랜드', rows: rows, key: function (b) { return b.brand; }, file: '소싱후보', src: [c.malls.map(function (m) { return MALL_SRC[m.mall]; }).concat(['logi']), { at: '사이트별 최근 수집 ' + c.malls.map(function (m) { return md(m.date); }).filter(function (d, i, a) { return a.indexOf(d) === i; }).join(' · '), calc: '먼저 들이기 = 다른 사이트 상위(화해 30위 · 그 외 20위 안)인데 올영 30위 밖 · 올영 먼저 뜸 = 올영 20위 안인데 화해 50위 밖', lim: '약국에 있는 브랜드는 뺐어요' }],
     open: function (b) { if (b.ranks.oliveyoung) openBrand(b.brand); else toast('올리브영 100위 밖 브랜드라 상세가 없어요 · 더 보기 › 브랜드 찾기에서 화해 상품을 볼 수 있어요'); },
     emptyMsg: '지금은 다른 사이트와 엇갈리는 브랜드가 없어요', note: '약국에 있는 브랜드는 뺐어요 · 사이트별 가장 최근 수집',
     attr: function (b) { return ' data-b="' + esc(b.brand) + '"'; },
@@ -3995,7 +4108,7 @@ function calHtml() {
     + '<div class="cal-kpis"><button type="button" class="kpi kpi-btn" onclick="setTrendFrom(\'week\')"><span class="kpi-l">이번 주 신상품</span><b>' + wkN + '개</b><span class="kpi-s">품평회 표로 보기' + icon('chev') + '</span></button>'
     + kpiHtml('4주 신상품', la.items.length + '개', rows.filter(function (r) { return r.n; }).length + '개 브랜드') + kpiHtml('가장 많이 낸 브랜드', top ? esc(top.brand) : '–', top ? '신상 ' + top.n + '개' : '4주 동안 없음') + kpiHtml('오늘 행사 중', evB + '곳', '세일·쿠폰·증정 브랜드') + '</div>'
     + '<p class="cal-key"><span><i class="cal-pin" aria-hidden="true"></i>신상품 처음 본 날 (숫자 = 개수 · 누르면 상품)</span><span><i class="cal-bar" aria-hidden="true"></i>세일·쿠폰·증정 중</span>' + late + '</p>'
-    + (rows.length ? '<div class="cal" role="table" aria-label="브랜드별 신상품·행사 4주">' + head + body + '</div>' + (rows.length > 16 ? '<button type="button" class="more" onclick="S.calAll=!S.calAll;renderPlan()">' + (S.calAll ? '접기' : '브랜드 ' + (rows.length - 16) + '곳 더 보기') + '</button>' : '') : '<p class="empty">4주 동안 새 상품·행사 기록이 없어요</p>') + '</article>';
+    + (rows.length ? '<div class="cal" role="table" aria-label="브랜드별 신상품·행사 4주">' + head + body + '</div>' + (rows.length > 16 ? '<button type="button" class="more" onclick="S.calAll=!S.calAll;renderPlan()">' + (S.calAll ? '접기' : '브랜드 ' + (rows.length - 16) + '곳 더 보기') + '</button>' : '') : '<p class="empty">4주 동안 새 상품·행사 기록이 없어요</p>') + srcLine(['oy'], { at: oyAt(la.today), calc: '점 = 신상품을 100위 안에서 처음 본 날 · 막대 = 세일·쿠폰·증정 표시가 붙어 있던 날', lim: '올리브영 100위 안 상품만 · 날짜는 수집한 날 기준' }) + '</article>';
 }
 
 /* 시작은 맨 끝에서: 위의 S.set · S.pb 같은 값이 다 만들어진 뒤 */
