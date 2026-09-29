@@ -108,8 +108,9 @@ kbd{display:inline-flex;align-items:center;height:22px;padding:0 6px;border:1px 
 .topbar{position:sticky;top:0;z-index:20;height:var(--top-h);background:var(--glass);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
 .topbar-inner{display:flex;align-items:center;gap:12px;height:100%;padding:0 var(--gutter);min-width:0}
 .logo{display:flex;align-items:center;gap:8px;flex:none}
-.logo-mark{width:28px;height:28px;border-radius:9px;background:var(--pri) linear-gradient(135deg,var(--pri),#5b7cff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:var(--fs-2)}
-.logo-text{font-size:var(--fs-4);font-weight:800;letter-spacing:-.02em}
+.logo-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(140deg,#155EEF 0%,#4F7BFF 55%,#8B5CF6 100%);box-shadow:0 2px 6px rgba(21,94,239,.28),inset 0 1px 0 rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;padding:2px;flex:none}
+.logo-text{font-size:var(--fs-4);font-weight:800;letter-spacing:-.01em}
+.logo-text b{font-weight:800;background:linear-gradient(90deg,#155EEF,#8B5CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .status-dot,.side-status{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:0;border-radius:var(--pill);background:transparent;color:var(--ink2);font-size:var(--fs-2);font-weight:600;white-space:nowrap;transition:background var(--t)}
 .status-dot i,.side-status i,.st-line i{width:8px;height:8px;border-radius:50%;background:var(--flat);box-shadow:0 0 0 3px color-mix(in srgb,var(--flat) 22%,transparent)}
 [data-tone="ok"] i{background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.2)}
@@ -1330,6 +1331,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .rp-src{display:block;margin-top:2px;font-size:var(--fs-1);color:var(--ink3)}
 @media(hover:hover){.rp-nl:hover b{text-decoration:underline;text-underline-offset:3px}}
 .rp-nl:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px}
+@media(prefers-color-scheme:dark){.logo-text b{background-image:linear-gradient(90deg,#6B9BFF,#A78BFA)}}
 </style>
 </head>
 <body data-tab="today">
@@ -1338,7 +1340,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 <div class="col">
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true">T</span><span class="logo-text">TRENDLAB</span></span>
+    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>
     <button type="button" class="status-dot" id="statusDot" onclick="openStatus()" aria-label="수집 상태"><i aria-hidden="true"></i><span id="statusTime">수집 확인 중</span></button>
     <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="검색 (상품 · 브랜드 · 약국 상품)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 약국 상품 검색</span><kbd>⌘K</kbd></button>
   </div>
@@ -1557,7 +1559,7 @@ function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; re
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
 function renderTabs() {
-  $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark">T</span><span class="logo-text">TRENDLAB</span></span>'
+  $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>'
     + TABS.map(function (t, i) { var on = S.tab === t[0]; return '<button type="button" role="tab" data-tab="' + t[0] + '" class="' + (on ? 'on' : '') + '" aria-selected="' + on + '" title="' + t[1] + ' (' + (i + 1) + ')" onclick="tabTap(this.dataset.tab)">' + icon(t[2]) + '<span>' + t[1] + '</span></button>'; }).join('')
     + '<button type="button" class="side-status" id="sideStatus" onclick="openStatus()"><i aria-hidden="true"></i><span>수집 확인 중</span></button>';
 }
