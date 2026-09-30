@@ -1567,6 +1567,9 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .idea-r{margin:0;font-size:var(--fs-2);color:var(--ink2);line-height:1.6}.idea-p{margin:0}.idea-ev{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}.idea-ev li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:var(--fs-1)}.idea-ev a{display:inline-flex;align-items:center;gap:2px;color:var(--pri-text);text-decoration:none}.idea-ev a .ic{width:12px;height:12px}.idea-ev small{color:var(--ink3)}
 .idea-acts{display:flex;gap:8px;margin-top:auto;padding-top:4px}
 @media(max-width:599px){.ideas-row{grid-template-columns:1fr}.nw-bar{flex-wrap:wrap}.nw-bar .meta{width:100%}}
+
+/* 0930 리포트 저장본 표시 띠 */
+.rp-stale{margin:0 0 10px;padding:8px 12px;border-radius:12px;background:var(--pri-soft);color:var(--pri-text);font-size:13px;font-weight:600}
 </style>
 </head>
 <body data-tab="today">
@@ -1760,11 +1763,12 @@ function fastCall(fn, ok, fail) {
 }
 /* 0928 빠르게 보이기: 읽기 전용 호출은 지난번 결과를 먼저 그리고(12시간 안), 서버 답이 다르면 다시 그린다. 저장본은 최근 40개만 */
 var SWR_MAX = 40, SWR_TTL = 12 * 3600e3;
-function swrCall(fn, args, ok, fail) {
+function swrCall(fn, args, ok, fail, onLive) {   // onLive: 서버 응답이 오면(같아서 안 그려도) 한 번 부른다
   var key = 'tl_c_' + fn + ':' + JSON.stringify(args || []), hit = null, shown = false;
   try { hit = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
   if (hit && hit.r && hit.r.ok && Date.now() - hit.t < SWR_TTL) { shown = true; try { ok(hit.r); } catch (e) {} }
   call(fn, args, function (res) {
+    try { onLive && onLive(res); } catch (eL) {}
     if (res && res.ok) {
       var js = JSON.stringify(res);
       try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), r: res })); swrTrim(key); } catch (e) { try { swrTrim(key, true); } catch (e2) {} }
@@ -3876,13 +3880,21 @@ function renderKeywords() {
 function rpTodoText(date) { var r = S.rp; if (!r || r.date !== date) { try { var x = JSON.parse(localStorage.getItem('tl_c_getReport:[""]') || 'null'); r = x && x.r; } catch (e) { r = null; } } var a = r && r.date === date && r.report && r.report.actions; if (!a || !a.length) return ''; var d = rpDone(date), n = a.filter(function (x, i) { return d[i]; }).length; return '오늘 할 일 ' + a.length + '개' + (n ? ' · ' + n + '개 했어요' : '') + ' · '; }
 function openReport(date) { S.rpDate = date || ''; if (S.tab === 'report') loadReport(S.rpDate); else route('report'); }
 function loadReport(date) {
-  var rev = S.rev.rp = (S.rev.rp || 0) + 1, el = $('report');
+  var rev = S.rev.rp = (S.rev.rp || 0) + 1, el = $('report'), fromCache = true;
   if (!S.rp || (date && S.rp.date !== date)) { el.innerHTML = skel(5); skelWatch(el, "loadReport('" + esc(date || '') + "')"); }
   swrCall('getReport', [date || ''], function (r) {
     if (rev !== S.rev.rp) return;
     if (!r || !r.ok) { el.innerHTML = emptyHtml((r && r.msg) || '불러오지 못했어요', '다시 불러오기', "loadReport('')"); return; }
     S.rp = r; S.rpDate = date || ''; renderReportView(r); if (S.tab === 'more' && S.moreSub === 'news') renderMore();
-  }, function () { if (rev === S.rev.rp) failBox(el, "loadReport('')"); });
+    if (fromCache && !date) rpStale(true);   // 0930 저장본을 먼저 보여 줄 때 "새 리포트 불러오는 중" 띠
+  }, function () { if (rev === S.rev.rp) failBox(el, "loadReport('')"); }, function () { rpStale(false); });
+  fromCache = false;
+}
+function rpStale(on) {
+  var el = $('report'), b = el && el.querySelector('.rp-stale');
+  if (!on) { if (b) b.remove(); return; }
+  if (!el || b) return;
+  b = document.createElement('div'); b.className = 'rp-stale'; b.setAttribute('role', 'status'); b.textContent = '저장해 둔 리포트예요 · 새 리포트 불러오는 중…'; el.insertBefore(b, el.firstChild);
 }
 function rpProd(key) {
   if (S.rpCards && S.rpCards[key]) return S.rpCards[key];
