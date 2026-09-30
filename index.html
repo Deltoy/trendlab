@@ -1546,6 +1546,27 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 
 /* 0929 관광데이터랩 돈 타일: 좁은 폰에서 "283.8…" 잘림 방지 → 2열 + 셋째는 한 줄 전체, 큰 숫자는 살짝 작게 */
 @media(max-width:600px){.kpi-grid.med-k{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-grid.med-k .kpi:nth-child(3){grid-column:1/-1}.kpi-grid.med-k .kpi b{font-size:var(--fs-5)}}
+
+/* 0930 뉴스 탭 · 기획 제안 */
+.nw-sum{margin-bottom:16px}.nw-sum>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:12px}.nw-sum>summary::-webkit-details-marker{display:none}.nw-sum>summary h2{display:flex;align-items:center;gap:6px;margin:0;font-size:var(--fs-4)}.nw-sum>summary h2 small{font-weight:500;color:var(--ink3);font-size:var(--fs-2)}
+.nw-sum>summary::after{content:'';margin-left:auto;width:9px;height:9px;border-right:2px solid var(--ink3);border-bottom:2px solid var(--ink3);transform:rotate(45deg);transition:transform var(--t)}.nw-sum:not([open])>summary::after{transform:rotate(-45deg)}
+.nw-top .card-head{margin-bottom:8px}.nw-top h2{display:flex;align-items:center;gap:6px}.nw-bar{margin-bottom:10px}.nw-f{margin:0 0 4px}
+.nw-day{margin-top:16px;padding-top:12px}.nw-h{display:flex;align-items:baseline;gap:8px;margin:0 0 4px;font-size:var(--fs-3);font-weight:700}.nw-h small{color:var(--ink3);font-weight:500;font-size:var(--fs-1)}
+.nw-item{position:relative;padding:12px 0 12px 14px;border-top:1px solid var(--line)}.nw-item:first-of-type{border-top:0}.nw-item::before{content:'';position:absolute;left:0;top:18px;width:6px;height:6px;border-radius:50%;background:var(--line-strong)}.nw-item.unread::before{background:var(--pri)}
+.nw-item.unread .nw-t b{color:var(--ink)}.nw-item:not(.unread) .nw-t b{color:var(--ink2);font-weight:500}
+.nw-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}.nw-t{display:inline-flex;align-items:flex-start;gap:4px;color:inherit;text-decoration:none;font-size:var(--fs-4);line-height:1.4}.nw-t b{font-weight:600}.nw-t .ic{flex:none;width:14px;height:14px;margin-top:4px;color:var(--ink3)}
+.nw-item .rp-src{display:block;margin-top:2px;color:var(--ink3);font-size:var(--fs-1)}
+.nw-ex{margin:6px 0 0;font-size:var(--fs-2);color:var(--ink2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}.nw-ex.open{display:block;-webkit-line-clamp:unset}
+.nw-cm{display:flex;gap:6px;margin:8px 0 0;padding:10px 12px;border-radius:var(--r-tile);background:var(--pri-soft);color:var(--pri-text);font-size:var(--fs-2);line-height:1.6}.nw-cm .ic{flex:none;width:16px;height:16px;margin-top:3px}
+.nw-item .rp-players{margin-top:6px;font-size:var(--fs-1)}
+.nw-rd{position:absolute;right:0;top:8px;display:inline-flex;align-items:center;gap:3px;min-height:36px;padding:0 8px;font-size:var(--fs-1);color:var(--ink3)}.nw-rd .ic{width:14px;height:14px}.nw-item:not(.unread) .nw-rd{color:var(--ok)}
+.nw-item .nw-tags{padding-right:64px}
+.nw-more{width:100%;margin-top:12px}.nw-missed{margin-top:4px;color:var(--pri-text)}.nw-missed b{margin:0 3px}
+.ideas-card{margin-bottom:16px}.ideas-card .card-head h2{display:flex;align-items:center;gap:6px}
+.ideas-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.idea{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);border-radius:var(--r-tile);background:var(--bg)}.idea h3{margin:0;font-size:var(--fs-4);line-height:1.35}
+.idea-r{margin:0;font-size:var(--fs-2);color:var(--ink2);line-height:1.6}.idea-p{margin:0}.idea-ev{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}.idea-ev li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:var(--fs-1)}.idea-ev a{display:inline-flex;align-items:center;gap:2px;color:var(--pri-text);text-decoration:none}.idea-ev a .ic{width:12px;height:12px}.idea-ev small{color:var(--ink3)}
+.idea-acts{display:flex;gap:8px;margin-top:auto;padding-top:4px}
+@media(max-width:599px){.ideas-row{grid-template-columns:1fr}.nw-bar{flex-wrap:wrap}.nw-bar .meta{width:100%}}
 </style>
 </head>
 <body data-tab="today">
@@ -1651,7 +1672,8 @@ var SRC = {
   fx: { n: '환율 open.er-api.com', url: 'https://open.er-api.com/v6/latest/KRW', how: '1 외화 = 몇 원 (엔은 100엔) · 1주 전과 비교', freq: '매일 아침', lag: '하루 한 번 갱신', lim: '기준 환율 · 은행 고시 환율과 조금 달라요' },
   pos: { n: '약국 POS 엑셀', url: '', how: 'MD가 올린 POS 상품별 통계 엑셀의 판매수량 순 (올린 날짜 · 기간 그대로)', freq: 'MD가 올릴 때', lag: '올린 기간까지', lim: '상품별 이익률은 보여 주지 않아요 · 우리 약국 한 곳 기준' },
   logi: { n: '레디영 물류앱 상품 시트', url: '', how: '서버가 물류앱 구글 시트(상품 · 세트 · 용도)를 읽어 상품 이름으로 연결', freq: '열 때마다 (10~15분 캐시)', lag: '거의 실시간', lim: '이름이 다르게 적히면 연결이 빠질 수 있어요' },
-  news: { n: '뉴스 RSS', url: 'https://news.google.com/', how: '구글 뉴스 RSS + 전문지 RSS(코스모닝 · 뷰티누리 · 장업신문 · 데일리팜 · 약사공론) 최근 3일 기사', freq: '매일 리포트 때', lag: '최근 3일', lim: '기사 제목·요약 기준 · 원문 링크로 확인' },
+  news: { n: '뉴스 RSS', url: 'https://news.google.com/', how: '구글 뉴스 RSS + 전문지 RSS(코스모닝 · 뷰티누리 · 장업신문 · 데일리팜 · 약사공론) · 하루 최대 40건을 시트에 쌓음', freq: '매일 07시 리포트 때 + 12시', lag: '어제 오후~오늘 아침 기사 먼저', lim: '기사 제목·요약 기준 · 원문 링크로 확인' },
+  ideas: { n: '주간 기획 제안', url: '', how: '최근 7일 뉴스를 같은 흐름끼리 묶어 맥의 Claude 가 3~5개 제안 · 근거는 저장된 기사만', freq: '매주 월요일', lag: '지난 7일', lim: 'AI 제안 · 매출·재고 반영 안 됨' },
   report: { n: 'AI 리포트', url: '', how: '수집 뒤 맥의 Claude가 그날 자료(DATA)를 읽고 작성 · 못 쓴 날은 Gemini', freq: '매일 아침', lag: '당일', lim: 'AI 해석이 들어가요 · 숫자는 원자료 카드로 확인' },
   setai: { n: 'AI 세트 추천', url: '', how: '맥의 Claude가 재료함 · 약국 상품 · 오늘 순위를 읽고 제안 (5분마다 요청 확인)', freq: '요청할 때 · 월요일 자동', lag: '요청 뒤 5~10분', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' },
   mat: { n: '재료함', url: '', how: 'MD가 트렌드랩에 직접 넣은 협업 · 자사 재료', freq: '넣을 때', lag: '실시간', lim: '직접 입력한 내용 그대로' },
@@ -1831,7 +1853,7 @@ function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product
 /* 0929 PC 왼쪽 메뉴: MD·마케팅 중심 묶음(기본 · MD · 마케팅 · 데이터) · 줄마다 기존 화면으로 바로 · 폰은 아래 탭 그대로 */
 var NAV = [['기본', [['today', '오늘', 'house'], ['report', '리포트', 'file']]],
   ['MD', [['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
-  ['마케팅', [['plan/cal', '행사 캘린더', 'calendar'], ['plan/areas', '뜨는 상권 · 팝업 후보', 'pin'], ['plan/tour', '외국인 손님', 'globe'], ['trend/keyword', '검색 반응 · 키워드', 'search'], ['trend/shorts', '쇼츠', 'play'], ['more/news', '뉴스 · 업계 흐름', 'news'], ['more/story', '브랜드 이야기', 'book']]],
+  ['마케팅', [['plan/cal', '행사 캘린더', 'calendar'], ['plan/areas', '뜨는 상권 · 팝업 후보', 'pin'], ['plan/tour', '외국인 손님', 'globe'], ['trend/keyword', '검색 반응 · 키워드', 'search'], ['trend/shorts', '쇼츠', 'play'], ['more/news', '뉴스', 'news'], ['more/story', '브랜드 이야기', 'book']]],
   ['데이터', [['trend/brand/cmp', '사이트 비교', 'columns'], ['more/analysis', '카테고리 · 브랜드 분석', 'grid'], ['more/sources', '데이터 출처 · 수집 상태', 'info'], ['more/', '더 보기', 'grid']]]];
 var NAV_TAB = { today: 'today', report: 'report', 'trend/product/rank': 'trend', 'set/diy': 'set', 'plan/cal': 'plan', 'more/': 'more' };   /* 탭 이름으로 찾는 곳(단축키·테스트)이 쓰는 대표 줄 */
 var PC_MQ = window.matchMedia ? matchMedia('(min-width:1100px)') : { matches: false };
@@ -1841,7 +1863,7 @@ function renderTabs() {
     + (side ? '<div class="snav">' + NAV.map(function (sec) { return '<div class="snav-sec" role="group" aria-label="' + sec[0] + '"><p class="snav-h">' + sec[0] + '</p>' + sec[1].map(function (e) { return '<button type="button" class="snav-i" data-nav="' + e[0] + '"' + (NAV_TAB[e[0]] ? ' data-tab="' + NAV_TAB[e[0]] + '"' : '') + ' onclick="navGo(this.dataset.nav)">' + icon(e[2]) + '<span>' + e[1] + '</span></button>'; }).join('') + '</div>'; }).join('') + '</div>'
       : TABS.map(function (t, i) { return '<button type="button" role="tab" data-tab="' + t[0] + '" title="' + t[1] + ' (' + (i + 1) + ')" onclick="tabTap(this.dataset.tab)">' + icon(t[2]) + '<span>' + t[1] + '</span></button>'; }).join(''))
     + '<button type="button" class="side-status" id="sideStatus" onclick="openStatus()"><i aria-hidden="true"></i><span>수집 확인 중</span></button>';
-  navSync(); if (S.stat) renderStatus(S.home);
+  navSync(); if (S.stat) renderStatus(S.home); if (S.news) nwBadge();
 }
 if (PC_MQ.addEventListener) PC_MQ.addEventListener('change', renderTabs);
 /* 지금 화면의 메뉴 줄 이름: 트렌드 상품/이번 주 신상은 보기(f), 소싱/사이트 비교는 브랜드 보기(view)로 가른다 */
@@ -3619,7 +3641,7 @@ function renderBrief() {
   var r = c.report;
   var rep = '<article class="card bc-report" data-card="report" id="c-report"><p class="rp-kicker">' + icon('file') + (r && r.date !== h.today ? esc(shortDate(r.date)) + ' 리포트' : '오늘의 리포트') + '</p>'
     + (r ? '<h2 class="rp-head">' + esc(r.headline) + '</h2>' + ((r.summary || []).length ? '<ul class="rp-sum">' + r.summary.slice(0, 2).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + '<button type="button" class="lnk-more" data-act="report-open" data-date="' + esc(r.date) + '" onclick="openReport(this.dataset.date)">' + rpTodoText(r.date) + '리포트 전체 보기' + icon('chev') + '</button>'
-      : '<p class="rp-one">07시 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>') + (r ? srcLine(['report'], { at: md(r.date) + ' 자료 · ' + (r.source === 'gemini' ? 'Gemini' : 'Claude') + ' 작성' }) : '') + '</article>';
+      : '<p class="rp-one">07시 수집이 끝나면 오늘의 리포트가 여기에 올라와요</p>') + '<button type="button" class="lnk-more nw-missed" id="newsMissed" hidden onclick="route(\'more\',\'news\')"></button>' + (r ? srcLine(['report'], { at: md(r.date) + ' 자료 · ' + (r.source === 'gemini' ? 'Gemini' : 'Claude') + ' 작성' }) : '') + '</article>';
   var cnt = function (m) { return m && m.ready !== false ? m.items.length : '–'; };
   var kpis = '<nav class="bc-kpis sum card" aria-label="오늘 숫자">' + [['missing', '들여올 후보', '약국에 없는 상위 상품', 'warn'], ['risers', '급상승', '크게 오른 상품', 'up'], ['new', 'NEW', '새로 들어온 상품', 'ink']].map(function (k) {
     var wk = k[0] === 'new' && S.la && S.la.items ? laWeek().length : -1;   /* 0929d 이번 주 신상(품평회 표)으로 */
@@ -3663,7 +3685,8 @@ function renderBrief() {
       + ((rvN ? 1 : 0) + (aiN ? 1 : 0) + (ph ? 1 : 0) < 2 ? '<button type="button" class="bc-link go" onclick="route(\'set\',\'list\')">' + icon('layers') + '세트 목록 보기' + icon('chev') + '</button>' : '') + '</div></article>');
   }
   small = small.slice(0, innerWidth < 600 ? 3 : 4);
-  el.innerHTML = '<div class="brief">' + banner + '<header class="page-h"><p class="eyebrow">' + dl + '</p><h1 class="view-h1">오늘의 MD 브리핑</h1></header><div class="brief-top">' + rep + kpis + '</div>' + top + (small.length ? '<div class="brief-grid" data-n="' + small.length + '">' + small.join('') + '</div>' : '') + '</div>';
+  if (!S.news && !S.newsBusy) newsLoad();   /* 0930 놓친 뉴스 배지 */
+  el.innerHTML = '<div class="brief">' + banner + '<header class="page-h"><p class="eyebrow">' + dl + '</p><h1 class="view-h1">오늘의 MD 브리핑</h1></header><div class="brief-top">' + rep + kpis + '</div>' + top + (small.length ? '<div class="brief-grid" data-n="' + small.length + '">' + small.join('') + '</div>' : '') + '</div>'; nwBadge();
   if (!S.viz && !S.vizLoading) loadViz();
   if (!S.la && !S.laBusy) laLoad();
 }
@@ -3945,7 +3968,7 @@ function renderPlan() {
   $('planSeg').innerHTML = segHtml('planSeg', PLAN_SUBS, S.planSub, "route('plan',this.dataset.s)");
   var sg = $('planSeg'), so = sg.querySelector('.on'); if (so && sg.scrollWidth > sg.clientWidth) sg.scrollLeft = so.offsetLeft - (sg.clientWidth - so.offsetWidth) / 2;
   var b = $('planBody'), s = S.planSub;
-  if (s === 'board') { b.innerHTML = planStrip() + '<div id="board" class="board"></div>'; loadBoard(); if (!S.set.mats) loadSetTab(); }
+  if (s === 'board') { if (!S.ideas) ideasLoad(); b.innerHTML = ideasHtml() + planStrip() + '<div id="board" class="board"></div>'; loadBoard(); if (!S.set.mats) loadSetTab(); }
   else if (s === 'mat') { if (S.set.mats) b.innerHTML = matCardHtml(); else { b.innerHTML = skel(3); loadSetTab(); } }
   else if (s === 'cal') { if (!S.la) { b.innerHTML = skel(4); laLoad(); } else b.innerHTML = S.la.err ? '<article class="card">' + emptyHtml(S.la.err, '다시 불러오기', 'S.la=null;laLoad()') + '</article>' : calHtml(); }
   else if (s === 'season') { if (!S.season) seasonLoad(); b.innerHTML = seasonHtml(); balIf('seGrid'); }
@@ -4129,15 +4152,81 @@ function playersLine(ps) {
 function newsItemsHtml(news) {
   return news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + playersLine(n.players) + '</div>'; }).join('');
 }
+/* ── 0930 뉴스 탭: 시트 '뉴스'에 날마다 쌓인 기사 타임라인(날짜별·태그·검색·읽음) + 오늘의 요약(리포트 뉴스·대세·행사) ── */
+var NW_TAGS = ['뷰티', '스킨부스터', '브랜드', '관광객', '규제·유통', '약국'], NW_TONE = { '뷰티': 't-neutral', '스킨부스터': 't-up', '브랜드': 't-story', '관광객': 't-ok', '규제·유통': 't-warn', '약국': 't-down' };
+S.nwF = S.nwF || { tag: '', q: '', unread: false };
+function nwRead() { return lsGet('tl_news_read', []); }
+function nwIsRead(u) { return nwRead().indexOf(u) !== -1; }
+function nwMarkRead(u, el) { var a = nwRead(); if (a.indexOf(u) === -1) { a.unshift(u); lsSet('tl_news_read', a.slice(0, 2000)); } var it = el && el.closest('.nw-item'); if (it) it.classList.remove('unread'); nwBadge(); }
+function nwToggleRead(u, el) { var a = nwRead(), i = a.indexOf(u); if (i === -1) { nwMarkRead(u, el); return; } a.splice(i, 1); lsSet('tl_news_read', a); var it = el.closest('.nw-item'); if (it) it.classList.add('unread'); nwBadge(); }
+/** 최근 3일 기사 중 안 읽은 수 → 왼쪽 메뉴 '뉴스' 배지 + 오늘 카드 줄 */
+function nwMissed() { var n = S.news; if (!n || !n.items) return 0; var t = S.home ? dnum(S.home.today) : dnum(n.latest), rd = nwRead(); return n.items.filter(function (x) { return t - dnum(x.at) <= 3 && rd.indexOf(x.url) === -1; }).length; }
+function nwBadge() {
+  var n = nwMissed(), b = document.querySelector('#tabs [data-nav="more/news"]');
+  if (b) { var e = b.querySelector('.tb-badge'); if (!e) { e = document.createElement('i'); e.className = 'tb-badge'; b.appendChild(e); } e.textContent = n; e.hidden = !n; b.setAttribute('aria-label', '뉴스' + (n ? ' · 놓친 뉴스 ' + n + '건' : '')); }
+  var m = $('newsMissed'); if (m) { m.hidden = !n; m.innerHTML = icon('news') + '놓친 뉴스 <b>' + n + '</b>건 · 최근 3일' + icon('chev'); }
+}
+function newsLoad(more) {
+  var f = S.nwF, page = more && S.news ? (S.news.page || 0) + 1 : 0;
+  if (S.newsBusy) return; S.newsBusy = 1; if (more) { var mb = $('nwMore'); if (mb) mb.textContent = '불러오는 중…'; }
+  call('getNews', [{ tag: f.tag, q: f.q, page: page }], function (r) {
+    S.newsBusy = 0;
+    if (!(r && r.ok)) { S.news = { err: (r && r.msg) || '불러오지 못했어요' }; nwDraw(); return; }
+    if (r.ready === false) { S.news = { ready: false }; nwDraw(); return; }
+    if (more && S.news && S.news.items) r.items = S.news.items.concat(r.items);
+    S.news = r; nwDraw(); nwBadge();
+  }, function () { S.newsBusy = 0; S.news = { missing: 1 }; nwDraw(); });
+}
+function nwFilter(k, v) { S.nwF[k] = k === 'unread' ? !S.nwF.unread : (S.nwF[k] === v ? '' : v); if (k !== 'unread') { S.news = S.news && S.news.ready ? { ready: true, items: null, tags: S.news.tags, total: 0 } : S.news; newsLoad(); } else nwDraw(); }
+function nwDraw() { var el = $('nwTl'); if (!el || !(S.tab === 'more' && S.moreSub === 'news')) return; var tmp = document.createElement('div'); tmp.innerHTML = nwTimelineHtml(); el.replaceWith(tmp.firstChild); }
+function nwDay(d) { var t = dateOf(d); return t ? (t.getMonth() + 1) + '월 ' + t.getDate() + '일 ' + '일월화수목금토'.charAt(t.getDay()) : esc(d); }
+function nwItemHtml(x, cm) {
+  var rd = nwIsRead(x.url);
+  return '<div class="nw-item' + (rd ? '' : ' unread') + '" data-url="' + esc(x.url) + '"><div class="nw-tags">' + (x.tags || []).map(function (t) { return '<span class="tag ' + (NW_TONE[t] || 't-neutral') + '">' + esc(t) + '</span>'; }).join('') + (x.query === '전문지' ? '<span class="tag t-neutral">전문지</span>' : '') + '</div>'
+    + '<a class="nw-t" href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer" data-url="' + esc(x.url) + '" onclick="nwMarkRead(this.dataset.url,this)"><b>' + esc(x.title) + '</b>' + icon('ext') + '</a>'
+    + '<small class="rp-src">' + esc([x.source, x.at ? shortDate(x.at) : ''].filter(Boolean).join(' · ')) + '</small>'
+    + (x.excerpt ? '<p class="nw-ex" onclick="this.classList.toggle(\'open\')" title="누르면 펼쳐요">' + esc(x.excerpt) + '</p>' : '')
+    + (cm ? '<p class="nw-cm">' + icon('spark') + esc(cm) + '</p>' : '') + playersLine(x.players)
+    + '<button type="button" class="lnk nw-rd" data-url="' + esc(x.url) + '" onclick="nwToggleRead(this.dataset.url,this)" aria-label="읽음 표시 바꾸기">' + icon('check') + '<span>읽음</span></button></div>';
+}
+function nwTimelineHtml() {
+  var st = newState(S.news, 'S.news=null;newsLoad()'); if (st) return '<div id="nwTl">' + (S.news && S.news.ready === false ? '<article class="card">' + emptyHtml('아직 저장된 뉴스가 없어요 · 다음 07시·12시 수집부터 날마다 쌓여요') + '</article>' : st) + '</div>';
+  var n = S.news, f = S.nwF, items = n.items || [], cm = {}; ((S.rp && S.rp.report && S.rp.report.news) || []).forEach(function (x) { if (x.detail) cm[x.url] = x.detail; });
+  if (f.unread) items = items.filter(function (x) { return !nwIsRead(x.url); });
+  var chips = '<div class="grp-chips nw-f">' + (n.tags || []).map(function (t) { var on = f.tag === t.tag; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-t="' + esc(t.tag) + '" onclick="nwFilter(\'tag\',this.dataset.t)">' + esc(t.tag) + ' <em>' + t.n + '</em></button>'; }).join('')
+    + '<button type="button" class="chip tog' + (f.unread ? ' on' : '') + '" aria-pressed="' + f.unread + '" onclick="nwFilter(\'unread\')">' + icon('bell') + '읽지 않음만</button></div>';
+  var bar = '<div class="st-bar nw-bar"><label class="sr-box st-q">' + icon('search') + '<input id="nwQ" type="search" placeholder="제목 · 내용 검색" value="' + esc(f.q) + '" oninput="S.nwF.q=this.value;clearTimeout(S.nwT);S.nwT=setTimeout(function(){S.news={ready:true,items:null,tags:S.news&&S.news.tags};newsLoad()},350)" aria-label="뉴스 검색"></label><span class="meta">' + (n.items ? n.total + '건' : '') + (n.latest ? ' · 최근 ' + md(n.latest) : '') + '</span></div>';
+  var days = [], by = {}; items.forEach(function (x) { if (!by[x.at]) { by[x.at] = []; days.push(x.at); } by[x.at].push(x); });
+  var body = !n.items ? SKL : days.length ? days.map(function (d) { return '<section class="card nw-day"><h3 class="nw-h">' + nwDay(d) + ' <small>' + by[d].length + '건' + (by[d].filter(function (x) { return !nwIsRead(x.url); }).length ? ' · 안 읽음 ' + by[d].filter(function (x) { return !nwIsRead(x.url); }).length : '') + '</small></h3>' + by[d].map(function (x) { return nwItemHtml(x, cm[x.url]); }).join('') + '</section>'; }).join('')
+    : '<article class="card">' + emptyHtml(f.unread ? '안 읽은 뉴스가 없어요 · 다 봤어요' : '조건에 맞는 뉴스가 없어요') + '</article>';
+  var more = n.items && n.items.length < n.total ? '<button type="button" class="btn nw-more" id="nwMore" onclick="newsLoad(true)">' + icon('down') + '더 보기 · ' + (n.total - n.items.length) + '건 남음</button>' : '';
+  return '<div id="nwTl"><section class="card nw-top"><div class="card-head"><h2>' + icon('news') + '뉴스 타임라인 <small>날마다 쌓여요 · 놓친 뉴스 ' + nwMissed() + '건</small></h2></div>' + bar + chips + srcLine(['news'], { at: n.latest ? md(n.latest) + ' 기사까지' : '', calc: '07시 리포트 때 + 12시 수집 때 그날 기사 전부(최대 40건) 저장 · 태그 = 제목·본문 키워드 · 읽음 표시는 이 기기에만', lim: '기사 제목·요약 기준 · 원문 링크로 확인' }) + '</section>' + body + more + '</div>';
+}
 function newsViewHtml() {
-  var r = S.rp; if (!r) return SKL;
-  var p = r.report; if (!p) return '<article class="card">' + emptyHtml('아직 리포트가 없어요 · 매일 아침 수집이 끝나면 올라와요') + '</article>';
-  var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
-  var sec = function (k, t, ic) { var a = p[k] || []; return a.length ? '<section class="card rp-sec"><h2>' + icon(ic) + t + '</h2><div class="rp-items">' + a.map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p></div>'; }).join('') + '</div>' + rpSrc(k, r.date) + '</section>' : ''; };
-  var h = (news.length ? '<section class="card rp-sec rp-news"><h2>' + icon('news') + '오늘의 뉴스 <small>' + news.length + '건</small></h2><div class="rp-items">' + newsItemsHtml(news) + '</div>' + rpSrc('news', r.date) + '</section>' : '')
-    + sec('trends', '요즘 대세', 'spark') + sec('events', '행사 · 이벤트 흐름', 'calendar');
-  return '<article class="card nv-head"><div class="card-head"><h2>' + esc(p.headline || '오늘의 업계 흐름') + '</h2><span class="head-acts">' + asOf(r.date) + '<button type="button" class="btn ghost" onclick="route(\'report\')">' + icon('file') + '리포트 전체</button></span></div></article>'
-    + (h ? '<div class="nv-grid" id="nvGrid">' + h + '</div>' : '<article class="card">' + emptyHtml('이 날 리포트에는 뉴스·흐름 칸이 없어요') + '</article>');
+  var r = S.rp, p = r && r.report, sum = '';
+  if (!r) sum = SKL;
+  else if (p) {
+    var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
+    var sec = function (k, t, ic) { var a = p[k] || []; return a.length ? '<section class="card rp-sec"><h2>' + icon(ic) + t + '</h2><div class="rp-items">' + a.map(function (c) { return '<div class="rp-item"><b>' + esc(c.title) + '</b><p>' + esc(c.detail) + '</p></div>'; }).join('') + '</div>' + rpSrc(k, r.date) + '</section>' : ''; };
+    var h = (news.length ? '<section class="card rp-sec rp-news"><h2>' + icon('news') + '최근 뉴스 <small>어제 오후~오늘 아침 · ' + news.length + '건 · 업계 코멘트</small></h2><div class="rp-items">' + newsItemsHtml(news) + '</div>' + rpSrc('news', r.date) + '</section>' : '') + sec('trends', '요즘 대세', 'spark') + sec('events', '행사 · 이벤트 흐름', 'calendar');
+    sum = '<article class="card nv-head"><div class="card-head"><h2>' + esc(p.headline || '오늘의 업계 흐름') + '</h2><span class="head-acts">' + asOf(r.date) + '<button type="button" class="btn ghost" onclick="route(\'report\')">' + icon('file') + '리포트 전체</button></span></div></article>' + (h ? '<div class="nv-grid" id="nvGrid">' + h + '</div>' : '');
+  }
+  return (sum ? '<details class="nw-sum" open><summary><h2>' + icon('file') + '오늘의 요약 <small>리포트가 고른 뉴스와 흐름</small></h2></summary>' + sum + '</details>' : '') + nwTimelineHtml();
+}
+/* 이번 주 기획 제안(뉴스기획 시트) — 기획 탭 맨 위. [나중에]는 이 기기에서만 숨김 */
+function ideasLoad() { newLoad('getIdeas', 'ideas', function () { if (S.tab === 'plan' && S.planSub === 'board') renderPlan(); }); }
+function ideasVisible() { var g = S.ideas; if (!g || !g.ready) return []; var hid = lsGet('tl_ideas_hide', []); return (g.ideas || []).filter(function (x) { return hid.indexOf(g.week + '|' + x.title) === -1; }); }
+function ideaLater(i) { var g = S.ideas, x = ideasVisible()[i]; if (!x) return; var hid = lsGet('tl_ideas_hide', []); hid.push(g.week + '|' + x.title); lsSet('tl_ideas_hide', hid.slice(-50)); renderPlan(); toast('나중에 볼게요 · 이 기기에서만 숨겨요'); }
+function ideaToSet(i) { var x = ideasVisible()[i]; if (!x) return; S.psEditing = psNewDraft(); S.psEditing.name = x.title.slice(0, 30); S.psEditing.memo = ('뉴스 기획: ' + x.rationale).slice(0, 200); (x.products || []).forEach(function (n) { S.psEditing.items.push({ name: n, qty: 1 }); }); S.pbView = ''; route('set', 'diy'); setTimeout(openDiySheet, 350); }
+var IDEA_TONE = { '이벤트': 't-up', '세트': 't-story', '진열': 't-ok', '콘텐츠': 't-warn' };
+function ideasHtml() {
+  var g = S.ideas, list = ideasVisible(); if (!g || !g.ready || !list.length) return '';
+  return '<section class="card ideas-card"><div class="card-head"><h2>' + icon('spark') + '이번 주 기획 제안 <small>' + esc(g.week.split('~').map(md).join(' ~ ')) + ' 뉴스 ' + '엮음</small></h2><button type="button" class="lnk-more" onclick="route(\'more\',\'news\')">근거 뉴스 전체' + icon('chev') + '</button></div><div class="ideas-row">'
+    + list.map(function (x, i) { return '<article class="idea"><div class="nw-tags"><span class="tag ' + (IDEA_TONE[x.type] || 't-neutral') + '">' + esc(x.type) + '</span><span class="tag t-neutral">품 ' + esc(x.effort) + '</span>' + (x.when ? '<span class="tag t-neutral">' + esc(x.when) + '</span>' : '') + '</div><h3>' + esc(x.title) + '</h3><p class="idea-r">' + esc(x.rationale) + '</p>'
+      + ((x.products || []).length ? '<div class="grp-chips idea-p">' + x.products.map(function (p) { return '<span class="se-exi">' + esc(p) + '</span>'; }).join('') + '</div>' : '')
+      + '<ul class="idea-ev">' + (x.evidence || []).map(function (e) { return '<li><a href="' + esc(e.url) + '" target="_blank" rel="noopener noreferrer">' + esc(e.title || e.url) + icon('ext') + '</a><small>' + esc([e.source, e.date ? shortDate(e.date) : ''].filter(Boolean).join(' · ')) + '</small></li>'; }).join('') + '</ul>'
+      + '<div class="idea-acts"><button type="button" class="btn pri sm" data-i="' + i + '" onclick="ideaToSet(+this.dataset.i)">' + icon('package') + '세트로 만들기</button><button type="button" class="btn sm" data-i="' + i + '" onclick="ideaLater(+this.dataset.i)">나중에</button></div></article>'; }).join('')
+    + '</div>' + srcLine(['news', 'ideas'], { at: md(g.date) + ' 작성', calc: '최근 7일 뉴스에서 같은 흐름(같은 태그·기업·키워드 기사 3건 이상)을 묶어 맥의 Claude 가 제안 · 근거 링크는 저장된 기사만', lim: 'AI 제안이에요 · 매출·재고는 반영 안 됨' }) + '</section>';
 }
 
 /* 브랜드 이야기: 아침 브리핑이 조사한 브랜드 프로필 + 업계 관계(가치사슬) */
@@ -4187,7 +4276,7 @@ function renderMore() {
   S.bcOn = s === 'find'; if (s !== 'find') clearTimeout(S.bcTimer);
   var back = function (t) { return '<div class="view-head"><button type="button" class="back-btn" onclick="subBack(\'more\',\'\')">' + icon('left') + '더 보기</button><h2 class="view-title">' + t + '</h2></div>'; };
   if (s === 'analysis') { el.innerHTML = back('카테고리 · 브랜드 분석') + (S.viz && S.home ? analysisHtml() : skel(4)); if (!S.viz) loadViz(); if (!S.home) loadHome(); fitSvgText(el); if (innerWidth >= 840) balanceCols(el.querySelector('.vz-grid'), 2); return; }
-  if (s === 'news') { if (!S.rp) loadReport(''); if (!S.stories) storiesLoad(); el.innerHTML = back('뉴스 · 업계 흐름') + newsViewHtml(); return; }
+  if (s === 'news') { if (!S.rp) loadReport(''); if (!S.stories) storiesLoad(); if (!S.news || !S.news.items) newsLoad(); el.innerHTML = back('뉴스') + newsViewHtml(); return; }
   if (s === 'story') { if (!S.stories) storiesLoad(); if (!S.pb) pbLoad(); el.innerHTML = back('브랜드 이야기') + storiesViewHtml(); balIf('stGrid'); return; }
   if (s === 'find') { el.innerHTML = back('화해 브랜드 전체 조사') + '<div id="findList"></div>'; loadFind(); return; }
   if (s === 'watch') {
@@ -4209,7 +4298,7 @@ function renderMore() {
     + card('package', '용도별 상품 · 사진 확인', (ph ? '사진 확인 필요 <b class="warn">' + ph + '개</b> · ' : '') + '물류앱 용도 고치기 · 사진 없는 상품에 맞는 사진 고르기', "route('set','uses')")
     + card('columns', '세트 박스 크기', '투명박스 안쪽 크기를 넣어 두면 세트가 들어가는지 실제 비율로 그려 봐요', 'moreBox()')
     + card('grid', '올리브영 · 화해 · 다이소 · 큐텐 외 3곳 비교', '사이트별 순위 비교표 · 카테고리별 순위', "route('more','filters')")
-    + card('news', '뉴스 · 업계 흐름', '오늘 리포트의 뉴스 · 요즘 대세 · 행사 흐름을 한 번에', "route('more','news')")
+    + card('news', '뉴스', '날마다 쌓이는 업계 뉴스 타임라인 · 태그·검색·읽음 표시 · 오늘의 요약', "route('more','news')")
     + card('book', '브랜드 이야기', '브랜드 · 회사 · 대표 상품 이야기와 손님에게 할 말 · 관련 기업', "route('more','story')")
     + card('info', '데이터 출처 · 수집 상태', (S.stat ? esc(S.stat.time) + ' · ' : '') + '모든 숫자의 출처 · 주기 · 늦음 · 한계', "route('more','sources')")
     + card('bell', '변화 알림 목록', '알림을 켠 상품·브랜드 ' + watchCount() + '개 · 오늘 변화와 끄기', "route('more','watch')")
