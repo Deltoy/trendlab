@@ -1473,9 +1473,16 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .se-now{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--ink);pointer-events:none}
 .vz-key .k-win{background:var(--pri)}.vz-key .k-ord{width:4px;background:var(--up)}.vz-key .k-now{width:0;border-left:1.5px dashed var(--ink);border-radius:0}
 .se-grid{display:flex;flex-direction:column;gap:16px}
+.ev-seg{margin-top:10px}
 .ev-strip{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}.ev-strip::-webkit-scrollbar{display:none}
 .ev-pill{display:flex;flex-direction:column;gap:2px;flex:none;min-width:120px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r-sm);color:var(--ink);text-decoration:none;font-size:var(--fs-2)}.ev-pill b{font-size:var(--fs-3)}.ev-pill span{color:var(--ink3)}.ev-pill.t-warn{border-color:var(--warn);background:var(--warn-soft)}.ev-pill.t-ok{border-color:var(--ok);background:var(--ok-soft)}
 .ev-tg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pt-sum{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:var(--fs-2);color:var(--ink2)}.pt-sum b{font-size:var(--fs-4);margin-right:4px;color:var(--ink)}.pt-sum .up b{color:var(--up,#D92D20)}.pt-sum .dn b{color:var(--down,#155EEF)}
+.pt-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}.pt-row{padding:12px 0;border-top:1px solid var(--line)}.pt-row:first-child{border-top:0;padding-top:4px}
+.pt-h{display:flex;align-items:center;gap:12px}.pt-n{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.pt-n b{font-size:var(--fs-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pt-n .meta{font-size:var(--fs-1);color:var(--ink3)}
+.pt-v{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none}.pt-v b{font-size:var(--fs-4)}.pt-v small{color:var(--ink3);font-size:var(--fs-1)}.pt-v .up{color:var(--up,#D92D20)}.pt-v .dn{color:var(--down,#155EEF)}
+.pt-bars{display:inline-flex;align-items:flex-end;gap:2px;height:24px;flex:none}.pt-bars i{display:block;width:6px;border-radius:2px;background:var(--line2)}.pt-bars i.last{background:var(--pri)}
+.pt-why{list-style:none;margin:8px 0 0 0;padding:0;display:flex;flex-direction:column;gap:4px}.pt-why li{display:flex;gap:6px;align-items:flex-start;font-size:var(--fs-1);color:var(--ink2)}.pt-why .ic{width:14px;height:14px;flex:none;margin-top:2px;color:var(--pri-text)}.pt-why .k-none .ic{color:var(--ink3)}.pt-why a{color:inherit;vertical-align:middle}
 .ev-ideas{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}.ev-ideas li{font-size:var(--fs-2);color:var(--ink2)}.ev-ideas .ev-i-h{display:flex;align-items:center;gap:8px;color:var(--ink)}.ev-ideas p{margin:2px 0 0}
 .ev-step.past span{color:var(--ink3)}.ev-step.now{background:var(--pri-soft,var(--fill));border-radius:var(--r-sm)}.ev-step small{color:var(--ink3);margin-right:2px}
 .se-grid.balanced{display:grid;grid-template-columns:repeat(var(--bal-n),minmax(0,1fr));gap:16px;align-items:start}
@@ -1686,6 +1693,7 @@ var SRC = {
   setai: { n: 'AI 세트 추천', url: '', how: '맥의 Claude가 재료함 · 약국 상품 · 오늘 순위를 읽고 제안 (5분마다 요청 확인)', freq: '요청할 때 · 월요일 자동', lag: '요청 뒤 5~10분', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' },
   mat: { n: '재료함', url: '', how: 'MD가 트렌드랩에 직접 넣은 협업 · 자사 재료', freq: '넣을 때', lag: '실시간', lim: '직접 입력한 내용 그대로' },
   kdatalab: { n: '한국관광 데이터랩 의료관광 소비', url: 'https://datalab.visitkorea.or.kr/', how: '외국인 의료 소비액 월별 · 진료과목별(약국 · 피부과) 비율, 로그인 없이 되는 것만', freq: '매달', lag: '1~2달', lim: '전국 기준 · 지자체별은 로그인이 필요해 빠져요' },
+  ptrend: { n: '약국 POS 기간별 이력', url: '', how: 'POS 판매 통계를 올릴 때마다 기간별 판매수량을 남겨 두고, 최근 기간 vs 그 전 기간의 하루 평균 판매량으로 상승·하락을 가려요. 이유는 시즌 창·이벤트 달력·최근 30일 뉴스(제조사·브랜드)·올리브영 랭킹·할인금액 변화에서 근거가 있는 것만 붙여요', freq: 'POS 올릴 때', lag: '올린 기간까지', lim: '기간 길이가 다르면 하루 평균으로 맞춰요 · 이유는 후보이지 확정이 아니에요 · 매장 요인(진열·추천·품절)은 자료가 없어요' },
   events: { n: '이벤트 달력(경험 규칙)', url: '', how: '서버가 할로윈·블랙프라이데이·크리스마스 등 17개 이벤트 달력에 약국형 아이디어·준비 타임라인(D-day 역산)을 붙이고, 우리 약국 베스트·물류앱 상품명에서 키워드가 맞는 예시를 찾아요', freq: '열 때마다 오늘 기준', lag: '당일', lim: '아이디어는 경험 규칙 · 매출 반응은 성과 기록으로 직접 확인해요' },
   season: { n: '시즌 달력 · 기상청 단기예보', url: 'https://www.data.go.kr/data/15084084/openapi.do', how: '맥이 시즌 달력(20개 시즌 · 준비 기간)과 네이버 검색 신호 · 기상청 단기예보 최저기온을 합쳐 매일 계산', freq: '매일 아침', lag: '당일', lim: '달력은 경험 규칙 · 신호가 없으면 달력 기준이에요' },
   brief: { n: '아침 브리핑 조사', url: '', how: '맥의 아침 브리핑이 기사 · 인터뷰를 읽고 브랜드 이야기와 업계 관계(제조 · 원료 · 유통)를 정리', freq: '매일 아침(브랜드는 90일마다 다시)', lag: '조사한 날 기준', lim: 'AI 요약이에요 · 출처 링크로 확인' },
@@ -1856,13 +1864,13 @@ function dragScroll(el) {
 
 /* ── v3 화면 이동: 탭 6개 + 하위 화면 · 이동마다 기록(안드로이드 뒤로 = 앱 안에서) · #trend/product 주소 ── */
 var TABS = [['today', '오늘', 'house'], ['report', '리포트', 'file'], ['trend', '트렌드', 'trend'], ['set', '세트', 'package'], ['plan', '기획', 'calendar'], ['more', '더 보기', 'grid']];
-var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses'], plan: ['board', 'mat', 'cal', 'tour', 'price', 'season', 'areas', 'events'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources', 'news', 'story'] };
+var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses', 'ptrend'], plan: ['board', 'mat', 'cal', 'tour', 'price', 'season', 'areas', 'events'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources', 'news', 'story'] };
 function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; return w ? (w.items || []).length + (w.brands || []).length : 0; }
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
 /* 0929 PC 왼쪽 메뉴: MD·마케팅 중심 묶음(기본 · MD · 마케팅 · 데이터) · 줄마다 기존 화면으로 바로 · 폰은 아래 탭 그대로 */
 var NAV = [['기본', [['today', '오늘', 'house'], ['report', '리포트', 'file']]],
-  ['MD', [['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
+  ['MD', [['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/ptrend', '상품 추세 ▲▼ · 이유', 'trend'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
   ['마케팅', [['plan/events', '이벤트 기획', 'gift'], ['plan/cal', '행사 캘린더', 'calendar'], ['plan/areas', '뜨는 상권 · 팝업 후보', 'pin'], ['plan/tour', '외국인 손님', 'globe'], ['trend/keyword', '검색 반응 · 키워드', 'search'], ['trend/shorts', '쇼츠', 'play'], ['more/news', '뉴스', 'news'], ['more/story', '브랜드 이야기', 'book']]],
   ['데이터', [['trend/brand/cmp', '사이트 비교', 'columns'], ['more/analysis', '카테고리 · 브랜드 분석', 'grid'], ['more/sources', '데이터 출처 · 수집 상태', 'info'], ['more/', '더 보기', 'grid']]]];
 var NAV_TAB = { today: 'today', report: 'report', 'trend/product/rank': 'trend', 'set/diy': 'set', 'plan/cal': 'plan', 'more/': 'more' };   /* 탭 이름으로 찾는 곳(단축키·테스트)이 쓰는 대표 줄 */
@@ -2612,7 +2620,7 @@ function matStatusBadge(m) {
   var d = m.dday == null ? '' : m.dday < 0 ? ' · 종료' : ' · D-' + m.dday;
   return tag('협업' + d, m.status === '곧 종료' ? 't-warn' : 't-neutral');
 }
-var SET_SUBS = [['diy', '만들기'], ['list', '세트 목록'], ['best', '약국 베스트']];
+var SET_SUBS = [['diy', '만들기'], ['list', '세트 목록'], ['best', '약국 베스트'], ['ptrend', '추세 ▲▼']];
 function renderSetTab() {
   var el = $('set'); if (!S.set.mats) { el.innerHTML = skel(3); return; }
   var sub = S.setSub = { have: 'list' }[S.setSub] || S.setSub || 'diy', hid = { ai: 'AI 세트 추천', uses: '용도별 상품 · 사진 확인' }[sub];
@@ -2620,6 +2628,7 @@ function renderSetTab() {
     : '<div class="seg set-sub" role="tablist" aria-label="세트 메뉴">' + segHtml('', SET_SUBS, sub, "route('set',this.dataset.s)") + '</div><button type="button" class="btn ghost" onclick="route(\'set\',\'ai\')" title="협업·자사 재료로 AI가 세트를 짜 줘요">' + icon('spark') + 'AI 세트 추천</button>') + '</div>';
   if (sub === 'best') { el.innerHTML = tabs + (S.pbView === 'table' && innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? pbTableHtml() : pbToggle(pbHtml())); dragScroll(document.querySelector('#set .pb-cats')); if (S.pbView === 'table') pbTableMount(); return; }
   if (sub === 'ai') { el.innerHTML = tabs + aiHtml(); return; }
+  if (sub === 'ptrend') { if (!S.ptrend) ptLoad(); el.innerHTML = tabs + ptHtml(); balIf('ptGrid'); return; }
   el.innerHTML = tabs + psHtml(sub);
 }
 /* 약국 베스트 옆 [표로 보기] (폴드·PC): 같은 판매 자료를 정렬·거르기·묶기·CSV 로 (금액·이익은 표에 없음) */
@@ -4057,13 +4066,42 @@ function pctChip(v, label) { return v == null ? '<span class="tag t-neutral">' +
 function lsGet(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
+/* 0930 상품 추세 ▲▼ — 서버 getProductTrends(POS 기간별 이력 → 상승·하락 + 이유 후보) */
+var PT_KIND = { season: 'sun', event: 'gift', news: 'news', oy: 'trend', disc: 'tagi', none: 'info' };
+function ptLoad() { newLoad('getProductTrends', 'ptrend', function () { if (S.tab === 'set' && S.setSub === 'ptrend') renderSetTab(); }); }
+function ptBars(series) {   /* 기간별 하루 평균 판매량 작은 막대(최근 6기간) */
+  var mx = Math.max.apply(null, series.concat([0.01]));
+  return '<span class="pt-bars" aria-hidden="true">' + series.map(function (v, i) { return '<i style="height:' + Math.max(2, Math.round(v / mx * 22)) + 'px" class="' + (i === series.length - 1 ? 'last' : '') + '"></i>'; }).join('') + '</span>';
+}
+function ptRow(it) {
+  var pct = it.pct != null ? (it.pct > 0 ? '+' : '') + it.pct + '%' : '';
+  return '<li class="pt-row ' + esc(it.cls || '') + '"><div class="pt-h">' + ptBars(it.series || []) + '<div class="pt-n"><b>' + esc(it.name) + '</b><span class="meta">' + esc([it.maker, it.cat].filter(Boolean).join(' · ')) + '</span></div>'
+    + '<div class="pt-v num">' + (pct ? '<b class="' + (it.cls === 'up' ? 'up' : 'dn') + '">' + pct + '</b>' : '') + '<small>' + (it.prevQty != null ? it.prevQty + '개 → ' : '') + it.lastQty + '개</small>' + (it.streak ? tag('연속', it.cls === 'up' ? 't-ok' : 't-down') : '') + '</div></div>'
+    + ((it.reasons || []).length ? '<ul class="pt-why">' + it.reasons.map(function (r) { return '<li class="k-' + esc(r.kind) + '">' + icon(PT_KIND[r.kind] || 'info') + '<span>' + esc(r.text) + (r.url ? ' <a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + icon('ext') + '</a>' : '') + '</span></li>'; }).join('') + '</ul>' : '') + '</li>';
+}
+function ptList(title, arr, empty, tone) {
+  return '<article class="card pt-card"><div class="card-head"><h2>' + esc(title) + ' <small>' + arr.length + '개</small></h2></div>' + (arr.length ? '<ol class="pt-list">' + arr.map(ptRow).join('') + '</ol>' : '<p class="se-why">' + esc(empty) + '</p>') + '</article>';
+}
+function ptHtml() {
+  var st = newState(S.ptrend, "S.ptrend=null;ptLoad()"); if (st) return st;
+  var r = S.ptrend;
+  if (!r.enough) return '<article class="card">' + emptyHtml(r.msg || 'POS 판매 통계를 두 번 이상 올려야 추세가 나와요', '약국 베스트에서 올리기', "route('set','best')") + '</article>';
+  var c = r.counts || {}, per = function (p) { return md(p.from) + '~' + md(p.to) + ' (' + p.days + '일)'; };
+  return '<article class="card se-top"><div class="card-head"><h2>상품 추세 ▲▼ <small>' + esc(per(r.prev)) + ' → ' + esc(per(r.last)) + ' · 하루 평균 판매량 ±' + r.rule.pct + '% 넘으면 추세</small></h2>' + asOf(r.last.to) + '</div>'
+    + '<div class="pt-sum"><span class="up"><b>' + c.up + '</b> 상승</span><span class="dn"><b>' + c.down + '</b> 하락</span><span><b>' + c.fresh + '</b> 새로 팔림</span><span><b>' + c.gone + '</b> 안 팔림</span><span class="meta"><b>' + c.flat + '</b> 보합</span></div>'
+    + srcLine(['ptrend', 'pos', 'season', 'events', 'news'], { at: md(r.last.to) + ' 기간까지', calc: '추세 = (최근 기간 하루 평균 − 그 전 기간 하루 평균) ÷ 그 전 기간 · ' + r.rule.minQty + '개 미만은 제외 · 이유 = 시즌 창·이벤트 D-45 안·최근 30일 뉴스 제조사/브랜드 일치·올리브영 랭킹·할인금액 변화' }) + '</article>'
+    + '<div class="se-grid" id="ptGrid">' + ptList('▲ 상승 — 세트·이벤트 재료로', r.up || [], '상승 추세 상품이 없어요', 'up') + ptList('▼ 하락 — 원인 확인·정리 후보', r.down || [], '하락 추세 상품이 없어요', 'dn')
+    + ((r.fresh || []).length ? ptList('새로 팔리기 시작', r.fresh, '', '') : '') + ((r.gone || []).length ? ptList('이번 기간엔 안 팔림', r.gone, '', '') : '') + '</div>';
+}
+
 /* 0930 이벤트 기획 — 서버 getEvents(달력 + 약국형 아이디어 + D-day 타임라인 + 우리 상품 예시) */
 var EV_PHASE = { '준비': 't-warn', '진행 중': 't-ok', '대기': 't-neutral' }, EV_EFF = { '소': 't-ok', '중': 't-warn', '대': 't-down' };
 function evLoad() { newLoad('getEvents', 'events', function () { if (S.tab === 'plan' && S.planSub === 'events') renderPlan(); }); }
 function evTick(b) { var d = lsGet('tl_ev_done', {}), k = b.dataset.k; d[k] = d[k] || {}; d[k][b.dataset.i] = b.checked; lsSet('tl_ev_done', d); }
 function evCard(x) {
   var done = lsGet('tl_ev_done', {}), key = x.id + ':' + x.date, dd = x.dday > 0 ? 'D-' + x.dday : x.dday === 0 ? 'D-day' : 'D+' + (-x.dday);
-  return '<article class="card se-card ev-card" data-id="' + esc(x.id) + '"><div class="card-head"><h2>' + esc(x.title) + ' <small class="num">' + esc(md(x.date)) + '</small></h2><span class="head-acts">' + tag(x.phase, EV_PHASE[x.phase]) + tag(dd, x.dday <= 7 ? 't-down' : x.dday <= 28 ? 't-warn' : 't-neutral') + '</span></div>'
+  var grp = x.group === 'jp' ? tag('일본 손님', 't-pb') : x.group === 'cn' ? tag('중국 손님', 't-pb') : '';
+  return '<article class="card se-card ev-card" data-id="' + esc(x.id) + '"><div class="card-head"><h2>' + esc(x.title) + ' <small class="num">' + esc(md(x.date)) + '</small></h2><span class="head-acts">' + grp + tag(x.phase, EV_PHASE[x.phase]) + tag(dd, x.dday <= 7 ? 't-down' : x.dday <= 28 ? 't-warn' : 't-neutral') + '</span></div>'
     + '<p class="se-win-t">' + icon('calendar') + '판매 창 ' + esc(md(x.window.from)) + ' ~ ' + esc(md(x.window.to)) + ' · 발주 확정 ' + esc(md(x.orderBy)) + '까지</p>'
     + '<p class="se-why"><b>컨셉</b> ' + esc(x.concept) + '</p><div class="ev-tg">' + (x.targets || []).map(function (t) { return tag(t, 't-neutral'); }).join('') + '</div>'
     + '<p class="se-lab">약국에서 할 만한 이벤트</p><ol class="ev-ideas">' + (x.ideas || []).map(function (i) { return '<li><div class="ev-i-h"><b>' + esc(i.name) + '</b>' + tag('품 ' + i.effort, EV_EFF[i.effort]) + '</div><p>' + esc(i.how) + '</p></li>'; }).join('') + '</ol>'
@@ -4073,10 +4111,12 @@ function evCard(x) {
 }
 function evHtml() {
   var st = newState(S.events, "S.events=null;evLoad()"); if (st) return st;
-  var r = S.events, items = r.items || []; if (!items.length) return '<article class="card">' + emptyHtml('앞으로 ' + (r.horizon || 120) + '일 안에 오는 이벤트가 없어요') + '</article>';
+  var r = S.events, all = r.items || [], f = S.evF || 'all', items = all.filter(function (x) { return f === 'all' || (x.group || 'kr') === f; });
+  var seg = '<div class="seg ev-seg" role="group" aria-label="손님 구분">' + [['all', '전체'], ['kr', '국내'], ['jp', '일본 손님'], ['cn', '중국 손님']].map(function (o) { return '<button type="button" aria-pressed="' + (f === o[0]) + '" onclick="S.evF=\'' + o[0] + '\';renderPlan()">' + o[1] + '</button>'; }).join('') + '</div>';
+  if (!all.length) return '<article class="card">' + emptyHtml('앞으로 ' + (r.horizon || 120) + '일 안에 오는 이벤트가 없어요') + '</article>';
   var strip = '<div class="ev-strip">' + items.map(function (x) { return '<a class="ev-pill ' + (EV_PHASE[x.phase] || '') + '" href="#" onclick="var c=document.querySelector(\'.ev-card[data-id=&quot;' + esc(x.id) + '&quot;]\');if(c)c.scrollIntoView({behavior:\'smooth\',block:\'start\'});return false"><b>' + esc(x.title) + '</b><span class="num">' + esc(md(x.date)) + ' · ' + (x.dday > 0 ? 'D-' + x.dday : x.dday === 0 ? 'D-day' : '진행') + '</span></a>'; }).join('') + '</div>';
-  return '<article class="card se-top"><div class="card-head"><h2>이벤트 기획 <small>앞으로 ' + (r.horizon || 120) + '일 · 가까운 것부터 · 발주 확정일은 이벤트 D-day 에서 역산</small></h2>' + asOf(r.date) + '</div>' + strip
-    + srcLine(['events', 'pos', 'logi'], { at: md(r.date) + ' 계산', calc: '이벤트 달력 17개(음력 명절은 연도표, 블랙프라이데이는 11월 넷째 금요일) · 타임라인 = 발주 확정(이벤트별 3~5주 전) → D-14 진열 → D-7 안내 → D-day → D+3 정리 · 예시 = 약국 베스트·물류앱 상품명에 키워드가 들어간 것' }) + '</article>'
+  return '<article class="card se-top"><div class="card-head"><h2>이벤트 기획 <small>앞으로 ' + (r.horizon || 120) + '일 · 가까운 것부터 · 발주 확정일은 이벤트 D-day 에서 역산</small></h2>' + asOf(r.date) + '</div>' + seg + strip
+    + srcLine(['events', 'pos', 'logi'], { at: md(r.date) + ' 계산', calc: '이벤트 달력 26개 = 국내 16 + 일본 5(골든위크·오봉·실버위크·연말연시·봄방학) + 중국 5(국경절·춘절·노동절·단오·중추절) (음력은 연도표, 블랙프라이데이는 11월 넷째 금요일) · 타임라인 = 발주 확정(이벤트별 3~5주 전) → D-14 진열 → D-7 안내 → D-day → D+3 정리 · 예시 = 약국 베스트·물류앱 상품명에 키워드가 들어간 것' }) + '</article>'
     + '<div class="se-grid" id="evGrid">' + items.map(evCard).join('') + '</div>';
 }
 
