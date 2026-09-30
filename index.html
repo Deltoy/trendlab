@@ -4181,7 +4181,7 @@ function nwBadge() {
 function newsLoad(more) {
   var f = S.nwF, page = more && S.news ? (S.news.page || 0) + 1 : 0;
   if (S.newsBusy) return; S.newsBusy = 1; if (more) { var mb = $('nwMore'); if (mb) mb.textContent = '불러오는 중…'; }
-  call('getNews', [{ tag: f.tag, q: f.q, page: page }], function (r) {
+  call('getNews', [S.k || '', { tag: f.tag, q: f.q, page: page }], function (r) {   // 0930 서버 getNews(k, opts): 암호를 첫 인자로 (뒤에 call 이 붙이는 k 는 무시됨) — 빠져서 '암호 오류' → 암호창 반복되던 버그
     S.newsBusy = 0;
     if (!(r && r.ok)) { S.news = { err: (r && r.msg) || '불러오지 못했어요' }; nwDraw(); return; }
     if (r.ready === false) { S.news = { ready: false }; nwDraw(); return; }
