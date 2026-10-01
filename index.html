@@ -1515,6 +1515,9 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(max-width:599px){.hero-nums{grid-template-columns:repeat(2,minmax(0,1fr))}.hn b{font-size:22px}}
 .todo{margin-top:14px}@media(min-width:1100px){.todo-l{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}.todo-l li:nth-child(2){border-top:0}}@media(max-width:599px){.hero{display:flex;flex-direction:column}.todo{order:-1;margin:0 0 14px}.hero-nums{margin-top:0}}.todo-n{font-size:var(--fs-1);color:var(--ink3);font-weight:500;margin-left:6px}.todo-l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}.todo-l li{display:flex;align-items:center;gap:10px;min-height:52px;border-top:1px solid var(--line)}.todo-l li:first-child{border-top:0}.todo-l label{display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:-8px;flex:none}.todo-l input{width:22px;height:22px;accent-color:var(--pri);margin:0}.todo-t{flex:1;display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 0;border:0;background:transparent;text-align:left;color:var(--ink);font-size:var(--fs-2);cursor:pointer}.todo-t span{flex:1}.todo-t b{color:var(--pri-text)}.todo-t small{display:inline-flex;align-items:center;gap:2px;color:var(--ink3);font-size:var(--fs-1);white-space:nowrap}.todo-t small .ic{width:14px;height:14px}.todo-l li.done .todo-t{color:var(--ink3);text-decoration:line-through}.todo-l li.done .todo-t b{color:var(--ink3)}
 .rb>div{flex:1;min-width:0}.rb-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.rb-acts .btn .ic{width:16px;height:16px;margin-right:4px}
+.ar-map-l{position:relative;height:380px;border-radius:12px;overflow:hidden;background:var(--fill);margin-top:8px;z-index:0}.ar-map-l .ar-map-fb svg{display:block;width:100%;height:auto}.ar-map-l .leaflet-container{height:100%;font-family:inherit}.ar-map-l .leaflet-popup-content{font-size:13px;line-height:1.5;margin:10px 14px}.ar-map-l .leaflet-popup-content a{color:var(--pri-text);font-weight:700}.ar-map-l .leaflet-popup-content-wrapper{border-radius:12px}
+.ar-home i{display:block;width:14px;height:14px;border-radius:3px;background:var(--ink);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}.ar-home span{position:absolute;left:18px;top:-3px;white-space:nowrap;font-size:12px;font-weight:700;color:var(--ink);text-shadow:0 0 3px #fff,0 0 3px #fff}
+@media(max-width:599px){.ar-map-l{height:300px}}
 .stg-stars{color:var(--pri-text);letter-spacing:1px;margin:0 6px 0 4px;font-size:11px}.stg-stars i{font-style:normal;color:var(--line2)}
 .stg-rate li{grid-template-columns:minmax(110px,1.2fr) 2fr auto 1.2fr auto}.stg-cn small{display:block;color:var(--ink3);font-size:var(--fs-1)}
 @media(max-width:600px){.stg-rate li{grid-template-columns:minmax(90px,1fr) 2fr auto}.stg-rate .stg-cb.r,.stg-rate li small.num{display:none}}
@@ -4112,7 +4115,7 @@ function renderPlan() {
   else if (s === 'events') { if (!S.events) evLoad(); b.innerHTML = evHtml(); var eg = document.getElementById('evGrid'); if (eg) eg.classList.add('masonry'); }
   else if (s === 'strategy') { if (!S.strategy) stgLoad(); b.innerHTML = stgHtml(); balIf('stgGrid'); fitSvgText(b); }
   else if (s === 'swap') { if (!S.swap) swLoad(); b.innerHTML = swHtml(); }
-  else if (s === 'areas') { if (!S.areas) areasLoad(); b.innerHTML = areasHtml(); areasTable(); fitSvgText(b); }
+  else if (s === 'areas') { if (!S.areas) areasLoad(); b.innerHTML = areasHtml(); areasTable(); fitSvgText(b); areasMapMount(); }
   else if (s === 'tour') { if (S.viz) { b.innerHTML = tourPlanHtml(S.viz); fitSvgText(b); } else { b.innerHTML = skel(4); loadViz(); } }
   else if (s === 'price') {
     if (!S.viz || !S.home) { b.innerHTML = skel(3); if (!S.viz) loadViz(); if (!S.home) loadHome(); return; }
@@ -4447,7 +4450,42 @@ function seasonLoad() { newLoad('getSeason', 'season', function () { if (S.tab =
 var AR_G = [['beauty', '화장품'], ['pharmacy', '약국'], ['cafe', '카페'], ['fashion', '패션'], ['foreign', '외국인']];
 function qLabel(q) { q = String(q || ''); return q.length === 5 ? q.slice(0, 4) + '년 ' + q.slice(4) + '분기' : q; }
 function areasLag(a) { var f = a.meta && a.meta.foreignLatestDate; return qLabel(a.quarter) + ' 매출' + (f ? ' · 생활인구 ' + (+f.slice(4, 6)) + '/' + (+f.slice(6, 8)) + '까지' : ''); }
-function areasMap(a) {   /* 서울 좌표(상권 중심점) 그대로 점 찍기 · 성수는 대략 위치 기준점 */
+/* 1001 진짜 지도: 서울시 상권 좌표(EPSG:5181 중부원점 TM) → 위경도(proj4) → Leaflet + CARTO 밝은 타일(키 없음). 점을 누르면 네이버 지도·구글맵 링크. 못 불러오면 아래 약식 지도로 */
+var AR_PROJ = '+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', AR_S0 = { x: 204900, y: 449500 };
+function arLib(cb) {
+  if (window.L && window.proj4) { cb(); return; }
+  if (!document.getElementById('arLeafCss')) { var l = document.createElement('link'); l.id = 'arLeafCss'; l.rel = 'stylesheet'; l.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(l); }
+  var need = [['proj4', 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js'], ['L', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js']], left = 0, failed = false;
+  need.forEach(function (n) { if (window[n[0]]) return; left++; var s = document.createElement('script'); s.src = n[1]; s.async = true; s.onload = function () { if (--left === 0 && !failed) cb(); }; s.onerror = function () { failed = true; cb(new Error('load')); }; document.head.appendChild(s); });
+  if (!left) cb();
+}
+function arLL(x, y) { try { var p = proj4(AR_PROJ, 'EPSG:4326', [x, y]); return [p[1], p[0]]; } catch (e) { return null; } }
+function arNaver(name) { return 'https://map.naver.com/p/search/' + encodeURIComponent(name); }
+function arGoogle(ll) { return 'https://www.google.com/maps/search/?api=1&query=' + ll[0].toFixed(6) + ',' + ll[1].toFixed(6); }
+function areasMap(a) {
+  var pts = (a.top || []).filter(function (x) { return x.x && x.y; }); if (!pts.length) return '';
+  return '<div id="arLeaflet" class="ar-map-l" role="region" aria-label="상위 상권 지도"><div class="ar-map-fb">' + areasMapSvg(a) + '</div></div>'
+    + '<p class="vz-key"><span><i style="background:' + TOK.cat[0] + '"></i>상위 상권 · 점이 클수록 점수 높음</span><span><i style="background:' + TOK.up + '"></i>다음 성수 후보</span><span><i style="background:' + TOK.ink + ';border-radius:3px"></i>성수(우리 약국)</span><span>점을 누르면 네이버 지도·구글맵</span></p>';
+}
+function areasMapMount() {
+  var el = document.getElementById('arLeaflet'), a = S.areas; if (!el || !a || el.dataset.ok) return;
+  arLib(function (err) {
+    if (err || !window.L || !window.proj4 || !document.getElementById('arLeaflet')) return;   // 약식 지도 그대로
+    var pts = (a.top || []).filter(function (x) { return x.x && x.y; }), s0 = arLL(AR_S0.x, AR_S0.y); if (!s0) return;
+    el.innerHTML = ''; el.dataset.ok = '1';
+    var map = L.map(el, { scrollWheelZoom: false, attributionControl: true }).setView(s0, 11);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 18, subdomains: 'abcd', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' }).addTo(map);
+    var mx = Math.max.apply(null, pts.map(function (p) { return p.score; })) || 1, bounds = [s0];
+    pts.forEach(function (p, i) { var ll = arLL(p.x, p.y); if (!ll) return; bounds.push(ll);
+      var col = p.nextSeongsu ? getComputedStyle(document.documentElement).getPropertyValue('--up').trim() || '#e0323c' : getComputedStyle(document.documentElement).getPropertyValue('--cat-1').trim() || '#2a78d6';
+      L.circleMarker(ll, { radius: 6 + 10 * Math.max(0, p.score) / mx, color: '#fff', weight: 2, fillColor: col, fillOpacity: .8 }).addTo(map)
+        .bindPopup('<b>' + (i + 1) + '. ' + esc(p.name) + '</b><br><small>' + esc([p.gu, p.dong].filter(Boolean).join(' ')) + ' · 점수 ' + p.score + (p.nextSeongsu ? ' · 다음 성수 후보' : '') + '</small><br><a href="' + arNaver(p.name) + '" target="_blank" rel="noopener">네이버 지도</a> · <a href="' + arGoogle(ll) + '" target="_blank" rel="noopener">구글맵</a>'); });
+    L.marker(s0, { icon: L.divIcon({ className: 'ar-home', html: '<i></i><span>성수(우리 약국)</span>', iconSize: [14, 14], iconAnchor: [7, 7] }) }).addTo(map).bindPopup('<b>성수 레디영</b><br><a href="' + arNaver('성수 레디영 약국') + '" target="_blank" rel="noopener">네이버 지도</a>');
+    try { map.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 }); } catch (e) {}
+    setTimeout(function () { map.invalidateSize(); }, 200);
+  });
+}
+function areasMapSvg(a) {   /* 서울 좌표(상권 중심점) 그대로 점 찍기 · 성수는 대략 위치 기준점 (지도 못 불러올 때) */
   var pts = (a.top || []).filter(function (x) { return x.x && x.y; }), S0 = { x: 204900, y: 449500 };
   if (!pts.length) return '';
   var xs = pts.map(function (p) { return p.x; }).concat(S0.x), ys = pts.map(function (p) { return p.y; }).concat(S0.y);
