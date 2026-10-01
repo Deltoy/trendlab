@@ -1498,6 +1498,11 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .stg-medbar{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}.stg-medbar li{display:grid;grid-template-columns:minmax(96px,1fr) 3fr auto;gap:2px 10px;align-items:center;font-size:var(--fs-2)}.stg-medbar .nm{font-weight:600}.stg-medbar .nm small{display:block;font-weight:400;color:var(--ink3);font-size:var(--fs-1)}.stg-medbar .bar{height:22px;border-radius:6px;background:var(--fill);overflow:hidden}.stg-medbar .bar i{display:block;height:100%;border-radius:6px}.stg-medbar b{font-size:var(--fs-3)}.stg-medbar li small.num{grid-column:3;color:var(--ink3);font-size:var(--fs-1);text-align:right}.stg-medbar li.ours{background:var(--pri-soft);border-radius:var(--r-sm);padding:6px 8px;margin:0 -8px}
 .stg-lk{color:var(--ink3);margin-left:2px}.stg-top li .stg-lk{flex:none}
 .stg-lkbox{margin:8px 0 10px;padding:12px 14px;border-radius:var(--r2);background:var(--bg);border:1px solid var(--line)}.stg-lkbox p{margin:0 0 8px;font-size:var(--fs-2)}.stg-lkq{display:flex;flex-wrap:wrap;gap:6px}.stg-lkq input{flex:1;min-width:160px;height:36px;padding:0 10px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:var(--fs-2)}.stg-lkl{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.credit{margin:28px 16px 90px;text-align:center;font-size:12px;color:var(--ink3);letter-spacing:.01em}.credit b{font-weight:600;color:var(--ink2)}@media(min-width:1100px){.credit{margin:24px 16px 32px}}
+.sw-br{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}.sw-b{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r2);font-size:var(--fs-2)}.sw-b.has{border-color:var(--ok)}.sw-b.home{background:var(--pri-soft);border-color:var(--pri)}.sw-b small{color:var(--ink3);font-size:var(--fs-1)}.sw-b .btn{align-self:flex-start;margin-top:4px}
+.sw-seg{margin-bottom:10px}.sw-q{margin-bottom:10px}.sw-q input{width:100%;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:var(--fs-2)}
+.sw-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}.sw-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:12px 0;border-top:1px solid var(--line)}.sw-row:first-child{border-top:0}.sw-n{flex:1 1 220px;min-width:0}.sw-n b{display:block;font-size:var(--fs-3)}.sw-n small,.sw-to small{display:block;color:var(--ink3);font-size:var(--fs-1)}.sw-to{flex:0 1 200px;font-size:var(--fs-2)}.sw-to .up{color:var(--up)}
+.sw-act{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.sw-act input,.sw-act select{height:34px;padding:0 8px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:var(--fs-2);background:var(--card);color:var(--ink)}
 .stg-stars{color:var(--pri);letter-spacing:1px;margin:0 6px 0 4px;font-size:11px}.stg-stars i{font-style:normal;color:var(--line2)}
 .stg-rate li{grid-template-columns:minmax(110px,1.2fr) 2fr auto 1.2fr auto}.stg-cn small{display:block;color:var(--ink3);font-size:var(--fs-1)}
 @media(max-width:600px){.stg-rate li{grid-template-columns:minmax(90px,1fr) 2fr auto}.stg-rate .stg-cb.r,.stg-rate li small.num{display:none}}
@@ -1645,6 +1650,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
   <section id="plan" class="view" aria-label="기획"><div class="view-head"><div class="seg" id="planSeg" role="tablist" aria-label="기획 보기"></div></div><div id="planBody"></div></section>
   <section id="more" class="view" aria-label="더 보기"></section>
 </main>
+<p class="credit" aria-label="만든 사람">Idea by <b>Juhee Song</b> · Designed &amp; built by <b>MunJun</b> · Seongsu, Seoul</p>
 </div>
 </div>
 <div class="dim" id="pdDim" onclick="closePd()"></div>
@@ -1718,6 +1724,7 @@ var SRC = {
   setai: { n: 'AI 세트 추천', url: '', how: '맥의 Claude가 재료함 · 약국 상품 · 오늘 순위를 읽고 제안 (5분마다 요청 확인)', freq: '요청할 때 · 월요일 자동', lag: '요청 뒤 5~10분', lim: 'AI 제안이에요 · 가격·재고는 직접 확인' },
   mat: { n: '재료함', url: '', how: 'MD가 트렌드랩에 직접 넣은 협업 · 자사 재료', freq: '넣을 때', lag: '실시간', lim: '직접 입력한 내용 그대로' },
   kdatalab: { n: '한국관광 데이터랩 의료관광 소비', url: 'https://datalab.visitkorea.or.kr/', how: '외국인 의료 소비액 월별 · 진료과목별(약국 · 피부과) 비율, 로그인 없이 되는 것만', freq: '매달', lag: '1~2달', lim: '전국 기준 · 지자체별은 로그인이 필요해 빠져요' },
+  swap: { n: '지점 POS 판매 통계', url: '', how: '지점마다 POS 상품별 판매 통계 엑셀을 올리면(성수는 약국 베스트 그대로) 서버가 성수에서 안 팔리는 상품(15일 1개 미만)이 어느 지점에서 팔리는지(15일 3개 이상) 찾아요', freq: '지점이 올릴 때', lag: '올린 기간까지', lim: '재고 수량 자료가 없어 보낼 수량은 사람이 적어요 · 일반의약품은 약국 간 양도 제한 가능성(약사법, 확인 필요)으로 제안에서 빼고 따로 보여요 · 지점 간 이름 표기가 다르면 못 맞출 수 있어요(느슨하게 맞춤)' },
   stg: { n: '약국 전략(POS·올리브영·전국 약국 순위)', url: 'https://www.dailypharm.com/user/drug', how: '약국 POS 판매 + 물류앱 분류 + 올리브영·무신사·다이소 최근 수집 + 최근 30일 뉴스 + 데일리팜 전국 POS 약국 418곳 일반약 월간 순위를 서버가 한 번에 계산해요', freq: 'POS 올릴 때 · 매일', lag: '전국 순위는 전월 기준', lim: '상품 하나의 이익은 안 보여요(분류 합계만) · 교차판매는 영수증 자료가 없어 「같은 용도 케어 판매 ÷ 앵커 판매」 추정 · 강점 지도와 이길 자리는 조사·판단(자료 아님)' },
   ptrend: { n: '약국 POS 기간별 이력', url: '', how: 'POS 판매 통계를 올릴 때마다 기간별 판매수량을 남겨 두고, 최근 기간 vs 그 전 기간의 하루 평균 판매량으로 상승·하락을 가려요. 이유는 시즌 창·이벤트 달력·최근 30일 뉴스(제조사·브랜드)·올리브영 랭킹·할인금액 변화에서 근거가 있는 것만 붙여요', freq: 'POS 올릴 때', lag: '올린 기간까지', lim: '기간 길이가 다르면 하루 평균으로 맞춰요 · 이유는 후보이지 확정이 아니에요 · 매장 요인(진열·추천·품절)은 자료가 없어요' },
   events: { n: '이벤트 달력(경험 규칙)', url: '', how: '서버가 할로윈·블랙프라이데이·크리스마스 등 17개 이벤트 달력에 약국형 아이디어·준비 타임라인(D-day 역산)을 붙이고, 우리 약국 베스트·물류앱 상품명에서 키워드가 맞는 예시를 찾아요', freq: '열 때마다 오늘 기준', lag: '당일', lim: '아이디어는 경험 규칙 · 매출 반응은 성과 기록으로 직접 확인해요' },
@@ -1890,13 +1897,13 @@ function dragScroll(el) {
 
 /* ── v3 화면 이동: 탭 6개 + 하위 화면 · 이동마다 기록(안드로이드 뒤로 = 앱 안에서) · #trend/product 주소 ── */
 var TABS = [['today', '오늘', 'house'], ['report', '리포트', 'file'], ['trend', '트렌드', 'trend'], ['set', '세트', 'package'], ['plan', '기획', 'calendar'], ['more', '더 보기', 'grid']];
-var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses', 'ptrend'], plan: ['board', 'mat', 'cal', 'tour', 'price', 'season', 'areas', 'events', 'strategy'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources', 'news', 'story'] };
+var SUBS = { trend: ['product', 'brand', 'keyword', 'shorts'], set: ['diy', 'list', 'best', 'ai', 'uses', 'ptrend'], plan: ['board', 'mat', 'cal', 'tour', 'price', 'season', 'areas', 'events', 'strategy', 'swap'], more: ['', 'analysis', 'find', 'filters', 'watch', 'sources', 'news', 'story'] };
 function watchCount() { var w = S.home && S.home.cards && S.home.cards.watch; return w ? (w.items || []).length + (w.brands || []).length : 0; }
 function curSub(tab) { tab = tab || S.tab; return tab === 'trend' ? S.trend.sub : tab === 'set' ? S.setSub : tab === 'plan' ? S.planSub : tab === 'more' ? S.moreSub : ''; }
 function setSubOf(tab, sub) { if (tab === 'trend') S.trend.sub = sub || 'product'; else if (tab === 'set') S.setSub = sub || 'diy'; else if (tab === 'plan') S.planSub = sub || 'board'; else if (tab === 'more') S.moreSub = sub || ''; }
 /* 0929 PC 왼쪽 메뉴: MD·마케팅 중심 묶음(기본 · MD · 마케팅 · 데이터) · 줄마다 기존 화면으로 바로 · 폰은 아래 탭 그대로 */
 var NAV = [['기본', [['today', '오늘', 'house'], ['report', '리포트', 'file']]],
-  ['MD', [['plan/strategy', '전략 · 약국 강점', 'target'], ['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/ptrend', '상품 추세 ▲▼ · 이유', 'trend'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
+  ['MD', [['plan/strategy', '전략 · 약국 강점', 'target'], ['plan/swap', '지점 재고 스왑', 'package'], ['trend/product/rank', '트렌드 상품', 'trend'], ['trend/product/week', '이번 주 신상', 'spark'], ['trend/brand/src', '소싱 후보', 'search'], ['set/best', '약국 베스트 · ABC', 'bars'], ['set/ptrend', '상품 추세 ▲▼ · 이유', 'trend'], ['set/diy', '세트 만들기', 'package'], ['set/list', '세트 목록', 'layers'], ['plan/season', '시즌 준비', 'sun'], ['plan/price', '가격대 · 할인', 'tagi']]],
   ['마케팅', [['plan/events', '이벤트 기획', 'gift'], ['plan/cal', '행사 캘린더', 'calendar'], ['plan/areas', '뜨는 상권 · 팝업 후보', 'pin'], ['plan/tour', '외국인 손님', 'globe'], ['trend/keyword', '검색 반응 · 키워드', 'search'], ['trend/shorts', '쇼츠', 'play'], ['more/news', '뉴스', 'news'], ['more/story', '브랜드 이야기', 'book']]],
   ['데이터', [['trend/brand/cmp', '사이트 비교', 'columns'], ['more/analysis', '카테고리 · 브랜드 분석', 'grid'], ['more/sources', '데이터 출처 · 수집 상태', 'info'], ['more/', '더 보기', 'grid']]]];
 var NAV_TAB = { today: 'today', report: 'report', 'trend/product/rank': 'trend', 'set/diy': 'set', 'plan/cal': 'plan', 'more/': 'more' };   /* 탭 이름으로 찾는 곳(단축키·테스트)이 쓰는 대표 줄 */
@@ -3212,7 +3219,7 @@ function pbPick() {
 }
 function pbSheet(body, foot) {
   if (!$('mt').classList.contains('on')) { S.mtFrom = document.activeElement; $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
-  $('mtTitle').textContent = '약국 판매 엑셀 올리기'; $('mtBody').innerHTML = body; $('mtFoot').innerHTML = foot;
+  $('mtTitle').textContent = (S.pbBranch ? S.pbBranch + ' 지점 ' : '약국 ') + '판매 엑셀 올리기'; $('mtBody').innerHTML = body; $('mtFoot').innerHTML = foot;
 }
 function pbXlsx(ok, fail) {
   if (window.XLSX && window.XLSX.read) { ok(window.XLSX); return; }
@@ -3286,6 +3293,10 @@ function pbSend() {
   if (f > t) { err.textContent = '시작일이 끝일보다 늦어요'; return; }
   S.saving = true; b.disabled = true; b.textContent = '올리는 중…';
   var again = function (msg) { S.saving = false; b.disabled = false; b.textContent = '다시 올리기'; err.textContent = msg; };
+  if (S.pbBranch) { var br = S.pbBranch; call('saveBranchSales', [br, u.rows, { from: f.replace(/-/g, '.'), to: t.replace(/-/g, '.'), fileName: u.fileName }], function (r) {
+      if (!r || !r.ok) { again((r && r.msg) || '올리지 못했어요'); return; }
+      S.saving = false; S.pbUp = null; S.pbBranch = ''; closeMt(); toast(br + ' 지점 올렸어요 · 상품 ' + (r.n || 0).toLocaleString('ko-KR') + '개'); S.swap = null; swLoad(); renderPlan();
+    }, function () { again('서버와 연결하지 못했어요 · 잠시 뒤 다시 올려 주세요'); }); return; }
   call('savePharmacySales', [u.rows, { from: f.replace(/-/g, '.'), to: t.replace(/-/g, '.'), fileName: u.fileName }], function (r) {
     if (!r || !r.ok) { again((r && r.msg) || '올리지 못했어요'); return; }
     S.saving = false; S.pbUp = null; S.pb = pbPrep(r); S.pbCat = ''; S.pbQ = ''; S.pbN = 50;
@@ -4006,7 +4017,7 @@ function rpFillChips() {
 }
 
 /* ── 기획 (행사 · 운영 준비): 담은 상품 · 재료함 · 손님·환율 · 가격 참고 ── */
-var PLAN_SUBS = [['board', '담은 상품'], ['strategy', '전략'], ['mat', '협업·자사 재료'], ['events', '이벤트 기획'], ['cal', '행사 캘린더'], ['season', '시즌 준비'], ['areas', '뜨는 상권'], ['tour', '손님 · 환율'], ['price', '가격대 · 할인']];
+var PLAN_SUBS = [['board', '담은 상품'], ['strategy', '전략'], ['swap', '재고 스왑'], ['mat', '협업·자사 재료'], ['events', '이벤트 기획'], ['cal', '행사 캘린더'], ['season', '시즌 준비'], ['areas', '뜨는 상권'], ['tour', '손님 · 환율'], ['price', '가격대 · 할인']];
 function planStrip() {
   var c = (S.home && S.home.cards) || {}, v = S.viz, t = v && v.tourism, a = t && t.spop && t.spop.areas && t.spop.areas[0], cny = t && t.fx && t.fx.items.filter(function (x) { return x.cur === 'CNY'; })[0];
   var grp = (S.board && S.board.groups) || [], nB = grp.reduce(function (n, g) { return n + g.items.length; }, 0), nMiss = grp.reduce(function (n, g) { return n + g.items.filter(function (p) { return !(p.logi && p.logi.length); }).length; }, 0);
@@ -4027,6 +4038,7 @@ function renderPlan() {
   else if (s === 'season') { if (!S.season) seasonLoad(); b.innerHTML = seasonHtml(); balIf('seGrid'); }
   else if (s === 'events') { if (!S.events) evLoad(); b.innerHTML = evHtml(); balIf('evGrid'); }
   else if (s === 'strategy') { if (!S.strategy) stgLoad(); b.innerHTML = stgHtml(); balIf('stgGrid'); fitSvgText(b); }
+  else if (s === 'swap') { if (!S.swap) swLoad(); b.innerHTML = swHtml(); }
   else if (s === 'areas') { if (!S.areas) areasLoad(); b.innerHTML = areasHtml(); areasTable(); fitSvgText(b); }
   else if (s === 'tour') { if (S.viz) { b.innerHTML = tourPlanHtml(S.viz); fitSvgText(b); } else { b.innerHTML = skel(4); loadViz(); } }
   else if (s === 'price') {
@@ -4092,6 +4104,49 @@ function dnum(d) { var t = dateOf(d); return t ? Math.round(t.getTime() / 864000
 function pctChip(v, label) { return v == null ? '<span class="tag t-neutral">' + esc(label) + ' –</span>' : '<span class="tag ' + (v > 0 ? 't-up' : v < 0 ? 't-down' : 't-neutral') + '">' + esc(label) + ' ' + (v > 0 ? '+' : '') + v + '%</span>'; }
 function lsGet(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+/* 1001 지점 재고 스왑 — 서버 getSwap / saveBranchSales / recordSwap / setSwapStatus */
+var SW = { tab: 'sug', q: '' };
+function swLoad() { newLoad('getSwap', 'swap', function () { if (S.tab === 'plan' && S.planSub === 'swap') renderPlan(); }); }
+function swPick(b) { S.pbBranch = b; pbPick(); }
+function swHtml() {
+  var st = newState(S.swap, "S.swap=null;swLoad()"); if (st) return st;
+  var r = S.swap, c = r.counts || {}, has = r.branches.filter(function (b) { return b.has; }).length;
+  var up = '<div class="sw-br">' + r.branches.map(function (b) { return '<div class="sw-b' + (b.has ? ' has' : '') + (b.b === r.home ? ' home' : '') + '"><b>' + esc(b.b) + '</b><small>' + (b.has ? esc(md(b.from) + '~' + md(b.to)) + ' · ' + b.n + '개' : '자료 없음') + '</small>' + (b.b === r.home ? '<button type="button" class="btn ghost sm" onclick="route(\'set\',\'best\')">약국 베스트에서</button>' : '<button type="button" class="btn ' + (b.has ? 'ghost' : 'pri') + ' sm" onclick="swPick(\'' + b.b + '\')">' + (b.has ? '다시 올리기' : 'POS 엑셀 올리기') + '</button>') + '</div>'; }).join('') + '</div>';
+  var top = '<article class="card se-top"><div class="card-head"><h2>지점 재고 스왑 <small>' + esc(r.home) + '에서 안 나가는 상품 → 팔리는 지점으로 · 전 지점에서 안 나가면 본사 활용</small></h2>' + asOf(r.at) + '</div>'
+    + stgRead(['<b>어떻게</b>: 지점마다 POS 상품별 판매 통계 엑셀을 올려요(성수는 약국 베스트). 성수에서 15일 1개 미만인데 다른 지점에서 15일 ' + r.minRate15 + '개 이상 팔리면 "보내라"고 나와요', '<b>보낼 수량</b>은 재고 자료가 없어 직접 적어요 → 「보냄 기록」 → 받는 지점이 「받음」 → 기록에 남아요', '<b>일반의약품</b>은 약국 간 양도가 약사법상 제한될 수 있어 제안에서 빼고 「약 · 확인 필요」에 따로 보여요(대표 약사 확인 후 이동)']) + up
+    + (r.ready ? '' : '<p class="se-why">' + (has < 2 ? '지점 자료가 ' + has + '곳뿐이에요 — 다른 지점 엑셀을 하나라도 올리면 제안이 나와요' : '') + '</p>')
+    + srcLine(['swap', 'pos', 'logi'], { calc: '성수 보유 = 물류앱 상품 목록 · 15일 환산 = 판매수량 ÷ 기간 일수 × 15 · 지점끼리 이름은 괄호·용량·띄어쓰기·영문 표기 무시하고 맞춤' }) + '</article>';
+  if (!r.ready) return top;
+  var tabs = [['sug', '보내기 제안', c.suggestions || 0], ['hq', '본사 활용(전 지점 안 나감)', c.hq || 0], ['drugs', '약 · 확인 필요', c.drugs || 0], ['moves', '이동 기록', (r.moves || []).length]];
+  var seg = '<div class="seg sw-seg" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" aria-selected="' + (SW.tab === t[0]) + '" onclick="SW.tab=\'' + t[0] + '\';renderPlan()">' + t[1] + ' <b>' + t[2] + '</b></button>'; }).join('') + '</div>';
+  var q = '<div class="sw-q"><input type="search" placeholder="상품명으로 찾기" value="' + esc(SW.q) + '" oninput="SW.q=this.value;swList()"></div>';
+  return top + '<article class="card">' + seg + (SW.tab === 'moves' ? '' : q) + '<div id="swList">' + swListHtml() + '</div></article>';
+}
+function swList() { var el = document.getElementById('swList'); if (el) el.innerHTML = swListHtml(); }
+function swRow(x, kind) {
+  var alt = (x.alt || []).map(function (a) { return a.b + ' ' + a.rate15 + '개'; }).join(' · ');
+  var mv = x.moved ? '<span class="tag ' + (x.moved.status === '받음' ? 't-ok' : x.moved.status === '취소' ? 't-neutral' : 't-warn') + '">' + esc(x.moved.date.slice(5) + ' ' + x.moved.to + ' ' + x.moved.qty + '개 ' + x.moved.status) + '</span>' : '';
+  var act = kind === 'drugs' ? '<small class="mut">대표 약사 확인 후 이동</small>' : '<span class="sw-act"><input type="number" min="1" inputmode="numeric" placeholder="수량" aria-label="보낼 수량" id="swq-' + esc(x.name) + '" style="width:72px"><select aria-label="받는 지점" id="swt-' + esc(x.name) + '">' + [x.to].concat((x.alt || []).map(function (a) { return a.b; })).map(function (b) { return '<option>' + esc(b) + '</option>'; }).join('') + '</select><button type="button" class="btn sm" onclick="swSend(this.dataset.n)" data-n="' + esc(x.name) + '">보냄 기록</button></span>';
+  return '<li class="sw-row"><div class="sw-n"><b>' + esc(x.name) + '</b><small>' + esc([x.cat || x.group, x.homeQty ? r0(x.homeQty) + '개 · 성수 거의 안 나감' : '성수 판매 없음'].filter(Boolean).join(' · ')) + '</small></div><div class="sw-to"><b>' + esc(x.to) + '</b> 15일 <b class="up">' + x.toRate15 + '개</b>' + (alt ? '<small>' + esc('다른 곳: ' + alt) + '</small>' : '') + (x.toName && x.toName !== x.name ? '<small class="mut">' + esc(x.to + ' 이름: ' + x.toName) + '</small>' : '') + '</div>' + mv + act + '</li>';
+}
+function r0(n) { return Math.round(n).toLocaleString('ko-KR'); }
+function psk(s) { return String(s || '').replace(/\s+/g, '').toLowerCase(); }
+function swListHtml() {
+  var r = S.swap, q = psk(SW.q || ''), f = function (arr) { return (arr || []).filter(function (x) { return !q || psk(x.name).indexOf(q) !== -1; }); };
+  if (SW.tab === 'moves') { var mv = r.moves || []; return mv.length ? '<ul class="sw-list">' + mv.map(function (m) { return '<li class="sw-row"><div class="sw-n"><b>' + esc(m.name) + '</b><small>' + esc(m.date + ' · ' + m.from + ' → ' + m.to + ' · ' + m.qty + '개 · ' + m.member + (m.memo ? ' · ' + m.memo : '')) + '</small></div><span class="tag ' + (m.status === '받음' ? 't-ok' : m.status === '취소' ? 't-neutral' : 't-warn') + '">' + esc(m.status) + '</span><span class="sw-act">' + (m.status === '보냄' ? '<button type="button" class="btn sm" onclick="swStatus(' + m.id + ',\'받음\')">받음</button><button type="button" class="btn ghost sm" onclick="swStatus(' + m.id + ',\'취소\')">취소</button>' : '') + '</span></li>'; }).join('') + '</ul>' : '<p class="se-why">아직 이동 기록이 없어요</p>'; }
+  if (SW.tab === 'hq') { var hq = f(r.hq); return (hq.length ? '<p class="se-why">성수에 있는데 성수에서도, 자료 올린 다른 지점에서도 안 팔리는 상품 — 본사 이벤트·샘플·세트 재료 후보. <button type="button" class="btn ghost sm" onclick="swCopy()">목록 복사</button></p><ul class="sw-list">' + hq.map(function (x) { return '<li class="sw-row"><div class="sw-n"><b>' + esc(x.name) + '</b><small>' + esc(x.cat || x.group) + '</small></div></li>'; }).join('') + '</ul>' : '<p class="se-why">해당 상품이 없어요</p>'); }
+  var arr = f(SW.tab === 'drugs' ? r.drugs : r.suggestions);
+  return arr.length ? '<ul class="sw-list">' + arr.map(function (x) { return swRow(x, SW.tab); }).join('') + '</ul>' : '<p class="se-why">' + (q ? '찾는 상품이 없어요' : '제안할 상품이 없어요') + '</p>';
+}
+function swSend(name) {
+  var x = (S.swap.suggestions || []).filter(function (i) { return i.name === name; })[0]; if (!x) return;
+  var qty = +((document.getElementById('swq-' + name) || {}).value || 0), to = (document.getElementById('swt-' + name) || {}).value || x.to;
+  if (!(qty > 0)) { toast('보낼 수량을 넣어 주세요'); return; }
+  call('recordSwap', [name, S.swap.home, to, qty, '', 'MD', S.k || ''], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '기록 실패'); return; } toast('✓ ' + to + '로 ' + qty + '개 보냄 기록'); S.swap = null; swLoad(); }, function () { toast('기록 실패'); });
+}
+function swStatus(id, status) { call('setSwapStatus', [id, status, S.k || ''], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '실패'); return; } toast('✓ ' + status); S.swap = null; swLoad(); }, function () { toast('실패'); }); }
+function swCopy() { var t = (S.swap.hq || []).map(function (x) { return '- ' + x.name + (x.cat ? ' (' + x.cat + ')' : ''); }).join('\n'); if (!t) return; try { navigator.clipboard.writeText('[전 지점 안 나가는 상품 · 본사 활용 후보]\n' + t).then(function () { toast('✓ 복사했어요'); }); } catch (e) { toast('복사가 안 되는 브라우저예요'); } }
 
 /* 1001 전략 · 약국 강점 — 서버 getStrategy: KPI · 이길 자리 5 · 매출 구성 · 전국 약국 순위 vs 우리 · 앵커→케어 깔때기 · 가격 포지션 · 가격대 띠 · 신뢰×트렌드 · 분류 버블 · 강점 지도 */
 var STG_GC = { '약': 'var(--pri)', '화장품': 'var(--up)', '건기식': 'var(--ok)', '기타': 'var(--line2)' };
