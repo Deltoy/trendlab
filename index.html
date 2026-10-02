@@ -1630,11 +1630,19 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .rp-stale{margin:0 0 10px;padding:8px 12px;border-radius:12px;background:var(--pri-soft);color:var(--pri-text);font-size:13px;font-weight:600}
 
 /* 1002 사용자: 약국 베스트가 '이 안에서만 움직여서 답답' → PC 도 페이지 전체가 내려가고, 오른쪽 만드는 세트는 화면에 붙어 따라옴 */
+/* 세트 만들기(DIY)도 같은 방식: 상품 목록은 페이지와 같이 내려가고, 왼쪽 용도 메뉴·오른쪽 만드는 세트는 화면에 붙어 따라옴 */
 @media(min-width:840px){
-  .diy.pb-wrap{height:auto;min-height:0;align-items:start}
+  .diy{height:auto;min-height:0;align-items:start}
+  .diy-left{height:auto;overflow:visible}
+  .diy-main{height:auto}
+  .diy-main .diy-list{overflow:visible;max-height:none;flex:none}
+  .diy-right{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
   .pb-wrap .pb-left{height:auto;overflow:visible;display:block}
   .pb-wrap .pb-list{overflow:visible;max-height:none;flex:none}
-  .pb-wrap .diy-right{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
+}
+@media(min-width:1100px){
+  .diy-left{align-items:start}
+  .diy-side{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
 }
 </style>
 </head>
