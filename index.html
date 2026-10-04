@@ -46,11 +46,11 @@
 <base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <title>레디영 트렌드</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>/* TRENDLAB v3 — 디자인 토큰 (2026 레퍼런스: Calm · #155EEF · 20/12/999 · Pretendard · lucide 1.5) · 라이트/다크 두 벌 */
-:root{color-scheme:light dark;
+:root{color-scheme:light;
   --bg:#F5F6F8;--card:#fff;--fill:#F2F3F5;--fill-2:#E8EAEE;--line:#EDEEF0;--line-strong:#DEE1E6;--glass:rgba(245,246,248,.86);--tabbar:rgba(255,255,255,.94);
   --ink:#111827;--ink2:#4B5563;--ink3:#5F6672;--on-ink:#fff;
   --pri:#155EEF;--pri-2:#0F4FD1;--pri-ink:#fff;--pri-text:#155EEF;--pri-soft:#EAF1FE;--ring:rgba(21,94,239,.28);
@@ -66,18 +66,7 @@
   --ease:cubic-bezier(.2,.8,.2,1);--t:.18s;
   --gutter:16px;--pad:16px;--top-h:56px;--tab-h:60px;--side-w:0px;
 }
-@media(prefers-color-scheme:dark){:root{
-  --bg:#0D0F14;--card:#161920;--fill:#1D2129;--fill-2:#272C36;--line:#2A2F3A;--line-strong:#323845;--glass:rgba(13,15,20,.84);--tabbar:rgba(22,25,32,.94);
-  --ink:#F2F4F7;--ink2:#C2C8D2;--ink3:#A3AAB6;--on-ink:#0D0F14;
-  --pri:#155EEF;--pri-2:#2D6FF2;--pri-ink:#fff;--pri-text:#8AB4FF;--pri-soft:#18264A;--ring:rgba(138,180,255,.35);
-  --up:#F0555E;--down:#4C8DFF;--up-ink:#FF9AA0;--up-soft:#3A1B20;--down-ink:#9CC0FF;--down-soft:#172846;
-  --warn:#F0B070;--warn-soft:#3A2A18;--ok:#5EDB8F;--ok-soft:#133022;--bad:#FF8B84;--bad-soft:#3D1B1A;--pb:#C4A8FF;--pb-soft:#2A2145;
-  --amber:#2A2110;--amber-line:#5A4513;--amber-ink:#FCD68A;
-  --cat-1:#4C8DFF;--cat-2:#EE8A45;--cat-3:#A28BF2;--cat-4:#34C79C;--cat-other:#6B7280;--flat:#6B7280;
-  --hero:radial-gradient(90% 140% at 100% 0%,rgba(76,141,255,.16),transparent 60%),#161920;--img-well:#ECEEF1;--on-cat:#0D0F14;
-  --shadow:none;--shadow-2:0 16px 40px rgba(0,0,0,.5);--scrim:rgba(0,0,0,.6);
-  --toast:rgba(242,244,247,.96);--toast-ink:#111827;
-}}
+
 @media(min-width:840px){:root{--gutter:24px;--pad:20px}}
 @media(min-width:1100px){:root{--gutter:24px;--pad:24px;--top-h:72px;--side-w:200px}}
 @media(min-width:1440px){:root{--side-w:232px;--gutter:32px}}
@@ -1170,7 +1159,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(max-width:1099px){.dt-tools .btn,.dt-sort,.dt-filter input,.dt-vform input{min-height:44px}.bx-size,.linkbtn{min-height:44px}.diy-x{width:44px;height:44px;top:2px;right:2px}.dt-x{width:44px;height:44px;margin-left:-44px}.dt-view .chip{padding-right:44px}}
 
 /* ══ v3 검수 반영 (0929) ══ */
-@media(prefers-color-scheme:dark){:root:not([data-x]) :focus-visible{outline-color:var(--pri-text)}img{filter:brightness(.94)}.card{box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}}
+
 /* 제목 */
 .page-h{display:flex;flex-direction:column;gap:2px}
 .eyebrow{margin:0;font-size:var(--fs-2);font-weight:600;color:var(--ink3)}
@@ -1199,7 +1188,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(min-width:1100px){.bc-picks{grid-template-columns:repeat(6,minmax(0,1fr))}.bc-picks .pick:nth-child(n+5){display:flex}.bc-picks .pick:nth-child(n+7){display:none}}
 @media(min-width:1600px){.bc-picks{grid-template-columns:repeat(8,minmax(0,1fr))}.bc-picks .pick:nth-child(n+7){display:flex}}
 .pick-img img,.pick-img .noimg,.dt-thumb img,.c-img img,.sr-item img,.kchip img,.pc-img img{mix-blend-mode:multiply}
-@media(prefers-color-scheme:dark){.pick-img img,.dt-thumb img,.c-img img,.sr-item img,.kchip img,.pc-img img{mix-blend-mode:normal}}
+
 @media(max-width:839px){.pick-set{display:none}}
 /* 작은 카드: 1280+ 한 줄 4칸 */
 @media(min-width:1280px){.brief-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.brief-grid>:last-child:nth-child(3n+1),.brief-grid>:last-child:nth-child(3n+2){grid-column:auto}.brief-grid>:last-child:nth-child(4n+1){grid-column:1/-1}.brief-grid>:last-child:nth-child(4n+2){grid-column:span 3}.brief-grid>:last-child:nth-child(4n+3){grid-column:span 2}}
@@ -1335,7 +1324,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .rp-src{display:block;margin-top:2px;font-size:var(--fs-1);color:var(--ink3)}
 @media(hover:hover){.rp-nl:hover b{text-decoration:underline;text-underline-offset:3px}}
 .rp-nl:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px}
-@media(prefers-color-scheme:dark){.logo-text b{background-image:linear-gradient(90deg,#6B9BFF,#A78BFA)}}
+
 /* ══ 0929d MD 업무 5가지 ══ */
 /* ① ABC 등급 칩 · 요약 */
 .tag.abc{justify-content:center;min-width:22px;padding:0 6px;font-weight:700}
