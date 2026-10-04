@@ -1704,7 +1704,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 </div>
 <div class="dim" id="srDim" onclick="closeSearch()"></div>
 <div class="sheet sr" id="sr" role="dialog" aria-modal="true" aria-label="검색" aria-hidden="true">
-  <div class="sr-head"><label class="sr-box"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="srQ" type="search" enterkeyhint="search" maxlength="30" autocomplete="off" placeholder="상품 · 브랜드 · 약국 상품" aria-label="검색어" oninput="srInput(this.value)" onkeydown="if(event.key==='Enter'){srRemember(this.value);var f=document.querySelector('#srBody .sr-item');if(f)f.click();else this.blur();}"></label><button type="button" class="close" onclick="closeSearch()">취소</button></div>
+  <div class="sr-head"><label class="sr-box"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="srQ" type="search" enterkeyhint="search" maxlength="30" autocomplete="off" placeholder="상품 · 브랜드 · 약국 상품" aria-label="검색어" oninput="srInput(this.value)" onkeydown="if(event.isComposing||event.keyCode===229)return;if(event.key==='Enter'){srRemember(this.value);var f=document.querySelector('#srBody .sr-item');if(f)f.click();else this.blur();}"></label><button type="button" class="close" onclick="closeSearch()">취소</button></div>
   <div class="sheet-body" id="srBody"></div>
 </div>
 <div class="dim" id="diyDim" onclick="layerClose('diy')"></div>
@@ -3657,7 +3657,7 @@ function dtRowHtml(T, cols, r, i, wide, sel, st) {
     inner = by('lead').map(cell).join('') + '<span class="dt-mid">' + by('title').map(cell).join('') + (by('sub').length ? '<span class="dt-subs">' + by('sub').map(cell).join('') + '</span>' : '') + '</span>' + (by('side').length ? '<span class="dt-side">' + by('side').map(cell).join('') + '</span>' : '');
   }
   var cur = T.selKey && T.selKey();
-  return '<div class="dt-row' + (on ? ' picked' : '') + (cur && cur === key ? ' sel' : '') + (T.open ? ' click' : '') + '" role="row"' + (T.open ? ' tabindex="0" onclick="dtOpen(\'' + esc(T.id) + '\',' + i + ')" onkeydown="if(event.key===\'Enter\'){event.preventDefault();dtOpen(\'' + esc(T.id) + '\',' + i + ')}"' : '') + (T.attr ? T.attr(r) : '') + (T.tip ? ' title="' + esc(T.tip(r)) + '"' : '') + '>' + inner + (T.act ? '<span class="dt-act" onclick="event.stopPropagation()">' + T.act(r) + '</span>' : '') + '</div>';
+  return '<div class="dt-row' + (on ? ' picked' : '') + (cur && cur === key ? ' sel' : '') + (T.open ? ' click' : '') + '" role="row"' + (T.open ? ' tabindex="0" onclick="dtOpen(\'' + esc(T.id) + '\',' + i + ')" onkeydown="if(!event.isComposing&&event.keyCode!==229&&event.key===\'Enter\'){event.preventDefault();dtOpen(\'' + esc(T.id) + '\',' + i + ')}"' : '') + (T.attr ? T.attr(r) : '') + (T.tip ? ' title="' + esc(T.tip(r)) + '"' : '') + '>' + inner + (T.act ? '<span class="dt-act" onclick="event.stopPropagation()">' + T.act(r) + '</span>' : '') + '</div>';
 }
 function dtPivot(T, rows) {
   var st = dtSt(T.id), g = T.groups.filter(function (x) { return x[0] === st.group; })[0], m = {}, order = [];
@@ -4267,7 +4267,7 @@ function stgLinkDraw() { var el = document.getElementById('stgLinkBox'); if (el)
 function stgLinkBox() {
   if (!STGL.name) return '<div id="stgLinkBox" hidden></div>';
   var list = STGL.busy ? '<p class="se-why">찾는 중…</p>' : STGL.items === null ? '' : STGL.items.length ? '<ul class="stg-lkl">' + STGL.items.map(function (x) { return '<li><button type="button" class="chip" onclick="stgLinkSave(this.dataset.n)" data-n="' + esc(x.name) + '">' + esc(x.name) + '</button></li>'; }).join('') + '</ul>' : '<p class="se-why">물류앱에서 못 찾았어요 — 검색어를 줄여 보세요(브랜드·앞 두 글자)</p>';
-  return '<div id="stgLinkBox" class="stg-lkbox"><p><b>' + esc(STGL.name) + '</b> ↔ 물류앱의 어떤 상품인가요?</p><div class="stg-lkq"><input id="stgLinkQ" type="search" value="' + esc(STGL.q) + '" placeholder="물류앱 상품명 검색" onkeydown="if(event.key===\'Enter\'){stgLinkSearch()}"><button type="button" class="btn" onclick="stgLinkSearch()">찾기</button><button type="button" class="btn ghost" onclick="STGL={name:\'\',q:\'\',items:null,busy:false};stgLinkDraw()">닫기</button><button type="button" class="btn ghost" onclick="stgLinkSave(\'\')" title="자동 연결이 틀렸을 때">연결 끊기</button></div>' + list + '</div>';
+  return '<div id="stgLinkBox" class="stg-lkbox"><p><b>' + esc(STGL.name) + '</b> ↔ 물류앱의 어떤 상품인가요?</p><div class="stg-lkq"><input id="stgLinkQ" type="search" value="' + esc(STGL.q) + '" placeholder="물류앱 상품명 검색" onkeydown="if(!event.isComposing&&event.keyCode!==229&&event.key===\'Enter\'){stgLinkSearch()}"><button type="button" class="btn" onclick="stgLinkSearch()">찾기</button><button type="button" class="btn ghost" onclick="STGL={name:\'\',q:\'\',items:null,busy:false};stgLinkDraw()">닫기</button><button type="button" class="btn ghost" onclick="stgLinkSave(\'\')" title="자동 연결이 틀렸을 때">연결 끊기</button></div>' + list + '</div>';
 }
 function stgErr(x, what) { return x && x.err ? '<p class="se-why">' + esc(what + ' 계산 실패: ' + x.err) + '</p>' : ''; }
 function stgHtml() {
@@ -4814,6 +4814,7 @@ window.addEventListener('resize', function () { if (innerWidth >= 840 && S.layer
 /* ── 키보드 (PC): ⌘K · Ctrl+K · / 검색, 1~6 탭, ↑↓(j/k) 목록 이동(트렌드 목록은 옆 칸 상세도 따라감), Enter 열기, Esc 닫기 ── */
 document.addEventListener('keydown', function (e) {
   var t = e.target, typing = t && (/INPUT|TEXTAREA|SELECT/.test(t.tagName) || t.isContentEditable);
+  if (e.isComposing || e.keyCode === 229) return;   /* 1004 한글 조합 중엔 아무것도 안 함 — 조합 중 포커스가 옮겨지면 맥·크롬이 마지막 글자를 한 번 더 넣음('아누아' → '아누아아') */
   if ((e.metaKey || e.ctrlKey) && !e.altKey && String(e.key).toLowerCase() === 'k') { e.preventDefault(); if (S.layers.indexOf('sr') === -1) openSearch(); else $('srQ').focus(); return; }
   if (typing) { if (t.id === 'srQ' && e.key === 'ArrowDown') { var f = document.querySelector('#srBody .sr-item'); if (f) { e.preventDefault(); f.focus(); } } return; }
   if (e.metaKey || e.ctrlKey || e.altKey) return;
