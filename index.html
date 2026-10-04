@@ -1644,6 +1644,10 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
   .diy-left{align-items:start}
   .diy-side{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
 }
+
+/* 1004 네이버 월간 검색수 */
+.nv-b{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--pri-soft);color:var(--pri-text);font-size:11.5px;font-weight:700;vertical-align:1px;white-space:nowrap}
+.nv-sp{display:block;font-size:11.5px}
 </style>
 </head>
 <body data-tab="today">
@@ -1741,6 +1745,7 @@ var SRC = {
   qoo10: { n: '큐텐 재팬', url: 'https://www.qoo10.jp/gmkt.inc/Bestsellers/?g=2', how: '큐텐 재팬 뷰티 베스트셀러에서 한국 판매자 상품만 남김', freq: '매일 07시', lag: '당일', lim: '순위는 원래 전체 순위 그대로 · 가격은 엔화' },
   amazon: { n: '아마존 미국', url: 'https://www.amazon.com/Best-Sellers-Beauty-Personal-Care-Skin-Care-Products/zgbs/beauty/11060451', how: '아마존 미국 스킨케어 베스트셀러 100위', freq: '매일 07시', lag: '당일', lim: '목록에 브랜드 칸이 없어 상품 이름으로 맞춰요 · 가격은 달러' },
   naverDatalab: { n: '네이버 데이터랩', url: 'https://datalab.naver.com/keyword/trendSearch.naver', how: '수집 뒤 맥이 검색어마다 데이터랩 검색어 트렌드 곡선을 받음 (로그인 없음)', freq: '매일 아침', lag: '1~2일', lim: '검색 수가 아니라 0~100 상대값이에요' },
+  naverVol: { n: '네이버 검색광고 키워드 도구', url: 'https://searchad.naver.com/', how: '검색어마다 최근 30일 PC·모바일 조회수(공식 API). 지난달 같은 때와 비교', freq: '매일 아침', lag: '당일', lim: '10회 미만은 10 미만으로만 나와요 · 띄어쓰기 없는 말 기준' },
   naverBlog: { n: '네이버 블로그', url: 'https://section.blog.naver.com/', how: '검색어마다 최근 7일 블로그 글 수 vs 그 전 7일', freq: '매일 아침', lag: '당일', lim: '네이버가 1000건에서 잘라 큰 검색어는 1000+로만 보여요' },
   gtrends: { n: '구글 트렌드', url: 'https://trends.google.com/trends/?geo=KR', how: '맥의 크롬이 대한민국 · 최근 3개월 검색어 곡선을 받음', freq: '매일 아침', lag: '1~2일', lim: '검색 수가 아니라 0~100 상대값이에요' },
   youtube: { n: '유튜브', url: 'https://www.youtube.com/', how: 'YouTube Data API로 뷰티 검색어 6개 · 한국 · 최근 7일 쇼츠를 조회수순으로', freq: '매일 아침', lag: '당일', lim: '제목·태그에 브랜드 이름이 나온 영상만 세요' },
@@ -2442,7 +2447,7 @@ function loadBrandDetail(b) {
     var bw = $('bsWatch'); bw.hidden = false; bw.dataset.b = r.brand; setHeart(bw, r.watched);
     var sv = r.survival || {};
     var last = r.series.length ? (r.series[r.series.length - 1].count || 0) : 0;
-    $('bsBody').innerHTML = '<p class="sub">' + esc(r.label) + ' 기준 · ' + r.items.length + '개 상품이 100위 안' + (r.owned === true ? ' ' + tag('약국 취급', 't-ok') : r.owned === false ? ' · 약국 미취급' : '') + ' ' + storyChip(r.brand) + '</p>'
+    $('bsBody').innerHTML = '<p class="sub">' + esc(r.label) + ' 기준 · ' + r.items.length + '개 상품이 100위 안' + (r.owned === true ? ' ' + tag('약국 취급', 't-ok') : r.owned === false ? ' · 약국 미취급' : '') + (nvOf(r.brand) ? ' · 네이버 월간 검색 ' + nvTxt(nvOf(r.brand)) : '') + ' ' + storyChip(r.brand) + '</p>'
       + '<div class="pd-sec"><h4>100위 안 상품 수 흐름 · 오늘 ' + last + '개</h4>' + chartSvg({ s: r.series.map(function (x) { return { date: x.date, rank: x.count || 0 }; }) }, { s: '상품 수' }, true).replace(/<div class="legend">[\s\S]*?<\/div>/, '') + '</div>'
       + (r.catMix && r.catMix.length ? '<div class="pd-sec"><h4>이 브랜드 상품의 카테고리</h4>' + vzDonut(r.catMix, 0, '오늘 100위 안') + '</div>' : '')
       + '<div class="pd-sec"><h4>신제품 생존율</h4><div class="kpi-grid">' + survCell(sv.d7, '7일', '판단 전') + survCell(sv.d14, '14일', '판단 전') + survCell(sv.d30, '30일', '판단 전') + '</div></div>'
@@ -3970,7 +3975,7 @@ function brandTable(r) {
     attr: function (b) { return ' data-b="' + esc(b.brand) + '"'; },
     cols: [
       { k: '_i', label: '순위', w: '40px', num: 1, m: 'lead', html: function (b) { return '<span class="rk">' + b._i + '</span>'; } },
-      { k: 'brand', label: '브랜드', w: 'minmax(140px,1.6fr)', m: 'title', filter: 1, html: function (b) { return '<span class="nm1">' + esc(b.brand) + (b.watched ? '<span role="img" aria-label="변화 알림 켬">' + icon('bell') + '</span>' : '') + (b.isNew ? ' ' + newTag() : '') + '</span>'; } },
+      { k: 'brand', label: '브랜드', w: 'minmax(140px,1.6fr)', m: 'title', filter: 1, html: function (b) { var nv = nvOf(b.brand); return '<span class="nm1">' + esc(b.brand) + (b.watched ? '<span role="img" aria-label="변화 알림 켬">' + icon('bell') + '</span>' : '') + (b.isNew ? ' ' + newTag() : '') + (nv ? ' <span class="nv-b" title="네이버 월간 검색수(최근 30일)">검색 ' + manTxt(nv.total) + '</span>' : '') + '</span>'; } },
       { k: 'count', label: '100위 안', w: 'minmax(96px,1fr)', num: 1, desc: 1, m: 'sub', filter: 1, html: function (b, wide) { return (wide ? '' : '100위 안 ') + '<b>' + esc(b.count) + '개</b>'; } },
       { k: 'best', label: '최고 순위', w: 'minmax(96px,1fr)', num: 1, m: 'sub', html: function (b, wide) { return b.best ? (wide ? '' : '최고 ') + '<b>' + esc(b.best) + '위</b>' : '–'; } },
       { k: 'delta', label: '지난주 대비', w: 'minmax(104px,1fr)', num: 1, desc: 1, m: 'sub', html: function (b) { return b.delta ? delta(b.delta, '점') : '<span class="meta">–</span>'; } },
@@ -3984,6 +3989,9 @@ function brandTable(r) {
 }
 /* 트렌드 > 키워드: 급상승 키워드 · TOP5 · 상품명 키워드(3곳) → 한 표, 구글 · 네이버 · 블로그(3카드) → 검색 반응 한 표 */
 function kwBars(s) { s = (s || []).slice(-7); if (s.length < 3) return ''; var mx = Math.max.apply(null, s.concat([1])); return '<span class="kwb" role="img" aria-label="최근 ' + s.length + '일 흐름">' + s.map(function (v, i) { return '<i style="height:' + Math.max(8, Math.round(v / mx * 100)) + '%"' + (i === s.length - 1 ? ' class="last"' : '') + '></i>'; }).join('') + '</span>'; }
+/* 1004 네이버 월간 검색수(최근 30일 PC+모바일) — S.viz.nvol. 이름은 띄어쓰기·대소문자 무시로 맞춤 */
+function nvOf(term) { var v = S.viz && S.viz.nvol, k = String(term || '').replace(/\s+/g, '').toLowerCase(); if (!v || !k) return null; for (var i = 0; i < v.items.length; i++) if (String(v.items[i].term).replace(/\s+/g, '').toLowerCase() === k) return v.items[i]; return null; }
+function nvTxt(x) { return x ? '<b class="num">' + manTxt(x.total) + '</b>' + (x.growth != null ? ' ' + delta(x.growth, '%') : '') : ''; }
 function renderKeywords() {
   var v = S.viz, el = $('tv-keyword'); if (!el) return;
   if (!v || v.empty) { el.innerHTML = '<p class="empty">데이터가 쌓이면 키워드가 나와요</p>'; return; }
@@ -4004,15 +4012,16 @@ function renderKeywords() {
     facets: [{ k: 'g', opts: [['up', '오름'], ['down', '내림'], ['new', '새로 등장']], test: function (k, x) { return x === 'new' ? k.growth == null && k.prev === 0 : x === 'up' ? k.growth > 0 : k.growth < 0; } }]
   });
   var terms = {}, order = [];
-  [['g', v.gtrends], ['n', v.ndatalab], ['b', v.nblog]].forEach(function (s) { ((s[1] && s[1].items) || []).forEach(function (x) { if (!terms[x.term]) { terms[x.term] = { term: x.term, kind: x.kind }; order.push(x.term); } terms[x.term][s[0]] = x; }); });
+  [['g', v.gtrends], ['n', v.ndatalab], ['b', v.nblog], ['vol', v.nvol]].forEach(function (s) { ((s[1] && s[1].items) || []).forEach(function (x) { if (!terms[x.term]) { terms[x.term] = { term: x.term, kind: x.kind }; order.push(x.term); } terms[x.term][s[0]] = x; }); });
   var gcell = function (x) { return x ? (x.growth == null ? (x.prev === 0 ? newTag() : delta(null)) : delta(x.growth, '%')) : '<span class="meta">–</span>'; };
-  dtMount({ id: 'sx', el: 'sxTable', label: '검색 반응', rows: order.map(function (t) { return terms[t]; }), key: function (x) { return x.term; }, open: function (x) { openSearch(x.term); }, file: '검색반응', src: [['gtrends', 'naverDatalab', 'naverBlog'], { at: srcDate ? md(srcDate) + ' 수집' : '', calc: '구글·네이버 = 최근 7일 평균 vs 그 전 7일 (%) · 블로그 = 최근 7일 글 수', lim: '구글·네이버는 0~100 상대값이라 검색어끼리 크기 비교는 안 돼요' }], emptyMsg: '매일 아침 수집 뒤 맥이 구글·네이버·블로그를 모으면 여기에 떠요',
+  dtMount({ id: 'sx', el: 'sxTable', label: '검색 반응', rows: order.map(function (t) { return terms[t]; }), key: function (x) { return x.term; }, open: function (x) { openSearch(x.term); }, file: '검색반응', src: [['gtrends', 'naverDatalab', 'naverBlog', 'naverVol'], { at: srcDate ? md(srcDate) + ' 수집' : '', calc: '구글·네이버 = 최근 7일 평균 vs 그 전 7일 (%) · 블로그 = 최근 7일 글 수', lim: '구글·네이버는 0~100 상대값이라 검색어끼리 크기 비교는 안 돼요' }], emptyMsg: '매일 아침 수집 뒤 맥이 구글·네이버·블로그를 모으면 여기에 떠요',
     note: '블로그는 네이버가 1000건에서 잘라서 큰 검색어는 1000+로만 보여요',
     cols: [
       { k: 'term', label: '검색어', w: 'minmax(120px,1.4fr)', m: 'title', filter: 1, html: function (x) { return '<b>' + esc(x.term) + '</b> <span class="meta">' + esc(GT_KIND[x.kind] || '') + '</span>'; } },
       { k: 'g', label: '구글', w: 'minmax(76px,.8fr)', num: 1, desc: 1, m: 'sub', hideEmpty: 1, v: function (x) { return x.g ? (x.g.growth == null ? 0 : x.g.growth) : null; }, html: function (x, wide) { return (wide ? '' : '<span class="meta">구글</span> ') + gcell(x.g); } },
       { k: 'n', label: '네이버', w: 'minmax(76px,.8fr)', num: 1, desc: 1, m: 'sub', hideEmpty: 1, v: function (x) { return x.n ? (x.n.growth == null ? 0 : x.n.growth) : null; }, html: function (x, wide) { return (wide ? '' : '<span class="meta">네이버</span> ') + gcell(x.n); } },
       { k: 'gs', label: '구글 흐름', w: 'minmax(132px,.8fr)', nosort: 1, csv: false, m: 'hide', hideEmpty: 1, v: function (x) { return x.g && x.g.series && x.g.series.length >= 3 ? 1 : null; }, html: function (x) { return x.g ? kwBars((x.g.series || []).map(function (p) { return p.v; })) : ''; } },
+      { k: 'vol', label: '월간 검색', w: 'minmax(104px,.9fr)', num: 1, desc: 1, m: 'sub', hideEmpty: 1, v: function (x) { return x.vol ? x.vol.total : null; }, html: function (x, wide) { if (!x.vol) return '<span class="meta">–</span>'; return (wide ? '' : '<span class="meta">월 검색</span> ') + nvTxt(x.vol) + (wide ? '<span class="meta nv-sp"> PC ' + manTxt(x.vol.pc) + ' · 폰 ' + manTxt(x.vol.mo) + '</span>' : ''); } },
       { k: 'b', label: '블로그', w: 'minmax(112px,1fr)', num: 1, desc: 1, m: 'sub', hideEmpty: 1, v: function (x) { return x.b ? x.b.now : null; }, html: function (x, wide) { var b = x.b; if (!b) return '<span class="meta">–</span>'; if (!wide) return '<span class="meta">블로그</span> ' + (b.now >= 1000 ? '<b>1000+건</b>' : '<b>' + manTxt(b.now) + '건</b> ' + (growthTag(b) || '')); return b.now >= 1000 ? '<b>1000+건</b>' : '<b>' + manTxt(b.now) + '건</b> ' + (growthTag(b) || delta(null)); } }
     ],
     facets: [{ k: 'kind', opts: Object.keys(GT_KIND).map(function (k) { return [k, GT_KIND[k]]; }), test: function (x, v) { return x.kind === v; } }]
@@ -4729,7 +4738,7 @@ function srcLast() {
   var h = S.home, v = S.viz || {}, t = v.tourism || {}, o = {}, at = function (d) { return d ? md(d) : ''; };
   o.oy = oyAt();
   ((S.cmp && S.cmp.malls) || []).forEach(function (m) { if (MALL_SRC[m.mall] && m.mall !== 'oliveyoung') o[MALL_SRC[m.mall]] = at(m.date) + ' 수집'; });
-  if (v.gtrends) o.gtrends = at(v.gtrends.date); if (v.ndatalab) o.naverDatalab = at(v.ndatalab.date); if (v.nblog) o.naverBlog = at(v.nblog.date);
+  if (v.gtrends) o.gtrends = at(v.gtrends.date); if (v.ndatalab) o.naverDatalab = at(v.ndatalab.date); if (v.nblog) o.naverBlog = at(v.nblog.date); if (v.nvol) o.naverVol = at(v.nvol.date);
   if (t.fx) o.fx = at(t.fx.date); if (t.spop && t.spop.areas && t.spop.areas[0]) o.spop = at(t.spop.areas[0].last) + ' 자료';
   if (t.tour && t.tour.ym) o.tourKto = t.tour.ym.slice(0, 4) + '.' + (+t.tour.ym.slice(4)) + '월 자료'; if (t.kto && t.kto.areas && t.kto.areas[0]) o.ktoArea = at(t.kto.areas[0].last) + ' 자료';
   if (S.yt && S.yt.date) o.youtube = at(S.yt.date); if (S.pb && S.pb.meta && !S.pb.empty) o.pos = at(S.pb.meta.from) + '~' + at(S.pb.meta.to) + ' (' + at(S.pb.meta.at) + ' 올림)';
