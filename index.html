@@ -48,7 +48,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <title>레디영 트렌드</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <style>/* TRENDLAB v3 — 디자인 토큰 (2026 레퍼런스: Calm · #155EEF · 20/12/999 · Pretendard · lucide 1.5) · 라이트/다크 두 벌 */
 :root{color-scheme:light;
   --bg:#F5F6F8;--card:#fff;--fill:#F2F3F5;--fill-2:#E8EAEE;--line:#EDEEF0;--line-strong:#DEE1E6;--glass:rgba(245,246,248,.86);--tabbar:rgba(255,255,255,.94);
@@ -1897,7 +1898,15 @@ function prefetch(h) {
   var q = [['getReport', ['']], ['getRanking', ['all', 'day']], ['getBrands', ['all']]], keys = {};
   ['risers', 'new', 'missing'].forEach(function (k) { var c = h.cards && h.cards[k]; ((c && c.items) || []).slice(0, 3).forEach(function (x) { if (x.key && !keys[x.key]) { keys[x.key] = 1; q.push(['getProduct', [x.key]]); } }); });
   q = q.filter(function (x) { return !fresh(x[0], x[1]); });
-  var next = function () { var x = q.shift(); if (!x || document.hidden) return; swrCall(x[0], x[1], function () {}, function () {}); setTimeout(next, 1200); };
+  /* 1007 하나가 끝난 뒤 다음 것 (전에는 1.2초마다 끝나기 전에 또 보내 서버 실행 10여 개가 겹쳐 사용자가 누른 화면까지 늦어졌다) · 브랜드 목록이 오면 1위 브랜드 상세도 */
+  var next = function () {
+    var x = q.shift(); if (!x || document.hidden) return;
+    if (fresh(x[0], x[1])) { next(); return; }   // 그사이 사용자가 열어 이미 받은 것은 건너뜀
+    var done = false, go = function () { if (done) return; done = true; clearTimeout(t); setTimeout(next, 300); }, t = setTimeout(go, 20000);
+    swrCall(x[0], x[1], function (r) {
+      if (x[0] === 'getBrands' && !x.more && r && r.ok && r.brands && r.brands[0]) { x.more = 1; var b = ['getBrand', [r.brands[0].brand, x[1][0]]]; if (!fresh(b[0], b[1])) q.unshift(b); }
+    }, go, go);
+  };
   setTimeout(next, 2500);
 }
 function swrTrim(keep, hard) {
@@ -2178,13 +2187,14 @@ function setCat(c) { S.rank.cat = c; S.rank.data = null; loadRank(); }
 function setMode(m) { S.rank.mode = m; S.rank.data = null; loadRank(); }
 function loadRank() {
   renderChips();
-  var rev = ++S.rev.rank;
+  var rev = ++S.rev.rank; S.rank.pend = S.rank.cat + S.rank.mode;
   if (S.trend.f === 'rank' || S.rank.cat !== 'all') $('rankList').innerHTML = skel(6);
   swrCall('getRanking', [S.rank.cat, S.rank.mode], function (r) {
     if (rev !== S.rev.rank) return;
+    S.rank.pend = null;
     if (!r || !r.ok) { $('rankList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadRank()'); return; }
     S.rank.data = r; renderTrendList();
-  }, function () { if (rev === S.rev.rank) $('rankList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadRank()'); });
+  }, function () { if (rev === S.rev.rank) { S.rank.pend = null; $('rankList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadRank()'); } });
   if (S.trend.f !== 'rank' && S.rank.cat === 'all') renderTrendList();
 }
 
@@ -2439,16 +2449,17 @@ function setBrandCat(c) { S.brand.cat = c; S.brand.data = null; loadBrands(); }
 /* 브랜드 탭: 올리브영 브랜드 표 ↔ 사이트 비교 */
 function loadBrands() {
   renderBrandChips();
-  var rev = ++S.rev.brands;
+  var rev = ++S.rev.brands; S.brand.pend = S.brand.cat;
   $('brandList').classList.remove('dt', 'dt-wide'); $('brandList').innerHTML = skel(6);
   swrCall('getBrands', [S.brand.cat], function (r) {
     if (rev !== S.rev.brands) return;
+    S.brand.pend = null;
     if (!r || !r.ok) { $('brandList').innerHTML = '<div class="empty">' + esc((r && r.msg) || '불러오지 못했어요') + '</div>'; return; }
     S.brand.data = r;
     if (!r.brands.length) { $('brandList').classList.remove('dt', 'dt-wide'); $('brandList').innerHTML = '<div class="empty">이 카테고리는 아직 수집된 기록이 없어요</div>'; return; }
     brandTable(r); if (r.fallback) toast(fbText(r.date));
     ensureDock('bs');
-  }, function () { if (rev === S.rev.brands) $('brandList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadBrands()'); });
+  }, function () { if (rev === S.rev.brands) { S.brand.pend = null; $('brandList').innerHTML = emptyHtml('불러오지 못했어요', '다시 불러오기', 'loadBrands()'); } });
 }
 /* ── 폴드(840+)·PC 에선 트렌드 상품·브랜드 상세를 팝업 대신 목록 옆 칸에 바로 보여준다 ── */
 var DOCK = { pd: { sub: 'product', side: 'rankSide' }, bs: { sub: 'brand', side: 'brandSide' } };
@@ -3932,8 +3943,9 @@ function renderTrend() {
   var sub = S.trend.sub;
   $('trendSeg').innerHTML = gsegHtml(); $('trendSeg').classList.add('gseg'); var tgm = $('trendSeg').parentNode.nextElementSibling; if (tgm && tgm.classList.contains('gmore-row')) tgm.remove(); if (S.gMore) $('trendSeg').parentNode.insertAdjacentHTML('afterend', gmoreHtml());
   TREND_SUBS.forEach(function (s) { $('tv-' + s[0]).hidden = s[0] !== sub; });
-  if (sub === 'product') { if (!S.home) loadHome(); renderChips(); if (!S.rank.data) loadRank(); else renderTrendList(); }
-  else if (sub === 'brand') { if (S.brand.view === 'cmp' || S.brand.view === 'src') { if (S.cmp) (S.brand.view === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else if (!S.brand.data) loadBrands(); else { brandTable(S.brand.data); ensureDock('bs'); } }
+  /* 1007 이미 받는 중이면 다시 부르지 않는다: 다른 카드가 도착해 화면을 다시 그릴 때마다 새로 불러 앞 응답을 버리던 것(브랜드 옆 칸이 한참 회색이던 원인 중 하나) */
+  if (sub === 'product') { if (!S.home) loadHome(); renderChips(); if (!S.rank.data) { if (S.rank.pend !== S.rank.cat + S.rank.mode) loadRank(); } else renderTrendList(); }
+  else if (sub === 'brand') { if (S.brand.view === 'cmp' || S.brand.view === 'src') { if (S.cmp) (S.brand.view === 'src' ? renderSourcing : renderCompare)(); else loadCompare(); } else if (!S.brand.data) { if (S.brand.pend !== S.brand.cat) loadBrands(); } else { brandTable(S.brand.data); ensureDock('bs'); } }
   else if (sub === 'keyword') { if (S.viz) renderKeywords(); else { $('tv-keyword').innerHTML = skel(5); loadViz(); } }
   else if (sub === 'shorts') loadYt();
 }
