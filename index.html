@@ -1682,6 +1682,41 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 main{overflow-x:clip}
 .rpv-head,.rpv-secs,.rpv-rail,.rpv-secs>*,.rp-item,.rp-item>*{min-width:0;overflow-wrap:anywhere}
 .rpv img{max-width:100%;height:auto}
+/* 1011 오늘의 성분 (뉴스 탭 맨 위 · 리포트 칸 끝) — 접힘: 제목 + 첫 문단 */
+.edu-slot:empty{display:none}
+.edu-slot{margin-bottom:16px}
+.edu-card .card-head h2{display:flex;align-items:center}
+.edu-t{margin:12px 0 4px;font-size:var(--fs-5);font-weight:800;line-height:1.35;letter-spacing:-.02em;overflow-wrap:anywhere}
+.edu-n{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:0 0 8px;font-size:var(--fs-2);color:var(--ink2)}
+.edu-n b{color:var(--pri-text);font-weight:700}
+.edu-s{margin:8px 0 0;font-size:var(--fs-3);line-height:1.75;color:var(--ink);overflow-wrap:anywhere}
+.edu-g{display:grid;gap:8px;margin-top:16px}
+@media(min-width:600px){.edu-g{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+.edu-b{padding:12px 14px;border-radius:var(--r-tile);background:var(--fill)}
+.edu-b h4,.edu-p h4{margin:0 0 4px;font-size:var(--fs-2);font-weight:700;color:var(--ink2)}
+.edu-b p{margin:0;font-size:var(--fs-3);line-height:1.65;overflow-wrap:anywhere}
+.edu-p{margin-top:16px}
+.edu-pl{display:flex;flex-wrap:wrap;gap:6px}
+.edu-pl span{display:inline-flex;align-items:center;max-width:100%;min-height:32px;padding:4px 12px;border:1px solid var(--line-strong);border-radius:var(--pill);font-size:var(--fs-2);overflow-wrap:anywhere}
+.edu-src{display:flex;flex-wrap:wrap;gap:0 12px;margin-top:8px}
+.edu-src a{display:inline-flex;align-items:center;gap:6px;min-height:44px;max-width:100%;color:var(--ink2);font-size:var(--fs-2);text-decoration:none;overflow-wrap:anywhere}
+.edu-src a .ic{width:14px;height:14px;flex:none}
+@media(hover:hover){.edu-src a:hover{color:var(--pri-text)}}
+.edu-more{margin:4px 0 -8px -8px}
+.edu-card h2 .tag{margin-left:8px}
+.edu-pair{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.edu-pg,.edu-pv{padding:12px 14px;border-radius:var(--r-tile);background:var(--fill)}
+.edu-pv{background:var(--warn-soft)}
+.edu-pg h4,.edu-pv h4{display:flex;align-items:center;gap:4px;margin:0 0 6px;font-size:var(--fs-2);font-weight:700;color:var(--ink2)}
+.edu-pv h4{color:var(--warn)}.edu-pv h4 .ic{width:16px;height:16px}
+.edu-pair ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.edu-pair li{font-size:var(--fs-3);line-height:1.6;overflow-wrap:anywhere}
+.edu-pair li b{display:inline-flex;align-items:center;margin-right:8px;padding:0 10px;min-height:26px;border-radius:var(--pill);background:var(--card);border:1px solid var(--line-strong);font-size:var(--fs-2);font-weight:700;vertical-align:1px}
+.edu-pv li b{border-color:var(--amber-line);color:var(--warn)}
+.edu-pair li span{color:var(--ink2)}
+.edu-psrc{margin-top:0}.edu-psrc a{font-size:var(--fs-1)}
+.edu-more .ic{transform:rotate(90deg);transition:transform var(--t)}.edu-card.open .edu-more .ic{transform:rotate(-90deg)}
+.edu-pair li b{max-width:100%}
 </style>
 </head>
 <body data-tab="today">
@@ -4177,7 +4212,7 @@ function renderReportView(r) {
   var dl = dates.length > 1 ? '<section class="card rp-dates"><h2>지난 리포트</h2><div class="rp-dlist">' + dates.slice(0, 14).map(function (x) { var d = dateOf(x); return '<button type="button" class="rp-d' + (x === r.date ? ' on' : '') + '" data-d="' + esc(x) + '" aria-pressed="' + (x === r.date) + '" onclick="loadReport(this.dataset.d)"><b>' + esc(shortDate(x)) + '</b><span>' + (d ? '일월화수목금토'.charAt(d.getDay()) : '') + '</span></button>'; }).join('') + '</div></section>' : '';
   el.innerHTML = gsegBar() + '<div class="rpv"><header class="rpv-head card"><div class="rpv-top"><p class="rp-kicker">' + icon('file') + esc(r.date) + ' · ' + (r.source === 'gemini' ? '비상용 AI 요약' : 'Claude 작성') + '</p>' + sel + '</div><h1 class="rp-title">' + esc(p.headline) + '</h1>'
     + ((p.summary || []).length ? '<ul class="rp-sum">' + p.summary.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + (p.note ? '<p class="rp-note">※ ' + esc(p.note) + '</p>' : '') + srcLine(['report', 'oy'], { at: '리포트 작성: ' + (r.source === 'gemini' ? 'Gemini' : 'Claude') + ' · DATA 기준일 ' + md(r.date) }) + '</header>'
-    + '<aside class="rpv-rail">' + actH + picks + dl + '</aside><div class="rpv-secs">' + (secs || '<p class="empty">이 날은 따로 정리한 인사이트가 없어요</p>') + '</div></div>';
+    + '<aside class="rpv-rail">' + actH + picks + dl + '</aside><div class="rpv-secs">' + (secs || '<p class="empty">이 날은 따로 정리한 인사이트가 없어요</p>') + eduSlot() + '</div></div>';
   rpBalance();
   window.scrollTo({ top: 0, behavior: 'instant' });
   rpFillChips();
@@ -4723,7 +4758,45 @@ function newsViewHtml() {
     var h = (news.length ? '<section class="card rp-sec rp-news"><h2>' + icon('news') + '최근 뉴스 <small>어제 오후~오늘 아침 · ' + news.length + '건 · 업계 코멘트</small></h2><div class="rp-items">' + newsItemsHtml(news) + '</div>' + rpSrc('news', r.date) + '</section>' : '') + sec('trends', '요즘 대세', 'spark') + sec('events', '행사 · 이벤트 흐름', 'calendar');
     sum = '<article class="card nv-head"><div class="card-head"><h2>' + esc(p.headline || '오늘의 업계 흐름') + '</h2><span class="head-acts">' + asOf(r.date) + '<button type="button" class="btn ghost" onclick="route(\'report\')">' + icon('file') + '리포트 전체</button></span></div></article>' + (h ? '<div class="nv-grid" id="nvGrid">' + h + '</div>' : '');
   }
-  return (sum ? '<details class="nw-sum" open><summary><h2>' + icon('file') + '오늘의 요약 <small>리포트가 고른 뉴스와 흐름</small></h2></summary>' + sum + '</details>' : '') + nwTimelineHtml();
+  return eduSlot() + (sum ? '<details class="nw-sum" open><summary><h2>' + icon('file') + '오늘의 요약 <small>리포트가 고른 뉴스와 흐름</small></h2></summary>' + sum + '</details>' : '') + nwTimelineHtml();
+}
+/* 1011 오늘의 성분 — 물류앱과 같은 이야기(같은 날 같은 성분). readyyoung Pages 의 edu_story.json 을 하루 한 번 받아 저장, 못 받으면 카드 숨김 */
+var EDU_URL = 'https://deltoy.github.io/readyyoung/edu_story.json', EDU_BASE = Date.parse('2026-10-10T00:00:00Z');
+function eduDay() { return Math.floor((Date.now() + 9 * 3600000) / 864e5) - Math.floor(EDU_BASE / 864e5); }   /* KST 날짜 기준 */
+function eduLoad() {
+  var c = lsGet('tl_edu', null), d = eduDay();
+  if (!S.edu && c && c.items) S.edu = c.items;
+  if (S.eduBusy || (c && c.day === d)) return;
+  S.eduBusy = 1;
+  fetch(EDU_URL, { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) {
+    var it = ((j && j.items) || []).filter(function (x) { return x && x.name && (x.story || x.body); });   /* 물류앱 eduStories() 와 같은 거름 → 같은 순번 */
+    if (it.length) { S.edu = it; lsSet('tl_edu', { day: d, items: it }); eduDraw(); }
+  }).catch(function () {}).then(function () { S.eduBusy = 0; });
+}
+function eduSlot() { eduLoad(); return '<div class="edu-slot">' + eduCardHtml() + '</div>'; }
+function eduDraw() { [].forEach.call(document.querySelectorAll('.edu-slot'), function (el) { el.innerHTML = eduCardHtml(); }); }
+function eduToggle(b) { var slot = b && b.closest('.edu-slot'); S.eduOpen = !S.eduOpen; eduDraw(); var c = slot && slot.firstChild; if (c && !S.eduOpen) { var t = c.getBoundingClientRect().top - 80; if (t < 0) window.scrollBy(0, t); } }   /* 접을 때 카드 위가 화면 밖이면 카드로 올라감 */
+function eduPairHtml(pr) {   /* 1011 pair: { good: [{name, why}], avoid: [...], src: [url] } — 없으면 숨김 */
+  if (!pr) return '';
+  var li = function (a) { return (a || []).filter(function (x) { return x && x.name; }).map(function (x) { return '<li><b>' + esc(x.name) + '</b>' + (x.why ? '<span>' + esc(x.why) + '</span>' : '') + '</li>'; }).join(''); };
+  var g = li(pr.good), v = li(pr.avoid), src = (pr.src || []).filter(function (u) { return /^https?:\/\//i.test(u || ''); });
+  if (!g && !v) return '';
+  return '<div class="edu-pair">' + (g ? '<div class="edu-pg"><h4>같이 쓰면 좋은 성분</h4><ul>' + g + '</ul></div>' : '') + (v ? '<div class="edu-pv"><h4>' + icon('alert') + '피해야 할 조합</h4><ul>' + v + '</ul></div>' : '')
+    + (src.length ? '<div class="edu-src edu-psrc">' + src.map(function (u) { var h = u; try { h = new URL(u).hostname.replace(/^www\./, ''); } catch (e) {} return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + icon('ext') + esc(h) + '</a>'; }).join('') + '</div>' : '') + '</div>';
+}
+function eduCardHtml() {
+  var a = S.edu; if (!a || !a.length) return '';
+  var day = eduDay(), s = a[((day % a.length) + a.length) % a.length], dt = new Date(EDU_BASE + day * 864e5), open = !!S.eduOpen;
+  var ps = String(s.story || '').split(/\n\s*\n/).map(function (t) { return t.trim(); }).filter(Boolean);
+  var blk = function (k, v) { return v ? '<div class="edu-b"><h4>' + k + '</h4><p>' + esc(v) + '</p></div>' : ''; };
+  var src = (s.sources || []).map(function (x) { return typeof x === 'string' ? { url: x } : x; }).filter(function (x) { return x && /^https?:\/\//i.test(x.url || ''); });
+  var more = open ? '<div class="edu-g">' + blk('몸에서는', s.body) + blk('이럴 때', s.when) + blk('한 줄 상식', s.fun) + '</div>' + eduPairHtml(s.pair)
+    + ((s.products || []).length ? '<div class="edu-p"><h4>우리 약국 제품</h4><div class="edu-pl">' + s.products.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div></div>' : '')
+    + (src.length ? '<div class="edu-src">' + src.map(function (x) { var h = ''; try { h = new URL(x.url).hostname.replace(/^www\./, ''); } catch (e) {} return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + icon('ext') + esc(x.title || h) + '</a>'; }).join('') + '</div>' : '') : '';
+  return '<section class="card edu-card' + (open ? ' open' : '') + '" aria-label="오늘의 성분"><div class="card-head"><h2>' + icon('book') + '오늘의 성분 <small>' + (dt.getUTCMonth() + 1) + '월 ' + dt.getUTCDate() + '일</small>' + (s.status === 'draft' || !s.status ? '<span class="tag t-warn">AI 초안</span>' : '') + '</h2></div>'
+    + '<h3 class="edu-t">' + esc(s.title || s.name) + '</h3><p class="edu-n"><b>' + esc(s.name) + '</b>' + (s.en ? '<span lang="en">' + esc(s.en) + '</span>' : '') + '</p>'
+    + (open ? ps : ps.slice(0, 1)).map(function (t) { return '<p class="edu-s">' + esc(t) + '</p>'; }).join('') + (ps.length ? '' : blk('몸에서는', s.body)) + more
+    + '<button type="button" class="lnk-more edu-more" aria-expanded="' + open + '" onclick="eduToggle(this)">' + (open ? '접기' : '더 읽기') + icon('chev') + '</button></section>';
 }
 /* 이번 주 기획 제안(뉴스기획 시트) — 기획 탭 맨 위. [나중에]는 이 기기에서만 숨김 */
 function ideasLoad() { newLoad('getIdeas', 'ideas', function () { if (S.tab === 'plan' && S.planSub === 'board') renderPlan(); }); }
