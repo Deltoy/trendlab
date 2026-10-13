@@ -1769,6 +1769,17 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
   .rpv-rail{display:contents}
   .rpv-secs{order:1}.rp-picks{order:2}
 }
+
+/* 1013 오늘의 성분 · 우리 약국 제품 사진 (사진 56px + 이름 · 폰 한 줄에 하나, 넓으면 2~3개) */
+.edu-p .edu-pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:8px}
+.edu-pc{display:flex;align-items:center;gap:12px;min-width:0;min-height:68px;padding:6px 12px 6px 6px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.edu-pi{position:relative;flex:none;display:block;width:56px;height:56px;border-radius:10px;background:#fff;border:1px solid var(--line);overflow:hidden}
+.edu-pi img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:3px}
+.edu-pi .noimg{position:absolute;inset:0}
+.edu-pi .sk{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.04),rgba(0,0,0,.08),rgba(0,0,0,.04));background-size:200% 100%;animation:eduSk 1.2s linear infinite}
+@keyframes eduSk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.edu-pi .sk{animation:none}}
+.edu-pc b{font-size:14px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all;overflow-wrap:anywhere}
 </style>
 </head>
 <body data-tab="today">
@@ -4862,6 +4873,15 @@ function eduPairHtml(pr) {   /* 1011 pair: { good: [{name, why}], avoid: [...], 
   return '<div class="edu-pair">' + (g ? '<div class="edu-pg"><h4>같이 쓰면 좋은 성분</h4><ul>' + g + '</ul></div>' : '') + (v ? '<div class="edu-pv"><h4>' + icon('alert') + '피해야 할 조합</h4><ul>' + v + '</ul></div>' : '')
     + (src.length ? '<div class="edu-src edu-psrc">' + src.map(function (u) { var h = u; try { h = new URL(u).hostname.replace(/^www\./, ''); } catch (e) {} return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + icon('ext') + esc(h) + '</a>'; }).join('') + '</div>' : '') + '</div>';
 }
+/* 1013 MJ: 이 성분이 든 우리 약국 제품을 사진으로 — 서버 getEduPhotos(물류앱 상품 사진) · 접혀 있어도 보임 · 사진 없으면 이름 칸 */
+function eduProdsHtml(ps) {
+  ps = (ps || []).slice(0, 6); if (!ps.length) return '';
+  var key = ps.join('|'), P = S.eduPh || (S.eduPh = {});
+  if (!(key in P)) { P[key] = null; call('getEduPhotos', [ps], function (r) { P[key] = r && r.ok ? r.photos || {} : {}; eduDraw(); }, function () { P[key] = {}; eduDraw(); }); }
+  var ph = P[key] || {};
+  return '<div class="edu-p"><h4>이 성분이 든 우리 약국 제품</h4><div class="edu-pg">' + ps.map(function (n) { var x = ph[n];
+    return '<div class="edu-pc"><span class="edu-pi">' + (x && x.url ? '<img src="' + esc(x.url) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="imgErr(this)">' : P[key] === null ? '<span class="sk"></span>' : '<div class="noimg" aria-hidden="true"></div>') + '</span><b>' + esc(n) + '</b></div>'; }).join('') + '</div></div>';
+}
 function eduCardHtml() {
   var a = S.edu; if (!a || !a.length) return '';
   var day = eduDay(), s = a[((day % a.length) + a.length) % a.length], dt = new Date(EDU_BASE + day * 864e5), open = !!S.eduOpen;
@@ -4869,11 +4889,11 @@ function eduCardHtml() {
   var blk = function (k, v) { return v ? '<div class="edu-b"><h4>' + k + '</h4><p>' + esc(v) + '</p></div>' : ''; };
   var src = (s.sources || []).map(function (x) { return typeof x === 'string' ? { url: x } : x; }).filter(function (x) { return x && /^https?:\/\//i.test(x.url || ''); });
   var more = open ? '<div class="edu-g">' + blk('몸에서는', s.body) + blk('이럴 때', s.when) + blk('한 줄 상식', s.fun) + '</div>' + eduPairHtml(s.pair)
-    + ((s.products || []).length ? '<div class="edu-p"><h4>우리 약국 제품</h4><div class="edu-pl">' + s.products.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div></div>' : '')
     + (src.length ? '<div class="edu-src">' + src.map(function (x) { var h = ''; try { h = new URL(x.url).hostname.replace(/^www\./, ''); } catch (e) {} return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + icon('ext') + esc(x.title || h) + '</a>'; }).join('') + '</div>' : '') : '';
   return '<section class="card edu-card' + (open ? ' open' : '') + '" aria-label="오늘의 성분"><div class="card-head"><h2>' + icon('book') + '오늘의 성분 <small>' + (dt.getUTCMonth() + 1) + '월 ' + dt.getUTCDate() + '일</small>' + (s.status === 'draft' || !s.status ? '<span class="tag t-warn">AI 초안</span>' : '') + '</h2></div>'
     + '<h3 class="edu-t">' + esc(s.title || s.name) + '</h3><p class="edu-n"><b>' + esc(s.name) + '</b>' + (s.en ? '<span lang="en">' + esc(s.en) + '</span>' : '') + '</p>'
     + (open ? ps : ps.slice(0, 1)).map(function (t) { return '<p class="edu-s">' + esc(t) + '</p>'; }).join('') + (ps.length ? '' : blk('몸에서는', s.body)) + more
+    + eduProdsHtml(s.products)
     + '<button type="button" class="lnk-more edu-more" aria-expanded="' + open + '" onclick="eduToggle(this)">' + (open ? '접기' : '더 읽기') + icon('chev') + '</button></section>';
 }
 /* 이번 주 기획 제안(뉴스기획 시트) — 기획 탭 맨 위. [나중에]는 이 기기에서만 숨김 */
