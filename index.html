@@ -1793,6 +1793,7 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 .ing-all summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink2);font-size:var(--fs-2)}.ing-all p{font-size:var(--fs-2);color:var(--ink2);line-height:1.6}
 #pdIng .ing-cs{margin-bottom:4px}
 .ing-p .tx{display:flex;flex-direction:column;gap:2px;line-height:1.35}#ingCard .nw{white-space:nowrap}
+.ing-gh .meta{display:inline;font-weight:500}.ing-gh{margin:14px 0 8px;font-size:var(--fs-2);font-weight:700;color:var(--ink2)}.ing-gh:first-child{margin-top:0}
 </style>
 </head>
 <body data-tab="today">
@@ -4224,7 +4225,8 @@ function openIng(id) {
   if (!$('mt').classList.contains('on')) { $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
   var C = S.ingOurs || (S.ingOurs = {}), draw = function () { var el = $('ingOurs'), r = C[id]; if (!el || S.ingCur !== id || !r) return;
     if (!r.items || !r.items.length) { el.innerHTML = '<p class="empty">우리 약국 상품 이름·교육 자료에서 못 찾았어요 → 들여올 후보예요</p>'; return; }
-    el.innerHTML = '<div class="ing-og">' + r.items.map(function (it) { return '<div class="ing-oc"><span class="ing-oi">' + imgHtml(it.img) + '</span><b>' + esc(it.name) + '</b><span class="meta num">' + (it.cat ? esc(it.cat) + ' · ' : '') + '15일 ' + it.s15 + '개</span><button type="button" class="btn sm" data-n="' + esc(it.name) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에 넣기</button></div>'; }).join('') + '</div>' + (r.total > r.items.length ? '<p class="meta">15일 판매 많은 ' + r.items.length + '개 · 모두 ' + r.total + '개</p>' : ''); };
+    var G = [['cos', '화장품 · 의약외품'], ['top', '바르는 약 · 연고'], ['med', '먹는 약']], one = function (it) { return '<div class="ing-oc"><span class="ing-oi">' + imgHtml(it.img) + '</span><b>' + esc(it.name) + '</b><span class="meta num">' + (it.cat ? esc(it.cat) + ' · ' : '') + '15일 ' + it.s15 + '개</span><button type="button" class="btn sm" data-n="' + esc(it.name) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에 넣기</button></div>'; };
+    el.innerHTML = G.map(function (g) { var xs = r.items.filter(function (it) { return (it.kind || 'cos') === g[0]; }); return xs.length ? '<h5 class="ing-gh">' + g[1] + ' <span class="meta num">' + ((r.n || {})[g[0]] || xs.length) + '개</span></h5><div class="ing-og">' + xs.map(one).join('') + '</div>' : ''; }).join('') + '<p class="meta">묶음마다 15일 판매 많은 8개까지 · 세트는 섞어서 담아도 돼요</p>'; };
   if (C[id]) draw(); else call('getIngProds', [id], function (r) { C[id] = r && r.ok ? r : { items: [] }; draw(); }, function () { C[id] = { items: [] }; draw(); });
 }
 /* 1013 상품 상세: 전성분 (주요 성분 칩 → 성분 창) */
