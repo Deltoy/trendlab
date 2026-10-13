@@ -1780,6 +1780,19 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 @keyframes eduSk{to{background-position:-200% 0}}
 @media (prefers-reduced-motion:reduce){.edu-pi .sk{animation:none}}
 .edu-pc b{font-size:14px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all;overflow-wrap:anywhere}
+
+/* 1013 뜨는 화장품 성분 */
+.ing-seg{margin:12px 16px 4px}
+.ing-th{display:flex;gap:4px}.ing-ti{width:36px;height:36px;flex:none;border-radius:8px;overflow:hidden;background:var(--fill-2);display:inline-block}.ing-ti img,.ing-ti .noimg{width:100%;height:100%;object-fit:cover}
+.ing-p{display:flex;align-items:center;gap:10px}.ing-cs{display:flex;flex-wrap:wrap;column-gap:6px}.ing-c{min-height:44px;padding:0;border:0;background:none;cursor:pointer;display:inline-flex;align-items:center}
+.ing-c span{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:999px;background:var(--fill-2);color:var(--ink);font-size:var(--fs-2);font-weight:600}.ing-c:hover span{background:var(--line)}
+.ing-sh h4{margin:16px 0 8px;font-size:var(--fs-3)}.ing-sh h4:first-child{margin-top:0}
+.ing-og{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}.ing-oc{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:var(--fs-2)}
+.ing-oi{aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--fill-2)}.ing-oi img,.ing-oi .noimg{width:100%;height:100%;object-fit:cover}.ing-oc .btn{margin-top:auto;min-height:44px}
+.ing-ol{display:flex;flex-direction:column}.ing-or{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;color:var(--ink);cursor:pointer}.ing-or .tx{display:flex;flex-direction:column;font-size:var(--fs-2)}
+.ing-all summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink2);font-size:var(--fs-2)}.ing-all p{font-size:var(--fs-2);color:var(--ink2);line-height:1.6}
+#pdIng .ing-cs{margin-bottom:4px}
+.ing-p .tx{display:flex;flex-direction:column;gap:2px;line-height:1.35}#ingCard .nw{white-space:nowrap}
 </style>
 </head>
 <body data-tab="today">
@@ -2411,14 +2424,14 @@ function renderPd(r) {
     h += L.suggest.map(function (s) { return '<div class="link-row"><span><b>' + esc(s.name) + '</b></span><button type="button" class="btn" data-act="link-yes" data-name="' + esc(s.name) + '" onclick="linkAct(this)">같은 상품</button><button type="button" class="btn" data-act="link-no" data-name="' + esc(s.name) + '" onclick="linkAct(this)">아니에요</button></div>'; }).join('');
     if (!L.confirmed.length && !L.suggest.length) h += '<p class="empty">비슷한 약국 상품을 찾지 못했어요 → 들여올 후보예요</p>';
   }
-  h += '</div><div class="pd-sec"><h4>최근 30일 순위 ' + asOf(c.last) + '</h4>' + chartSvg(r.series, r.labels) + '</div>' + otherMallsHtml(r.otherMalls)
+  h += '</div>' + (/^oy:/.test(c.key) ? '<div class="pd-sec" id="pdIng"><h4>성분</h4><p class="meta">불러오는 중…</p></div>' : '') + '<div class="pd-sec"><h4>최근 30일 순위 ' + asOf(c.last) + '</h4>' + chartSvg(r.series, r.labels) + '</div>' + otherMallsHtml(r.otherMalls)
     + '<div class="pd-sec"><h4>메모 · 묶음</h4>'
     + '<label class="field"><textarea id="pdMemo" maxlength="200" placeholder="메모 (예: 가을 보습 세트에 넣기)">' + esc(r.board ? r.board.memo : '') + '</textarea></label>'
     + '<label class="field"><input id="pdGroup" maxlength="30" list="pdGroups" placeholder="묶음 이름 (선택 · 예: 가을 행사)" value="' + esc(r.board ? r.board.group : '') + '"></label>'
     + (groups.length ? '<div class="grp-chips">' + groups.map(function (g) { return '<button type="button" class="chip" data-g="' + esc(g) + '" onclick="pickGroup(this)">' + esc(g) + '</button>'; }).join('') + '</div>' : '')
     + '<div class="acts"><button type="button" class="btn" data-act="save-board" onclick="saveBoard()">' + (r.board ? '메모·묶음 저장' : icon('bookmark') + '메모와 함께 찜하기') + '</button>' + (r.board ? '<button type="button" class="btn danger" onclick="removeBoard()">담은 상품에서 빼기</button>' : '') + '</div></div>';
   h += srcLine(['oy', 'logi'].concat(pbr ? ['pos'] : [], (r.otherMalls || []).map(function (x) { return MALL_SRC[x.mall]; })), { at: oyAt(c.last), calc: '최근 30일 순위 = 카테고리마다 날짜별 수집 순위 · 가격 = 마지막 수집 때 판매가' });
-  $('pdBody').innerHTML = h; fitSvgText($('pdBody'));
+  $('pdBody').innerHTML = h; fitSvgText($('pdBody')); pdIngs(c.key);
   $('pdFoot').innerHTML = '';
 }
 function pdQuickSave(btn) {
@@ -4171,13 +4184,65 @@ function kwBars(s) { s = (s || []).slice(-7); if (s.length < 3) return ''; var m
 /* 1004 네이버 월간 검색수(최근 30일 PC+모바일) — S.viz.nvol. 이름은 띄어쓰기·대소문자 무시로 맞춤 */
 function nvOf(term) { var v = S.viz && S.viz.nvol, k = String(term || '').replace(/\s+/g, '').toLowerCase(); if (!v || !k) return null; for (var i = 0; i < v.items.length; i++) if (String(v.items[i].term).replace(/\s+/g, '').toLowerCase() === k) return v.items[i]; return null; }
 function nvTxt(x) { return x ? '<b class="num">' + manTxt(x.total) + '</b>' + (x.growth != null ? ' ' + delta(x.growth, '%') : '') : ''; }
+/* 1013 MJ: 뜨는 화장품의 성분 — 약국은 성분으로 세트를 만든다. 성분 순위(상위 상품 몇 개에 들었나) · 제품별 주요 성분 · 성분을 누르면 우리 약국에 그 성분이 든 제품(사진·15일 판매·세트에 넣기) */
+function ingLoad() {
+  if (S.ingT) return ingDraw();
+  swrCall('getIngTrend', [], function (r) { S.ingT = r && r.ok ? r : { rank: [], prods: [] }; ingDraw(); }, function () { S.ingT = { rank: [], prods: [], err: 1 }; ingDraw(); });
+}
+function ingThumbs(keys, n) { var P = ingProdMap(); return '<span class="ing-th">' + keys.slice(0, n).map(function (k) { var p = P[k]; return p ? '<span class="ing-ti" title="' + esc(p.brand + ' ' + p.name) + '">' + imgHtml(p.img) + '</span>' : ''; }).join('') + '</span>'; }
+function ingProdMap() { var T = S.ingT || {}; if (!T._m) { T._m = {}; (T.prods || []).forEach(function (p) { T._m[p.key] = p; }); } return T._m; }
+function ingLabel(id) { var x = ((S.ingT || {}).rank || []).filter(function (r) { return r.id === id; })[0]; return x ? x.label : id; }
+function ingChips(keys) { return '<span class="ing-cs">' + keys.map(function (k) { var id = Array.isArray(k) ? k[0] : k, lb = Array.isArray(k) ? k[1] : ingLabel(id); return '<button type="button" class="ing-c" data-id="' + esc(id) + '" onclick="event.stopPropagation();openIng(this.dataset.id)"><span>' + esc(lb) + '</span></button>'; }).join('') + '</span>'; }
+function ingDraw() {
+  var el = $('ingBody'), T = S.ingT; if (!el || !T) return;
+  if ($('ingAsof')) $('ingAsof').innerHTML = T.date ? esc(shortDate(T.date)) + ' · 상품 ' + T.total + '개' : '';
+  if (!T.rank.length) { el.innerHTML = '<p class="empty">' + (T.err ? '불러오지 못했어요' : '성분 자료를 모으는 중이에요 — 맥 수집기가 매일 아침 새 상품 전성분을 받아요') + '</p>'; return; }
+  var seg = S.ingSeg === 'prod' ? 'prod' : 'rank';
+  el.innerHTML = '<div class="seg ing-seg" role="tablist" aria-label="성분 보기">' + [['rank', '성분 순위'], ['prod', '제품별 성분']].map(function (x) { return '<button type="button" role="tab" class="' + (x[0] === seg ? 'on' : '') + '" aria-selected="' + (x[0] === seg) + '" onclick="S.ingSeg=\'' + x[0] + '\';ingDraw()">' + x[1] + '</button>'; }).join('') + '</div><div id="ingTable"></div>';
+  if (seg === 'rank') dtMount({ id: 'ing', el: 'ingTable', label: '뜨는 성분', rows: T.rank, key: function (x) { return x.id; }, open: function (x) { openIng(x.id); }, tip: function (x) { return x.label + ' 든 제품 보기'; }, file: '뜨는성분', src: [['oy'], { at: T.date ? shortDate(T.date) + ' 수집' : '', calc: '올영 랭킹(전체 100 + 화장품 카테고리별 30)의 상품 상세 전성분에 그 성분이 있는 상품 수', lim: '성분 이름(INCI 한글) 기준이라 함량은 몰라요 · 건강식품은 빠져요' }],
+    cols: [
+      { k: 'label', label: '성분', w: 'minmax(120px,1.2fr)', m: 'title', filter: 1, html: function (x) { return '<b>' + esc(x.label) + '</b>'; } },
+      { k: 'n', label: '든 상품', w: 'minmax(80px,.6fr)', num: 1, desc: 1, m: 'sub', html: function (x, wide) { return (wide ? '' : '<span class="meta">든 상품</span> ') + '<span class="nw"><b class="num">' + x.n + '개</b> <span class="meta num">/ ' + T.total + '</span></span>'; } },
+      { k: 'top100', label: '전체 랭킹 100 안', w: 'minmax(96px,.6fr)', num: 1, desc: 1, m: 'hide', html: function (x) { return '<span class="num">' + x.top100 + '개</span>'; } },
+      { k: 'prods', label: '대표 상품', w: 'minmax(132px,1fr)', nosort: 1, csv: false, m: 'sub', html: function (x) { return ingThumbs(x.prods, 4); } }
+    ] });
+  else dtMount({ id: 'ingp', el: 'ingTable', label: '제품별 성분', rows: T.prods, key: function (x) { return x.key; }, open: function (x) { openPd(x.key); }, tip: function (x) { return x.name + ' 상세 · 전성분'; }, file: '제품별성분', src: [['oy'], { at: T.date ? shortDate(T.date) + ' 수집' : '', calc: '상품 상세 전성분 중 주요 성분만 (바탕 성분 뺌)' }],
+    cols: [
+      { k: 'rank', label: '순위', w: 'minmax(56px,.4fr)', num: 1, m: 'sub', v: function (x) { return x.rank || 999; }, html: function (x) { return x.rank ? '<b class="num nw">' + x.rank + '위</b>' : '<span class="meta">' + esc(x.cat || '카테고리') + '</span>'; } },
+      { k: 'name', label: '상품', w: 'minmax(180px,1.6fr)', m: 'title', filter: 1, v: function (x) { return x.brand + ' ' + x.name; }, html: function (x) { return '<span class="ing-p"><span class="ing-ti">' + imgHtml(x.img) + '</span><span class="tx"><span class="meta">' + esc(x.brand) + '</span><span>' + esc(x.name) + '</span></span></span>'; } },
+      { k: 'keys', label: '주요 성분', w: 'minmax(200px,2fr)', nosort: 1, m: 'sub', v: function (x) { return x.keys.map(ingLabel).join(' · '); }, html: function (x) { return x.keys.length ? ingChips(x.keys) : '<span class="meta">주요 성분 없음 · 전체 ' + x.n + '개</span>'; } }
+    ] });
+}
+function openIng(id) {
+  var T = S.ingT || { rank: [], prods: [] }, x = T.rank.filter(function (r) { return r.id === id; })[0], P = ingProdMap();
+  var ps = (T.prods || []).filter(function (p) { return p.keys.indexOf(id) !== -1; });
+  S.mtFrom = document.activeElement; S.ingCur = id;
+  $('mtTitle').textContent = '성분 · ' + ingLabel(id);
+  $('mtBody').innerHTML = '<div class="ing-sh"><h4>우리 약국에 이 성분이 든 제품</h4><div id="ingOurs">' + skel(2) + '</div>'
+    + '<h4>올영 상위 상품 중 ' + ps.length + '개에 들어 있어요</h4><div class="ing-ol">' + ps.slice(0, 12).map(function (p) { return '<button type="button" class="ing-or" data-k="' + esc(p.key) + '" onclick="openPd(this.dataset.k)"><span class="ing-ti">' + imgHtml(p.img) + '</span><span class="tx"><span class="meta">' + (p.rank ? p.rank + '위 · ' : esc(p.cat) + ' · ') + esc(p.brand) + '</span><b>' + esc(p.name) + '</b></span></button>'; }).join('') + '</div></div>';
+  $('mtFoot').innerHTML = '';
+  if (!$('mt').classList.contains('on')) { $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
+  var C = S.ingOurs || (S.ingOurs = {}), draw = function () { var el = $('ingOurs'), r = C[id]; if (!el || S.ingCur !== id || !r) return;
+    if (!r.items || !r.items.length) { el.innerHTML = '<p class="empty">우리 약국 상품 이름·교육 자료에서 못 찾았어요 → 들여올 후보예요</p>'; return; }
+    el.innerHTML = '<div class="ing-og">' + r.items.map(function (it) { return '<div class="ing-oc"><span class="ing-oi">' + imgHtml(it.img) + '</span><b>' + esc(it.name) + '</b><span class="meta num">15일 ' + it.s15 + '개' + (it.by === 'card' ? ' · 교육 자료' : '') + '</span><button type="button" class="btn sm" data-n="' + esc(it.name) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에 넣기</button></div>'; }).join('') + '</div>' + (r.total > r.items.length ? '<p class="meta">15일 판매 많은 ' + r.items.length + '개 · 모두 ' + r.total + '개</p>' : ''); };
+  if (C[id]) draw(); else call('getIngProds', [id], function (r) { C[id] = r && r.ok ? r : { items: [] }; draw(); }, function () { C[id] = { items: [] }; draw(); });
+}
+/* 1013 상품 상세: 전성분 (주요 성분 칩 → 성분 창) */
+function pdIngs(key) {
+  if (!/^oy:/.test(key)) return;
+  call('getProdIngs', [key], function (r) { var el = $('pdIng'); if (!el || S.pdKey !== key) return;
+    if (!r || !r.ok || !r.ings) { el.remove(); return; }
+    el.innerHTML = '<h4>성분</h4>' + (r.keys.length ? ingChips(r.keys) : '<p class="meta">주요 성분 없음</p>') + '<details class="ing-all"><summary>전성분 ' + r.ings.length + '개 보기</summary><p>' + esc(r.ings.join(', ')) + '</p></details>'; }, function () { var el = $('pdIng'); if (el) el.remove(); });
+}
 function renderKeywords() {
   var v = S.viz, el = $('tv-keyword'); if (!el) return;
   if (!v || v.empty) { el.innerHTML = '<p class="empty">데이터가 쌓이면 키워드가 나와요</p>'; return; }
   var range = (v.keywordBase ? shortDate(v.keywordBase) + ' → ' : '') + shortDate(v.date) + ' · 7일 비교' + (v.keywordSites && v.keywordSites.length > 1 ? ' · ' + v.keywordSites.length + '개 사이트 합산' : '');
   var srcDate = (v.gtrends && v.gtrends.date) || (v.ndatalab && v.ndatalab.date) || (v.nblog && v.nblog.date) || '';
   el.innerHTML = '<div class="kw-grid"><section class="card kw-card"><div class="card-head"><h2>네이버 월간 검색수 · 반응 <small>한 달 검색수 큰 순 · 구글·블로그는 최근 7일 vs 그 전 7일</small></h2>' + asOf((v.nvol && v.nvol.date) || srcDate) + '</div><div id="sxTable"></div></section>'
+    + '<section class="card kw-card" id="ingCard"><div class="card-head"><h2>뜨는 화장품 성분 <small>올영 상위 상품 전성분 · 누르면 그 성분이 든 우리 약국 제품</small></h2><span class="meta" id="ingAsof"></span></div><div id="ingBody">' + skel(3) + '</div></section>'
     + '<section class="card kw-card"><div class="card-head"><h2>올영 상위 상품 속 키워드 <small>상품 이름에 몇 번 나왔나</small></h2><span class="meta">' + esc(range) + '</span></div><div id="kwTable"></div></section></div>';   /* 1004 검색수를 맨 위로 */
+  ingLoad();
   var kw = topKeywords(v);
   dtMount({ id: 'kw', el: 'kwTable', label: '이번 주 키워드', rows: kw, key: function (k) { return k.word; }, open: function (k) { openSearch(k.word); }, tip: function (k) { return '#' + k.word + ' 들어간 상품 찾기'; }, file: '키워드', src: [['oy'].concat((v.keywordSites || []).map(function (m) { return MALL_SRC[m]; }).filter(function (m) { return m && m !== 'oy'; })), { at: range, calc: '상위 상품 이름에 키워드가 나온 상품 수 · 지난주와 비교' }],
     cols: [
