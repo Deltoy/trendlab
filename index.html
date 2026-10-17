@@ -1794,6 +1794,66 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 #pdIng .ing-cs{margin-bottom:4px}
 .ing-p .tx{display:flex;flex-direction:column;gap:2px;line-height:1.35}#ingCard .nw{white-space:nowrap}
 .ing-gh .meta{display:inline;font-weight:500}.ing-gh{margin:14px 0 8px;font-size:var(--fs-2);font-weight:700;color:var(--ink2)}.ing-gh:first-child{margin-top:0}
+
+/* 1017 약국 세트 (판매 순위 · 구성품 사입가 · 마진) */
+.pss-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:4px 0 16px}
+@media(min-width:840px){.pss-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pss-kpi{display:flex;flex-direction:column;gap:2px;padding:12px 16px;border-radius:var(--r-tile);background:var(--fill)}
+.pss-kpi span{font-size:var(--fs-1);color:var(--ink2);font-weight:600}
+.pss-kpi b{font-size:var(--fs-5);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pss-kpi small{font-size:var(--fs-1);color:var(--ink3)}
+.pss-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.pss-q{flex:1 1 220px;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--pill);background:var(--card);color:var(--ink3)}
+.pss-q input{flex:1;min-width:0;border:0;background:none;outline:none;color:var(--ink)}
+.pss-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.pss-item{border-bottom:1px solid var(--line)}
+.pss-item.open{background:color-mix(in srgb,var(--pri-soft) 40%,transparent)}
+.pss-row{display:grid;grid-template-columns:28px 56px minmax(0,1fr) auto 20px;grid-template-areas:"rk ph main money chev" "rk ph sales sales chev";gap:4px 12px;align-items:center;width:100%;padding:12px 4px;border:0;background:none;text-align:left;font:inherit;color:inherit}
+@media(min-width:840px){.pss-row{grid-template-columns:32px 64px minmax(0,1fr) minmax(160px,220px) 120px 20px;grid-template-areas:"rk ph main sales money chev";gap:16px;padding:12px 8px}}
+@media(hover:hover){.pss-row:hover{background:var(--fill)}}
+.pss-rk{grid-area:rk;font-size:var(--fs-3);font-weight:800;color:var(--ink3);text-align:center;font-variant-numeric:tabular-nums}
+.pss-rk.top{color:var(--pri-text)}
+.pss-ph{grid-area:ph;width:56px;height:56px;border-radius:var(--r-sm);overflow:hidden;background:var(--img-well)}
+@media(min-width:840px){.pss-ph{width:64px;height:64px}}
+.pss-ph img{width:100%;height:100%;object-fit:cover}
+.pss-main{grid-area:main;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pss-nm{font-weight:700;font-size:var(--fs-3);line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pss-sub{display:flex;align-items:center;gap:8px;min-width:0}
+.pss-ths{display:flex;gap:4px;min-width:0;overflow:hidden}
+.pss-th{position:relative;flex:none;width:28px;height:28px;border-radius:8px;overflow:hidden;background:var(--img-well);border:1px solid var(--line)}
+.pss-th img{width:100%;height:100%;object-fit:contain}
+.pss-th em{position:absolute;right:0;bottom:0;padding:0 3px;border-radius:6px 0 0 0;background:var(--ink);color:var(--on-ink);font:700 10px/14px inherit;font-style:normal}
+.pss-more{flex:none;align-self:center;font-size:var(--fs-1);color:var(--ink3);font-weight:600}
+.pss-sales{grid-area:sales;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 8px}
+.pss-sales b{font-variant-numeric:tabular-nums;font-weight:800}
+.pss-sales small{grid-column:1/-1;font-size:var(--fs-1);color:var(--ink3)}
+@media(max-width:839px){.pss-sales small{display:none}}
+.pss-bar{height:6px;border-radius:var(--pill);background:var(--fill-2);overflow:hidden}
+.pss-bar i{display:block;height:100%;border-radius:inherit;background:var(--pri)}
+.pss-money{grid-area:money;display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.pss-money b{font-variant-numeric:tabular-nums;font-weight:700}
+.pss-money small{font-size:var(--fs-1);color:var(--ok);font-weight:600}
+.pss-chev{grid-area:chev;color:var(--ink3);transition:transform var(--t) var(--ease)}
+.pss-item.open .pss-chev{transform:rotate(90deg)}
+.pss-detail{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:4px 8px 20px}
+@media(min-width:840px){.pss-detail{grid-template-columns:minmax(200px,280px) minmax(0,1fr);gap:24px;padding:4px 8px 24px 56px}}
+.pss-big{border-radius:var(--r-tile);overflow:hidden;background:var(--img-well);align-self:start}
+.pss-big img{display:block;width:100%;max-height:360px;object-fit:contain}
+.pss-dmain{display:flex;flex-direction:column;gap:12px;min-width:0}
+.pss-memo{margin:0;padding:10px 14px;border-radius:var(--r-sm);background:var(--amber);color:var(--amber-ink);font-size:var(--fs-2)}
+.pss-tw{overflow-x:auto}
+.pss-tbl{width:100%;border-collapse:collapse;font-size:var(--fs-2)}
+.pss-tbl th{padding:8px;font-size:var(--fs-1);font-weight:600;color:var(--ink3);text-align:left;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+.pss-tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.pss-tbl .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pss-cn{display:flex;align-items:center;gap:10px;min-width:180px}
+.pss-cn .pss-th{width:36px;height:36px}
+.pss-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0}
+.pss-sum div{padding:10px 14px;border-radius:var(--r-sm);background:var(--card);border:1px solid var(--line)}
+.pss-sum div.hl{background:var(--ok-soft);border-color:transparent}
+.pss-sum dt{font-size:var(--fs-1);color:var(--ink2);font-weight:600}
+.pss-sum dd{margin:2px 0 0;font-size:var(--fs-4);font-weight:800;font-variant-numeric:tabular-nums}
+.pss-sum dd small{font-size:var(--fs-1);font-weight:600;color:var(--ok)}
 </style>
 </head>
 <body data-tab="today">
@@ -2397,6 +2457,7 @@ function logiInfoHtml(i) {
   var p = [];
   if (i.act) p.push(tag('발주 진행 중', 't-ink'));
   if (i.s15 !== '' && i.s15 != null) p.push('15일 판매 <b>' + esc(i.s15) + '개</b>');
+  if (i.cost || i.price) p.push('사입 <b>' + (i.cost ? Number(i.cost).toLocaleString() + '원' : '–') + '</b> · 판매 <b>' + (i.price ? Number(i.price).toLocaleString() + '원' : '–') + '</b>');   /* 1017 MJ */
   if (i.inb) p.push('마지막 입고 ' + esc(i.inb));
   else if (i.ord) p.push('마지막 발주 ' + esc(i.ord));
   if (!p.length) p.push('발주 기록 없음');
@@ -2977,13 +3038,73 @@ function psHtml(sub) {
 /* 세트 > 세트 목록: 물류앱 세트(S…)와 세트 초안(D…)를 한 목록에 · 상태 칩으로 거르기 · AI 검토가 붙은 카드는 한 줄 전체 */
 var PS_F = [['all', '전체'], ['logi', '물류앱 반영됨'], ['test', '초안'], ['edited', '반영 후 수정']];
 function psListHtml(p) {
-  var f = S.psF || 'all', ds = p.diys || [];
-  var all = (p.sets || []).map(function (s) { return { k: 'logi', rv: false, h: haveCardHtml(s) }; }).concat(ds.map(function (s) { return { k: s.status === '반영됨' ? 'logi' : s.status === '반영 후 수정' ? 'edited' : 'test', rv: !!(s.review && s.review.result), h: diyCardHtml(s) }; }));
-  var n = function (k) { return all.filter(function (x) { return k === 'all' || x.k === k; }).length; }, list = all.filter(function (x) { return f === 'all' || x.k === f; });
-  var chips = '<div class="chips ps-f" role="group" aria-label="세트 상태">' + PS_F.map(function (x) { var on = f === x[0]; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-f="' + x[0] + '" onclick="S.psF=this.dataset.f;renderSetTab()">' + x[1] + ' <em>' + n(x[0]) + '</em></button>'; }).join('') + '</div>';
-  var rv = list.filter(function (x) { return x.rv; }), rest = list.filter(function (x) { return !x.rv; });
-  return '<article class="card" id="psCard"><div class="card-head"><h2>세트 목록 <small class="meta">' + all.length + '개</small></h2><button type="button" class="btn" onclick="S.psEditing=psNewDraft();route(\'set\',\'diy\')">' + icon('plus') + '새 세트 만들기</button></div><p class="sub">물류앱 세트와 세트 초안를 한곳에서 봐요 · 세트 초안는 [물류앱에 반영]을 눌러야 물류앱에 들어가요</p>' + chips
-    + (list.length ? (rv.length ? '<div class="ps-grid rv">' + rv.map(function (x) { return x.h; }).join('') + '</div>' : '') + (rest.length ? '<div class="ps-grid" data-n="' + rest.length + '">' + rest.map(function (x) { return x.h; }).join('') + '</div>' : '') : '<p class="empty">이 상태의 세트가 없어요</p>') + srcLine(['logi'], { calc: 'S… = 물류앱 세트 시트 · D… = 트렌드랩 세트 초안' }) + '</article>';
+  return pssHtml(p) + psDraftHtml(p);
+}
+/* 1017 MJ: 물류앱 세트를 판매 순위로 · 누르면 구성품(사진·사입가·판매가·15일 판매)과 세트 마진이 펼쳐짐 */
+function pssPrice(s) { var m = String(s.memo || '').match(/(\d{1,3}(?:,\d{3})+)\s*원/); return m ? +m[1].replace(/,/g, '') : 0; }
+function pssCalc(s, info) {
+  var cost = 0, sep = 0, miss = 0;
+  s.items.forEach(function (it) { var x = info[String(it.name).replace(/\s+/g, '').toLowerCase()] || {}; if (!x.cost) { miss++; return; } cost += x.cost * it.qty; sep += (x.price || 0) * it.qty; });
+  var price = pssPrice(s), gain = price && cost ? price - cost : null;
+  return { cost: cost, sep: sep, miss: miss, price: price, gain: gain, rate: gain != null ? gain / price : null, s15: s.s15 || 0 };
+}
+function pssWon(n) { return n ? won(n) : '–'; }
+function pssHtml(p) {
+  var info = p.itemInfo || {}, sets = (p.sets || []).map(function (s) { return { s: s, c: pssCalc(s, info) }; });
+  if (!sets.length) return '<article class="card" id="psCard"><p class="empty">물류앱에 등록된 세트가 없어요</p></article>';
+  var boxes = {}; sets.forEach(function (x) { var b = String(x.s.box || '').replace(/\s|번/g, ''); if (b) boxes[b] = (boxes[b] || 0) + 1; });
+  var bf = S.pssBox || '', sort = S.pssSort || 's15', q = String(S.pssQ || '').replace(/\s+/g, '').toLowerCase();
+  var list = sets.filter(function (x) { return (!bf || String(x.s.box || '').replace(/\s|번/g, '') === bf) && (!q || (x.s.name + x.s.items.map(function (i) { return i.name; }).join('')).replace(/\s+/g, '').toLowerCase().indexOf(q) !== -1); });
+  list.sort(sort === 'gain' ? function (a, b) { return (b.c.gain || -1e9) * (b.c.s15 || 0) - (a.c.gain || -1e9) * (a.c.s15 || 0); } : sort === 'rate' ? function (a, b) { return (b.c.rate == null ? -9 : b.c.rate) - (a.c.rate == null ? -9 : a.c.rate); } : function (a, b) { return (b.c.s15 || 0) - (a.c.s15 || 0); });
+  var top = Math.max.apply(null, sets.map(function (x) { return x.c.s15; }).concat(1)), per = (sets.filter(function (x) { return x.s.s15p; })[0] || { s: {} }).s.s15p;
+  var tot = sets.reduce(function (a, x) { a.n += x.c.s15; if (x.c.price) a.rev += x.c.price * x.c.s15; if (x.c.gain != null) a.gain += x.c.gain * x.c.s15; return a; }, { n: 0, rev: 0, gain: 0 });
+  var rankOf = {}; sets.slice().sort(function (a, b) { return b.c.s15 - a.c.s15; }).forEach(function (x, i) { rankOf[x.s.id] = i + 1; });
+  psNeedImgs([].concat.apply([], sets.map(function (x) { return x.s.items.map(function (i) { return i.name; }); })));
+  var kpi = function (lab, val, sub) { return '<div class="pss-kpi"><span>' + lab + '</span><b>' + val + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>'; };
+  var h = '<article class="card" id="psCard"><div class="card-head"><h2>약국 세트 <small class="meta">' + sets.length + '개' + (per ? ' · 15일 판매 ' + esc(per) : '') + '</small></h2><button type="button" class="btn" onclick="S.psEditing=psNewDraft();route(\'set\',\'diy\')">' + icon('plus') + '새 세트 만들기</button></div>'
+    + '<div class="pss-kpis">' + kpi('세트 판매', tot.n.toLocaleString('ko-KR') + '개', '15일') + kpi('세트 매출', pssWon(tot.rev), '세트가 × 판매') + kpi('남는 돈', pssWon(tot.gain), '(세트가 − 사입가) × 판매') + kpi('평균 마진', tot.rev ? Math.round(tot.gain / tot.rev * 100) + '%' : '–', '남는 돈 ÷ 매출') + '</div>'
+    + '<div class="pss-tools"><label class="pss-q">' + icon('search') + '<input type="search" placeholder="세트 · 구성품 이름" value="' + esc(S.pssQ || '') + '" oninput="S.pssQ=this.value;clearTimeout(S.pssT);S.pssT=setTimeout(function(){renderSetTab();var i=document.querySelector(\'.pss-q input\');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)" aria-label="세트 찾기"></label>'
+    + '<div class="seg" role="group" aria-label="정렬">' + [['s15', '많이 팔린 순'], ['gain', '많이 남긴 순'], ['rate', '마진율 순']].map(function (x) { var on = sort === x[0]; return '<button type="button" class="' + (on ? 'on' : '') + '" aria-pressed="' + on + '" data-k="' + x[0] + '" onclick="S.pssSort=this.dataset.k;renderSetTab()">' + x[1] + '</button>'; }).join('') + '</div></div>'
+    + '<div class="chips pss-box" role="group" aria-label="박스로 거르기"><button type="button" class="chip' + (bf ? '' : ' on') + '" aria-pressed="' + !bf + '" onclick="S.pssBox=\'\';renderSetTab()">전체 <em>' + sets.length + '</em></button>'
+    + Object.keys(boxes).sort(function (a, b) { return (parseFloat(a) || 99) - (parseFloat(b) || 99); }).map(function (b) { var on = bf === b; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-b="' + esc(b) + '" onclick="S.pssBox=this.dataset.b;renderSetTab()">박스 ' + esc(b) + '번 <em>' + boxes[b] + '</em></button>'; }).join('') + '</div>'
+    + '<div class="pss-list" role="list">' + (list.length ? list.map(function (x) { return pssRow(x.s, x.c, rankOf[x.s.id], top, info); }).join('') : '<p class="empty">맞는 세트가 없어요</p>') + '</div>'
+    + srcLine(['logi'], { calc: '15일 판매 = POS 엑셀 · 세트가 = 세트 메모의 첫 가격 · 사입가·판매가 = POS 15일 엑셀(사입가 합 ÷ 수량)' }) + '</article>';
+  return h;
+}
+function pssRow(s, c, rank, top, info) {
+  var open = S.pssOpen === s.id, thumbs = s.items.slice(0, 5).map(function (it) { return '<span class="pss-th" title="' + esc(it.name) + '">' + imgHtml(psImgFor(it.name)) + (it.qty > 1 ? '<em>×' + it.qty + '</em>' : '') + '</span>'; }).join('') + (s.items.length > 5 ? '<span class="pss-more">+' + (s.items.length - 5) + '</span>' : '');
+  var h = '<div class="pss-item' + (open ? ' open' : '') + '" role="listitem"><button type="button" class="pss-row" aria-expanded="' + open + '" data-id="' + esc(s.id) + '" onclick="S.pssOpen=S.pssOpen===this.dataset.id?\'\':this.dataset.id;renderSetTab()">'
+    + '<span class="pss-rk' + (rank <= 3 ? ' top' : '') + '">' + rank + '</span>'
+    + '<span class="pss-ph">' + (/^https:\/\//.test(s.photo || '') ? imgHtml(s.photo) : '<i class="noimg"></i>') + '</span>'
+    + '<span class="pss-main"><span class="pss-nm">' + esc(s.name) + '</span><span class="pss-sub">' + (s.box ? tag('박스 ' + String(s.box).replace(/번$/, '') + '번') : tag('박스 없음', 't-warn')) + '<span class="pss-ths">' + thumbs + '</span></span></span>'
+    + '<span class="pss-sales"><span class="pss-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round((c.s15 || 0) / top * 100)) + '%"></i></span><b>' + (s.s15 == null ? '–' : (c.s15).toLocaleString('ko-KR') + '개') + '</b><small>15일 판매</small></span>'
+    + '<span class="pss-money"><b>' + pssWon(c.price) + '</b><small>' + (c.rate != null ? '마진 ' + Math.round(c.rate * 100) + '%' + (c.miss ? ' (일부)' : '') : '사입가 모름') + '</small></span>'
+    + '<span class="pss-chev" aria-hidden="true">' + icon('chev') + '</span></button>';
+  if (open) h += pssDetail(s, c, info);
+  return h + '</div>';
+}
+function pssDetail(s, c, info) {
+  var rows = s.items.map(function (it) {
+    var x = info[String(it.name).replace(/\s+/g, '').toLowerCase()] || {};
+    return '<tr><td class="pss-cn"><span class="pss-th">' + imgHtml(psImgFor(it.name)) + '</span><span>' + esc(it.name) + '</span></td><td class="num">' + it.qty + '</td><td class="num">' + pssWon(x.cost) + '</td><td class="num">' + pssWon(x.price) + '</td><td class="num">' + (x.s15 == null ? '–' : x.s15.toLocaleString('ko-KR') + '개') + '</td></tr>';
+  }).join('');
+  var disc = c.price && c.sep ? Math.round((1 - c.price / c.sep) * 100) : null;
+  return '<div class="pss-detail">'
+    + (/^https:\/\//.test(s.photo || '') ? '<div class="pss-big">' + imgHtml(s.photo) + '</div>' : '')
+    + '<div class="pss-dmain">' + (s.memo ? '<p class="pss-memo">' + esc(s.memo) + '</p>' : '')
+    + '<div class="pss-tw"><table class="pss-tbl"><thead><tr><th>구성품</th><th class="num">개수</th><th class="num">사입가</th><th class="num">판매가</th><th class="num">15일 판매</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '<dl class="pss-sum"><div><dt>구성품 사입가 합</dt><dd>' + pssWon(c.cost) + '</dd></div><div><dt>따로 사면</dt><dd>' + pssWon(c.sep) + '</dd></div><div><dt>세트가</dt><dd>' + pssWon(c.price) + (disc > 0 ? ' <small>' + disc + '% 싸게</small>' : '') + '</dd></div>'
+    + '<div class="hl"><dt>세트 1개 남는 돈</dt><dd>' + (c.gain != null ? won(c.gain) + ' <small>' + Math.round(c.rate * 100) + '%</small>' : '–') + '</dd></div>'
+    + '<div class="hl"><dt>15일 동안 남긴 돈</dt><dd>' + (c.gain != null ? won(c.gain * c.s15) : '–') + '</dd></div></dl>'
+    + (c.miss ? '<p class="meta">사입가를 모르는 구성품 ' + c.miss + '개는 빼고 계산했어요</p>' : '')
+    + '<div class="ps-act"><button type="button" class="btn" data-id="' + esc(s.id) + '" onclick="psEditHave(this.dataset.id)">고치기</button>' + (s.at ? '<span class="meta">마지막 수정 ' + esc(s.editor || '') + ' · ' + esc(s.at) + '</span>' : '') + '</div></div></div>';
+}
+/* 세트 초안(D…)은 아래에 따로 */
+function psDraftHtml(p) {
+  var ds = p.diys || []; if (!ds.length) return '';
+  var rv = ds.filter(function (s) { return s.review && s.review.result; }), rest = ds.filter(function (s) { return !(s.review && s.review.result); });
+  return '<article class="card" id="psDraft"><div class="card-head"><h2>세트 초안 <small class="meta">' + ds.length + '개</small></h2></div><p class="sub">[물류앱에 반영]을 눌러야 위 약국 세트에 들어가요</p>'
+    + (rv.length ? '<div class="ps-grid rv">' + rv.map(diyCardHtml).join('') + '</div>' : '') + (rest.length ? '<div class="ps-grid" data-n="' + rest.length + '">' + rest.map(diyCardHtml).join('') + '</div>' : '') + '</article>';
 }
 function haveCardHtml(s) {
   return '<div class="ps-card"><div class="ps-main"><div class="ps-st">' + tag('물류앱', 't-ok') + '<span class="meta">' + esc(s.id) + '</span>' + pbRateTag(s.items) + '</div>' + (/^https:\/\//.test(s.photo || '') ? '<div class="ps-ph">' + imgHtml(s.photo) + '</div>' : '')
@@ -3321,7 +3442,7 @@ function psNeedImgs(names) {
   var need = names.filter(function (n) { return !(n in S.psImg) && !/^\[올리브영\]/.test(n); }).slice(0, 150);
   if (!need.length) return;
   need.forEach(function (n) { S.psImg[n] = ''; });
-  call('getProductImages', [need], function (r) { if (!r || !r.ok) return; Object.keys(r.imgs).forEach(function (n) { S.psImg[n] = r.imgs[n]; }); diyList(); var b = $('diyBox'); if (b && S.ps && !S.ps.err) b.innerHTML = diyBoxHtml(); });
+  call('getProductImages', [need], function (r) { if (!r || !r.ok) return; Object.keys(r.imgs).forEach(function (n) { S.psImg[n] = r.imgs[n]; }); if (S.tab === 'set' && S.setSub === 'list' && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('.pss-q'))) renderSetTab(); diyList(); var b = $('diyBox'); if (b && S.ps && !S.ps.err) b.innerHTML = diyBoxHtml(); });
 }
 function psFoundHtml() { return (S.psFound || []).map(function (x, i) { var has = diyHas(x.name); return '<div class="diy-row"><span class="diy-img">' + imgHtml(x.img || '') + '</span><span class="tx"><span class="nm1">' + esc(x.name.replace(/^\[올리브영\] /, '')) + '</span><span class="meta">' + (x.src === 'oy' ? '올리브영' : '약국') + '</span></span><button type="button" class="btn add' + (has ? ' on' : '') + '" data-act="diy-add" data-i="' + i + '" onclick="psAdd(+this.dataset.i)"' + (has ? ' disabled' : '') + '>' + (has ? icon('check') + '넣음' : icon('plus') + '넣기') + '</button></div>'; }).join(''); }
 var _psQT = null;
