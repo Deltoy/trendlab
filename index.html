@@ -3041,11 +3041,12 @@ function psListHtml(p) {
   return pssHtml(p) + psDraftHtml(p);
 }
 /* 1017 MJ: 물류앱 세트를 판매 순위로 · 누르면 구성품(사진·사입가·판매가·15일 판매)과 세트 마진이 펼쳐짐 */
-function pssPrice(s) { var m = String(s.memo || '').match(/(\d{1,3}(?:,\d{3})+)\s*원/); return m ? +m[1].replace(/,/g, '') : 0; }
+function pssPrice(s, info) { var x = (info || {})[String(s.name).replace(/\s+/g, '').toLowerCase()]; if (x && x.price) return x.price; var m = String(s.memo || '').match(/(\d{1,3}(?:,\d{3})+)\s*원/); return m ? +m[1].replace(/,/g, '') : 0; }   /* POS 세트 판매가 먼저, 없으면 메모의 첫 가격 */
+function pssMan(n) { return !n ? '–' : Math.abs(n) >= 1e5 ? Math.round(n / 1e4).toLocaleString('ko-KR') + '만원' : won(n); }
 function pssCalc(s, info) {
   var cost = 0, sep = 0, miss = 0;
   s.items.forEach(function (it) { var x = info[String(it.name).replace(/\s+/g, '').toLowerCase()] || {}; if (!x.cost) { miss++; return; } cost += x.cost * it.qty; sep += (x.price || 0) * it.qty; });
-  var price = pssPrice(s), gain = price && cost ? price - cost : null;
+  var price = pssPrice(s, info), gain = price && cost ? price - cost : null;
   return { cost: cost, sep: sep, miss: miss, price: price, gain: gain, rate: gain != null ? gain / price : null, s15: s.s15 || 0 };
 }
 function pssWon(n) { return n ? won(n) : '–'; }
@@ -3062,13 +3063,13 @@ function pssHtml(p) {
   psNeedImgs([].concat.apply([], sets.map(function (x) { return x.s.items.map(function (i) { return i.name; }); })));
   var kpi = function (lab, val, sub) { return '<div class="pss-kpi"><span>' + lab + '</span><b>' + val + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>'; };
   var h = '<article class="card" id="psCard"><div class="card-head"><h2>약국 세트 <small class="meta">' + sets.length + '개' + (per ? ' · 15일 판매 ' + esc(per) : '') + '</small></h2><button type="button" class="btn" onclick="S.psEditing=psNewDraft();route(\'set\',\'diy\')">' + icon('plus') + '새 세트 만들기</button></div>'
-    + '<div class="pss-kpis">' + kpi('세트 판매', tot.n.toLocaleString('ko-KR') + '개', '15일') + kpi('세트 매출', pssWon(tot.rev), '세트가 × 판매') + kpi('남는 돈', pssWon(tot.gain), '(세트가 − 사입가) × 판매') + kpi('평균 마진', tot.rev ? Math.round(tot.gain / tot.rev * 100) + '%' : '–', '남는 돈 ÷ 매출') + '</div>'
+    + '<div class="pss-kpis">' + kpi('세트 판매', tot.n.toLocaleString('ko-KR') + '개', '15일') + kpi('세트 매출', pssMan(tot.rev), '세트가 × 판매') + kpi('남는 돈', pssMan(tot.gain), '(세트가 − 사입가) × 판매') + kpi('평균 마진', tot.rev ? Math.round(tot.gain / tot.rev * 100) + '%' : '–', '남는 돈 ÷ 매출') + '</div>'
     + '<div class="pss-tools"><label class="pss-q">' + icon('search') + '<input type="search" placeholder="세트 · 구성품 이름" value="' + esc(S.pssQ || '') + '" oninput="S.pssQ=this.value;clearTimeout(S.pssT);S.pssT=setTimeout(function(){renderSetTab();var i=document.querySelector(\'.pss-q input\');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)" aria-label="세트 찾기"></label>'
     + '<div class="seg" role="group" aria-label="정렬">' + [['s15', '많이 팔린 순'], ['gain', '많이 남긴 순'], ['rate', '마진율 순']].map(function (x) { var on = sort === x[0]; return '<button type="button" class="' + (on ? 'on' : '') + '" aria-pressed="' + on + '" data-k="' + x[0] + '" onclick="S.pssSort=this.dataset.k;renderSetTab()">' + x[1] + '</button>'; }).join('') + '</div></div>'
     + '<div class="chips pss-box" role="group" aria-label="박스로 거르기"><button type="button" class="chip' + (bf ? '' : ' on') + '" aria-pressed="' + !bf + '" onclick="S.pssBox=\'\';renderSetTab()">전체 <em>' + sets.length + '</em></button>'
     + Object.keys(boxes).sort(function (a, b) { return (parseFloat(a) || 99) - (parseFloat(b) || 99); }).map(function (b) { var on = bf === b; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-b="' + esc(b) + '" onclick="S.pssBox=this.dataset.b;renderSetTab()">박스 ' + esc(b) + '번 <em>' + boxes[b] + '</em></button>'; }).join('') + '</div>'
     + '<div class="pss-list" role="list">' + (list.length ? list.map(function (x) { return pssRow(x.s, x.c, rankOf[x.s.id], top, info); }).join('') : '<p class="empty">맞는 세트가 없어요</p>') + '</div>'
-    + srcLine(['logi'], { calc: '15일 판매 = POS 엑셀 · 세트가 = 세트 메모의 첫 가격 · 사입가·판매가 = POS 15일 엑셀(사입가 합 ÷ 수량)' }) + '</article>';
+    + srcLine(['logi'], { calc: '15일 판매 = POS 엑셀 · 세트가 = POS 세트 판매가(없으면 세트 메모의 첫 가격) · 사입가·판매가 = POS 15일 엑셀(사입가 합 ÷ 수량)' }) + '</article>';
   return h;
 }
 function pssRow(s, c, rank, top, info) {
