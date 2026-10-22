@@ -1865,7 +1865,7 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 .pss-sum dd{margin:2px 0 0;font-size:var(--fs-4);font-weight:800;font-variant-numeric:tabular-nums}
 .pss-sum dd small{font-size:var(--fs-1);font-weight:700;color:var(--ink2)}
 /* 1023 MJ: 약국 베스트 목록 판매가·사입가 */
-.pb-money{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px;font-size:var(--fs-2);color:var(--ink3);font-variant-numeric:tabular-nums}.pb-money b{color:var(--ink);font-weight:700}.pb-money i{font-style:normal;color:var(--line-strong)}
+.pb-money{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:var(--fs-2);color:var(--ink3);font-variant-numeric:tabular-nums}.pb-m{white-space:nowrap}.pb-money b{color:var(--ink);font-weight:700}.pb-money b.neg,#pbTable .neg{color:var(--up)}
 </style>
 </head>
 <body data-tab="today">
@@ -1971,7 +1971,7 @@ var SRC = {
   ktoArea: { n: '한국관광 데이터랩 지역 방문자', url: 'https://datalab.visitkorea.or.kr/', how: '한국관광공사 빅데이터(통신사 기반) 시군구 하루 방문자 · 성동구 · 서울 중구 · 부산 중구 · 제주시', freq: '매일 아침', lag: '며칠 늦음', lim: '시군구 단위라 성수 · 명동보다 넓어요' },
   spop: { n: '서울 열린데이터 생활인구', url: 'https://data.seoul.go.kr/', how: '단기체류 외국인 생활인구 · 행정동 시간대별 → 영업시간 10~21시 하루 평균 (성수동 = 성수1가1·2동 · 성수2가1·3동 합, 명동)', freq: '매일 아침', lag: '약 2달 늦음', lim: '국적은 중국 / 그 외 두 가지뿐' },
   fx: { n: '환율 open.er-api.com', url: 'https://open.er-api.com/v6/latest/KRW', how: '1 외화 = 몇 원 (엔은 100엔) · 1주 전과 비교', freq: '매일 아침', lag: '하루 한 번 갱신', lim: '기준 환율 · 은행 고시 환율과 조금 달라요' },
-  pos: { n: '약국 POS 엑셀', url: '', how: 'MD가 올린 POS 상품별 통계 엑셀의 판매수량 순 (올린 날짜 · 기간 그대로)', freq: 'MD가 올릴 때', lag: '올린 기간까지', lim: '상품별 이익률은 보여 주지 않아요 · 우리 약국 한 곳 기준' },
+  pos: { n: '약국 POS 엑셀', url: '', how: 'MD가 올린 POS 상품별 통계 엑셀의 판매수량 순 (올린 날짜 · 기간 그대로)', freq: 'MD가 올릴 때', lag: '올린 기간까지', lim: '우리 약국 한 곳 기준' },
   logi: { n: '레디영 물류앱 상품 시트', url: '', how: '서버가 물류앱 구글 시트(상품 · 세트 · 용도)를 읽어 상품 이름으로 연결', freq: '열 때마다 (10~15분 캐시)', lag: '거의 실시간', lim: '이름이 다르게 적히면 연결이 빠질 수 있어요' },
   news: { n: '뉴스 RSS', url: 'https://news.google.com/', how: '구글 뉴스 RSS + 전문지 RSS(코스모닝 · 뷰티누리 · 장업신문 · 데일리팜 · 약사공론) · 하루 최대 40건을 시트에 쌓음', freq: '매일 07시 리포트 때 + 12시', lag: '어제 오후~오늘 아침 기사 먼저', lim: '기사 제목·요약 기준 · 원문 링크로 확인' },
   ideas: { n: '주간 기획 제안', url: '', how: '최근 7일 뉴스를 같은 흐름끼리 묶어 맥의 Claude 가 3~5개 제안 · 근거는 저장된 기사만', freq: '매주 월요일', lag: '지난 7일', lim: 'AI 제안 · 매출·재고 반영 안 됨' },
@@ -2974,7 +2974,7 @@ function renderSetTab() {
   if (sub === 'ptrend') { if (!S.ptrend) ptLoad(); el.innerHTML = tabs + ptHtml(); balIf('ptGrid'); return; }
   el.innerHTML = tabs + psHtml(sub);
 }
-/* 약국 베스트 옆 [표로 보기] (폴드·PC): 같은 판매 자료를 정렬·거르기·묶기·CSV 로 (1023 판매가·사입가 칸 추가, 이익률은 없음) */
+/* 약국 베스트 옆 [표로 보기] (폴드·PC): 같은 판매 자료를 정렬·거르기·묶기·CSV 로 (1023 판매가·사입가·마진율 칸) */
 function pbToggle(h) { return innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? h.replace('<button type="button" class="btn" onclick="pbPick()">', function () { return '<button type="button" class="btn ghost" onclick="S.pbView=\'table\';renderSetTab()">' + icon('columns') + '표로 보기</button><button type="button" class="btn" onclick="pbPick()">'; }) : h; }
 function pbTableHtml() {
   S.psEditing = S.psEditing || psNewDraft();
@@ -2996,6 +2996,7 @@ function pbTableMount() {
       { k: 'mv', label: '지난번 대비', w: 'minmax(80px,.7fr)', num: 1, desc: 1, m: 'side', v: function (x) { return x.p > 0 ? x.p - x.r : x.p === 0 ? 999 : null; }, csv: function (x) { return x.p < 0 ? '' : x.p === 0 ? 'NEW' : x.p - x.r; }, html: function (x) { return pbMove(x) || '<span class="meta">–</span>'; } },
       { k: 'up', label: '판매가', w: 'minmax(84px,.7fr)', num: 1, desc: 1, m: 'side', filter: 1, html: function (x) { return x.up != null ? won(x.up) : '<span class="meta">–</span>'; } },
       { k: 'uc', label: '사입가', w: 'minmax(84px,.7fr)', num: 1, desc: 1, m: 'side', filter: 1, html: function (x) { return x.uc != null ? won(x.uc) : '<span class="meta">–</span>'; } },
+      { k: 'mr', label: '마진율', w: 'minmax(72px,.6fr)', num: 1, desc: 1, m: 'side', csv: function (x) { return x.mr == null ? '' : Math.round(x.mr * 1000) / 10; }, html: function (x) { return x.mr != null ? '<span' + (x.mr < 0 ? ' class="neg"' : '') + '>' + pbPct(x.mr) + '</span>' : '<span class="meta">–</span>'; } },
       { k: 'g', label: '분류', w: 'minmax(88px,.8fr)', m: 'sub', filter: 1, html: function (x) { return x.g ? tag(x.g) : '<span class="meta">–</span>'; } },
       { k: 'o', label: '올리브영', w: 'minmax(76px,.6fr)', m: 'side', v: function (x) { return x.o ? '인기' : ''; }, html: function (x) { return x.o ? tag('올영 인기', 't-ink') : '<span class="meta">–</span>'; } }
     ],
@@ -3491,12 +3492,12 @@ function psPoll() { clearTimeout(S.psPollT); if (S.tab === 'set' && S.ps && S.ps
 function psAddon(id, i) { var s = psFind(id), a = s && s.review.result.addons[i]; if (!a) return; var d = JSON.parse(JSON.stringify(s)); if (!d.items.some(function (x) { return x.name === a.name; })) d.items.push({ name: a.name, qty: 1 }); psEdit(id, d); }
 function psFromDerived(id, i) { var s = psFind(id), d = s && s.review.result.sets[i]; if (!d) return; psEdit('', { name: d.name, box: '', memo: d.reason || '', items: d.items.map(function (x) { return { name: x.name, qty: 1 }; }) }); }
 /* ── 0929 우리 약국 베스트: POS 판매 통계 엑셀(보통 15일)을 올리면 판매수량 순위 · 지난번 대비 ▲▼ · 세트에 넣기 · 세트 예상 이익률 ──
-   1023 MJ: 목록·표에 상품마다 판매가·사입가 (판매가 = (매출 + 할인) ÷ 수량, 사입가 = 사입가 합 ÷ 수량 — 물류앱 '_단가_' 와 같은 계산) */
+   1023 MJ: 목록·표에 상품마다 판매가·사입가·마진율 (판매가 = (매출 + 할인) ÷ 수량, 사입가 = 사입가 합 ÷ 수량 — 물류앱 '_단가_' 와 같은 계산) */
 S.pb = null; S.pbN = 50; S.pbCat = ''; S.pbQ = '';
 var PB_XLSX = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', PB_SRI = 'sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==';
 function pbPrep(r) {
   if (!r || !r.ok) return { err: (r && r.msg) || '약국 베스트를 불러오지 못했어요' };
-  var by = {}, list = (r.items || []).map(function (a) { var x = { r: a[0], n: String(a[1]), q: +a[2] || 0, s: +a[3] || 0, c: +a[4] || 0, p: a[5], m: a[6] || '', g: a[7] || '', o: !!a[8], d: +a[9] || 0 }; x.up = x.q && x.s ? Math.round((x.s + x.d) / x.q) : null; x.uc = x.q && x.c ? Math.round(x.c / x.q) : null; if (!by[x.n]) by[x.n] = x; if (x.m && !by[x.m]) by[x.m] = x; return x; });
+  var by = {}, list = (r.items || []).map(function (a) { var x = { r: a[0], n: String(a[1]), q: +a[2] || 0, s: +a[3] || 0, c: +a[4] || 0, p: a[5], m: a[6] || '', g: a[7] || '', o: !!a[8], d: +a[9] || 0 }; x.up = x.q && x.s ? Math.round((x.s + x.d) / x.q) : null; x.uc = x.q && x.c ? Math.round(x.c / x.q) : null; x.mr = x.up && x.uc != null ? (x.up - x.uc) / x.up : null;   /* 1023 MJ: 마진율 = (판매가 − 사입가) ÷ 판매가 */ if (!by[x.n]) by[x.n] = x; if (x.m && !by[x.m]) by[x.m] = x; return x; });
   return { ok: true, empty: !!r.empty || !list.length, meta: r.meta || {}, prev: r.prev || null, list: list, by: by, abcBy: pbAbc(list) };
 }
 function pbLoad() { swrCall('getPharmacyBest', [], function (r) { S.pb = pbPrep(r); pbRefresh(); }, function () { S.pb = { err: '약국 베스트를 불러오지 못했어요' }; pbRefresh(); }); }
@@ -3524,7 +3525,7 @@ function pbMarginHtml(items) {
   if (S.pb.empty) return '<div class="pb-mg-none"><span>약국 판매 엑셀을 올리면 세트 예상 이익률이 나와요</span><button type="button" class="btn" onclick="pbPick()">엑셀 올리기</button></div>';
   var m = pbMargin(items);
   if (m.none) return '<p class="pb-mg-none">담은 상품이 판매 기록에 없어 이익률을 계산할 수 없어요</p>';
-  if (m.n < 2) return '<p class="pb-mg-none">판매 기록 있는 상품을 2개 이상 넣으면 세트 예상 이익률이 나와요 (상품 하나의 이익은 보여 주지 않아요)</p>';   /* 0929 상품별 이익 숨김 규칙 */
+  if (m.n < 2) return '<p class="pb-mg-none">판매 기록 있는 상품을 2개 이상 넣으면 세트 예상 이익률이 나와요</p>';
   var d = m.price * 0.9, r9 = (d - m.cost) / d, ten = function (v) { return won(Math.round(v / 10) * 10); };
   return '<div class="pb-mg" role="status" aria-live="polite"><div class="pb-mg-top"><span>세트 예상 이익률</span><b' + (m.rate < 0 ? ' class="neg"' : '') + '>' + pbPct(m.rate) + '</b></div>'
     + '<p class="pb-mg-line">세트 하나 순이익 약 <b>' + ten(m.profit) + '</b> · 판매가 합계 ' + ten(m.price) + '</p>'
@@ -3542,7 +3543,11 @@ function pbRowHtml(x, max) {
     + '<span class="tx"><span class="nm1">' + esc(x.n) + '</span><span class="meta">' + abcChip(x) + '<b class="pb-q">' + x.q.toLocaleString('ko-KR') + '개</b><span class="pb-bar" aria-hidden="true"><i style="width:' + Math.max(2, Math.round(x.q / (max || x.q) * 100)) + '%"></i></span>' + (x.g ? tag(x.g) : '') + (x.o ? tag('올리브영에서도 인기', 't-ink') : '') + pbHintOf(x) + '</span>' + pbMoney(x) + '</span>'
     + '<button type="button" class="btn pb-add' + (has ? ' on' : '') + '" data-n="' + esc(name) + '" aria-pressed="' + has + '" aria-label="' + (has ? '세트에서 빼기' : '세트에 넣기') + '" onclick="pbAdd(this.dataset.n)">' + icon(has ? 'check' : 'plus') + '<span>' + (has ? '담김' : '세트에 넣기') + '</span></button></div>';
 }
-function pbMoney(x) { return x.up == null && x.uc == null ? '' : '<span class="pb-money">판매가 <b>' + (x.up != null ? won(x.up) : '–') + '</b><i aria-hidden="true">·</i>사입가 <b>' + (x.uc != null ? won(x.uc) : '–') + '</b></span>'; }
+function pbMoney(x) {
+  if (x.up == null && x.uc == null) return '';
+  var pair = function (k, v, cls) { return '<span class="pb-m">' + k + ' <b' + (cls ? ' class="' + cls + '"' : '') + '>' + v + '</b></span>'; };
+  return '<span class="pb-money">' + pair('판매가', x.up != null ? won(x.up) : '–') + pair('사입가', x.uc != null ? won(x.uc) : '–') + (x.mr != null ? pair('마진', pbPct(x.mr), x.mr < 0 ? 'neg' : '') : '') + '</span>';
+}
 function pbListHtml() {
   var rows = pbRows(), n = S.pbN, shown = rows.slice(0, n);
   psNeedImgs(shown.filter(function (x) { return x.m; }).map(function (x) { return x.m; }));
@@ -3566,7 +3571,7 @@ function pbPeriodText() {
   var m = S.pb.meta, t = m.from && m.to ? md(m.from) + '~' + md(m.to) + ' 판매' + (m.days ? ' (' + m.days + '일)' : '') : '판매 기간 모름';
   return t + ' · ' + md(m.at) + ' 올림 · ' + (S.pb.prev ? '▲▼는 ' + md(S.pb.prev.at) + '에 올린 자료와 비교' : '다음에 새로 올리면 순위 변화(▲▼)가 나와요');
 }
-function pbSrc(raw) { var m = S.pb.meta, a = [['pos', 'logi', 'oy'], { at: 'POS ' + md(m.from) + '~' + md(m.to) + ' · ' + md(m.at) + ' 올림', calc: 'ABC = ' + (S.pb.abcBy === 's' ? '매출' : '판매수량') + ' 누적 70%까지 A · 90%까지 B · 나머지 C · 판매가 = (매출 + 할인) ÷ 수량 · 사입가 = 사입가 합 ÷ 수량', lim: 'POS 기간 ' + md(m.from) + '~' + md(m.to) + ' · 상품별 이익률은 보여 주지 않아요' }]; return raw ? a : srcLine(a[0], a[1]); }
+function pbSrc(raw) { var m = S.pb.meta, a = [['pos', 'logi', 'oy'], { at: 'POS ' + md(m.from) + '~' + md(m.to) + ' · ' + md(m.at) + ' 올림', calc: 'ABC = ' + (S.pb.abcBy === 's' ? '매출' : '판매수량') + ' 누적 70%까지 A · 90%까지 B · 나머지 C · 판매가 = (매출 + 할인) ÷ 수량 · 사입가 = 사입가 합 ÷ 수량 · 마진율 = (판매가 − 사입가) ÷ 판매가', lim: 'POS 기간 ' + md(m.from) + '~' + md(m.to) + '' }]; return raw ? a : srcLine(a[0], a[1]); }
 function pbRead() {
   var pb = S.pb; if (!pb || !pb.list || pb.empty) return '';
   var L = pb.list, tot = L.reduce(function (a, x) { return a + (+x.q || 0); }, 0) || 1, top10 = L.slice(0, 10).reduce(function (a, x) { return a + (+x.q || 0); }, 0), oyN = L.filter(function (x) { return x.o; }).length;
