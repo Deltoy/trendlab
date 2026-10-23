@@ -2155,7 +2155,7 @@ var SRC = {
   ktoArea: { n: '한국관광 데이터랩 지역 방문자', url: 'https://datalab.visitkorea.or.kr/', how: '한국관광공사 빅데이터(통신사 기반) 시군구 하루 방문자 · 성동구 · 서울 중구 · 부산 중구 · 제주시', freq: '매일 아침', lag: '며칠 늦음', lim: '시군구 단위라 성수 · 명동보다 넓어요' },
   spop: { n: '서울 열린데이터 생활인구', url: 'https://data.seoul.go.kr/', how: '단기체류 외국인 생활인구 · 행정동 시간대별 → 영업시간 10~21시 하루 평균 (성수동 = 성수1가1·2동 · 성수2가1·3동 합, 명동)', freq: '매일 아침', lag: '약 2달 늦음', lim: '국적은 중국 / 그 외 두 가지뿐' },
   fx: { n: '환율 open.er-api.com', url: 'https://open.er-api.com/v6/latest/KRW', how: '1 외화 = 몇 원 (엔은 100엔) · 1주 전과 비교', freq: '매일 아침', lag: '하루 한 번 갱신', lim: '기준 환율 · 은행 고시 환율과 조금 달라요' },
-  pos: { n: '약국 POS 엑셀', url: '', how: 'MD가 올린 POS 상품별 통계 엑셀의 판매수량 순 (올린 날짜 · 기간 그대로)', freq: 'MD가 올릴 때', lag: '올린 기간까지', lim: '우리 약국 한 곳 기준' },
+  pos: { n: '약국 POS 엑셀', url: '', how: '물류앱에 15일마다 올리는 POS 상품별 통계 엑셀의 판매수량 순 (물류앱에 적은 기간 그대로 · 트렌드랩엔 따로 안 올림)', freq: '물류앱에 올릴 때 (15일마다)', lag: '올린 기간까지', lim: '우리 약국 한 곳 기준' },
   logi: { n: '레디영 물류앱 상품 시트', url: '', how: '서버가 물류앱 구글 시트(상품 · 세트 · 용도)를 읽어 상품 이름으로 연결', freq: '열 때마다 (10~15분 캐시)', lag: '거의 실시간', lim: '이름이 다르게 적히면 연결이 빠질 수 있어요' },
   news: { n: '뉴스 RSS', url: 'https://news.google.com/', how: '구글 뉴스 RSS + 전문지 RSS(코스모닝 · 뷰티누리 · 장업신문 · 데일리팜 · 약사공론) · 하루 최대 40건을 시트에 쌓음', freq: '매일 07시 리포트 때 + 12시', lag: '어제 오후~오늘 아침 기사 먼저', lim: '기사 제목·요약 기준 · 원문 링크로 확인' },
   ideas: { n: '주간 기획 제안', url: '', how: '최근 7일 뉴스를 같은 흐름끼리 묶어 맥의 Claude 가 3~5개 제안 · 근거는 저장된 기사만', freq: '매주 월요일', lag: '지난 7일', lim: 'AI 제안 · 매출·재고 반영 안 됨' },
@@ -2361,7 +2361,7 @@ var GROUPS = [
   ['today', '오늘', 'house', [['today', '', '오늘 브리핑', '오늘 할 일과 꼭 볼 숫자', '홈 브리핑 할일 한눈에'], ['report', '', '데일리 리포트', '매일 아침 AI가 쓴 MD 리포트', '리포트 요약 아침']], []],
   ['hot', '뜨는 상품', 'trend', [['trend', 'product', '들여올 후보', '약국에 없는데 뜨는 상품', '들여올 입점 후보 없는 미취급', 'missing'], ['trend', 'product', '트렌드 상품', '올리브영 랭킹 · 급상승 · 이번 주 신상', '랭킹 순위 급상승 신상 올리브영 품평회'], ['trend', 'brand', '뜨는 브랜드', '올리브영에서 뜨는 브랜드 · 소싱 후보', '브랜드 소싱 입점'], ['trend', 'keyword', '검색수 · 반응', '네이버 월간 검색수 · 블로그 언급', '검색량 검색수 키워드 블로그 네이버 구글 월간']],
     [['trend', 'shorts', '쇼츠', '유튜브 뷰티 쇼츠 인기 영상', '유튜브 영상 숏폼'], ['more', 'watch', '관심 상품 변화', '하트 누른 상품 · 브랜드의 변화', '알림 관심 하트 변화'], ['more', 'filters', '사이트 비교', '올영 · 무신사 · 다이소 · 큐텐 비교', '무신사 다이소 큐텐 아마존 사이트'], ['more', 'find', '화해 조사', '화해에서 브랜드 전체 상품 조사', '화해 성분 리뷰 조사'], ['more', 'analysis', '카테고리 분석', '카테고리 · 브랜드 구성', '분석 카테고리 비중'], ['more', 'story', '브랜드 이야기', '브랜드 창업 스토리', '브랜드 스토리 창업']]],
-  ['store', '우리 매장', 'bars', [['set', 'best', '약국 베스트', '약국 판매 순위 · ABC 등급 · 엑셀 올리기', '판매 순위 베스트 abc 매출 엑셀 올리기 pos 업로드 판매자료'], ['set', 'ptrend', '판매 오르내림', '판매가 오르고 내린 상품과 이유', '추세 상승 하락 판매 변화'], ['plan', 'strategy', '우리만 잘 파는 것', '약국 강점 · 약 매출 비중 · 전략', '강점 전략 차별 약 매출'], ['plan', 'price', '가격 · 할인', '올리브영 할인 · 가격 비교', '가격 할인 세일 마진']],
+  ['store', '우리 매장', 'bars', [['set', 'best', '약국 베스트', '약국 판매 순위 · ABC 등급 (물류앱 15일 판매 엑셀)', '판매 순위 베스트 abc 매출 엑셀 올리기 pos 업로드 판매자료'], ['set', 'ptrend', '판매 오르내림', '판매가 오르고 내린 상품과 이유', '추세 상승 하락 판매 변화'], ['plan', 'strategy', '우리만 잘 파는 것', '약국 강점 · 약 매출 비중 · 전략', '강점 전략 차별 약 매출'], ['plan', 'price', '가격 · 할인', '올리브영 할인 · 가격 비교', '가격 할인 세일 마진']],
     [['plan', 'swap', '재고 스왑', '지점끼리 재고 맞바꾸기', '재고 지점 교환']]],
   ['set', '세트 · 행사', 'package', [['set', 'diy', '세트 만들기', '상품을 담아 세트 구성 · AI 추천', '세트 구성 만들기 ai 추천 박스'], ['set', 'list', '세트 목록', '만든 세트 · AI 검토 결과', '세트 목록 검토'], ['plan', 'events', '우리 행사 기획', '이벤트 기획과 진행 단계', '이벤트 기획 행사 프로모션'], ['plan', 'cal', '행사 일정', '올리브영 · 브랜드 행사 캘린더', '캘린더 일정 올영세일 올영 행사']],
     [['plan', 'season', '시즌 준비', '계절별 준비 시점', '시즌 계절 여름 겨울 준비'], ['plan', 'mat', '협업 재료', '브랜드 협업 · 증정 재료', '협업 증정 콜라보'], ['plan', 'board', '찜한 상품', '눈여겨 담아 둔 상품', '담은 보드 저장 찜']]],
@@ -3172,10 +3172,10 @@ function renderSetTab() {
   el.innerHTML = tabs + psHtml(sub);
 }
 /* 약국 베스트 옆 [표로 보기] (폴드·PC): 같은 판매 자료를 정렬·거르기·묶기·CSV 로 (1023 판매가·사입가·마진율 칸) */
-function pbToggle(h) { return innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? h.replace('<button type="button" class="btn" onclick="pbPick()">', function () { return '<button type="button" class="btn ghost" onclick="S.pbView=\'table\';renderSetTab()">' + icon('columns') + '표로 보기</button><button type="button" class="btn" onclick="pbPick()">'; }) : h; }
+function pbToggle(h) { return innerWidth >= 840 && S.pb && S.pb.list && !S.pb.empty ? h.replace('<!--pbT-->', function () { return '<button type="button" class="btn ghost" onclick="S.pbView=\'table\';renderSetTab()">' + icon('columns') + '표로 보기</button>'; }) : h; }
 function pbTableHtml() {
   S.psEditing = S.psEditing || psNewDraft();
-  return '<section class="card pb-left pb-tbl" aria-label="약국 베스트 표"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순 · 표</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="S.pbView=\'\';renderSetTab()">목록으로</button><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></span></div><p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml(1) + '<div id="pbTable"></div></section>'
+  return '<section class="card pb-left pb-tbl" aria-label="약국 베스트 표"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순 · 표</small></h2><span class="head-acts"><button type="button" class="btn ghost" onclick="S.pbView=\'\';renderSetTab()">목록으로</button></span></div><p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml(1) + '<div id="pbTable"></div></section>'
     + diyBarHtml().replace('class="diy-bar"', 'class="diy-bar float"').replace('onclick="openDiySheet()"', 'onclick="S.pbView=\'\';route(\'set\',\'diy\')"');
 }
 function pbTableMount() {
@@ -3719,7 +3719,7 @@ function pbRateText(items) { var m = pbMargin(items); return m && !m.none && m.n
 function pbRateTag(items) { var m = pbMargin(items); return m && !m.none && m.n >= 2 ? ' ' + tag('예상 이익률 ' + pbPct(m.rate), m.rate < 0 ? 't-warn' : 't-ok') : ''; }
 function pbMarginHtml(items) {
   if (!items || !items.length || !S.pb || S.pb.err) return '';
-  if (S.pb.empty) return '<div class="pb-mg-none"><span>약국 판매 엑셀을 올리면 세트 예상 이익률이 나와요</span><button type="button" class="btn" onclick="pbPick()">엑셀 올리기</button></div>';
+  if (S.pb.empty) return '<div class="pb-mg-none"><span>물류앱에 15일 판매량 엑셀을 올리면 세트 예상 이익률이 나와요</span></div>';
   var m = pbMargin(items);
   if (m.none) return '<p class="pb-mg-none">담은 상품이 판매 기록에 없어 이익률을 계산할 수 없어요</p>';
   if (m.n < 2) return '<p class="pb-mg-none">판매 기록 있는 상품을 2개 이상 넣으면 세트 예상 이익률이 나와요</p>';
@@ -3773,18 +3773,18 @@ function pbRead() {
   var pb = S.pb; if (!pb || !pb.list || pb.empty) return '';
   var L = pb.list, tot = L.reduce(function (a, x) { return a + (+x.q || 0); }, 0) || 1, top10 = L.slice(0, 10).reduce(function (a, x) { return a + (+x.q || 0); }, 0), oyN = L.filter(function (x) { return x.o; }).length;
   var to = dateOf(pb.meta.to), td = S.home ? dateOf(S.home.today) : null, age = to && td ? Math.round((td - to) / 864e5) : 0;
-  return readBox(['상위 10개가 전체 판매의 <b>' + Math.round(top10 / tot * 100) + '%</b>' + (L[0] ? ' · 1위 <b>' + esc(L[0].n) + '</b>' : ''), oyN ? '올리브영 랭킹에도 있는 우리 베스트 <b>' + oyN + '개</b> → 세트·진열 얼굴로 쓰기 좋아요' : '올리브영 랭킹과 겹치는 베스트가 없어요 → 약국만의 상품이 팔리는 중', age > 15 ? '자료가 <b>' + age + '일</b> 지났어요 → 2주마다 올리면 추세가 보여요' : null],
-    [{ t: '판매 오르내림 보기', go: "gGo('set','ptrend')", ic: 'trend' }, { t: '세트 만들기', go: "gGo('set','diy')", ic: 'package' }, { t: '새 엑셀 올리기', go: 'pbPick()', ic: 'upload' }]);
+  return readBox(['상위 10개가 전체 판매의 <b>' + Math.round(top10 / tot * 100) + '%</b>' + (L[0] ? ' · 1위 <b>' + esc(L[0].n) + '</b>' : ''), oyN ? '올리브영 랭킹에도 있는 우리 베스트 <b>' + oyN + '개</b> → 세트·진열 얼굴로 쓰기 좋아요' : '올리브영 랭킹과 겹치는 베스트가 없어요 → 약국만의 상품이 팔리는 중', age > 15 ? '자료가 <b>' + age + '일</b> 지났어요 → 물류앱에 15일 판매량 엑셀을 올리면 여기도 바뀌어요' : null],
+    [{ t: '판매 오르내림 보기', go: "gGo('set','ptrend')", ic: 'trend' }, { t: '세트 만들기', go: "gGo('set','diy')", ic: 'package' }]);
 }
 function pbHtml() {
   var pb = S.pb;
   if (!pb) return '<article class="card">' + skel(3) + '</article>';
   if (pb.err) return '<article class="card">' + emptyHtml(pb.err, '다시 불러오기', 'pbLoad()') + '</article>';
-  if (pb.empty) return '<article class="card pb-empty" id="pbEmpty"><span class="pb-empty-ic">' + icon('upload') + '</span><div class="pb-empty-tx"><h2>약국 베스트</h2><p class="sub">POS 판매 통계(상품별) 엑셀을 그대로 올리면 많이 팔린 순서로 보여요. 매주 올리면 순위 변화도 나와요</p></div><button type="button" class="btn pri" onclick="pbPick()">' + icon('upload') + '엑셀 올리기</button></article>'
-    + '<div class="pb-steps">' + [['1', 'POS에서 받기', '판매 통계 › 상품별 → 기간 고르기(2주 추천) → 엑셀 다운로드'], ['2', '여기에 올리기', '파일 그대로 · 열 이름은 알아서 맞춰요'], ['3', '이렇게 보여요', '판매 순위 · 효자 상품(A) · 올리브영에서도 뜨는 상품 · 다음엔 순위 ▲▼']].map(function (x) { return '<div class="pb-step"><b class="num">' + x[0] + '</b><span><strong>' + x[1] + '</strong><small>' + x[2] + '</small></span></div>'; }).join('') + '</div>';   /* 1004 빈 화면 대신 3단계 안내 */
+  if (pb.empty) return '<article class="card pb-empty" id="pbEmpty"><span class="pb-empty-ic">' + icon('upload') + '</span><div class="pb-empty-tx"><h2>약국 베스트</h2><p class="sub">물류앱에 15일 판매량 엑셀을 올리면 여기도 자동으로 많이 팔린 순서로 나와요 (10분 안). 트렌드랩엔 따로 안 올려요</p></div></article>'
+    + '<div class="pb-steps">' + [['1', 'POS에서 받기', '판매 통계 › 상품별 → 15일 기간 → 엑셀 다운로드'], ['2', '물류앱에 올리기', '물류앱 도구 › 15일 판매량 엑셀 → 저장'], ['3', '여기 자동으로', '판매 순위 · 효자 상품(A) · 올리브영에서도 뜨는 상품 · 다음엔 순위 ▲▼']].map(function (x) { return '<div class="pb-step"><b class="num">' + x[0] + '</b><span><strong>' + x[1] + '</strong><small>' + x[2] + '</small></span></div>'; }).join('') + '</div>';   /* 1004 빈 화면 대신 3단계 안내 */
   S.psEditing = S.psEditing || psNewDraft();
   var right = !S.ps ? skel(2) : S.ps.err ? '<p class="empty">' + esc(S.ps.err) + '</p>' : diyBoxHtml();
-  return '<div class="diy pb-wrap"><section class="card pb-left" aria-label="약국 베스트"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순</small></h2><button type="button" class="btn" onclick="pbPick()">' + icon('upload') + '새 엑셀</button></div>'
+  return '<div class="diy pb-wrap"><section class="card pb-left" aria-label="약국 베스트"><div class="card-head"><h2>약국 베스트 <small class="meta">판매수량 순</small></h2><!--pbT--></div>'
     + '<p class="sub pb-per">' + esc(pbPeriodText()) + '</p>' + abcSumHtml()
     + '<input id="pbQ" type="search" class="diy-q" placeholder="상품 이름으로 찾기" aria-label="약국 베스트에서 찾기" value="' + esc(S.pbQ) + '" oninput="S.pbQ=this.value;S.pbN=50;pbList()">'
     + '<div class="chips pb-cats" role="group" aria-label="분류">' + pbCatsHtml() + '</div>'
@@ -3803,7 +3803,7 @@ function pbDiyRows(inCat) {
 function pbDiyEmpty() {
   if (!S.pb) return '<p class="meta">약국 베스트를 불러오는 중…</p>';
   if (S.pb.err) return emptyHtml(S.pb.err, '다시 불러오기', 'pbLoad()');
-  if (S.pb.empty) return emptyHtml('약국 판매 엑셀을 올리면 많이 팔린 순서로 여기서 바로 담을 수 있어요', '엑셀 올리기', 'pbPick()');
+  if (S.pb.empty) return emptyHtml('물류앱에 15일 판매량 엑셀을 올리면 많이 팔린 순서로 여기서 바로 담을 수 있어요');
   return '<p class="empty">고른 분류에는 판매 기록이 없어요</p>';
 }
 function setBadge() { var n = (S.psEditing && S.psEditing.items.length) || 0, b = document.querySelector('#tabs [data-group="set"]'); if (!b) return; var e = b.querySelector('.tb-badge'); if (!e) { e = document.createElement('i'); e.className = 'tb-badge'; b.appendChild(e); } e.textContent = n; e.hidden = !n; b.setAttribute('aria-label', '세트' + (n ? ' · 만드는 세트 ' + n + '개' : '')); }
@@ -4296,7 +4296,7 @@ function todoAll() {
   if (S.season && S.season.now) S.season.now.filter(function (x) { return x.phase === '준비'; }).slice(0, 1).forEach(function (x) { var left = dnum(x.orderBy) != null && dnum(today) != null ? dnum(x.orderBy) - dnum(today) : null; out.push({ k: 'se' + x.id + today, t: ((x.actions || [])[0] ? esc(x.actions[0]) : '시즌 준비') + ' — <b>' + esc(x.title) + '</b> ' + (left == null ? '' : left >= 0 ? '발주 ' + esc(md(x.orderBy)) + '까지(' + left + '일)' : '발주 마감 ' + (-left) + '일 지남 → 긴급 발주 가능한지 확인'), go: "gGo('plan','season')", l: '시즌' }); });
   if (S.ideas && S.ideas.ideas) S.ideas.ideas.slice(0, 1).forEach(function (i) { out.push({ k: 'id' + today, t: '기획 제안 검토하기 — <b>' + esc(i.title) + '</b> (' + esc(i.type) + ')', go: "gGo('plan','board')", l: '기획' }); });
   if (S.swap && S.swap.ready && (S.swap.counts || {}).suggestions) out.push({ k: 'sw' + today, t: '보낼 지점 정하기 — 성수에서 안 나가는데 다른 지점에서 팔리는 상품 <b>' + S.swap.counts.suggestions + '개</b>', go: "gGo('plan','swap')", l: '재고 스왑' });
-  if (S.pb && S.pb.list && !S.pb.empty && S.pb.meta) { var to = dateOf(S.pb.meta.to), td = dateOf(today), age = to && td ? Math.round((td - to) / 864e5) : 0; if (age > 15) out.push({ k: 'pb' + today, t: '새 POS 엑셀 올리기 — 판매 자료가 <b>' + age + '일</b> 지났어요', go: 'pbPick()', l: '약국 베스트' }); }
+  if (S.pb && S.pb.list && !S.pb.empty && S.pb.meta) { var to = dateOf(S.pb.meta.to), td = dateOf(today), age = to && td ? Math.round((td - to) / 864e5) : 0; if (age > 15) out.push({ k: 'pb' + today, t: '물류앱에 15일 판매량 엑셀 올리기 — 판매 자료가 <b>' + age + '일</b> 지났어요', go: "window.open('https://deltoy.github.io/readyyoung/','_blank','noopener')", l: '약국 베스트' }); }
   return out.slice(0, 6);
 }
 function todoTick(b) { var d = lsGet('tl_todo_done', {}); d[b.dataset.k] = b.checked ? Date.now() : 0; Object.keys(d).forEach(function (k) { if (!d[k] || Date.now() - d[k] > 14 * 864e5) delete d[k]; }); lsSet('tl_todo_done', d); var li = b.closest('li'); if (li) li.classList.toggle('done', b.checked); var n = document.querySelector('.todo-n'); if (n) { var all = document.querySelectorAll('.todo-l li').length, dn = document.querySelectorAll('.todo-l li.done').length; n.textContent = dn + '/' + all + ' 완료'; } }
@@ -4317,7 +4317,7 @@ function heroHtml() {
     ['순위 급상승', cnt(c.risers) != null ? cnt(c.risers) + '개' : OFF('수집 중'), '올리브영 순위가 크게 오른 상품', "setTrendFrom('risers')", 'up'],
     ['이번 주 신상', wk != null ? wk + '개' : cnt(c['new']) != null ? cnt(c['new']) + '개' : OFF('수집 중'), '올리브영 새 상품', "setTrendFrom('week')", ''],
     ['검색 급상승', nv ? '+' + nv.growth + '%' : nvTop ? manTxt(nvTop.total) : OFF('수집 중'), nv ? nv.term + ' · 월 ' + manTxt(nv.total) + '회' : nvTop ? nvTop.term + ' · 월간 검색 1위' : '네이버 월간 검색수', "gGo('trend','keyword')", 'up'],
-    ['약국 베스트 1위', pb ? { txt: pb[0].n } : OFF('엑셀 필요'), pb ? '상위 10개가 판매의 ' + pbTop + '%' : '판매 엑셀을 올리면 계산돼요', "gGo('set','best')", ''],
+    ['약국 베스트 1위', pb ? { txt: pb[0].n } : OFF('물류앱 엑셀 필요'), pb ? '상위 10개가 판매의 ' + pbTop + '%' : '물류앱에 15일 판매 엑셀을 올리면 계산돼요', "gGo('set','best')", ''],
     ['다음 행사', ev ? (ev.dday === 0 ? 'D-day' : 'D-' + ev.dday) : OFF('일정 없음'), ev ? (ev.title || ev.name || '') : '행사 일정 보기', ev ? "gGo('plan','events')" : "gGo('plan','cal')", ''],
     ['올리브영 대비 가격', pr && pr.medianGap != null ? (pr.medianGap > 0 ? '+' : '') + pr.medianGap + '%' : OFF('매칭 전'), pr && pr.matched ? '같은 상품 ' + pr.matched + '개 비교' : '가격 비교 화면에서 맞추기', "gGo('plan','price')", ''],
     ['외국인 손님', ta ? manTxt(ta.week || 0) + '명' : OFF('수집 중'), ta ? ta.label + ' 하루 평균' + (ta.growth != null ? ' · 지난주 ' + (ta.growth > 0 ? '+' : '') + ta.growth + '%' : '') : '관광 자료 · 환율', "gGo('plan','tour')", '']];
@@ -4365,7 +4365,7 @@ function renderBrief() {
     var seen = {}, hotp = pb.list.filter(function (x) { var k = loose(x.m || x.n).replace(/(신형|대용량|\d+개입|\d+ml|\d+g)$/g, '').slice(0, 10); if (!x.o || seen[k]) return false; seen[k] = 1; return true; }).slice(0, 3), to = dateOf(pb.meta.to), td = dateOf(h.today), age = to && td ? Math.round((td - to) / 864e5) : 0;
     if (hotp.length || age > 15) small.push('<article class="card bc-small" data-card="pbest"><div class="card-head"><h2>올영에서도 뜨는 약국 베스트 <small>세트에 넣어 보세요</small></h2>' + asOf(pb.meta.to) + '</div>'
       + hotp.map(function (x) { var nm = x.m || x.n; return '<div class="bc-pb"><span class="pb-rk-s">' + x.r + '위</span><span class="nm1">' + esc(x.n) + '</span><button type="button" class="' + btn('sm') + '" data-n="' + esc(nm) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에</button></div>'; }).join('')
-      + (age > 15 ? '<p class="bc-line warn">판매 자료가 ' + age + '일 지났어요</p><button type="button" class="' + btn('bc-act') + '" onclick="pbPick()">' + icon('upload') + '새 판매 엑셀 올리기</button>' : '') + srcLine(['pos', 'oy'], { at: 'POS ' + md(pb.meta.from) + '~' + md(pb.meta.to), calc: '약국 판매수량 순위 중 올리브영 100위에도 있는 상품', lim: '약국 판매 기간 ' + md(pb.meta.from) + '~' + md(pb.meta.to) }) + '</article>');
+      + (age > 15 ? '<p class="bc-line warn">판매 자료가 ' + age + '일 지났어요</p><button type="button" class="' + btn('bc-act') + '" onclick="window.open(\'https://deltoy.github.io/readyyoung/\',\'_blank\',\'noopener\')">' + icon('upload') + '물류앱에서 15일 판매 엑셀 올리기</button>' : '') + srcLine(['pos', 'oy'], { at: 'POS ' + md(pb.meta.from) + '~' + md(pb.meta.to), calc: '약국 판매수량 순위 중 올리브영 100위에도 있는 상품', lim: '약국 판매 기간 ' + md(pb.meta.from) + '~' + md(pb.meta.to) }) + '</article>');
   }
   var tl = tourLine(v); if (tl) small.push(tl);
   var ps = S.ps, ss = S.set && S.set.sets, today = h.today;
