@@ -6,6 +6,7 @@
   var API = "https://script.google.com/macros/s/AKfycbzV6NiDcEOG_4cGorp0d-aGrl5e_ibqvzII33rQZVSqbcf8NG6SPtvC0V4tyL01ovcJdg/exec";
   var q = new URLSearchParams(location.search), k = q.get('k') || '';
   try { if (k) localStorage.setItem('tl_k', k); else k = localStorage.getItem('tl_k') || ''; } catch (e) {}
+  if (q.has('k')) { q.delete('k'); try { history.replaceState(history.state, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash); } catch (e) {} }   /* 1024 주소창·방문 기록·복사한 링크에 암호가 남지 않게 */
   function send(fn, args, ok, fail) {
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ rpc: fn, args: args }) })
       .then(function (r) { return r.json(); })
