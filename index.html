@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="theme-color" content="#F5F6F8" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0D0F14" media="(prefers-color-scheme: dark)"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TRENDLAB"><title>TRENDLAB · 레디영</title><script>/* GitHub Pages 전용: google.script.run 을 Apps Script 서버 호출(fetch)로 바꾼다. 암호(k)는 주소 또는 이 기기에 저장된 값 */
+<head><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="theme-color" content="#F2F2F7"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TRENDLAB"><title>TRENDLAB · 레디영</title><script>/* GitHub Pages 전용: google.script.run 을 Apps Script 서버 호출(fetch)로 바꾼다. 암호(k)는 주소 또는 이 기기에 저장된 값 */
 (function () {
   if (window.google && window.google.script) return;   /* Apps Script 안에서 열렸거나 테스트 목이 있으면 그대로 */
   var API = "https://script.google.com/macros/s/AKfycbzV6NiDcEOG_4cGorp0d-aGrl5e_ibqvzII33rQZVSqbcf8NG6SPtvC0V4tyL01ovcJdg/exec";
@@ -52,28 +52,27 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <style>/* TRENDLAB v3 — 디자인 토큰 (2026 레퍼런스: Calm · #155EEF · 20/12/999 · Pretendard · lucide 1.5) · 라이트/다크 두 벌 */
 :root{color-scheme:light;
-  --bg:#F5F6F8;--card:#fff;--fill:#F2F3F5;--fill-2:#E8EAEE;--line:#EDEEF0;--line-strong:#DEE1E6;--glass:rgba(245,246,248,.86);--tabbar:rgba(255,255,255,.94);
-  --ink:#111827;--ink2:#4B5563;--ink3:#5F6672;--on-ink:#fff;
-  --pri:#155EEF;--pri-2:#0F4FD1;--pri-ink:#fff;--pri-text:#155EEF;--pri-soft:#EAF1FE;--ring:rgba(21,94,239,.28);
-  --up:#e0323c;--down:#1f6fd6;--up-ink:#c81e28;--up-soft:#fdecec;--down-ink:#1f63c4;--down-soft:#eaf1fc;
-  --warn:#9a5b1f;--warn-soft:#f6ece0;--ok:#15803d;--ok-soft:#ecf7ef;--bad:#b42318;--bad-soft:#fee4e2;--pb:#6d3fc0;--pb-soft:#f1ebfc;
-  --amber:#FFFBEB;--amber-line:#FDE68A;--amber-ink:#8a4b08;
-  --cat-1:#2a78d6;--cat-2:#d4661f;--cat-3:#7a5bd6;--cat-4:#1f9e7a;--cat-other:#8A919D;--flat:#9ca3af;
-  --hero:radial-gradient(90% 140% at 100% 0%,rgba(21,94,239,.10),transparent 60%),#fff;--img-well:#F7F8FA;--on-cat:#fff;
+  --bg:#F2F2F7;--card:#fff;--fill:#EEEEF0;--fill-2:#E5E5EA;--line:#E5E5EA;--line-strong:#D1D1D6;--hair:rgba(60,60,67,.22);--glass:rgba(242,242,247,.96);--tabbar:rgba(249,249,251,.97);
+  --ink:#1D1D1F;--ink2:#48484A;--ink3:#67676C;--on-ink:#fff;
+  --pri:#0071E3;--pri-2:#0062C4;--pri-ink:#fff;--pri-text:#0066CC;--pri-soft:#E8F1FC;--ring:rgba(0,113,227,.32);
+  --up:#E5352B;--down:#0A6DE0;--up-ink:#C9190E;--up-soft:#FFECEA;--down-ink:#0058C7;--down-soft:#E8F1FC;
+  --warn:#9A5400;--warn-soft:#FFF3E0;--ok:#1F7A35;--ok-soft:#E9F6EC;--bad:#C9190E;--bad-soft:#FFE9E7;--pb:#7D3FA8;--pb-soft:#F5ECFA;
+  --amber:#FFF9E8;--amber-line:#FFE08A;--amber-ink:#8A4B00;
+  --cat-1:#0071E3;--cat-2:#D4661F;--cat-3:#8E5BD6;--cat-4:#1F8F6A;--cat-other:#8E8E93;--flat:#AEAEB2;
+  --hero:var(--card);--img-well:#F5F5F7;--on-cat:#fff;
   --fs-1:12px;--fs-2:13px;--fs-3:15px;--fs-4:17px;--fs-5:20px;--fs-6:24px;--fs-7:32px;
-  --r-mark:999px;--r-tag:12px;--r-sm:12px;--r2:12px;--line2:var(--line-strong);--r-tile:12px;--r-card:20px;--pill:999px;
-  --shadow:0 1px 3px rgba(16,24,40,.04),0 1px 2px rgba(16,24,40,.03);--shadow-2:0 12px 32px rgba(16,24,40,.12);--scrim:rgba(17,24,39,.36);
-  --toast:rgba(17,24,39,.94);--toast-ink:#fff;
-  --ease:cubic-bezier(.2,.8,.2,1);--t:.18s;
-  --gutter:16px;--pad:16px;--top-h:56px;--tab-h:60px;--side-w:0px;
+  --r-mark:999px;--r-tag:10px;--r-sm:10px;--r2:12px;--line2:var(--line-strong);--r-tile:14px;--r-card:20px;--pill:999px;
+  --shadow:none;--shadow-2:0 10px 40px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.06);--scrim:rgba(0,0,0,.32);
+  --toast:rgba(29,29,31,.92);--toast-ink:#fff;
+  --ease:cubic-bezier(.32,.72,0,1);--t:.2s;
+  --gutter:16px;--pad:16px;--top-h:calc(56px + env(safe-area-inset-top,0px));--tab-h:60px;--side-w:0px;
 }
-
 @media(min-width:840px){:root{--gutter:24px;--pad:20px}}
 @media(min-width:1100px){:root{--gutter:24px;--pad:24px;--top-h:72px;--side-w:200px}}
 @media(min-width:1440px){:root{--side-w:232px;--gutter:32px}}
 @media(min-width:1800px){:root{--side-w:248px;--gutter:40px}}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:var(--fs-3);line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all;text-rendering:optimizeLegibility}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,Pretendard,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:var(--fs-3);line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all;text-rendering:optimizeLegibility}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{color:var(--pri-text)}
@@ -93,7 +92,7 @@ kbd{display:inline-flex;align-items:center;height:22px;padding:0 6px;border:1px 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
 /* ── 앱 셸: 폰·폴드 = 위 헤더 + 아래 탭 6개 / PC(1100+) = 왼쪽 사이드바 + 위 검색 ── */
-.app{min-height:100vh}
+.app{min-height:100dvh}
 .col{min-width:0}
 .topbar{position:sticky;top:0;z-index:20;height:var(--top-h);background:var(--glass);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
 .topbar-inner{display:flex;align-items:center;gap:12px;height:100%;padding:0 var(--gutter);min-width:0}
@@ -127,7 +126,7 @@ kbd{display:inline-flex;align-items:center;height:22px;padding:0 6px;border:1px 
 .tabs button.on .ic{stroke-width:2}
 .side-logo,.side-status{display:none}
 @media(min-width:1100px){
-  .tabs{position:sticky;top:0;height:100vh;flex-direction:column;justify-content:flex-start;gap:4px;padding:16px 12px;border-top:0;border-right:1px solid var(--line);background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .tabs{position:sticky;top:0;height:100dvh;flex-direction:column;justify-content:flex-start;gap:4px;padding:16px 12px;border-top:0;border-right:1px solid var(--line);background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none}
   .side-logo{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;margin:0 0 20px}
   .tabs button[data-tab]{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;height:44px;padding:0 12px;border-radius:var(--r-sm);font-size:var(--fs-3);color:var(--ink2);transition:background var(--t),color var(--t)}
   .tabs button[data-tab] .ic{width:20px;height:20px}
@@ -296,7 +295,7 @@ a.kpi{min-height:44px}
 /* ── 창(시트) ── */
 .dim{position:fixed;inset:0;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
 .dim.on{opacity:1;pointer-events:auto}
-.sheet{visibility:hidden;position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--card);border-radius:var(--r-card) var(--r-card) 0 0;max-height:90vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s var(--ease),visibility 0s .25s;box-shadow:var(--shadow-2)}
+.sheet{visibility:hidden;position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--card);border-radius:var(--r-card) var(--r-card) 0 0;max-height:90dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .25s var(--ease),visibility 0s .25s;box-shadow:var(--shadow-2)}
 .sheet.on{transform:none;visibility:visible;transition-delay:0s}
 @media(min-width:840px){
   .sheet{left:auto;top:0;bottom:0;width:min(520px,46vw);max-height:none;border-radius:var(--r-card) 0 0 var(--r-card);transform:translateX(105%)}
@@ -351,7 +350,7 @@ a.kpi{min-height:44px}
   .split{display:grid;grid-template-columns:minmax(0,56fr) minmax(0,44fr);gap:16px;align-items:start}
   .split:not(:has(>.split-side.on)){grid-template-columns:minmax(0,1fr)}
   .split-side.on{display:block;position:sticky;top:calc(var(--top-h) + 12px)}
-  .sheet.docked,#pd.sheet.docked,#bs.sheet.docked{position:relative;inset:auto;top:auto!important;width:auto;transform:none!important;opacity:1!important;pointer-events:auto!important;visibility:visible;max-width:none;margin:0;max-height:calc(100vh - var(--top-h) - 28px);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow);z-index:auto!important;transition:none}
+  .sheet.docked,#pd.sheet.docked,#bs.sheet.docked{position:relative;inset:auto;top:auto!important;width:auto;transform:none!important;opacity:1!important;pointer-events:auto!important;visibility:visible;max-width:none;margin:0;max-height:calc(100dvh - var(--top-h) - 28px);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow);z-index:auto!important;transition:none}
   .sheet.docked .close{display:none}
   .sheet.docked .sheet-body{overflow-y:auto}
   .brow.sel,.row.sel,.dt-row.sel{background:var(--pri-soft);box-shadow:inset 3px 0 0 var(--pri)}
@@ -593,7 +592,7 @@ button.vz-row{min-height:44px}
 @media(max-width:420px){.diy-row{grid-template-columns:48px minmax(0,1fr)}.diy-row .diy-btns{grid-column:1/-1;justify-content:flex-end}.diy-row .diy-img{width:48px;height:48px}}
 /* 폴드·PC: 화면 높이에 맞춘 작업 공간 — (PC 는 왼쪽 메뉴) · 상품 목록 · 만드는 세트가 각자 스크롤 */
 @media(min-width:840px){
-  .diy{grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);height:calc(100vh - var(--top-h) - var(--tab-h) - 132px);min-height:520px;align-items:stretch}
+  .diy{grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);height:calc(100dvh - var(--top-h) - var(--tab-h) - 132px);min-height:520px;align-items:stretch}
   .diy-left{grid-template-rows:auto minmax(0,1fr);height:100%;min-height:0;overflow:hidden}
   .diy-main{display:flex;flex-direction:column;min-height:0;height:100%}
   .diy-main .diy-list{flex:1;max-height:none;min-height:0;overflow:auto}
@@ -602,7 +601,7 @@ button.vz-row{min-height:44px}
   .diy-right .diy-items>.empty{flex:1;display:flex;align-items:center;justify-content:center;background:none;border:1px dashed var(--line-strong)}
 }
 @media(min-width:1100px){
-  .diy{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);height:calc(100vh - var(--top-h) - 108px)}
+  .diy{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);height:calc(100dvh - var(--top-h) - 108px)}
   .diy-left{grid-template-columns:190px minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:start;height:100%;min-height:0;overflow:hidden}
   .diy-side{height:100%;overflow:auto;padding-right:12px;border-right:1px solid var(--line)}
   .diy-side .grp-chips{display:flex;flex-direction:column;gap:4px}
@@ -657,7 +656,7 @@ button.vz-row{min-height:44px}
 .set-ph.none{display:grid;place-items:center;background:var(--fill);color:var(--ink2);font-size:var(--fs-1)}
 .img-zoom{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.72);cursor:zoom-out}
 .img-zoom figure{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:min(92vw,720px);margin:0;padding:16px;border-radius:var(--r-card);background:#fff repeating-conic-gradient(var(--fill) 0 25%,#fff 0 50%) 0 0/18px 18px}
-.img-zoom img{max-width:100%;max-height:72vh;object-fit:contain}
+.img-zoom img{max-width:100%;max-height:72dvh;object-fit:contain}
 .img-zoom figcaption{padding:4px 12px;border-radius:var(--r-tag);background:#fff;color:#111;font-weight:700;font-size:var(--fs-3);text-align:center}
 .img-zoom-x{position:fixed;top:16px;right:16px;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#111;cursor:pointer}
 /* 대표색 점 */
@@ -1043,7 +1042,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(min-width:1100px){
   .rpv{grid-template-columns:minmax(0,1fr) minmax(340px,380px);grid-template-areas:"head rail" "secs rail";align-items:start;gap:20px}
   .rpv-head{grid-area:head}.rpv-secs{grid-area:secs}
-  .rpv-rail{grid-area:rail;position:sticky;top:calc(var(--top-h) + 20px);max-height:calc(100vh - var(--top-h) - 40px);overflow:auto;padding-bottom:4px}
+  .rpv-rail{grid-area:rail;position:sticky;top:calc(var(--top-h) + 20px);max-height:calc(100dvh - var(--top-h) - 40px);overflow:auto;padding-bottom:4px}
   .rpv-head .rp-date{display:none}
   .rp-title{font-size:34px}
 }
@@ -1102,7 +1101,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 /* 검색 (폰 전체 화면 · 폴드·PC 가운데 팔레트) */
 .sheet.sr{top:0;border-radius:0;max-height:none;transform:translateY(-8px);opacity:0;transition:opacity .16s,transform .16s var(--ease),visibility 0s .16s}
 .sheet.sr.on{transform:none;opacity:1;transition-delay:0s}
-@media(min-width:840px){.sheet.sr{left:50%;right:auto;top:10vh;bottom:auto;width:min(680px,92vw);max-height:76vh;border-radius:var(--r-card);transform:translate(-50%,-8px)}.sheet.sr.on{transform:translate(-50%,0)}}
+@media(min-width:840px){.sheet.sr{left:50%;right:auto;top:10dvh;bottom:auto;width:min(680px,92vw);max-height:76dvh;border-radius:var(--r-card);transform:translate(-50%,-8px)}.sheet.sr.on{transform:translate(-50%,0)}}
 .sr-head{flex:none;display:flex;align-items:center;gap:8px;padding:12px 12px 12px 16px;border-bottom:1px solid var(--line)}
 .sr-box{flex:1;display:flex;align-items:center;gap:10px;height:60px;padding:0 18px;border:1px solid var(--line-strong);border-radius:var(--r-card);background:var(--bg)}
 .sr-box:focus-within{border-color:var(--pri);box-shadow:0 0 0 5px var(--ring)}
@@ -1147,7 +1146,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 @media(max-width:839px){
   .diy{display:block}
   .diy-right{display:none}
-  body.diy-open .diy-right{display:block;position:fixed;left:0;right:0;bottom:0;z-index:39;max-height:88vh;overflow:auto;margin:0;border-radius:var(--r-card) var(--r-card) 0 0;padding-top:0;padding-bottom:calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow-2);animation:sheetUp .25s var(--ease)}
+  body.diy-open .diy-right{display:block;position:fixed;left:0;right:0;bottom:0;z-index:39;max-height:88dvh;overflow:auto;margin:0;border-radius:var(--r-card) var(--r-card) 0 0;padding-top:0;padding-bottom:calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow-2);animation:sheetUp .25s var(--ease)}
   body.diy-open .diy-grab{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:flex-end;min-height:56px;margin:0 calc(-1 * var(--pad)) 4px;padding:6px 12px 6px var(--pad);background:var(--card)}
   .grab-h{position:absolute;left:50%;top:8px;width:40px;height:5px;margin-left:-20px;border-radius:var(--pill);background:var(--line-strong)}
   body.diy-open .diy-bar{display:none}
@@ -1414,7 +1413,7 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .src-i .ic{width:15px;height:15px}
 .bc-kpis .src{grid-column:1/-1;margin:2px 0 0}
 .dt .src{padding:0 4px;margin-bottom:14px}
-.src-pop{position:fixed;inset:auto;margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.16);font-size:var(--fs-2);line-height:1.5;max-height:70vh;overflow:auto}
+.src-pop{position:fixed;inset:auto;margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.16);font-size:var(--fs-2);line-height:1.5;max-height:70dvh;overflow:auto}
 .src-pop .sp-src{padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
 .src-pop .sp-src p{margin:2px 0;color:var(--ink2)}.src-pop .sp-src .meta{color:var(--ink3)}
 .src-pop .sp-src a{display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
@@ -1626,13 +1625,13 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
   .diy-left{height:auto;overflow:visible}
   .diy-main{height:auto}
   .diy-main .diy-list{overflow:visible;max-height:none;flex:none}
-  .diy-right{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
+  .diy-right{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100dvh - var(--top-h) - 32px);overflow:auto}
   .pb-wrap .pb-left{height:auto;overflow:visible;display:block}
   .pb-wrap .pb-list{overflow:visible;max-height:none;flex:none}
 }
 @media(min-width:1100px){
   .diy-left{align-items:start}
-  .diy-side{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100vh - var(--top-h) - 32px);overflow:auto}
+  .diy-side{position:sticky;top:calc(var(--top-h) + 16px);height:auto;max-height:calc(100dvh - var(--top-h) - 32px);overflow:auto}
 }
 
 /* 1004 네이버 월간 검색수 */
@@ -1866,6 +1865,189 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 .pss-sum dd small{font-size:var(--fs-1);font-weight:700;color:var(--ink2)}
 /* 1023 MJ: 약국 베스트 목록 판매가·사입가 */
 .pb-money{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:var(--fs-2);color:var(--ink3);font-variant-numeric:tabular-nums}.pb-m{white-space:nowrap}.pb-money b{color:var(--ink);font-weight:700}.pb-money b.neg,#pbTable .neg{color:var(--up)}
+
+/* ── 1023 MJ: 애플 디자인 층 — iOS 그룹 화면(회색 바탕 · 흰 카드 · 테두리 대신 머리카락 선), 반투명 막대, 누르는 순간 반응, 조용한 움직임 ── */
+html,body{font-feature-settings:"tnum" 1;letter-spacing:-.005em}
+h1,.view-h1,.rp-title{letter-spacing:-.022em;line-height:1.15}
+h2{letter-spacing:-.017em}h3,h4{letter-spacing:-.01em}
+.card{border-color:transparent;box-shadow:none}
+.topbar{border-bottom:.5px solid var(--hair)}
+.tabs{border-top:.5px solid var(--hair)}
+@media(min-width:1100px){.tabs{border-right:.5px solid var(--hair);background:var(--glass);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}}
+.sheet-head{border-bottom:.5px solid var(--hair)}
+/* 버튼·칩: 테두리 없는 회색 캡슐, 주 버튼만 파랑 채움 · 눌리는 순간 살짝 작아짐 */
+.btn,.chip{border-color:transparent;background:var(--fill)}
+.btn.pri,.btn.on{border-color:transparent;background:var(--pri)}
+@media(hover:hover){.btn.pri:not([disabled]):hover{box-shadow:none}.btn:not(.pri):not(.on):not([disabled]):hover,.chip:not(.on):hover{background:var(--fill-2)}}
+button:active:not([disabled]),a.btn:active,a.kpi:active{transform:scale(.97);transition:transform .1s ease-out}
+/* 분절 토글: iOS 세그먼트 — 회색 홈 안에서 고른 칸만 떠 있음 */
+.seg{background:var(--fill)}
+.seg button.on{box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+/* 창(시트): iOS 곡선으로 올라오고, 폰에서는 손잡이 표시 */
+.sheet{transition:transform .45s var(--ease),visibility 0s .45s}
+.sheet.on{transition:transform .45s var(--ease),visibility 0s 0s}
+@media(max-width:839px){.sheet{border-radius:14px 14px 0 0}.sheet::before{content:'';position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--line-strong);z-index:1}}
+.dim{transition:opacity .3s var(--ease)}
+/* 투명도 줄이기 설정이면 반투명 막대를 단색으로 */
+@media(prefers-reduced-transparency:reduce){.topbar,.tabs{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none}}
+@media(prefers-contrast:more){.card{border-color:var(--line-strong)}.btn,.chip{border-color:var(--line-strong)}}
+/* ── 1023 MJ: 아이폰 17 (402×874pt) — 오며 가며 뉴스 읽기 ── */
+*{-webkit-tap-highlight-color:transparent}
+.topbar{padding-top:env(safe-area-inset-top,0px)}
+@supports(padding:max(0px)){.topbar-inner,main{padding-left:max(var(--gutter),env(safe-area-inset-left));padding-right:max(var(--gutter),env(safe-area-inset-right))}}
+.sheet{padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(min-width:840px){.sheet{padding-bottom:0}}
+.sheet-body,.split-side,.rpv-rail,.diy-right,.diy-side{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.chips,.seg,.rp-jump{overscroll-behavior-x:contain}
+a:not(.btn):not(.kpi):active,.nw-ex:active{opacity:.55;transition:opacity .1s}
+/* 아이폰 사파리는 16px 보다 작은 입력칸을 누르면 화면을 확대함 → 아이폰에서만 16px 이상 */
+@supports(-webkit-touch-callout:none){input,select,textarea{font-size:max(16px,1em)!important}}
+/* 폰 읽기 모드: 뉴스·리포트 본문 17px · 줄 간격 1.6 · 한 줄로 */
+@media(max-width:599px){
+  .nw-t{font-size:17px;line-height:1.45}
+  .nw-ex{font-size:16px;line-height:1.6;-webkit-line-clamp:3}
+  .nw-cm{font-size:15px;line-height:1.6}
+  .nw-item{padding:14px 0 14px 14px}
+  .nw-item .rp-src,.nw-h small{font-size:var(--fs-2)}
+  .rp-sum,.rp-item p,.rp-note{font-size:17px;line-height:1.6}
+  .rp-item p{font-size:16px}
+  .rp-title{font-size:26px}
+}
+
+@media(max-width:599px){
+  .view-h1{font-size:28px}
+  .edu-s{font-size:17px;line-height:1.65}
+  .edu-t{font-size:22px}
+}
+/* v2 빈 공간: 더 보기 메뉴 카드는 줄 높이에 늘이지 않고 내용만큼 (설명 길이가 달라 아래가 비던 문제) */
+.menu-grid{align-items:start}
+@media(min-width:1100px){.menu-card{min-height:0}}
+/* 반투명 막대 위 글자 겹침 방지: 막대 색을 한 겹 더 깔아(안쪽 그림자) 밑 글자가 비치지 않게 · 흐림을 못 쓰는 브라우저는 단색 */
+.topbar,.rp-jump{box-shadow:inset 0 0 0 100vmax var(--glass)}
+.tabs{box-shadow:inset 0 0 0 100vmax var(--tabbar)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.topbar,.tabs,.rp-jump{background:var(--card)}}
+
+/* ════════ 1023 애플2 — 처음부터 다시: iOS 큰 제목 · 인셋 그룹 목록 · Apple News 뉴스 · 주식식 숫자 · iPadOS 사이드바 ════════ */
+:root{--r-card:14px;--side-bg:#EBEBF0;--hair-c:rgba(60,60,67,.2)}
+/* 큰 제목: 34px 굵게 · 내리면 위 막대 작은 제목으로 */
+.lt{padding:8px 0 12px}
+.lt-t{margin:0;font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.12;overflow-wrap:anywhere}
+.lt-s{margin:4px 0 0;font-size:15px;color:var(--ink3);line-height:1.4}
+.lt-s:empty{display:none}
+.view .page-h{display:none}
+.nav-title{opacity:0;font-size:17px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .2s var(--ease);pointer-events:none}
+body.lt-mini .nav-title{opacity:1}
+.nav-title-pc{display:none}
+@media(max-width:839px){
+  .topbar .logo-text,.topbar .logo .nav-title{grid-area:1/2;transition:opacity .2s var(--ease)}
+  .topbar .owner-pill{grid-area:2/2}
+  .topbar .logo .nav-title{max-width:52vw}
+  body.lt-mini .topbar .logo-text{opacity:0}
+}
+@media(min-width:840px){
+  .topbar .logo .nav-title{display:none}
+  .topbar-inner{position:relative}
+  .nav-title-pc{display:block;position:absolute;left:50%;transform:translateX(-50%);max-width:30vw}
+}
+@media(min-width:1100px){.nav-title-pc{left:auto;right:var(--gutter);transform:none}.lt{padding-top:4px}}
+/* 그룹 안 작은 탭(세그먼트)은 큰 제목 바로 아래 */
+.gbar{margin-bottom:12px}
+/* 카드 = 인셋 그룹: 흰 둥근 묶음 · 머리글은 iOS 헤드라인 크기 */
+.card{border-radius:var(--r-card)}
+.card-head h2,.card>h2{font-size:17px;font-weight:600;letter-spacing:-.012em}
+.card-head h2 small,.card>h2 small{font-size:13px;font-weight:400;color:var(--ink3)}
+/* 목록 줄: 테두리 대신 글자 시작점부터 머리카락 구분선 (Settings 앱처럼) */
+.list{border:0;padding:0 0 0 16px;border-radius:var(--r-card)}
+.list .row{border-top:0;padding-right:16px;background:linear-gradient(var(--hair-c),var(--hair-c)) no-repeat 0 0/100% .5px}
+.list .row:first-child{background:none}
+.pb-row{border-top:0;background:linear-gradient(var(--hair-c),var(--hair-c)) no-repeat 52px 0/calc(100% - 52px) .5px}
+.pb-row:first-child{background:none}
+.pb-add{background:var(--pri-soft);color:var(--pri-text)}
+/* 바뀐 값 = 주식 앱처럼 둥근 알약 (한국식: 오름 빨강 · 내림 파랑) */
+em.up,em.dn,em.mut{display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:6px;font-style:normal;font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;line-height:1;vertical-align:middle}
+em.up{background:var(--up-ink);color:#fff}
+em.dn{background:var(--down-ink);color:#fff}
+em.mut{background:var(--fill);color:var(--ink3)}
+/* 숫자 칸 = 피트니스·주식처럼 큰 숫자 */
+.hn{gap:4px;padding:14px 14px 12px;border-radius:12px}
+.hn small{font-size:13px;font-weight:500;color:var(--ink3)}
+.hn b.num{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.hn.tx b.num{font-size:19px;letter-spacing:-.01em}
+.hn.off b.num{font-size:19px;color:var(--ink3);font-weight:600}
+.hn em{font-style:normal;font-size:12px;color:var(--ink3)}
+.hn.warn b.num{color:var(--warn)}.hn.up b.num{color:var(--up-ink)}
+.hn-h{font-size:22px;font-weight:700;letter-spacing:-.015em}
+.hn-row{font-size:13px;font-weight:600;color:var(--ink3);margin:14px 0 8px}
+.kpi b{font-size:28px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+/* 오늘 할 일 = 미리 알림 앱: 동그라미 체크 · 구분선 */
+.todo-l li{background:linear-gradient(var(--hair-c),var(--hair-c)) no-repeat 44px 0/calc(100% - 44px) .5px}
+.todo-l li:first-child{background:none}
+.todo-l label{display:grid;place-items:center;min-width:44px;min-height:44px;flex:none}
+/* 체크 = iOS 동그라미 (할 일 · 리포트 할 일 · 표 고르기). 스위치(role=switch)는 그대로 */
+input[type=checkbox]:not([role=switch]){-webkit-appearance:none;appearance:none;flex:none;width:22px;height:22px;margin:0;border-radius:50%;border:1.5px solid #C7C7CC;display:inline-grid;place-content:center;vertical-align:middle;background:var(--card);cursor:pointer;transition:background .15s,border-color .15s}
+input[type=checkbox]:not([role=switch]):checked{background:var(--pri);border-color:var(--pri)}
+input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;height:5px;margin-top:-2px;border:2px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg)}
+.todo-t{font-size:15px}
+/* 리포트 카드 = 뉴스 앱 리드 기사 */
+.bc-report .rp-kicker{color:var(--up-ink);font-size:13px;font-weight:700;letter-spacing:.01em}
+.bc-report .rp-head{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+/* 더 보기 = 설정 앱 목록: 색 아이콘 칸 · 제목 · 설명 · 꺾쇠 */
+.menu-grid{gap:0;background:var(--card);border-radius:var(--r-card);overflow:hidden}
+.menu-card{border:0!important;border-radius:0;box-shadow:none!important;transform:none!important;min-height:64px!important;padding:10px 16px!important;gap:14px;flex-direction:row!important;align-items:center!important;background:linear-gradient(var(--hair-c),var(--hair-c)) no-repeat 60px 0/calc(100% - 60px) .5px,var(--card)}
+.menu-card:first-child{background:var(--card)}
+.menu-card .mc-ic{width:30px;height:30px;border-radius:7px;color:#fff}
+.menu-card .mc-ic .ic{width:18px;height:18px}
+.menu-card:nth-child(4n+1) .mc-ic{background:var(--cat-1);color:#fff}.menu-card:nth-child(4n+2) .mc-ic{background:var(--cat-2);color:#fff}.menu-card:nth-child(4n+3) .mc-ic{background:var(--cat-3);color:#fff}.menu-card:nth-child(4n+4) .mc-ic{background:var(--cat-4);color:#fff}
+.menu-card>.ic:last-child{display:block!important;color:#C7C7CC}
+@media(hover:hover){button.menu-card:hover{background-color:var(--fill)}}
+@media(min-width:840px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:.5px;background:var(--hair-c)}.menu-card:nth-child(-n+2){background:var(--card)}}
+/* 뉴스 = Apple News: 날짜 머리글 · 첫 기사 크게 · 나머지 2줄 제목 + 출처·시간 회색 */
+.nw-day{padding:0;overflow:hidden}
+.nw-h{padding:14px 16px 4px;margin:0;font-size:13px;font-weight:600;color:var(--ink3)}
+.nw-h small{font-size:13px}
+.nw-item{padding:12px 16px 14px 28px;border-top:0;background:linear-gradient(var(--hair-c),var(--hair-c)) no-repeat 28px 0/calc(100% - 28px) .5px}
+.nw-h+.nw-item{background:none}
+.nw-item::before{left:12px;top:22px;width:8px;height:8px}
+.nw-item .nw-tags{gap:0;margin-bottom:4px;padding-right:72px}
+.nw-item .nw-tags .tag{background:none;border:0;padding:0;min-height:0;height:auto;font-size:12px;font-weight:700;color:var(--up-ink)}
+.nw-item .nw-tags .tag+.tag::before{content:'·';margin:0 5px;color:var(--ink3);font-weight:400}
+.nw-item .nw-tags .tag+.tag{color:var(--ink3);font-weight:600}
+.nw-t{font-size:17px;line-height:1.4}
+.nw-t b{font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nw-item .rp-src{font-size:13px;margin-top:4px}
+.nw-ex{font-size:15px;line-height:1.6}
+.nw-top+.nw-day .nw-item:first-of-type .nw-t{font-size:22px;line-height:1.3}
+.nw-top+.nw-day .nw-item:first-of-type .nw-t b{font-weight:700;-webkit-line-clamp:4;letter-spacing:-.015em}
+.nw-top+.nw-day .nw-item:first-of-type .nw-ex{font-size:16px;-webkit-line-clamp:3}
+/* 읽기 화면(리포트·성분 이야기): 17px · 줄 간격 1.6 · 줄 길이 제한 */
+.rp-sum,.rp-item p,.edu-s{font-size:17px;line-height:1.6}
+.rp-item p,.edu-s,.rp-sum{max-width:68ch}
+/* 창 닫기 = iOS 글자 버튼 */
+.sheet-head .close{border:0;background:transparent;color:var(--pri-text);font-size:17px;font-weight:600;min-height:44px;padding:0 4px}
+/* PC 사이드바 = iPadOS 소스 목록: 회색 판 · 그룹 이름은 작은 머리글 · 고른 줄은 파랑으로 꽉 채움 */
+@media(min-width:1100px){
+  .tabs{background:var(--side-bg);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .snav-g{color:var(--ink);font-size:15px;font-weight:600;border-radius:9px}
+  .snav-g .ic{color:var(--pri)}
+  .snav-g.on{background:transparent;color:var(--ink)}
+  .tabs .snav .snav-i{color:var(--ink);font-size:14px;font-weight:500;border-radius:8px}
+  .tabs .snav .snav-i.on{background:var(--pri);color:#fff;font-weight:600}
+  @media(hover:hover){.tabs .snav .snav-i:not(.on):hover,.snav-g:hover{background:rgba(0,0,0,.05)}}
+}
+/* 움직임 표시(▲▼) = 주식 앱 알약: 꽉 찬 빨강·파랑 + 흰 글자 */
+.tag.t-up{background:var(--up-ink);color:#fff;border-color:transparent}
+.tag.t-down{background:var(--down-ink);color:#fff;border-color:transparent}
+.tag.t-up,.tag.t-down{border-radius:6px}
+/* 기획 제안 근거 링크도 손가락 크기(44) */
+.idea a{display:inline-flex;align-items:center;min-height:44px}
+/* 오늘 = 건강 앱 요약처럼: 회색 바탕 위에 머리글, 할 일·숫자는 흰 위젯 (큰 흰 판 하나에 몰아넣지 않음) */
+.hero.card{background:transparent;padding:0;border-radius:0}
+.hero .todo{background:var(--card);border-radius:var(--r-card);padding:14px 16px 6px}
+.hero .hn{background:var(--card)}
+.hero .hn-h{margin:20px 0 4px}
+/* PC 검색 = macOS 도구 막대 검색칸: 회색 채움 · 테두리 없음 */
+@media(min-width:600px){.search-btn{background:var(--fill-2);border-color:transparent}}
+@media(min-width:1100px){.search-btn{height:40px;border-radius:10px;flex:0 1 420px}}
 </style>
 </head>
 <body data-tab="today">
@@ -1874,12 +2056,14 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 <div class="col">
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span><span class="owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span></span>
+    <span class="nav-title nav-title-pc" aria-hidden="true"></span>
+    <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span><span class="nav-title" aria-hidden="true"></span><span class="owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span></span>
     <button type="button" class="status-dot" id="statusDot" onclick="openStatus()" aria-label="수집 상태"><i aria-hidden="true"></i><span id="statusTime">수집 확인 중</span></button>
     <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="검색 (상품 · 브랜드 · 기능)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 기능 검색</span><kbd>⌘K</kbd></button>
   </div>
 </header>
 <main id="main">
+  <header class="lt" id="lt"><h1 class="lt-t" id="ltT"></h1><p class="lt-s" id="ltS"></p></header>
   <section id="today" class="view on" aria-label="오늘"></section>
   <section id="report" class="view" aria-label="데일리 리포트"></section>
   <section id="trend" class="view" aria-label="트렌드">
@@ -2228,7 +2412,20 @@ function ovfSync() { requestAnimationFrame(function () { [].forEach.call(documen
   var sn = document.querySelector('#tabs .snav'); if (sn) sn.classList.toggle('ovf', sn.scrollHeight > sn.clientHeight + 2 && sn.scrollTop + sn.clientHeight < sn.scrollHeight - 4); }); }
 document.addEventListener('scroll', function (e) { var t = e.target; if (t && t.classList && (t.classList.contains('gseg') || t.classList.contains('snav'))) ovfSync(); }, true);
 window.addEventListener('resize', ovfSync);
-function navSync() { ovfSync(); requestAnimationFrame(function () { [].forEach.call(document.querySelectorAll('.view.on .gseg'), function (g) { var on = g.querySelector('.on'); if (!on) return; var d = on.getBoundingClientRect().right - g.getBoundingClientRect().right + 24, l = on.getBoundingClientRect().left - g.getBoundingClientRect().left; if (d > 0) g.scrollLeft += d; else if (l < 0) g.scrollLeft += l - 12; }); });   /* 1004 폰: 고른 칸이 화면 밖에 있으면 보이게 */
+/* 1023 애플2: 화면마다 iOS 큰 제목 — 지금 메뉴 이름(화면 안 큰 제목이 있으면 그것) · 내리면 위 막대의 작은 제목으로 접힘 */
+function ltSync() {
+  var T = $('ltT'), Sb = $('ltS'); if (!T) return;
+  var g = curGroup(), it = gItems(g).filter(function (x) { return gMatch(x, S.tab, curSub()); })[0], t = it ? it[2] : ({ more: '더 보기', report: '데일리 리포트' }[S.tab] || g[1]), sub = it ? it[3] || '' : '';
+  var v = document.querySelector('.view.on'), ph = v && v.querySelector('.page-h');
+  if (ph) { var h = ph.querySelector('.view-h1'), e = ph.querySelector('.eyebrow'); if (h) t = h.textContent; if (e) sub = e.textContent; }
+  if (T.textContent !== t) T.textContent = t; if (Sb.textContent !== sub) Sb.textContent = sub;
+  [].forEach.call(document.querySelectorAll('.nav-title'), function (n) { if (n.textContent !== t) n.textContent = t; });
+  ltMini();
+}
+function ltMini() { var T = $('ltT'), tb = document.querySelector('.topbar'); if (T && tb) document.body.classList.toggle('lt-mini', T.getBoundingClientRect().bottom < tb.getBoundingClientRect().bottom + 4); }
+window.addEventListener('scroll', function () { if (!S.ltF) { S.ltF = 1; requestAnimationFrame(function () { S.ltF = 0; ltMini(); }); } }, { passive: true });
+if (window.MutationObserver) new MutationObserver(function () { if (!S.ltM) { S.ltM = 1; requestAnimationFrame(function () { S.ltM = 0; ltSync(); }); } }).observe(document.getElementById('main'), { childList: true, subtree: true });
+function navSync() { ltSync(); ovfSync(); requestAnimationFrame(function () { [].forEach.call(document.querySelectorAll('.view.on .gseg'), function (g) { var on = g.querySelector('.on'); if (!on) return; var d = on.getBoundingClientRect().right - g.getBoundingClientRect().right + 24, l = on.getBoundingClientRect().left - g.getBoundingClientRect().left; if (d > 0) g.scrollLeft += d; else if (l < 0) g.scrollLeft += l - 12; }); });   /* 1004 폰: 고른 칸이 화면 밖에 있으면 보이게 */
   var k = S.tab + '/' + (curSub() || ''), g = curGroup()[0], box = document.querySelector('#tabs .snav');
   if (box && box.dataset.g !== g) { box.dataset.g = g; renderTabs(); return; }
   [].forEach.call(document.querySelectorAll('#tabs [data-group]'), function (b) { var on = b.dataset.group === g; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
