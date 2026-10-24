@@ -37,7 +37,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function when(t) { if (!t) return ''; var d = new Date(t); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
   var css = document.createElement('style');
-  css.textContent = '.tlg{position:fixed;inset:0;z-index:999;background:var(--bg,#F5F6F8);display:flex;align-items:center;justify-content:center;padding:20px}'
+  css.textContent = '.tl-gated .app{visibility:hidden}.tlg{position:fixed;inset:0;z-index:999;background:var(--bg,#F5F6F8);display:flex;align-items:center;justify-content:center;padding:20px}'
     + '.tlg-c{width:min(360px,100%);background:var(--card,#fff);color:var(--ink,#101828);border:1px solid var(--line,#EDEEF0);border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.04);font-family:inherit}'
     + '.tlg-c i.lg{width:44px;height:44px;border-radius:12px;background:#155EEF;color:#fff;font-size:20px;font-weight:800;line-height:44px;font-style:normal;display:block;text-align:center}'
     + '.tlg-c h1{font-size:20px;margin:16px 0 4px}.tlg-c p{color:var(--ink3,#6b7280);font-size:14px;line-height:1.5;margin:0 0 14px}'
@@ -45,6 +45,7 @@
     + '.tlg-c button{margin-top:12px;width:100%;height:48px;border:0;border-radius:999px;background:#155EEF;color:#fff;font-size:16px;font-weight:600;cursor:pointer}'
     + '.tlg-c .m{color:#B42318;min-height:18px;margin:10px 0 0}.tlg-code{font:800 34px/1.2 ui-monospace,monospace;letter-spacing:6px;color:#155EEF;margin:6px 0 10px}'
     + '.tla-b{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 12px;border:1px solid var(--line,#EDEEF0);border-radius:999px;background:var(--card,#fff);color:var(--ink,#101828);font-size:13px;font-weight:600;cursor:pointer;flex:none}'
+    + '@media(max-width:599px){.tla-b{padding:0 9px}.tla-b .tla-bt{display:none}}'   /* 1024 폰에서 [🔒 기기]가 검색 버튼을 화면 밖으로 밀어냄 → 자물쇠만 */
     + '.tla-b b{min-width:18px;height:18px;border-radius:9px;background:#D92D20;color:#fff;font-size:11px;line-height:18px;text-align:center;padding:0 4px}'
     + '.tla{position:fixed;inset:0;z-index:998;background:rgba(16,24,40,.45);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow:auto}'
     + '.tla-p{width:min(560px,100%);background:var(--card,#fff);color:var(--ink,#101828);border-radius:20px;padding:22px;box-shadow:0 12px 40px rgba(16,24,40,.2)}'
@@ -65,6 +66,7 @@
   }
   function showGate() {
     if (gated) return; gated = true;
+    document.body.classList.add('tl-gated');   /* 1024 잠금 화면 뒤 '암호가 필요해요' 그리기로 화면이 밀리던 것(CLS) — 뒤 화면 숨김 */
     if (k) tryUnlock(k, true); else askPass('');   /* 저장된 암호가 있으면 다시 안 묻고 이 기기 허락부터 */
   }
   function askPass(msg) {
@@ -95,7 +97,7 @@
   function admBtn() {
     var bar = document.querySelector('.topbar-inner'), b = document.getElementById('tlAdm'), n = pend().length;
     if (bar && !b) { b = document.createElement('button'); b.type = 'button'; b.id = 'tlAdm'; b.className = 'tla-b'; b.onclick = admOpen; bar.insertBefore(b, document.getElementById('statusDot')); }
-    if (b) { b.innerHTML = '🔒 기기' + (n ? '<b>' + n + '</b>' : ''); b.setAttribute('aria-label', '사람·기기 관리' + (n ? ' · 새 요청 ' + n + '개' : '')); }
+    if (b) { b.innerHTML = '🔒<span class="tla-bt">기기</span>' + (n ? '<b>' + n + '</b>' : ''); b.setAttribute('aria-label', '사람·기기 관리' + (n ? ' · 새 요청 ' + n + '개' : '')); }
     var t = document.getElementById('tlAdmT');
     if (n && !panel) { if (!t) { t = document.createElement('div'); t.id = 'tlAdmT'; t.className = 'tla-t'; t.setAttribute('role', 'status'); document.body.appendChild(t); } t.innerHTML = '<span>🔒 새 기기 요청' + (n > 1 ? ' ' + n + '개' : '') + ' · ' + esc(pend()[0].n) + ' · ' + esc(pend()[0].lb) + '</span><button type="button">보기</button>'; t.querySelector('button').onclick = admOpen; }
     else if (t) t.remove();
@@ -140,8 +142,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <title>레디영 트렌드</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<!-- 1024 Lighthouse: 글꼴 CSS 가 첫 화면을 ~1초 막음 → 뒤에서 받기 (그동안 시스템 글꼴) -->
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"></noscript>
 <style>/* TRENDLAB v3 — 디자인 토큰 (2026 레퍼런스: Calm · #155EEF · 20/12/999 · Pretendard · lucide 1.5) · 라이트/다크 두 벌 */
 :root{color-scheme:light;
   --bg:#F2F2F7;--card:#fff;--fill:#EEEEF0;--fill-2:#E5E5EA;--line:#E5E5EA;--line-strong:#D1D1D6;--hair:rgba(60,60,67,.22);--glass:rgba(242,242,247,.96);--tabbar:rgba(249,249,251,.97);
@@ -1147,9 +1154,9 @@ a.card{text-decoration:none;color:inherit;transition:border-color var(--t),box-s
 .grp-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));column-gap:32px}
 .tour-grid{display:flex;flex-direction:column;gap:16px}
 .tour-card h4{margin:0 0 4px;font-size:var(--fs-3);font-weight:700}
-.tour-more summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;cursor:pointer}
+.tour-more .tour-hd,.tour-more summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;cursor:pointer}
 .tour-more summary::-webkit-details-marker{display:none}
-.tour-more summary h2{margin:0}
+.tour-more .tour-hd h2,.tour-more summary h2{margin:0}
 
 .kpi-grid.fx{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:600px){.kpi-grid.fx{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -1879,6 +1886,8 @@ details:not([open])>summary .rp-dt{display:-webkit-box;-webkit-box-orient:vertic
 .ing-c span{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:999px;background:var(--fill-2);color:var(--ink);font-size:var(--fs-2);font-weight:600}.ing-c:hover span{background:var(--line)}
 .ing-sh h4{margin:16px 0 8px;font-size:var(--fs-3)}.ing-sh h4:first-child{margin-top:0}
 .ing-og{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}.ing-oc{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);font-size:var(--fs-2)}
+.ing-oc{min-width:0}.ing-oc b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;line-height:1.35}   /* 1024 MJ '상품명이 너무 길어서 이상해' — 띄어쓰기 없는 긴 이름이 옆 카드로 넘침 → 2줄 … */
+.nm{overflow-wrap:anywhere}
 .ing-oi{aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--fill-2)}.ing-oi img,.ing-oi .noimg{width:100%;height:100%;object-fit:cover}.ing-oc .btn{margin-top:auto;min-height:44px}
 .ing-ol{display:flex;flex-direction:column}.ing-or{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;color:var(--ink);cursor:pointer}.ing-or .tx{display:flex;flex-direction:column;font-size:var(--fs-2)}
 .ing-all summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink2);font-size:var(--fs-2)}.ing-all p{font-size:var(--fs-2);color:var(--ink2);line-height:1.6}
@@ -2043,6 +2052,7 @@ body.lt-mini .nav-title{opacity:1}
   .nav-title-pc{display:block;position:absolute;left:50%;transform:translateX(-50%);max-width:30vw}
 }
 @media(min-width:1100px){.nav-title-pc{left:auto;right:var(--gutter);transform:none}.lt{padding-top:4px}}
+@media(min-width:840px) and (max-width:1099px){.nav-title-pc{display:none}}   /* 1024 MJ '제일 위쪽 글자가 겹쳐' (폴드 펼침) — 가운데 화면 이름이 [🔒 기기]·수집 시각과 겹침, 바로 아래 탭에 같은 이름이 있어 뺌 */
 /* 그룹 안 작은 탭(세그먼트)은 큰 제목 바로 아래 */
 .gbar{margin-bottom:12px}
 /* 카드 = 인셋 그룹: 흰 둥근 묶음 · 머리글은 iOS 헤드라인 크기 */
@@ -2151,8 +2161,8 @@ input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;hei
   <div class="topbar-inner">
     <span class="nav-title nav-title-pc" aria-hidden="true"></span>
     <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span><span class="nav-title" aria-hidden="true"></span><span class="owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span></span>
-    <button type="button" class="status-dot" id="statusDot" onclick="openStatus()" aria-label="수집 상태"><i aria-hidden="true"></i><span id="statusTime">수집 확인 중</span></button>
-    <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="검색 (상품 · 브랜드 · 기능)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 기능 검색</span><kbd>⌘K</kbd></button>
+    <button type="button" class="status-dot" id="statusDot" onclick="openStatus()"><i aria-hidden="true"></i><span class="sr-only">수집 상태 </span><span id="statusTime">수집 확인 중</span></button>
+    <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="상품 · 브랜드 · 기능 검색"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 기능 검색</span><kbd>⌘K</kbd></button>
   </div>
 </header>
 <main id="main">
@@ -2486,8 +2496,9 @@ function gsegRefresh() { [].forEach.call(document.querySelectorAll('.view.on .gs
 var PC_MQ = window.matchMedia ? matchMedia('(min-width:1100px)') : { matches: false };
 function renderTabs() {
   var side = S.sideNav = !!PC_MQ.matches, g0 = curGroup()[0];
+  if (side) $('tabs').removeAttribute('role'); else $('tabs').setAttribute('role', 'tablist');   /* 1024 PC 옆 메뉴는 탭이 아니라 메뉴(aria-current) */
   $('tabs').innerHTML = '<span class="side-logo" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span></span>' + (document.querySelector('.topbar .owner-pill') || { outerHTML: '' }).outerHTML.replace('owner-pill', 'owner-pill side-owner')
-    + (side ? '<div class="snav snav4" data-g="' + g0 + '">' + GROUPS.map(function (g) { var cur = g0 === g[0]; return '<div class="snav-sec' + (cur ? ' cur' : '') + '" role="group" aria-label="' + g[1] + '"><button type="button" class="snav-g' + (cur ? ' on' : '') + '" data-group="' + g[0] + '" data-tab="' + g[3][0][0] + '" aria-selected="' + cur + '" onclick="groupTap(this.dataset.group)">' + icon(g[2]) + '<span>' + g[1] + '</span></button>' + (cur ? g[3].concat(S.snavMore || g[4].some(function (x) { return gMatch(x, S.tab, curSub()); }) ? g[4] : []) : g[3]).filter(function (it) { return it[0] !== 'today'; }).map(function (it) { return '<button type="button" class="snav-i' + (g[4].indexOf(it) !== -1 ? ' sub' : '') + '" data-nav="' + it[0] + '/' + it[1] + (it[5] ? '/' + it[5] : '') + '" title="' + esc(it[3] || '') + '" onclick="' + navCall(it) + '"><span>' + esc(it[2]) + '</span></button>'; }).join('') + (cur && g[4].length ? '<button type="button" class="snav-more" aria-expanded="' + !!(S.snavMore || g[4].some(function (x) { return gMatch(x, S.tab, curSub()); })) + '" onclick="S.snavMore=!S.snavMore;renderTabs()">' + (S.snavMore ? '접기' : '더 보기 ' + g[4].length) + icon('chev') + '</button>' : '') + '</div>'; }).join('') + '</div>'
+    + (side ? '<div class="snav snav4" data-g="' + g0 + '">' + GROUPS.map(function (g) { var cur = g0 === g[0]; return '<div class="snav-sec' + (cur ? ' cur' : '') + '" role="group" aria-label="' + g[1] + '"><button type="button" class="snav-g' + (cur ? ' on' : '') + '" data-group="' + g[0] + '" data-tab="' + g[3][0][0] + '" aria-current="' + (cur ? 'page' : 'false') + '" onclick="groupTap(this.dataset.group)">' + icon(g[2]) + '<span>' + g[1] + '</span></button>' + (cur ? g[3].concat(S.snavMore || g[4].some(function (x) { return gMatch(x, S.tab, curSub()); }) ? g[4] : []) : g[3]).filter(function (it) { return it[0] !== 'today'; }).map(function (it) { return '<button type="button" class="snav-i' + (g[4].indexOf(it) !== -1 ? ' sub' : '') + '" data-nav="' + it[0] + '/' + it[1] + (it[5] ? '/' + it[5] : '') + '" title="' + esc(it[3] || '') + '" onclick="' + navCall(it) + '"><span>' + esc(it[2]) + '</span></button>'; }).join('') + (cur && g[4].length ? '<button type="button" class="snav-more" aria-expanded="' + !!(S.snavMore || g[4].some(function (x) { return gMatch(x, S.tab, curSub()); })) + '" onclick="S.snavMore=!S.snavMore;renderTabs()">' + (S.snavMore ? '접기' : '더 보기 ' + g[4].length) + icon('chev') + '</button>' : '') + '</div>'; }).join('') + '</div>'
       : GROUPS.map(function (g, i) { return '<button type="button" role="tab" data-group="' + g[0] + '" data-tab="' + g[3][0][0] + '" title="' + g[1] + ' (' + (i + 1) + ')" onclick="groupTap(this.dataset.group)">' + icon(g[2]) + '<span>' + g[1] + '</span></button>'; }).join(''))
     + '<button type="button" class="side-status" id="sideStatus" onclick="openStatus()"><i aria-hidden="true"></i><span>수집 확인 중</span></button>';
   navSync(); if (S.stat) renderStatus(S.home); if (S.news) nwBadge();
@@ -2521,7 +2532,7 @@ if (window.MutationObserver) new MutationObserver(function () { if (!S.ltM) { S.
 function navSync() { ltSync(); ovfSync(); requestAnimationFrame(function () { [].forEach.call(document.querySelectorAll('.view.on .gseg'), function (g) { var on = g.querySelector('.on'); if (!on) return; var d = on.getBoundingClientRect().right - g.getBoundingClientRect().right + 24, l = on.getBoundingClientRect().left - g.getBoundingClientRect().left; if (d > 0) g.scrollLeft += d; else if (l < 0) g.scrollLeft += l - 12; }); });   /* 1004 폰: 고른 칸이 화면 밖에 있으면 보이게 */
   var k = S.tab + '/' + (curSub() || ''), g = curGroup()[0], box = document.querySelector('#tabs .snav');
   if (box && box.dataset.g !== g) { box.dataset.g = g; renderTabs(); return; }
-  [].forEach.call(document.querySelectorAll('#tabs [data-group]'), function (b) { var on = b.dataset.group === g; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  [].forEach.call(document.querySelectorAll('#tabs [data-group]'), function (b) { var on = b.dataset.group === g; b.classList.toggle('on', on); if (b.getAttribute('role') === 'tab') b.setAttribute('aria-selected', on); else b.setAttribute('aria-current', on ? 'page' : 'false'); });
   [].forEach.call(document.querySelectorAll('#tabs [data-nav]'), function (b) { var it = b.dataset.nav.split('/'), on = gMatch([it[0], it[1], '', '', '', it[2] || ''], S.tab, curSub()); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     if (on && box) { var t = b.offsetTop - box.offsetTop; if (t < box.scrollTop || t + b.offsetHeight > box.scrollTop + box.clientHeight) box.scrollTop = t - box.clientHeight / 2; } });   /* 메뉴가 길어 안에서 스크롤될 때 지금 줄이 보이게 */
   if (box && !box.querySelector('[data-nav].on') && S.tab !== 'today') { var gg = curGroup(); if (gg[4].some(function (x) { return gMatch(x, S.tab, curSub()); }) && !box.dataset.more) { box.dataset.more = 1; renderTabs(); return; } }   /* 1004 '더 보기' 안 화면으로 가면 그 줄이 보이게 */
@@ -4674,7 +4685,7 @@ function openIng(id) {
   if (!$('mt').classList.contains('on')) { $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt'); }
   var C = S.ingOurs || (S.ingOurs = {}), draw = function () { var el = $('ingOurs'), r = C[id]; if (!el || S.ingCur !== id || !r) return;
     if (!r.items || !r.items.length) { el.innerHTML = '<p class="empty">우리 약국 상품 이름·교육 자료에서 못 찾았어요 → 들여올 후보예요</p>'; return; }
-    var G = [['cos', '화장품 · 의약외품'], ['top', '바르는 약 · 연고'], ['med', '먹는 약']], one = function (it) { return '<div class="ing-oc"><span class="ing-oi">' + imgHtml(it.img) + '</span><b>' + esc(it.name) + '</b><span class="meta num">' + (it.cat ? esc(it.cat) + ' · ' : '') + '15일 ' + it.s15 + '개</span><button type="button" class="btn sm" data-n="' + esc(it.name) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에 넣기</button></div>'; };
+    var G = [['cos', '화장품 · 의약외품'], ['top', '바르는 약 · 연고'], ['med', '먹는 약']], one = function (it) { return '<div class="ing-oc"><span class="ing-oi">' + imgHtml(it.img) + '</span><b title="' + esc(it.name) + '">' + esc(it.name) + '</b><span class="meta num">' + (it.cat ? esc(it.cat) + ' · ' : '') + '15일 ' + it.s15 + '개</span><button type="button" class="btn sm" data-n="' + esc(it.name) + '" onclick="toSet(this.dataset.n,\'\')">' + icon('plus') + '세트에 넣기</button></div>'; };
     el.innerHTML = G.map(function (g) { var xs = r.items.filter(function (it) { return (it.kind || 'cos') === g[0]; }); return xs.length ? '<h5 class="ing-gh">' + g[1] + ' <span class="meta num">' + ((r.n || {})[g[0]] || xs.length) + '개</span></h5><div class="ing-og">' + xs.map(one).join('') + '</div>' : ''; }).join('') + '<p class="meta">묶음마다 15일 판매 많은 8개까지 · 세트는 섞어서 담아도 돼요</p>'; };
   if (C[id]) draw(); else call('getIngProds', [id], function (r) { C[id] = r && r.ok ? r : { items: [] }; draw(); }, function () { C[id] = { items: [] }; draw(); });
 }
@@ -4891,7 +4902,7 @@ function tourPlanHtml(v) {
       + dnWrap(donutSvg(parts, manTxt(tot), mon + ' 전체', '나라별 비중') + '<div class="dn-list">' + hd + it.slice(0, S.natAll ? it.length : 5).map(function (x, i) { return '<button type="button" class="dn-row' + (i === si ? ' on' : '') + '" data-i="' + i + '" aria-pressed="' + (i === si) + '" onclick="S.natSel=+this.dataset.i;renderPlan()"><b style="background:' + (i < 4 ? catColor(i) : TOK.other) + '"></b><span class="dn-n">' + esc(x.nat) + '</span><span class="dn-v">' + manTxt(x.num) + '명</span><span class="dn-p">' + esc(x.share) + '%</span>' + pctTxt(x.mom) + '<span class="dn-y">' + pctTxt(x.yoy) + '</span></button>'; }).join('') + (it.length > 5 ? '<button type="button" class="more" onclick="S.natAll=!S.natAll;renderPlan()">' + (S.natAll ? '접기' : '그 외 ' + (it.length - 5) + '개 나라 보기') + '</button>' : '') + '</div>', natBars(it[si], t.tour.months), 'nat') + srcLine(['tourKto'], { at: t.tour.ym.slice(0, 4) + '년 ' + mon + ' 자료', calc: '비중 = 그 달 전체 방한 외래객 중 · 전달 · 작년 같은 달 대비 %' }) + '</section>';
   } else h += '<section class="card tour-card"><h2>어느 나라 손님이 오나?</h2><p class="empty">공공데이터포털 인증키를 넣으면 달마다 나라별로 떠요</p></section>';
   var ka = (t.kto && t.kto.areas) || [];
-  if (ka.length) h += '<details class="card tour-card tour-more"><summary><h2>4구역 외국인 방문자 <small>한국관광공사 · 통신사 기반</small></h2><span class="head-acts">' + asOf(ka[0].last) + '<span class="btn sm" aria-hidden="true">구역 더 보기</span></span></summary>' + areaDonut(ka, '4구역 외국인 비중') + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + manTxt(ar.outWeek || 0) + '명/일'); }).join('') + '</div>' + STK_KEY + srcLine(['ktoArea'], { at: md(ka[0].last) + ' 자료', calc: '시군구 하루 외국인 방문자 · 막대 색 = 전날 대비' }) + '</details>';
+  if (ka.length) h += '<section class="card tour-card tour-more"><div class="tour-hd"><h2>4구역 외국인 방문자 <small>한국관광공사 · 통신사 기반</small></h2><span class="head-acts">' + asOf(ka[0].last) + '</span></div>' + areaDonut(ka, '4구역 외국인 비중') + '<div class="stk-grid">' + ka.map(function (ar) { return stkCard(ar, 'fr', '명', '하루 외국인 방문자', '다른 지역에서 온 사람 ' + manTxt(ar.outWeek || 0) + '명/일'); }).join('') + '</div>' + STK_KEY + srcLine(['ktoArea'], { at: md(ka[0].last) + ' 자료', calc: '시군구 하루 외국인 방문자 · 막대 색 = 전날 대비' }) + '</section>';   /* 1024 MJ '버튼 눌러서 보는 게 아니라 그냥 보이게' — 접기 없앰 */
   h += medHtml(t.med);
   return '<div class="tour-grid">' + h + '</div>';
 }
