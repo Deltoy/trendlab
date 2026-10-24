@@ -107,13 +107,13 @@
       var me = d.id === A.me, st = d.ok === 1 ? (me ? '지금 이 기기' : d.seen ? '마지막 사용 ' + when(d.seen) : '허락됨') : d.ok === 0 ? '요청 ' + when(d.at) + ' · 코드 ' + esc(d.c) : '막음';
       var bt = d.ok === 0 ? '<button type="button" class="ok" data-op="ok">허락</button><button type="button" class="no" data-op="no">거절</button>'
         : d.ok === 1 ? (me ? '' : '<button type="button" class="no" data-op="no">끊기</button>') : '<button type="button" data-op="ok">다시 허락</button><button type="button" data-op="del">지우기</button>';
-      var warn = d.ok === 0 && d.n === '문준' && A.oldPass ? '<small style="color:#B42318">예전 공용 암호로 들어온 요청이에요 · 내 기기가 아니면 거절</small>' : '';
+      var warn = d.ok === 0 && d.n === '문준' && A.oldPass ? '<small style="color:#B42318">공용 암호로 들어온 요청 · 송주희 주임님 기기면 허락, 모르는 기기면 거절</small>' : '';
       return '<div class="tla-r" data-id="' + esc(d.id) + '"><div><b>' + esc(d.n) + '</b> · ' + esc(d.lb || '기기') + '<small>' + st + '</small>' + warn + '</div>' + bt + '</div>';
     };
     var P = pend(), ok = A.devs.filter(function (d) { return d.ok === 1; }), no = A.devs.filter(function (d) { return d.ok === -1; });
     panel.innerHTML = '<div class="tla-p" role="dialog" aria-modal="true" aria-label="사람·기기 관리"><h2>사람 · 기기<button type="button" class="x" data-op="close">닫기</button></h2>'
       + '<p style="color:var(--ink3,#667085);font-size:13.5px;margin:0">허락한 기기에서만 트렌드랩이 열려요. 잃어버린 폰은 [끊기]를 눌러 주세요.</p>'
-      + (A.oldPass ? '<div class="tla-w">⚠️ 문준 님 암호가 예전 공용 암호예요. 송주희 주임님도 아는 암호라 먼저 바꿔 주세요.<button type="button" class="tla-add" data-op="pw" data-n="문준">문준 암호 바꾸기</button></div>' : '')
+      + (A.oldPass ? '<div class="tla-w">ℹ️ 지금 암호 = 송주희 주임님과 같이 쓰는 공용 암호예요. 그대로 써도 새 기기는 MJ 허락이 있어야 열려요.<button type="button" class="tla-add" data-op="pw" data-n="문준">문준 암호 바꾸기</button></div>' : '')
       + (P.length ? '<h3>허락 기다리는 기기 ' + P.length + '</h3>' + P.map(row).join('') : '')
       + '<h3>허락한 기기 ' + ok.length + '</h3>' + (ok.length ? ok.map(row).join('') : '<div class="tla-r"><div><small>없어요</small></div></div>')
       + (no.length ? '<h3>막은 기기 ' + no.length + '</h3>' + no.map(row).join('') : '')
