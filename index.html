@@ -2461,14 +2461,14 @@ var NAV_TAB = { today: 'today', report: 'report', 'trend/product/rank': 'trend',
 /* 1004 v5 내비 (사용자: 카테고리 기능이 직관적이지 않음 · 찾기 쉽게): '하는 일' 기준 5묶음, '더' 없이 전부 보이게.
    줄 = [tab, sub, 이름, 한 줄 설명, 찾기 낱말] — 설명은 메뉴 툴팁 · 기능 검색 결과에 씀 */
 var GROUPS = [
-  ['today', '오늘', 'house', [['today', '', '오늘 브리핑', '오늘 할 일과 꼭 볼 숫자', '홈 브리핑 할일 한눈에'], ['report', '', '데일리 리포트', '매일 아침 AI가 쓴 MD 리포트', '리포트 요약 아침']], []],
-  ['hot', '뜨는 상품', 'trend', [['trend', 'product', '들여올 후보', '약국에 없는데 뜨는 상품', '들여올 입점 후보 없는 미취급', 'missing'], ['trend', 'product', '트렌드 상품', '올리브영 랭킹 · 급상승 · 이번 주 신상', '랭킹 순위 급상승 신상 올리브영 품평회'], ['trend', 'brand', '뜨는 브랜드', '올리브영에서 뜨는 브랜드 · 소싱 후보', '브랜드 소싱 입점'], ['trend', 'keyword', '검색수 · 반응', '네이버 월간 검색수 · 블로그 언급', '검색량 검색수 키워드 블로그 네이버 구글 월간']],
+  ['today', '오늘', 'house', [['today', '', '오늘 브리핑', '오늘 할 일과 꼭 볼 숫자', '홈 브리핑 할일 한눈에'], ['report', '', '데일리 리포트', '매일 아침 AI가 쓴 MD 리포트', '리포트 요약 아침'], ['more', 'news', '뉴스', '뷰티 업계 뉴스', '뉴스 기사 업계'], ['trend', 'keyword', '뜨는 키워드', '급상승 키워드 · 네이버 월간 검색수 · 블로그 언급', '뜨는 키워드 급상승 검색량 검색수 블로그 네이버 구글 월간']], []],
+  ['hot', '뜨는 상품', 'trend', [['trend', 'product', '들여올 후보', '약국에 없는데 뜨는 상품', '들여올 입점 후보 없는 미취급', 'missing'], ['trend', 'product', '트렌드 상품', '올리브영 랭킹 · 급상승 · 이번 주 신상', '랭킹 순위 급상승 신상 올리브영 품평회'], ['trend', 'brand', '뜨는 브랜드', '올리브영에서 뜨는 브랜드 · 소싱 후보', '브랜드 소싱 입점']],
     [['trend', 'shorts', '쇼츠', '유튜브 뷰티 쇼츠 인기 영상', '유튜브 영상 숏폼'], ['more', 'watch', '관심 상품 변화', '하트 누른 상품 · 브랜드의 변화', '알림 관심 하트 변화'], ['more', 'filters', '사이트 비교', '올영 · 무신사 · 다이소 · 큐텐 비교', '무신사 다이소 큐텐 아마존 사이트'], ['more', 'find', '화해 조사', '화해에서 브랜드 전체 상품 조사', '화해 성분 리뷰 조사'], ['more', 'analysis', '카테고리 분석', '카테고리 · 브랜드 구성', '분석 카테고리 비중'], ['more', 'story', '브랜드 이야기', '브랜드 창업 스토리', '브랜드 스토리 창업']]],
   ['store', '우리 매장', 'bars', [['set', 'best', '약국 베스트', '약국 판매 순위 · ABC 등급 (물류앱 15일 판매 엑셀)', '판매 순위 베스트 abc 매출 엑셀 올리기 pos 업로드 판매자료'], ['set', 'ptrend', '판매 오르내림', '판매가 오르고 내린 상품과 이유', '추세 상승 하락 판매 변화'], ['plan', 'strategy', '우리만 잘 파는 것', '약국 강점 · 약 매출 비중 · 전략', '강점 전략 차별 약 매출'], ['plan', 'price', '가격 · 할인', '올리브영 할인 · 가격 비교', '가격 할인 세일 마진']],
     [['plan', 'swap', '재고 스왑', '지점끼리 재고 맞바꾸기', '재고 지점 교환']]],
   ['set', '세트 · 행사', 'package', [['set', 'diy', '세트 만들기', '상품을 담아 세트 구성 · AI 추천', '세트 구성 만들기 ai 추천 박스'], ['set', 'list', '세트 목록', '만든 세트 · AI 검토 결과', '세트 목록 검토'], ['plan', 'events', '우리 행사 기획', '이벤트 기획과 진행 단계', '이벤트 기획 행사 프로모션'], ['plan', 'cal', '행사 일정', '올리브영 · 브랜드 행사 캘린더', '캘린더 일정 올영세일 올영 행사']],
     [['plan', 'season', '시즌 준비', '계절별 준비 시점', '시즌 계절 여름 겨울 준비'], ['plan', 'mat', '협업 재료', '브랜드 협업 · 증정 재료', '협업 증정 콜라보'], ['plan', 'board', '찜한 상품', '눈여겨 담아 둔 상품', '담은 보드 저장 찜']]],
-  ['market', '손님 · 상권', 'globe', [['plan', 'tour', '외국인 손님', '관광객 수 · 환율 · 국가별', '외국인 관광객 환율 중국 일본 택스리펀'], ['plan', 'areas', '뜨는 상권', '성수 상권 · 팝업 후보', '상권 팝업 성수 지도'], ['more', 'news', '뉴스', '뷰티 업계 뉴스', '뉴스 기사 업계']],
+  ['market', '손님 · 상권', 'globe', [['plan', 'tour', '외국인 손님', '관광객 수 · 환율 · 국가별', '외국인 관광객 환율 중국 일본 택스리펀'], ['plan', 'areas', '뜨는 상권', '성수 상권 · 팝업 후보', '상권 팝업 성수 지도']],
     [['more', 'sources', '데이터 출처', '수집 상태 · 출처', '출처 수집 상태 데이터']]]];
 function navFeatures() { var out = []; GROUPS.forEach(function (g) { g[3].concat(g[4]).forEach(function (it) { out.push({ g: g[1], ic: g[2], tab: it[0], sub: it[1], f: it[5] || '', n: it[2], d: it[3] || '', kw: it[4] || '' }); }); }); return out; }
 function navCall(it) { return 'gGo(\'' + it[0] + '\',\'' + it[1] + '\'' + (it[5] ? ',\'' + it[5] + '\'' : '') + ')'; }
@@ -4431,8 +4431,8 @@ function heroHtml() {
   var cell = function (n) { var v = n[1], off = v && v.off, tx = v && v.txt; return '<button type="button" class="hn' + (off ? ' off' : tx ? ' tx' : n[4] ? ' ' + n[4] : '') + '" onclick="' + n[3] + '" title="' + esc(n[2]) + '"><small>' + esc(n[0]) + '</small><b class="num">' + esc(off || tx || v) + '</b><em>' + esc(n[2]) + '</em></button>'; };
   var nh = '<h2 class="hn-h">한눈에</h2><p class="hn-row">뜨는 것</p><div class="hero-nums hn8">' + nums.slice(0, 4).map(cell).join('') + '</div><p class="hn-row">우리 매장 · 손님</p><div class="hero-nums hn8">' + nums.slice(4).map(cell).join('') + '</div>';
   var done = lsGet('tl_todo_done', {}), todos = todoAll().sort(function (a, b) { return (done[a.k] ? 1 : 0) - (done[b.k] ? 1 : 0); }), doneN = todos.filter(function (t) { return done[t.k]; }).length;
-  return '<section class="hero card">'
-    + '<div class="todo"><div class="card-head"><h2>오늘 할 일' + (todos.length ? '<span class="todo-n num">' + doneN + '/' + todos.length + ' 완료</span>' : '') + ' <small>자료에서 바로 나온 것만 · 누르면 그 화면</small></h2></div>' + (todos.length ? '<ol class="todo-l">' + todos.map(function (t) { var on = !!done[t.k]; return '<li class="' + (on ? 'done' : '') + '"><label><input type="checkbox" data-k="' + esc(t.k) + '"' + (on ? ' checked' : '') + ' onchange="todoTick(this)"></label><button type="button" class="todo-t" onclick="' + t.go + '"><span>' + t.t + '</span><small>' + esc(t.l) + icon('chev') + '</small></button></li>'; }).join('') + '</ol>' : '<p class="se-why">자료가 모이면 할 일이 여기 생겨요 — 약국 베스트에 POS 엑셀을 올려 보세요</p>') + '</div>' + nh + '</section>';
+  return ['<section class="hero card">' + nh + '</section>', '<section class="hero card hero-todo">'
+    + '<div class="todo"><div class="card-head"><h2>오늘 할 일' + (todos.length ? '<span class="todo-n num">' + doneN + '/' + todos.length + ' 완료</span>' : '') + ' <small>자료에서 바로 나온 것만 · 누르면 그 화면</small></h2></div>' + (todos.length ? '<ol class="todo-l">' + todos.map(function (t) { var on = !!done[t.k]; return '<li class="' + (on ? 'done' : '') + '"><label><input type="checkbox" data-k="' + esc(t.k) + '"' + (on ? ' checked' : '') + ' onchange="todoTick(this)"></label><button type="button" class="todo-t" onclick="' + t.go + '"><span>' + t.t + '</span><small>' + esc(t.l) + icon('chev') + '</small></button></li>'; }).join('') + '</ol>' : '<p class="se-why">자료가 모이면 할 일이 여기 생겨요 — 약국 베스트에 POS 엑셀을 올려 보세요</p>') + '</div></section>'];
 }
 function renderBrief() {
   var h = S.home, el = $('today'); if (!h || !el) return;
@@ -4489,8 +4489,9 @@ function renderBrief() {
       + ((rvN ? 1 : 0) + (aiN ? 1 : 0) + (ph ? 1 : 0) < 2 ? '<button type="button" class="bc-link go" onclick="route(\'set\',\'list\')">' + icon('layers') + '세트 목록 보기' + icon('chev') + '</button>' : '') + '</div></article>');
   }
   small = small.slice(0, innerWidth < 600 ? 3 : 4);
+  var hr = heroHtml();
   if (!S.news && !S.newsBusy) newsLoad();   /* 0930 놓친 뉴스 배지 */
-  el.innerHTML = gsegBar() + '<div class="brief"><header class="page-h"><p class="eyebrow">' + dl + '</p><h1 class="view-h1">오늘의 MD 브리핑</h1></header>' + banner + heroHtml() + '<div class="brief-top one">' + rep + '</div>' + top + (small.length ? '<div class="brief-grid" data-n="' + small.length + '">' + small.join('') + '</div>' : '') + '</div>'; nwBadge();
+  el.innerHTML = gsegBar() + '<div class="brief"><header class="page-h"><p class="eyebrow">' + dl + '</p><h1 class="view-h1">오늘의 MD 브리핑</h1></header>' + banner + hr[0] + '<div class="brief-top one">' + rep + '</div>' + top + (small.length ? '<div class="brief-grid" data-n="' + small.length + '">' + small.join('') + '</div>' : '') + hr[1] + '</div>'; nwBadge();
   if (!S.viz && !S.vizLoading) loadViz();
   if (!S.la && !S.laBusy) laLoad();
   if (!S.pb && !S.pbBusy) { S.pbBusy = 1; swrCall('getPharmacyBest', [], function (r) { S.pbBusy = 0; S.pb = pbPrep(r); if (S.tab === 'today') renderBrief(); }, function () { S.pbBusy = 0; }); }   /* 1004 '우리 베스트' 칸 */
