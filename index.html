@@ -2158,7 +2158,7 @@ input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;hei
 .rp-hlink .rp-all{margin-left:auto;display:inline-flex;align-items:center;gap:2px;font-size:var(--fs-2);font-weight:600;color:var(--pri-text);white-space:nowrap}
 .rp-hlink .rp-all .ic{width:16px;height:16px}
 .nwr{position:relative}
-.nwr>summary,.nwr:not(details){padding-left:18px}
+.nwr>summary,.nwr.nwr:not(details){padding-left:18px}   /* .rp-sec .rp-item 의 padding:12px 0 보다 세게 (점이 글씨 가리던 것) */
 .nwr::before{content:'';position:absolute;left:2px;top:20px;width:8px;height:8px;border-radius:50%;background:var(--pri)}
 .nwr:not(.unread)::before{background:none}
 .nwr .nw-seen,.nw-item .nw-seen{display:none}
