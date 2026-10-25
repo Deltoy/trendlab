@@ -2151,6 +2151,38 @@ input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;hei
 /* PC 검색 = macOS 도구 막대 검색칸: 회색 채움 · 테두리 없음 */
 @media(min-width:600px){.search-btn{background:var(--fill-2);border-color:transparent}}
 @media(min-width:1100px){.search-btn{height:40px;border-radius:10px;flex:0 1 420px}}
+
+/* 1025 MJ 뉴스 읽음 한눈에: 안 본 것 = 파란 점 + 진한 제목 · 본 것 = 흐리게 + ✓ 봤어요 (리포트 · 요약 · 타임라인 같은 규칙) */
+.rp-hlink{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:0;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.rp-hlink .rp-unr{margin-left:6px;font-size:var(--fs-2);font-weight:600;color:var(--pri-text)}
+.rp-hlink .rp-all{margin-left:auto;display:inline-flex;align-items:center;gap:2px;font-size:var(--fs-2);font-weight:600;color:var(--pri-text);white-space:nowrap}
+.rp-hlink .rp-all .ic{width:16px;height:16px}
+.nwr{position:relative}
+.nwr>summary,.nwr:not(details){padding-left:18px}
+.nwr::before{content:'';position:absolute;left:2px;top:20px;width:8px;height:8px;border-radius:50%;background:var(--pri)}
+.nwr:not(.unread)::before{background:none}
+.nwr .nw-seen,.nw-item .nw-seen{display:none}
+.nwr:not(.unread) .nw-seen{display:inline-flex;align-items:center;gap:3px;margin-top:6px;font-size:var(--fs-1);font-weight:600;color:var(--ok)}
+.nwr:not(.unread) .nw-seen .ic{width:13px;height:13px}
+.nwr:not(.unread)>summary b,.nwr:not(.unread)>.rp-nl b{color:var(--ink3);font-weight:500}
+.nwr:not(.unread) .rp-dt,.nwr:not(.unread)>p{color:var(--ink3)}
+.nw-item:not(.unread) .nw-t b,.nw-item:not(.unread) .nw-ex{color:var(--ink3)}
+.nw-item:not(.unread)::before{background:none}
+
+/* 1025 아이디어 메모 버튼(오른쪽 위) + 시트 */
+.memo-btn{flex:none;display:inline-grid;place-items:center;width:44px;height:44px;border:0;border-radius:14px;background:#FEF3C7;color:#92400E;cursor:pointer}
+.memo-btn .ic{width:22px;height:22px}
+@media(hover:hover){.memo-btn:hover{background:#FDE68A}}
+.memo-tx{display:block;width:100%;min-height:132px;padding:14px;border:1px solid var(--line-strong);border-radius:var(--r2,12px);background:#FFFBEB;color:var(--ink);font:inherit;font-size:16px;line-height:1.55;resize:vertical}
+.memo-tx:focus{outline:2px solid var(--pri);outline-offset:1px}
+.memo-ctx{display:flex;align-items:center;gap:6px;margin:8px 0 0;font-size:var(--fs-2);color:var(--ink2)}.memo-ctx span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.memo-ctx .ic{flex:none;width:15px;height:15px}
+.memo-h{margin:20px 0 6px;font-size:var(--fs-3);font-weight:700}.memo-h small{margin-left:4px;font-weight:500;color:var(--ink3)}
+.memo-l{list-style:none;margin:0;padding:0}.memo-l li{position:relative;padding:10px 64px 10px 0;border-top:1px solid var(--line)}.memo-l li:first-child{border-top:0}
+.memo-l p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.memo-l small{display:block;margin-top:3px;font-size:var(--fs-1);color:var(--ink3);overflow-wrap:anywhere}.memo-l small a{color:var(--pri-text)}
+.memo-x{position:absolute;right:0;top:6px;min-height:36px;font-size:var(--fs-1);color:var(--ink3)}
+.memo-empty{margin-top:14px}
+.memo-save{width:100%}
+.nw-item.unread .rd-y,.nw-item:not(.unread) .rd-n,.nw-item.unread .nw-rd .ic{display:none}
 </style>
 </head>
 <body data-tab="today">
@@ -2163,6 +2195,7 @@ input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;hei
     <span class="logo" aria-label="TRENDLAB 레디영"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5l5.5-5.5 4 3.2 7-8"/><circle cx="24" cy="11.2" r="2.3" fill="#fff" stroke="none"/></svg></span><span class="logo-text">TREND<b>LAB</b></span><span class="nav-title" aria-hidden="true"></span><span class="owner-pill" title="레디영 MD 송주희 주임 전용"><svg class="op-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4.5 19.5"/><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/></svg><span class="op-org">레디영 MD</span><span class="op-dot" aria-hidden="true"></span><span class="op-name">송주희 주임 전용</span></span></span>
     <button type="button" class="status-dot" id="statusDot" onclick="openStatus()"><i aria-hidden="true"></i><span class="sr-only">수집 상태 </span><span id="statusTime">수집 확인 중</span></button>
     <button type="button" class="search-btn" id="searchBtn" onclick="openSearch()" aria-label="상품 · 브랜드 · 기능 검색"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="sb-tx">상품 · 브랜드 · 기능 검색</span><kbd>⌘K</kbd></button>
+    <button type="button" class="memo-btn" id="memoBtn" onclick="openMemo()" aria-label="아이디어 메모" title="아이디어 메모"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/><path d="M8 13h6M8 17h4"/></svg></button>
   </div>
 </header>
 <main id="main">
@@ -4066,6 +4099,40 @@ function delMat() {
   call('removeMaterial', [m.id], function () { toast('지웠어요'); closeMt(); loadSetTab(); });
 }
 function closeMt() { layerClose('mt'); }
+/* ── 1025 MJ 아이디어 메모: 오른쪽 위 📝 → 바로 적기. 서버 시트 '메모'(폰·PC 같이) · 쓰던 글은 이 기기에 임시 저장 · 30분 안에 연 뉴스는 자동으로 붙음 ── */
+function memoCtx() {
+  var n = S.lastNews; if (n && Date.now() - n.at < 30 * 60e3) return { from: '뉴스 · ' + n.t, url: n.u };
+  var it = gItems(curGroup()).filter(function (x) { return gMatch(x, S.tab, curSub()); })[0]; return { from: it ? it[2] : '', url: '' };
+}
+function memoListHtml() {
+  var m = S.memos; if (!m) return '<p class="meta">메모 불러오는 중…</p>'; if (m.err) return '<p class="meta">' + esc(m.err) + '</p>';
+  if (!m.items.length) return '<p class="meta memo-empty">아직 메모가 없어요 · 적은 메모는 폰 · PC 어디서나 여기 모여요</p>';
+  return '<h3 class="memo-h">지난 메모 <small>' + m.items.length + '개</small></h3><ul class="memo-l">' + m.items.map(function (x) { return '<li><p>' + esc(x.text) + '</p><small>' + esc(x.at) + (x.from ? ' · ' + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + esc(x.from) + '</a>' : esc(x.from)) : '') + '</small><button type="button" class="lnk memo-x" data-id="' + esc(x.id) + '" onclick="delMemo(this.dataset.id)" aria-label="메모 지우기">지우기</button></li>'; }).join('') + '</ul>';
+}
+function memoDraw() { var el = $('memoList'); if (el) el.innerHTML = memoListHtml(); }
+function openMemo() {
+  S.mtFrom = document.activeElement; S.memoCtx = memoCtx();
+  $('mtTitle').textContent = '📝 아이디어 메모'; $('mt').setAttribute('aria-label', '아이디어 메모');
+  $('mtBody').innerHTML = '<textarea id="memoTx" class="memo-tx" rows="5" maxlength="2000" placeholder="떠오른 아이디어를 바로 적어요" aria-label="메모 내용" oninput="lsSet(\'tl_memo_draft\',this.value)">' + esc(lsGet('tl_memo_draft', '')) + '</textarea>'
+    + (S.memoCtx.from ? '<p class="memo-ctx">' + icon(S.memoCtx.url ? 'news' : 'file') + '<span>' + esc(S.memoCtx.from) + '</span><button type="button" class="lnk" onclick="S.memoCtx={from:\'\',url:\'\'};this.parentNode.remove()">빼기</button></p>' : '') + '<div id="memoList">' + memoListHtml() + '</div>';
+  $('mtFoot').innerHTML = '<button type="button" class="btn pri memo-save" onclick="saveMemoNow()">' + icon('check') + '저장</button>';
+  $('mtDim').classList.add('on'); $('mt').classList.add('on'); $('mt').setAttribute('aria-hidden', 'false'); layerOpen('mt');
+  setTimeout(function () { var t = $('memoTx'); if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 60);
+  call('getMemos', [], function (r) { S.memos = r && r.ok ? { items: r.items || [] } : { err: (r && r.msg) || '메모를 불러오지 못했어요' }; memoDraw(); }, function () { S.memos = S.memos || { err: '메모를 불러오지 못했어요' }; memoDraw(); });
+}
+function saveMemoNow() {
+  var t = $('memoTx'), v = t ? t.value.trim() : '', b = document.querySelector('.memo-save'); if (!v) { toast('내용을 적어 주세요'); if (t) t.focus(); return; }
+  if (S.memoBusy) return; S.memoBusy = 1; if (b) b.disabled = true;
+  call('saveMemo', [v, S.memoCtx.from, S.memoCtx.url], function (r) {
+    S.memoBusy = 0; if (b) b.disabled = false;
+    if (!r || !r.ok) { toast((r && r.msg) || '저장하지 못했어요 · 쓴 글은 그대로 있어요'); return; }
+    lsSet('tl_memo_draft', ''); if (t) t.value = ''; S.memos = S.memos && S.memos.items ? S.memos : { items: [] }; S.memos.items.unshift(r.item); memoDraw(); toast('메모 저장했어요');
+  }, function () { S.memoBusy = 0; if (b) b.disabled = false; toast('서버와 연결하지 못했어요 · 쓴 글은 그대로 있어요'); });
+}
+function delMemo(id) {
+  if (!confirm('이 메모를 지울까요?')) return;
+  call('deleteMemo', [id], function (r) { if (!r || !r.ok) { toast((r && r.msg) || '지우지 못했어요'); return; } S.memos.items = S.memos.items.filter(function (x) { return x.id !== id; }); memoDraw(); });
+}
 function hideMt() { $('mt').classList.remove('wide'); $('mtDim').classList.remove('on'); $('mt').classList.remove('on'); $('mt').setAttribute('aria-hidden', 'true'); if (S.mtFrom && S.mtFrom.focus && document.body.contains(S.mtFrom)) S.mtFrom.focus(); }
 
 /* ── 사이트 비교 (브랜드 교차표) ── */
@@ -4788,7 +4855,8 @@ function renderReportView(r) {
   var items = function (arr) { return '<div class="rp-items">' + arr.map(function (c) { return '<details class="rp-item"><summary><b>' + esc(c.title) + '</b><p class="rp-dt">' + esc(c.detail) + '</p>' + icon('chev', 'rp-chev') + '</summary>' + keyChips(c.keys) + '</details>'; }).join('') + '</div>'; };
   var head = function (k, t, ic, n) { return '<section class="card rp-sec" id="rps-' + k + '" data-sec="' + k + '"><h2>' + icon(ic) + t + (n ? '<small>' + n + '</small>' : '') + '</h2>'; };
   var news = (p.news || []).filter(function (n) { return /^https?:\/\//.test(n.url || ''); });
-  var newsH = news.length ? head('news', '오늘의 뉴스', 'news', news.length) + '<div class="rp-items">' + news.map(function (n) { return '<details class="rp-item"><summary><b>' + esc(n.title) + '</b>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p class="rp-dt">' + esc(String(n.detail).replace(/^업계 코멘트:\s*/, '')) + '</p>' : '') + icon('chev', 'rp-chev') + '</summary>' + playersLine(n.players) + '<a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer">기사 보기' + icon('ext') + '</a></details>'; }).join('') + '</div>' + rpSrc('news', r.date) + '</section>' : '';
+  var nUnr = news.filter(function (n) { return !nwIsRead(n.url); }).length;   /* 1025 MJ: 누르면 지난 뉴스도 전부 · 본 뉴스는 표시 */
+  var newsH = news.length ? '<section class="card rp-sec" id="rps-news" data-sec="news"><h2><button type="button" class="rp-hlink" onclick="nwGoAll()">' + icon('news') + '오늘의 뉴스<small class="rp-unr">' + rpUnrTxt(nUnr, news.length) + '</small><span class="rp-all">지난 뉴스 전체' + icon('chev') + '</span></button></h2>' + '<div class="rp-items">' + news.map(function (n) { return '<details class="rp-item nwr' + (nwIsRead(n.url) ? '' : ' unread') + '" data-url="' + esc(n.url) + '" ontoggle="if(this.open)nwMarkRead(this.dataset.url,this)"><summary><b>' + esc(n.title) + '</b>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p class="rp-dt">' + esc(String(n.detail).replace(/^업계 코멘트:\s*/, '')) + '</p>' : '') + '<span class="nw-seen">' + icon('check') + '봤어요</span>' + icon('chev', 'rp-chev') + '</summary>' + playersLine(n.players) + '<a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer">기사 보기' + icon('ext') + '</a></details>'; }).join('') + '</div>' + rpSrc('news', r.date) + '</section>' : '';
   var secA = RP_SECS.filter(function (s) { return (p[s[0]] || []).length; }).map(function (s) { return head(s[0], s[1], s[2], p[s[0]].length) + items(p[s[0]]) + rpSrc(s[0], r.date) + '</section>'; });
   var at = (p.changes || []).length ? 1 : 0;
   if (newsH) secA.splice(at, 0, newsH);   /* 뉴스는 '무엇이 바뀌었나' 바로 다음 */
@@ -5314,15 +5382,18 @@ function playersLine(ps) {
   return '<p class="rp-players">관련 기업: ' + ps.map(function (x) { return '<b>' + esc(x.name) + '</b>(' + esc(x.role) + ')'; }).join(' · ') + '</p>';
 }
 function newsItemsHtml(news) {
-  return news.map(function (n) { return '<div class="rp-item"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + playersLine(n.players) + '</div>'; }).join('');
+  return news.map(function (n) { return '<div class="rp-item nwr' + (nwIsRead(n.url) ? '' : ' unread') + '"><a class="rp-nl" href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer" data-url="' + esc(n.url) + '" onclick="nwMarkRead(this.dataset.url,this)"><b>' + esc(n.title) + '</b>' + icon('ext') + '</a>' + (n.source || n.date ? '<small class="rp-src">' + esc([n.source, n.date ? shortDate(n.date) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + (n.detail ? '<p>' + esc(n.detail) + '</p>' : '') + playersLine(n.players) + '</div>'; }).join('');
 }
 /* ── 0930 뉴스 탭: 시트 '뉴스'에 날마다 쌓인 기사 타임라인(날짜별·태그·검색·읽음) + 오늘의 요약(리포트 뉴스·대세·행사) ── */
 var NW_TAGS = ['뷰티', '스킨부스터', '브랜드', '관광객', '규제·유통', '약국'], NW_TONE = { '뷰티': 't-neutral', '스킨부스터': 't-up', '브랜드': 't-story', '관광객': 't-ok', '규제·유통': 't-warn', '약국': 't-down' };
 S.nwF = S.nwF || { tag: '', q: '', unread: false };
 function nwRead() { return lsGet('tl_news_read', []); }
 function nwIsRead(u) { return nwRead().indexOf(u) !== -1; }
-function nwMarkRead(u, el) { var a = nwRead(); if (a.indexOf(u) === -1) { a.unshift(u); lsSet('tl_news_read', a.slice(0, 2000)); } var it = el && el.closest('.nw-item'); if (it) it.classList.remove('unread'); nwBadge(); }
-function nwToggleRead(u, el) { var a = nwRead(), i = a.indexOf(u); if (i === -1) { nwMarkRead(u, el); return; } a.splice(i, 1); lsSet('tl_news_read', a); var it = el.closest('.nw-item'); if (it) it.classList.add('unread'); nwBadge(); }
+function nwMarkRead(u, el) { var a = nwRead(); if (a.indexOf(u) === -1) { a.unshift(u); lsSet('tl_news_read', a.slice(0, 2000)); } var it = el && el.closest('.nw-item, .nwr'); if (it) it.classList.remove('unread'); nwUnrSync(it); nwBadge(); var tb = it && it.querySelector('b'); if (tb) S.lastNews = { t: tb.textContent.trim(), u: u, at: Date.now() }; }
+function nwGoAll() { route('more', 'news'); setTimeout(function () { var e = $('nwTl'); if (e) e.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 300); }   /* 리포트 '오늘의 뉴스' → 뉴스 탭의 지난 뉴스 타임라인으로 바로 */
+function rpUnrTxt(k, n) { return k ? '안 본 뉴스 ' + k + ' / ' + n : n + '건 다 봤어요 ✓'; }
+function nwUnrSync(it) { var sec = it && it.closest('.rp-sec'), c = sec && sec.querySelector('.rp-unr'); if (c) c.textContent = rpUnrTxt(sec.querySelectorAll('.nwr.unread').length, sec.querySelectorAll('.nwr').length); }
+function nwToggleRead(u, el) { var a = nwRead(), i = a.indexOf(u); if (i === -1) { nwMarkRead(u, el); return; } a.splice(i, 1); lsSet('tl_news_read', a); var it = el.closest('.nw-item, .nwr'); if (it) it.classList.add('unread'); nwUnrSync(it); nwBadge(); }
 /** 최근 3일 기사 중 안 읽은 수 → 왼쪽 메뉴 '뉴스' 배지 + 오늘 카드 줄 */
 function nwMissed() { var n = S.news; if (!n || !n.items) return 0; var t = S.home ? dnum(S.home.today) : dnum(n.latest), rd = nwRead(); return n.items.filter(function (x) { return t - dnum(x.at) <= 3 && rd.indexOf(x.url) === -1; }).length; }
 function nwBadge() {
@@ -5349,9 +5420,9 @@ function nwItemHtml(x, cm) {
   return '<div class="nw-item' + (rd ? '' : ' unread') + '" data-url="' + esc(x.url) + '"><div class="nw-tags">' + (x.tags || []).map(function (t) { return '<span class="tag ' + (NW_TONE[t] || 't-neutral') + '">' + esc(t) + '</span>'; }).join('') + (x.query === '전문지' ? '<span class="tag t-neutral">전문지</span>' : '') + '</div>'
     + '<a class="nw-t" href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer" data-url="' + esc(x.url) + '" onclick="nwMarkRead(this.dataset.url,this)"><b>' + esc(x.title) + '</b>' + icon('ext') + '</a>'
     + '<small class="rp-src">' + esc([x.source, x.at ? shortDate(x.at) : ''].filter(Boolean).join(' · ')) + '</small>'
-    + (x.excerpt ? '<p class="nw-ex" onclick="this.classList.toggle(\'open\')" title="누르면 펼쳐요">' + esc(x.excerpt) + '</p>' : '')
+    + (x.excerpt ? '<p class="nw-ex" data-url="' + esc(x.url) + '" onclick="this.classList.toggle(\'open\');nwMarkRead(this.dataset.url,this)" title="누르면 펼쳐요">' + esc(x.excerpt) + '</p>' : '')
     + (cm ? '<p class="nw-cm">' + icon('spark') + esc(cm) + '</p>' : '') + playersLine(x.players)
-    + '<button type="button" class="lnk nw-rd" data-url="' + esc(x.url) + '" onclick="nwToggleRead(this.dataset.url,this)" aria-label="읽음 표시 바꾸기">' + icon('check') + '<span>읽음</span></button></div>';
+    + '<button type="button" class="lnk nw-rd" data-url="' + esc(x.url) + '" onclick="nwToggleRead(this.dataset.url,this)" aria-label="읽음 표시 바꾸기">' + icon('check') + '<span class="rd-y">읽음</span><span class="rd-n">읽음 표시</span></button></div>';
 }
 function nwTimelineHtml() {
   var st = newState(S.news, 'S.news=null;newsLoad()'); if (st) return '<div id="nwTl">' + (S.news && S.news.ready === false ? '<article class="card">' + emptyHtml('아직 저장된 뉴스가 없어요 · 다음 07시·12시 수집부터 날마다 쌓여요') + '</article>' : st) + '</div>';
