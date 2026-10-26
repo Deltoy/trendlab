@@ -2183,6 +2183,28 @@ input[type=checkbox]:not([role=switch]):checked::after{content:'';width:10px;hei
 .memo-empty{margin-top:14px}
 .memo-save{width:100%}
 .nw-item.unread .rd-y,.nw-item:not(.unread) .rd-n,.nw-item.unread .nw-rd .ic{display:none}
+/* ── 1026 MJ '트렌드랩에도 모션' — 화면을 연 순간(body.mo-in 1.4초)에만: 막대가 자라고 · 도넛이 돌며 · 꺾은선이 그려지고 · 목록이 차례로 · 알림 켜면 톡 ── */
+@keyframes moGrowX{from{transform:scaleX(0)}}
+@keyframes moGrowY{from{transform:scaleY(0)}}
+@keyframes moSpin{from{opacity:0}}
+@keyframes moSweep{from{stroke-dasharray:0 400}}
+@keyframes moDraw{from{stroke-dashoffset:100}}
+@keyframes moRise{from{opacity:0;transform:translateY(6px)}}
+@keyframes moClip{from{clip-path:inset(0 100% 0 0)}}
+@keyframes moPopK{0%{transform:scale(1)}40%{transform:scale(1.2)}100%{transform:scale(1)}}
+body.mo-in .vz-fill,body.mo-in .pb-bar i,body.mo-in .pss-bar i,body.mo-in .vz-mvfill{transform-origin:left center;animation:moGrowX .65s var(--ease) both}
+body.mo-in .vz-mvfill[style*="right:50%"]{transform-origin:right center}
+body.mo-in .vz-cbar,body.mo-in .pt-bars i{transform-origin:center bottom;animation:moGrowY .6s var(--ease) both}
+body.mo-in svg .mo-b{transform-box:fill-box;transform-origin:center bottom;animation:moGrowY .6s var(--ease) both}
+body.mo-in .stg-bar,body.mo-in .mix-bar{animation:moClip .7s var(--ease) both}
+body.mo-in .vz-donut svg{animation:moSpin .6s var(--ease) both}
+body.mo-in .dn-svg circle{animation:moSweep .7s var(--ease) both}
+body.mo-in .vz-spark path{stroke-dasharray:100;animation:moDraw .9s var(--ease) both}
+body.mo-in .view.on .row{animation:moRise .34s var(--ease) both}
+body.mo-in .view.on .row:nth-child(2){animation-delay:25ms}body.mo-in .view.on .row:nth-child(3){animation-delay:50ms}body.mo-in .view.on .row:nth-child(4){animation-delay:75ms}body.mo-in .view.on .row:nth-child(5){animation-delay:100ms}body.mo-in .view.on .row:nth-child(6){animation-delay:125ms}body.mo-in .view.on .row:nth-child(7){animation-delay:150ms}body.mo-in .view.on .row:nth-child(8){animation-delay:175ms}body.mo-in .view.on .row:nth-child(9){animation-delay:200ms}body.mo-in .view.on .row:nth-child(10){animation-delay:225ms}body.mo-in .view.on .row:nth-child(n+11){animation:none}
+.mo-pop .ic{animation:moPopK .4s var(--ease)}
+details[open]>:not(summary){animation:moRise .22s var(--ease)}
+@media(prefers-reduced-motion:reduce){body.mo-in *{animation:none!important}.mo-pop .ic,details[open]>:not(summary){animation:none}}
 </style>
 </head>
 <body data-tab="today">
@@ -2380,7 +2402,7 @@ function fastCall(fn, ok, fail) {
   if (cached && cached.ok) { shown = true; try { ok(cached); } catch (e) {} }
   call(fn, [], function (res) {
     if (res && res.ok) { try { localStorage.setItem(key, JSON.stringify(res)); } catch (e) {} }
-    ok(res);   /* 0927 같은 내용이어도 다시 그린다: 저장본으로 먼저 그린 뒤 홈이 다시 그려지며 대시보드 칸을 지우면, 건너뛸 경우 회색 칸이 남던 문제 */
+    if (shown) moAfter(function () { ok(res); }); else ok(res);   /* 1026 모션 · 0927 같은 내용이어도 다시 그린다: 저장본으로 먼저 그린 뒤 홈이 다시 그려지며 대시보드 칸을 지우면, 건너뛸 경우 회색 칸이 남던 문제 */
   }, shown ? function () {} : fail);
 }
 /* 0928 빠르게 보이기: 읽기 전용 호출은 지난번 결과를 먼저 그리고(12시간 안), 서버 답이 다르면 다시 그린다. 저장본은 최근 40개만 */
@@ -2396,7 +2418,7 @@ function swrCall(fn, args, ok, fail, onLive) {   // onLive: 서버 응답이 오
       try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), r: res })); swrTrim(key); } catch (e) { try { swrTrim(key, true); } catch (e2) {} }
       if (shown && hit && JSON.stringify(hit.r) === js) return;   // 같으면 다시 그리지 않음
     } else if (shown) return;   // 저장본을 이미 보여 줬으면 실패 화면으로 덮지 않음
-    ok(res);
+    if (shown) moAfter(function () { ok(res); }); else ok(res);
   }, shown ? function () {} : fail);
 }
 /* 0928 미리 받아 두기: 홈이 뜬 뒤 쉬는 동안 자주 여는 것(리포트 · 랭킹 · 브랜드 · 위쪽 상품 상세)을 하나씩 받아 저장 → 누르면 바로 */
@@ -2581,7 +2603,7 @@ function navGo(k) {
 function subBack(t, s) { if (S.prevRoute && S.prevRoute.tab === t && S.prevRoute.sub === s) history.back(); else route(t, s); }
 function tabTap(t) { route(t, S.tab === t ? (SUBS[t] ? SUBS[t][0] : '') : null); }
 function route(tab, sub, opt) {
-  opt = opt || {};
+  opt = opt || {}; moKick();   // 1026 모션
   if (SUBS[tab] && sub != null && SUBS[tab].indexOf(sub) === -1) sub = null;
   if (sub == null) sub = curSub(tab);
   var tf = tab === 'trend' && sub === 'product' ? (S.trend.f || 'rank') : '', entering = tab !== S.tab, changed = entering || sub !== curSub(tab) || (tf && tf !== S.histF);   /* 1004 들여올 후보 ⇄ 트렌드 상품도 뒤로 가기에 남김 */
@@ -2694,7 +2716,7 @@ function quickSave(btn) {
   call('saveBoardItem', [key, '', ''], function (r) {
     btn.disabled = false;
     if (!r || !r.ok) { toast((r && r.msg) || '저장하지 못했어요'); return; }
-    btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true'); btn.setAttribute('aria-label', '담은 상품');
+    btn.classList.add('on'); moPop(btn); btn.setAttribute('aria-pressed', 'true'); btn.setAttribute('aria-label', '담은 상품');
     toast('담았어요', ['되돌리기', function () { call('removeBoardItem', [key], function () { toast('뺐어요'); refreshBoardGroups(); }); }]); refreshBoardGroups();
   }, function () { btn.disabled = false; toast('저장하지 못했어요'); });
 }
@@ -2705,8 +2727,8 @@ function renderChips() {
   $('rankChips').innerHTML = CATS.map(function (c, i) { return '<button type="button" class="chip' + (S.rank.cat === c[0] ? ' on' : '') + '" aria-pressed="' + (S.rank.cat === c[0]) + '" data-cat="' + c[0] + '" onclick="setCat(this.dataset.cat)">' + (i ? '<i class="cdot" style="background:' + catColor(i - 1) + '"></i>' : '') + c[1] + '</button>'; }).join('');
   $('rankMode').value = S.rank.mode;
 }
-function setCat(c) { S.rank.cat = c; S.rank.data = null; loadRank(); }
-function setMode(m) { S.rank.mode = m; S.rank.data = null; loadRank(); }
+function setCat(c) { moKick(); S.rank.cat = c; S.rank.data = null; loadRank(); }
+function setMode(m) { moKick(); S.rank.mode = m; S.rank.data = null; loadRank(); }
 function loadRank() {
   renderChips();
   var rev = ++S.rev.rank; S.rank.pend = S.rank.cat + S.rank.mode;
@@ -2941,7 +2963,7 @@ function watchAct(btn) {
   call('toggleWatch', [kind, key], function (r) {
     btn.disabled = false;
     if (!r || !r.ok) { toast((r && r.msg) || '저장하지 못했어요'); return; }
-    setHeart(btn, r.watched); toast(r.watched ? '변화 알림을 켰어요 · 오늘 화면에서 매일 확인해요' : '변화 알림을 껐어요');
+    setHeart(btn, r.watched); if (r.watched) moPop(btn); toast(r.watched ? '변화 알림을 켰어요 · 오늘 화면에서 매일 확인해요' : '변화 알림을 껐어요');
     S.home = null; S.brand.data = null;
     if (kind === 'b' && S.tab === 'trend' && S.trend.sub === 'brand') loadBrands();   /* 목록의 알림 표시 바로 반영 */
   }, function () { btn.disabled = false; toast('저장하지 못했어요'); });
@@ -2968,7 +2990,7 @@ function priceCardHtml(price) {
 function renderBrandChips() {
   $('brandChips').innerHTML = CATS.map(function (c, i) { return '<button type="button" class="chip' + (S.brand.cat === c[0] ? ' on' : '') + '" aria-pressed="' + (S.brand.cat === c[0]) + '" data-cat="' + c[0] + '" onclick="setBrandCat(this.dataset.cat)">' + c[1] + '</button>'; }).join('');
 }
-function setBrandCat(c) { S.brand.cat = c; S.brand.data = null; loadBrands(); }
+function setBrandCat(c) { moKick(); S.brand.cat = c; S.brand.data = null; loadBrands(); }
 /* 브랜드 탭: 올리브영 브랜드 표 ↔ 사이트 비교 */
 function loadBrands() {
   renderBrandChips();
@@ -3087,7 +3109,7 @@ function vzColumns(bins) {   /* 세로 막대 (순서 있는 구간) */
 function vzSpark(points, color) {
   var W = 120, H = 32, n = points.length, max = Math.max.apply(null, points.concat([1])), min = Math.min.apply(null, points.concat([max]));
   var X = function (i) { return n < 2 ? W / 2 : 2 + (W - 4) * i / (n - 1); }, Y = function (v) { return max === min ? H / 2 : 3 + (H - 6) * (1 - (v - min) / (max - min)); };
-  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="vz-spark" aria-hidden="true"><path d="' + points.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(points[n - 1]).toFixed(1) + '" r="3" fill="' + color + '"/></svg>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="vz-spark" aria-hidden="true"><path pathLength="100" d="' + points.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(points[n - 1]).toFixed(1) + '" r="3" fill="' + color + '"/></svg>';
 }
 function vzMovers(m) {   /* 가운데서 갈라지는 막대: 오른쪽 오름(빨강), 왼쪽 내림(파랑) */
   var max = Math.max.apply(null, m.up.concat(m.down).map(function (x) { return Math.abs(x.diff); }).concat([1]));
@@ -3134,7 +3156,7 @@ function dayBars(ser, key, unit, what, span) {
   var b = '';
   for (var k = 1; k <= n; k++) {
     var v = vals[k], p = vals[k - 1], x = L + step * (k - 0.5), col = v > p ? TOK.up : v < p ? TOK.down : TOK.flat, y = ys(v), d = shortDate(s[k].d), ch = stkChg(p, v);
-    b += '<rect x="' + (x - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (ys(0) - y).toFixed(1) + '" rx="2" fill="' + col + '"><title>' + esc(d + ' · ' + v.toLocaleString('ko-KR') + unit + (ch ? ' · 전날보다 ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + Math.abs(ch.p) + '%)' : '')) + '</title></rect>';
+    b += '<rect class="mo-b" x="' + (x - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (ys(0) - y).toFixed(1) + '" rx="2" fill="' + col + '"><title>' + esc(d + ' · ' + v.toLocaleString('ko-KR') + unit + (ch ? ' · 전날보다 ' + (ch.d > 0 ? '▲' : ch.d < 0 ? '▼' : '') + Math.abs(ch.d).toLocaleString('ko-KR') + ' (' + Math.abs(ch.p) + '%)' : '')) + '</title></rect>';
     if ((n - k) % 2 === 0) b += tx(x.toFixed(1), H - 8, 'middle', d);   /* 마지막 날부터 하루 걸러 → 끝에서 글자가 안 겹친다 */
     if (k === n) b += tx(x.toFixed(1), (y - 6).toFixed(1), 'middle', fmt(v), true);
   }
@@ -4624,7 +4646,7 @@ function renderTrendF() {
     return '<button type="button" class="chip' + (on ? ' on' : '') + (dis ? ' muted' : '') + '" data-f="' + f[0] + '" aria-pressed="' + on + '"' + (dis ? ' title="꾸준 · 하락은 전체 카테고리에서만 볼 수 있어요"' : '') + ' onclick="setTrendF(this.dataset.f)">' + f[1] + (n != null ? ' <em>' + n + '</em>' : '') + '</button>';
   }).join('');
 }
-function setTrendF(f) { S.trend.f = f; navSync(); if (!S.rank.data) loadRank(); else renderTrendList(); }
+function setTrendF(f) { moKick(); S.trend.f = f; navSync(); if (!S.rank.data) loadRank(); else renderTrendList(); }
 function renderTrendList() {
   var el = $('rankList'); if (!el) return; renderTrendF();
   var t = trendSrc(), f = S.trend.f;
@@ -5834,6 +5856,39 @@ function calHtml() {
     + '<p class="cal-key"><span><i class="cal-pin" aria-hidden="true"></i>신상품 처음 본 날 (숫자 = 개수 · 누르면 상품)</span><span><i class="cal-bar" aria-hidden="true"></i>세일·쿠폰·증정 중</span>' + late + '</p>'
     + (rows.length ? '<div class="cal" role="table" aria-label="브랜드별 신상품·행사 4주">' + head + body + '</div>' + (rows.length > 16 ? '<button type="button" class="more" onclick="S.calAll=!S.calAll;renderPlan()">' + (S.calAll ? '접기' : '브랜드 ' + (rows.length - 16) + '곳 더 보기') + '</button>' : '') : '<p class="empty">4주 동안 새 상품·행사 기록이 없어요</p>') + srcLine(['oy'], { at: oyAt(la.today), calc: '점 = 신상품을 100위 안에서 처음 본 날 · 막대 = 세일·쿠폰·증정 표시가 붙어 있던 날', lim: '올리브영 100위 안 상품만 · 날짜는 수집한 날 기준' }) + '</article>';
 }
+
+/* ══ 1026 MJ '트렌드랩에도 모션 기능 넣을 수 있는 곳에 다 넣어줘' (물류앱과 같은 결 · 화면을 여는 순간 한 번 · 누르면 바로 반응 · 줄인 모션이면 안 움직임)
+   body.mo-in = 화면을 바꾸거나 처음 연 뒤 1.4초. 그 사이 그려진 그래프 막대가 자라고 · 도넛이 돌며 들어오고 · 꺾은선이 그려지고 · 숫자가 올라가고 · 목록이 차례로
+   (빠른 저장본으로 먼저 그린 뒤 서버 결과로 다시 그릴 때는 대개 1.4초가 지나 있어 두 번 움직이지 않음) ══ */
+var MO = { t: 0, q: 0, end: 0, cap: 0, ob: null, seen: {} };
+function moRm() { return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+function moKick() {
+  if (moRm()) return; document.body.classList.add('mo-in'); clearTimeout(MO.t); MO.end = Date.now() + 1400; MO.cap = MO.end + 1000; MO.t = setTimeout(moEnd, 1400);
+  if (MO.ob) MO.ob.observe(document.getElementById('main'), { childList: true, subtree: true });   // 1.4초 동안만 지켜봄
+}
+function moEnd() {   /* 막 시작한 그래프 움직임이 있으면 끝날 때까지 (최대 1초 더) — 중간에 뚝 끊기지 않게 */
+  var run = 0; try { run = document.getAnimations().filter(function (a) { return /^mo/.test(a.animationName || '') && a.playState === 'running'; }).length; } catch (e) {}
+  if (run && Date.now() < MO.cap) { MO.t = setTimeout(moEnd, 150); return; }
+  document.body.classList.remove('mo-in'); MO.end = 0; if (MO.ob) MO.ob.disconnect();
+}
+function moAfter(fn) { var go = function () { if (document.body.classList.contains('mo-in')) { setTimeout(go, 120); return; } fn(); }; go(); }   // 저장본을 먼저 그렸으면 서버 결과는 움직임이 끝난 뒤에 (두 번 움직이지 않게)
+function moCount(root) {   /* .kpi 큰 숫자: 0 → 값. 숫자+짧은 단위(%·개·명·원·만…)만 · 같은 화면에서 전과 같은 값이면 그대로 */
+  if (!root || moRm()) return;
+  [].forEach.call(root.querySelectorAll('.kpi b:not([data-mo])'), function (el) {
+    el.setAttribute('data-mo', '1');
+    var tn = el.firstChild; if (el.childNodes.length !== 1 || !tn || tn.nodeType !== 3) return;   // 안에 태그가 있으면 건드리지 않음
+    var t = tn.nodeValue, m = t.match(/^([^\d]*)(\d[\d,]*(?:\.\d+)?)([\s\S]*)$/);
+    if (!m || !/^[+\-−₩]?$/.test(m[1]) || !/^(%|[가-힣]{1,2})?$/.test(m[3])) return;   // D-4 · 3CE · 10/26 · 1조 2,345억원 · 범위 같은 건 그대로
+    var kl = el.closest('.kpi'), key = location.hash + '|' + (kl && kl.querySelector('.kpi-l') ? kl.querySelector('.kpi-l').textContent : '');
+    if (MO.seen[key] === t) return; MO.seen[key] = t;
+    var raw = m[2], to = parseFloat(raw.replace(/,/g, '')), dec = (raw.split('.')[1] || '').length, comma = raw.indexOf(',') >= 0 || to >= 10000; if (!isFinite(to) || to === 0) return;
+    var fmt = function (v) { var s = v.toFixed(dec); if (comma) { var p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); s = p.join('.'); } return m[1] + s + m[3]; };
+    var t0 = performance.now(), dur = 750, step = function (now) { if (!tn.parentNode) return; var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); tn.nodeValue = k < 1 ? fmt(to * e) : t; if (k < 1) requestAnimationFrame(step); };
+    tn.nodeValue = fmt(0); requestAnimationFrame(step);
+  });
+}
+if (window.MutationObserver) MO.ob = new MutationObserver(function () { if (MO.q) return; MO.q = 1; requestAnimationFrame(function () { MO.q = 0; moCount(document.querySelector('.view.on')); }); });
+function moPop(el) { if (!el || moRm()) return; el.classList.remove('mo-pop'); void el.offsetWidth; el.classList.add('mo-pop'); setTimeout(function () { el.classList.remove('mo-pop'); }, 600); }
 
 /* 시작은 맨 끝에서: 위의 S.set · S.pb 같은 값이 다 만들어진 뒤 */
 if (google.script.url && google.script.url.getLocation) google.script.url.getLocation(function (loc) { S.k = (loc && loc.parameter && loc.parameter.k) || ''; start(); });
